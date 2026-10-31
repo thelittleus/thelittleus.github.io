@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>little us · Plus and accounts (admin)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Figtree:wght@400..800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#2B2A35;--body:#4A4855;--muted:#6B6875;--bg:#F6F4F0;--card:#fff;--border:#E8E3DA;--input:#E1DBD0;--thead:#FAF8F5;--sunny:#FFC94A;--sunny-press:#F5B92E;--butter:#FFF1C7;--mint:#DDF2E4;--lilac:#E9E1F7;--sky:#DCEBFA;--rose:#FBE0E6;--peach:#FFE9DA;--sand:#F3EEE6;--success:#1E6B45;--danger:#B23A4E;--error:#B23A2E}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:500 14px/1.5 Figtree,system-ui,sans-serif}
+h1,h2,h3{font-family:Fredoka,sans-serif;font-weight:600;margin:0}
+a{color:var(--ink)}
+button,input,select,textarea{font:inherit;color:inherit}
+.shell{display:grid;grid-template-columns:230px 1fr;min-height:100vh}
+.side{background:#fff;border-right:1px solid var(--border);padding:20px 14px;display:flex;flex-direction:column;gap:6px;position:sticky;top:0;height:100vh}
+.brand{display:flex;align-items:center;gap:8px;padding:0 8px 16px}.brand img{height:26px;mix-blend-mode:multiply}
+.tag{font:800 10.5px Figtree,sans-serif;letter-spacing:.06em;background:var(--ink);color:var(--sunny);padding:2px 8px;border-radius:99px}
+.nav a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;text-decoration:none;font-weight:700;color:var(--body)}
+.nav a.on{background:var(--butter);color:var(--ink)}
+.nav a .b{margin-left:auto;background:var(--error);color:#fff;border-radius:99px;font-size:11px;padding:0 7px}
+.side .foot{margin-top:auto;display:flex;flex-direction:column;gap:8px;font-size:13px}
+main{padding:28px 32px 80px;max-width:1180px;width:100%}
+.head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:18px;flex-wrap:wrap}
+.head h1{font-size:30px}.head p{margin:4px 0 0;color:var(--muted)}
+.card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:18px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.stat b{display:block;font:600 32px Fredoka,sans-serif}.stat span{color:var(--muted);font-weight:700;font-size:13px}
+.stat.warn{background:#FDECEA;border-color:#F3C5BE}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden}
+th{background:var(--thead);text-align:left;font-size:12.5px;color:var(--muted);font-weight:800;padding:10px 14px;border-bottom:1px solid var(--border)}
+td{padding:11px 14px;border-top:1px solid var(--border);vertical-align:middle}
+tr:first-child td{border-top:0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:38px;padding:0 14px;border-radius:11px;border:1px solid var(--input);background:#fff;font-weight:700;cursor:pointer;text-decoration:none;white-space:nowrap}
+.btn.primary{background:var(--sunny);border-color:var(--sunny)}.btn.primary:hover{background:var(--sunny-press)}
+.btn.dark{background:var(--ink);color:#fff;border-color:var(--ink)}
+.btn.danger{color:var(--danger);border-color:#E9C4CB}
+.btn.sm{min-height:32px;padding:0 10px;font-size:13px;border-radius:9px}
+.btn[disabled]{opacity:.5;cursor:default}
+input[type=text],input[type=email],input[type=url],input[type=number],input[type=date],input[type=password],select,textarea{height:40px;border:1px solid var(--input);border-radius:10px;padding:0 12px;background:#fff;width:100%}
+textarea{height:auto;padding:10px 12px;min-height:70px;resize:vertical}
+label.f{display:flex;flex-direction:column;gap:5px;font-weight:700;font-size:13px}
+label.f small{font-weight:500;color:var(--muted)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;height:21px;padding:0 9px;border-radius:99px;font:800 10.5px Figtree,sans-serif;letter-spacing:.05em}
+.p-plus{background:var(--ink);color:var(--sunny)}.p-free{background:var(--mint);color:var(--success)}.p-exp{background:var(--butter)}.p-end{background:var(--sand);color:var(--body)}
+.p-unc{background:#FDECEA;color:var(--error)}.p-dis{background:var(--rose);color:var(--danger)}
+.seg{display:inline-flex;background:var(--sand);border-radius:11px;padding:3px;gap:2px}
+.seg button{border:0;background:none;padding:6px 10px;border-radius:9px;font-weight:700;font-size:12.5px;cursor:pointer;color:var(--body)}
+.seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 2px #0001}
+.seg button.on[data-v=plus]{background:var(--ink);color:var(--sunny)}
+.seg button.on[data-v=hidden]{background:var(--rose);color:var(--danger)}
+.seg button.on[data-v=account]{background:var(--mint);color:var(--success)}
+.muted{color:var(--muted)}.small{font-size:12.5px}
+.note{background:var(--butter);border-radius:14px;padding:12px 14px;font-size:13.5px}
+.err{background:#FDECEA;color:var(--error);border-radius:12px;padding:10px 12px;font-weight:600}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:12px;font-weight:700;z-index:99}
+.modal{position:fixed;inset:0;background:#2B2A3566;display:flex;align-items:center;justify-content:center;z-index:90;padding:16px}
+.modal .card{width:100%;max-width:460px;display:flex;flex-direction:column;gap:12px}
+.login{max-width:380px;margin:12vh auto;display:flex;flex-direction:column;gap:12px}
+.toolgrp{margin-bottom:18px}.toolgrp h3{font-size:18px;margin:0 0 8px;text-transform:capitalize}
+.bar{display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+.bar input{max-width:280px}
+.counts{font-size:12.5px;color:var(--muted);font-weight:700}
+@media(max-width:860px){.shell{grid-template-columns:1fr}.side{position:static;height:auto;flex-direction:row;flex-wrap:wrap}.nav{display:flex;flex-wrap:wrap}.grid4{grid-template-columns:1fr 1fr}main{padding:20px 16px}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+/* little us · admin for accounts and Little Us Plus
+   Uses the same Supabase project and admin login as admin.html (admins table).
+   Settings live in the database, so changes here show on the website straight away. */
+(function () {
+  'use strict';
+  var SB = 'https://bqiicazulzjtthvduear.supabase.co';
+  var KEY = 'sb_publishable_k9_U8J8UziaC_lSa10j-qw_0oRLtMF_';
+  var SKEY = 'lu_admin_session';
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+  var M = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  function d(x) { if (!x) return '–'; x = new Date(x); return x.getDate() + ' ' + M[x.getMonth()] + ' ' + x.getFullYear(); }
+  function toast(m) { var t = document.createElement('div'); t.className = 'toast'; t.textContent = m; document.body.appendChild(t); setTimeout(function () { t.remove(); }, 2600); }
+
+  var S = null; try { S = JSON.parse(localStorage.getItem(SKEY) || 'null'); } catch (e) {}
+  function setS(a) { S = a ? { access_token: a.access_token, refresh_token: a.refresh_token, expires_at: a.expires_at || Math.floor(Date.now() / 1000) + (a.expires_in || 3600), user: a.user || (S && S.user) } : null; try { S ? localStorage.setItem(SKEY, JSON.stringify(S)) : localStorage.removeItem(SKEY); } catch (e) {} }
+  function tok() {
+    if (!S) return Promise.resolve(null);
+    if (S.expires_at - 60 > Date.now() / 1000) return Promise.resolve(S.access_token);
+    return fetch(SB + '/auth/v1/token?grant_type=refresh_token', { method: 'POST', headers: { apikey: KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ refresh_token: S.refresh_token }) })
+      .then(function (r) { return r.json().then(function (j) { if (!r.ok) { setS(null); return null; } setS(j); return j.access_token; }); });
+  }
+  function api(path, o) {
+    o = o || {};
+    return tok().then(function (tk) {
+      var h = { apikey: KEY, Authorization: 'Bearer ' + (tk || KEY) };
+      if (o.body !== undefined) h['Content-Type'] = 'application/json';
+      if (o.prefer) h.Prefer = o.prefer;
+      return fetch(SB + path, { method: o.method || 'GET', headers: h, body: o.body !== undefined ? JSON.stringify(o.body) : undefined }).then(function (r) {
+        return r.text().then(function (t) { var j = null; try { j = t ? JSON.parse(t) : null; } catch (e) {} if (!r.ok) { var e = new Error((j && (j.message || j.msg || j.error_description)) || ('HTTP ' + r.status)); e.status = r.status; throw e; } return j; });
+      });
+    });
+  }
+  var rpc = function (fn, body) { return api('/rest/v1/rpc/' + fn, { method: 'POST', body: body || {} }); };
+
+  var TABS = [['overview', 'Overview'], ['features', 'Plus features'], ['members', 'Members'], ['payments', 'Plus payments'], ['products', 'Shop on Gumroad'], ['settings', 'Plus settings']];
+  var state = { tab: (location.hash.replace('#', '') || 'overview'), ov: null };
+
+  function shell(inner) {
+    $('#app').innerHTML = '<div class="shell"><aside class="side"><div class="brand"><img src="logo.png" alt="little us"><span class="tag">PLUS</span></div><nav class="nav">' +
+      TABS.map(function (t) { return '<a href="#' + t[0] + '" class="' + (state.tab === t[0] ? 'on' : '') + '">' + t[1] + (t[0] === 'payments' && state.ov && state.ov.unclaimed ? '<span class="b">' + state.ov.unclaimed + '</span>' : '') + '</a>'; }).join('') +
+      '</nav><div class="foot"><a href="admin.html">← Shop admin</a><a href="./" target="_blank" rel="noopener">View site ↗</a><span class="muted small">' + esc(S && S.user && S.user.email || '') + '</span><a href="#" id="out">Log out</a></div></aside><main id="main">' + inner + '</main></div>';
+    $('#out').onclick = function (e) { e.preventDefault(); setS(null); login(); };
+  }
+  function errBox(e) { return '<div class="err">' + esc(e && e.message || 'Something went wrong') + '</div>'; }
+
+  function login(msg) {
+    $('#app').innerHTML = '<form class="login card" id="lf"><div class="brand" style="padding:0"><img src="logo.png" alt="little us" style="height:28px"><span class="tag">PLUS</span></div><h1 style="font-size:24px">Admin log in</h1>' + (msg ? '<div class="err">' + esc(msg) + '</div>' : '') +
+      '<label class="f">Email<input type="email" id="le" autocomplete="email"></label><label class="f">Password<input type="password" id="lp" autocomplete="current-password"></label><button class="btn primary" type="submit">Log in</button></form>';
+    $('#lf').onsubmit = function (e) {
+      e.preventDefault();
+      fetch(SB + '/auth/v1/token?grant_type=password', { method: 'POST', headers: { apikey: KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ email: $('#le').value.trim(), password: $('#lp').value }) })
+        .then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error(j.msg || j.error_description || 'Login failed'); setS(j); start(); }); })
+        .catch(function (er) { login(er.message); });
+    };
+  }
+
+  function start() {
+    if (!S) return login();
+    rpc('lu_is_admin').then(function (ok) {
+      if (ok !== true) { setS(null); return login("This account isn't on the admin list."); }
+      route();
+    }).catch(function (e) { if (e.status === 401) { setS(null); return login(); } shell(errBox(e) + '<p class="muted">Did you run supabase/plus-setup.sql in the SQL editor?</p>'); });
+  }
+  function route() { state.tab = location.hash.replace('#', '') || 'overview'; (VIEWS[state.tab] || VIEWS.overview)(); }
+  window.addEventListener('hashchange', function () { if (S) route(); });
+
+  var VIEWS = {};
+  // ---------------------------------------------------------------- overview
+  VIEWS.overview = function () {
+    shell('<div class="head"><div><h1>Plus and accounts</h1><p>How Little Us Plus is doing.</p></div></div><div id="ov" class="muted">Loading…</div>');
+    rpc('lu_admin_plus_overview').then(function (o) {
+      state.ov = o; shell($('#main').innerHTML);
+      $('#ov').outerHTML = '<div class="grid4">' + [['accounts', 'Accounts'], ['plus_active', 'Active Plus members'], ['signups_7d', 'New sign-ups this week'], ['expiring_7d', 'Plus ending in 7 days'],
+        ['passes_month', 'Plus passes sold this month'], ['products_month', 'Single products sold this month'], ['unclaimed', 'Unclaimed payments'], ['disputed', 'Disputes']].map(function (k) {
+        return '<div class="card stat' + ((k[0] === 'unclaimed' || k[0] === 'disputed') && o[k[0]] ? ' warn' : '') + '"><b>' + (o[k[0]] || 0) + '</b><span>' + k[1] + '</span></div>';
+      }).join('') + '</div>' + (o.unclaimed ? '<p style="margin-top:16px"><a class="btn primary" href="#payments">Assign unclaimed payments →</a></p>' : '');
+    }).catch(function (e) { $('#ov').outerHTML = errBox(e); });
+  };
+
+  // ---------------------------------------------------------------- features
+  VIEWS.features = function () {
+    shell('<div class="head"><div><h1>Plus features</h1><p>Choose who can use each tool style. Changes show on the website within a few minutes.</p></div><button class="btn" id="addF">+ Add a style</button></div>' +
+      '<div class="note" style="margin-bottom:16px"><b>Free for everyone</b> needs no account · <b>Free account</b> needs a free sign-up · <b>Plus only</b> needs Little Us Plus · <b>Hidden</b> is not shown yet. A new style still has to be built into the tools once; after that you control it here using its ID (for example <code>timer.dino</code>).</div><div id="fl" class="muted">Loading…</div>');
+    function load() {
+      api('/rest/v1/plus_features?select=*&order=tool,sort').then(function (rows) {
+        var by = {}; rows.forEach(function (r) { (by[r.tool] = by[r.tool] || []).push(r); });
+        var total = rows.length, plus = rows.filter(function (r) { return r.access === 'plus'; }).length;
+        $('#fl').innerHTML = '<p class="counts">' + plus + ' of ' + total + ' styles are in Plus' + (total - plus ? ' (Plus adds about ' + Math.round(plus / Math.max(1, total - plus) * 100) + '% more styles)' : '') + '</p>' +
+          Object.keys(by).map(function (tool) {
+            return '<div class="toolgrp"><h3>' + esc(tool) + '</h3><table><tr><th>Style</th><th>ID</th><th>Who can use it</th></tr>' + by[tool].map(function (r) {
+              return '<tr><td><b>' + esc(r.name_en) + '</b><div class="small muted">' + esc(r.name_id) + '</div></td><td><code>' + esc(r.id) + '</code></td><td><div class="seg" data-id="' + esc(r.id) + '">' +
+                [['everyone', 'Free for everyone'], ['account', 'Free account'], ['plus', 'Plus only'], ['hidden', 'Hidden']].map(function (a) { return '<button type="button" data-v="' + a[0] + '" class="' + (r.access === a[0] ? 'on' : '') + '">' + a[1] + '</button>'; }).join('') +
+                '</div></td></tr>';
+            }).join('') + '</table></div>';
+          }).join('');
+        $$('.seg button', $('#fl')).forEach(function (b) {
+          b.onclick = function () {
+            var id = b.parentNode.dataset.id, v = b.dataset.v;
+            api('/rest/v1/plus_features?id=eq.' + encodeURIComponent(id), { method: 'PATCH', body: { access: v, updated_at: new Date().toISOString() } }).then(function () { toast('Saved'); load(); }).catch(function (e) { toast(e.message); });
+          };
+        });
+      }).catch(function (e) { $('#fl').innerHTML = errBox(e); });
+    }
+    load();
+    $('#addF').onclick = function () {
+      modal('<h2>Add a style</h2><label class="f">ID<small>tool.style, e.g. timer.rocket</small><input type="text" id="fi"></label><label class="f">Name (English)<input type="text" id="fe"></label><label class="f">Name (Indonesian)<input type="text" id="fid"></label>' +
+        '<label class="f">Who can use it<select id="fa"><option value="everyone">Free for everyone</option><option value="account">Free account</option><option value="plus" selected>Plus only</option><option value="hidden">Hidden</option></select></label>', 'Add', function (m) {
+        var id = $('#fi', m).value.trim().toLowerCase();
+        if (!/^[a-z0-9-]+\.[a-z0-9-]+$/.test(id)) throw new Error('The ID should look like tool.style');
+        return api('/rest/v1/plus_features', { method: 'POST', body: [{ id: id, tool: id.split('.')[0], name_en: $('#fe', m).value.trim() || id, name_id: $('#fid', m).value.trim() || $('#fe', m).value.trim() || id, access: $('#fa', m).value, sort: 100 }] }).then(load);
+      });
+    };
+  };
+
+  // ---------------------------------------------------------------- members
+  var MEM = { q: '', f: 'all', page: 0 };
+  VIEWS.members = function () {
+    shell('<div class="head"><div><h1>Members</h1><p>Accounts, their plan and how many children they set up. Children’s details stay private.</p></div></div>' +
+      '<div class="bar"><input type="text" id="mq" placeholder="Search name or email" value="' + esc(MEM.q) + '"><div class="seg" id="mf">' + [['all', 'All'], ['plus', 'Plus'], ['expiring', 'Ending soon'], ['free', 'Free']].map(function (a) { return '<button type="button" data-f="' + a[0] + '" class="' + (MEM.f === a[0] ? 'on' : '') + '">' + a[1] + '</button>'; }).join('') + '</div></div><div id="ml" class="muted">Loading…</div>');
+    var q = $('#mq'), tm;
+    q.oninput = function () { clearTimeout(tm); tm = setTimeout(function () { MEM.q = q.value.trim(); MEM.page = 0; load(); }, 300); };
+    $$('#mf button').forEach(function (b) { b.onclick = function () { MEM.f = b.dataset.f; MEM.page = 0; $$('#mf button').forEach(function (x) { x.classList.toggle('on', x === b); }); load(); }; });
+    function badge(r) {
+      if (!r.plus_until) return '<span class="pill p-free">FREE</span>';
+      var u = new Date(r.plus_until), days = Math.ceil((u - new Date()) / 86400000);
+      if (u < new Date()) return '<span class="pill p-end">ENDED ' + d(u) + '</span>';
+      return '<span class="pill ' + (days <= 14 ? 'p-exp' : 'p-plus') + '">PLUS · ' + d(u) + '</span>';
+    }
+    function load() {
+      rpc('lu_admin_members', { p_search: MEM.q, p_filter: MEM.f, p_limit: 50, p_offset: MEM.page * 50 }).then(function (rows) {
+        var total = rows[0] ? rows[0].total : 0;
+        $('#ml').innerHTML = '<p class="counts">' + total + ' account' + (total === 1 ? '' : 's') + '</p><table><tr><th>Name</th><th>Email</th><th>Plan</th><th>Children</th><th>Joined</th><th></th></tr>' +
+          (rows.length ? rows.map(function (r) {
+            return '<tr><td><b>' + esc(r.name) + '</b></td><td>' + esc(r.email) + (r.confirmed ? '' : ' <span class="pill p-unc">NOT CONFIRMED</span>') + '</td><td>' + badge(r) + '</td><td>' + r.children + '</td><td class="small">' + d(r.created_at) + '</td>' +
+              '<td style="text-align:right;white-space:nowrap"><button class="btn sm" data-g="' + r.id + '" data-e="' + esc(r.email) + '">Give Plus</button> ' + (r.plus_until && new Date(r.plus_until) > new Date() ? '<button class="btn sm danger" data-r="' + r.id + '" data-e="' + esc(r.email) + '">Remove</button>' : '') + '</td></tr>';
+          }).join('') : '<tr><td colspan="6" class="muted">No accounts found.</td></tr>') + '</table>' +
+          '<div class="row" style="margin-top:12px">' + (MEM.page ? '<button class="btn sm" id="pv">← Previous</button>' : '') + ((MEM.page + 1) * 50 < total ? '<button class="btn sm" id="nx">Next →</button>' : '') + '</div>';
+        var pv = $('#pv'), nx = $('#nx'); if (pv) pv.onclick = function () { MEM.page--; load(); }; if (nx) nx.onclick = function () { MEM.page++; load(); };
+        $$('[data-g]').forEach(function (b) {
+          b.onclick = function () {
+            modal('<h2>Give Plus</h2><p class="muted" style="margin:0">' + esc(b.dataset.e) + '</p><label class="f">How long<select id="gm"><option value="1">Add 1 month</option><option value="3" selected>Add 3 months</option><option value="12">Add 12 months</option><option value="date">Until a date…</option></select></label>' +
+              '<label class="f" id="gdw" hidden>End date<input type="date" id="gd"></label><label class="f">Reason<small>Kept as a record, e.g. "colleague", "giveaway", "fixed payment problem"</small><input type="text" id="gr"></label>', 'Give Plus', function (m) {
+              var v = $('#gm', m).value, until = v === 'date' ? $('#gd', m).value : null;
+              if (v === 'date' && !until) throw new Error('Choose an end date');
+              return rpc('lu_admin_grant_plus', { p_user: b.dataset.g, p_months: v === 'date' ? 0 : Number(v), p_until: until ? new Date(until + 'T23:59:00').toISOString() : null, p_reason: $('#gr', m).value.trim() }).then(function (r) { toast('Plus until ' + d(r)); load(); });
+            }, function (m) { $('#gm', m).onchange = function () { $('#gdw', m).hidden = $('#gm', m).value !== 'date'; }; });
+          };
+        });
+        $$('[data-r]').forEach(function (b) {
+          b.onclick = function () {
+            modal('<h2>Remove Plus?</h2><p style="margin:0">' + esc(b.dataset.e) + ' goes back to a free account straight away. Nothing they made is deleted.</p><label class="f">Reason<input type="text" id="rr"></label>', 'Remove Plus', function (m) {
+              return rpc('lu_admin_remove_plus', { p_user: b.dataset.r, p_reason: $('#rr', m).value.trim() }).then(function () { toast('Plus removed'); load(); });
+            });
+          };
+        });
+      }).catch(function (e) { $('#ml').innerHTML = errBox(e); });
+    }
+    load();
+  };
+
+  // ---------------------------------------------------------------- payments
+  var PAY = { f: 'all' };
+  VIEWS.payments = function () {
+    shell('<div class="head"><div><h1>Plus payments</h1><p>Every Gumroad sale that reached Little Us. Plus switches on automatically; only <b>unclaimed</b> sales need you.</p></div></div>' +
+      '<div class="bar"><div class="seg" id="pf">' + [['all', 'All'], ['unclaimed', 'Unclaimed'], ['plus', 'Plus passes'], ['product', 'Single products'], ['disputed', 'Disputes and refunds']].map(function (a) { return '<button type="button" data-f="' + a[0] + '" class="' + (PAY.f === a[0] ? 'on' : '') + '">' + a[1] + '</button>'; }).join('') + '</div></div><div id="pl" class="muted">Loading…</div>');
+    $$('#pf button').forEach(function (b) { b.onclick = function () { PAY.f = b.dataset.f; $$('#pf button').forEach(function (x) { x.classList.toggle('on', x === b); }); load(); }; });
+    function load() {
+      var q = '/rest/v1/purchases?select=id,sale_id,email,kind,plan,product_id,price_label,status,plus_to,note,created_at,user_id&order=created_at.desc&limit=200';
+      if (PAY.f === 'unclaimed') q += '&status=eq.unclaimed'; else if (PAY.f === 'plus') q += '&kind=eq.plus'; else if (PAY.f === 'product') q += '&kind=eq.product'; else if (PAY.f === 'disputed') q += '&status=in.(disputed,refunded)';
+      api(q).then(function (rows) {
+        $('#pl').innerHTML = '<table><tr><th>Date</th><th>Gumroad email</th><th>What</th><th>Paid</th><th>Status</th><th>Plus until</th><th></th></tr>' + (rows.length ? rows.map(function (r) {
+          var st = { paid: '<span class="pill p-free">PAID</span>', unclaimed: '<span class="pill p-unc">UNCLAIMED</span>', disputed: '<span class="pill p-dis">DISPUTED</span>', refunded: '<span class="pill p-end">REFUNDED</span>' }[r.status] || esc(r.status);
+          return '<tr><td class="small">' + d(r.created_at) + '</td><td>' + esc(r.email) + '<div class="small muted">' + esc(r.sale_id) + '</div></td><td>' + (r.kind === 'plus' ? '<span class="pill p-plus">PLUS</span> ' + (r.plan === '12m' ? '12 months' : '3 months') : esc(r.product_id || 'product')) + '</td><td>' + esc(r.price_label) + '</td><td>' + st + '</td><td class="small">' + (r.plus_to ? d(r.plus_to) : '–') + '</td>' +
+            '<td style="text-align:right">' + (r.status === 'unclaimed' ? '<button class="btn sm primary" data-a="' + r.id + '" data-e="' + esc(r.email) + '">Assign to account</button>' : '') + '</td></tr>';
+        }).join('') : '<tr><td colspan="7" class="muted">Nothing here.</td></tr>') + '</table>';
+        $$('[data-a]').forEach(function (b) {
+          b.onclick = function () {
+            modal('<h2>Assign this payment</h2><p style="margin:0" class="muted">Paid on Gumroad with ' + esc(b.dataset.e) + '. Enter the email of the Little Us account it belongs to. Plus is added to that account straight away.</p><label class="f">Little Us account email<input type="email" id="ae" value="' + esc(b.dataset.e) + '"></label>', 'Assign', function (m) {
+              return rpc('lu_admin_assign_purchase', { p_purchase: Number(b.dataset.a), p_email: $('#ae', m).value.trim() }).then(function () { toast('Assigned'); load(); });
+            });
+          };
+        });
+      }).catch(function (e) { $('#pl').innerHTML = errBox(e); });
+    }
+    load();
+  };
+
+  // ---------------------------------------------------------------- products
+  VIEWS.products = function () {
+    shell('<div class="head"><div><h1>Shop on Gumroad</h1><p>Paste each product’s Gumroad link. Products without a link show “Not on sale yet”. Free products keep their free download.</p></div></div>' +
+      '<div class="note" style="margin-bottom:16px">Use the short link from Gumroad, e.g. <code>https://littleus.gumroad.com/l/morning-cards</code>. The part after <code>/l/</code> is how Little Us recognises the sale, so keep it the same once people are buying.</div><div id="gl" class="muted">Loading…</div>');
+    api('/rest/v1/products?select=id,title_en,type,is_free,price_idr,price_usd,gumroad_url,in_plus&order=created_at.desc').then(function (rows) {
+      $('#gl').innerHTML = '<table><tr><th>Product</th><th>Price</th><th style="width:44%">Gumroad link</th><th>In Plus</th><th></th></tr>' + rows.map(function (r) {
+        return '<tr data-id="' + esc(r.id) + '"><td><b>' + esc(r.title_en) + '</b><div class="small muted">' + esc(r.type) + '</div></td><td class="small">' + (r.is_free ? 'Free' : 'Rp ' + Number(r.price_idr || 0).toLocaleString('id-ID') + (r.price_usd ? ' · $' + r.price_usd : '')) + '</td>' +
+          '<td>' + (r.is_free ? '<span class="muted small">Free download, no link needed</span>' : '<input type="url" class="gu" value="' + esc(r.gumroad_url || '') + '" placeholder="https://….gumroad.com/l/…">') + '</td>' +
+          '<td><input type="checkbox" class="ip"' + (r.in_plus !== false ? ' checked' : '') + (r.is_free ? ' disabled' : '') + '></td><td><button class="btn sm" data-save>Save</button></td></tr>';
+      }).join('') + '</table>';
+      $$('[data-save]').forEach(function (b) {
+        b.onclick = function () {
+          var tr = b.closest('tr'), gu = $('.gu', tr), url = gu ? gu.value.trim() : '';
+          if (url && !/^https:\/\/[^\s]+\/l\/[^\s/?#]+/.test(url)) return toast('That doesn’t look like a Gumroad product link');
+          b.disabled = true;
+          api('/rest/v1/products?id=eq.' + encodeURIComponent(tr.dataset.id), { method: 'PATCH', body: { gumroad_url: url, in_plus: $('.ip', tr).checked } }).then(function () { b.disabled = false; toast('Saved'); }).catch(function (e) { b.disabled = false; toast(e.message); });
+        };
+      });
+    }).catch(function (e) { $('#gl').innerHTML = errBox(e); });
+  };
+
+  // ---------------------------------------------------------------- settings
+  var FIELDS = [
+    ['Gumroad', [['gumroad_3m_url', '3 Months pass · Gumroad link', 'url'], ['gumroad_12m_url', '12 Months pass · Gumroad link', 'url']]],
+    ['Prices shown on the website', [['price_3m_label', '3 Months price', 'text'], ['per_month_3m', '3 Months, per month', 'text'], ['price_12m_label', '12 Months price', 'text'], ['per_month_12m', '12 Months, per month', 'text']]],
+    ['Free accounts', [['free_child_limit', 'Child profiles on a free account', 'number']]],
+    ['Upgrade popup', [['popup_title_en', 'Title (English) · {name} becomes the style name', 'text'], ['popup_title_id', 'Title (Indonesian)', 'text'], ['popup_body_en', 'Text (English)', 'area'], ['popup_body_id', 'Text (Indonesian)', 'area']]],
+    ['Plus page', [['plus_page_note_en', 'Intro (English)', 'area'], ['plus_page_note_id', 'Intro (Indonesian)', 'area']]],
+    ['Help', [['support_email', 'Support email shown when Plus is slow to switch on', 'email']]]
+  ];
+  VIEWS.settings = function () {
+    shell('<div class="head"><div><h1>Plus settings</h1><p>Links, prices and wording for Little Us Plus. Saved changes show on the website within a few minutes.</p></div></div><div id="sl" class="muted">Loading…</div>');
+    api('/rest/v1/plus_settings?select=*&id=eq.1').then(function (rows) {
+      var s = rows[0] || {};
+      $('#sl').innerHTML = '<form id="sf" style="display:flex;flex-direction:column;gap:16px">' + FIELDS.map(function (g) {
+        return '<div class="card" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px"><h3 style="grid-column:1/-1;font-size:18px">' + g[0] + '</h3>' + g[1].map(function (f) {
+          return '<label class="f">' + esc(f[1]) + (f[2] === 'area' ? '<textarea name="' + f[0] + '">' + esc(s[f[0]]) + '</textarea>' : '<input type="' + f[2] + '" name="' + f[0] + '" value="' + esc(s[f[0]]) + '"' + (f[2] === 'number' ? ' min="1" max="20"' : '') + '>') + '</label>';
+        }).join('') + '</div>';
+      }).join('') + '<div><button class="btn primary" type="submit">Save settings</button></div></form>';
+      $('#sf').onsubmit = function (e) {
+        e.preventDefault();
+        var body = { updated_at: new Date().toISOString() };
+        $$('[name]', $('#sf')).forEach(function (i) { body[i.name] = i.type === 'number' ? Math.max(1, Number(i.value) || 1) : i.value.trim(); });
+        api('/rest/v1/plus_settings?id=eq.1', { method: 'PATCH', body: body }).then(function () { toast('Settings saved'); }).catch(function (er) { toast(er.message); });
+      };
+    }).catch(function (e) { $('#sl').innerHTML = errBox(e); });
+  };
+
+  // ---------------------------------------------------------------- modal helper
+  function modal(html, okText, onOk, onOpen) {
+    var m = document.createElement('div'); m.className = 'modal';
+    m.innerHTML = '<div class="card">' + html + '<div class="err" hidden data-e></div><div class="row" style="justify-content:flex-end"><button class="btn" data-c>Cancel</button><button class="btn primary" data-ok>' + esc(okText) + '</button></div></div>';
+    document.body.appendChild(m);
+    var close = function () { m.remove(); };
+    m.onclick = function (e) { if (e.target === m || e.target.closest('[data-c]')) close(); };
+    if (onOpen) onOpen(m);
+    $('[data-ok]', m).onclick = function () {
+      var b = this, er = $('[data-e]', m); er.hidden = true;
+      try { b.disabled = true; Promise.resolve(onOk(m)).then(close).catch(function (e) { b.disabled = false; er.hidden = false; er.textContent = e.message; }); }
+      catch (e) { b.disabled = false; er.hidden = false; er.textContent = e.message; }
+    };
+  }
+
+  start();
+})();
+</script>
+</body>
+</html>
