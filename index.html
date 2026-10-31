@@ -347,6 +347,8 @@ body.tl-childon .tabbar{display:none}
 .ts-gear{width:42px;height:42px;border-radius:50%;background:#fff;border:1px solid var(--line);display:inline-flex;align-items:center;justify-content:center;color:var(--ink)}
 .ts-gear.on{border:1.5px solid var(--ink)}
 </style>
+<link rel="stylesheet" href="/lu-app.css?v=2">
+<script>(function(){try{var w=innerWidth,c=matchMedia("(pointer:coarse)").matches,f=localStorage.getItem("lu_force_app")==="1"||/[?&]app=(1|phone|tablet)/.test(location.search);if(w<760||((c||f)&&w<=1400)){var d=document.documentElement;d.classList.add("lu-app",w<760?"lu-phone":w>innerHeight?"lu-land":"lu-port")}}catch(e){}})();</script>
 </head>
 <body>
 <div id="lu-demo" class="demo-note" hidden></div>
@@ -637,7 +639,8 @@ function done(){o("#rqBox").innerHTML='<div class="rq-done"><span class="rq-hear
     setTimeout(()=>window.luLangAsk(),350);
     "serviceWorker"in navigator&&location.protocol==="https:"&&window.addEventListener("load",()=>{navigator.serviceWorker.register("/sw.js").catch(()=>{})});})(),(function(){"use strict";const J={en:[["#/terms","Terms & Conditions"],["#/license","License"],["#/refund","Refund Policy"],["#/privacy","Privacy Policy"]],id:[["#/terms","Syarat & Ketentuan"],["#/license","Lisensi"],["#/refund","Kebijakan Pengembalian Dana"],["#/privacy","Kebijakan Privasi"]]};function o(f){const e=LU.cfg.CONTACT||{};return f.replace(/\{wa\}/g,LU.esc(e.whatsapp||"")).replace(/\{waLink\}/g,"https://wa.me/"+LU.esc(e.whatsappLink||"")).replace(/\{email\}/g,LU.esc(e.email||"")).replace(/\{city\}/g,LU.esc(e.city||"Indonesia"))}window.LULegal=function(f){const e="#/"+LU.route;LU.page({strings:{en:{title:f.title.en,policies:"Policies"},id:{title:f.title.id,policies:"Kebijakan"}},title:"title",render(){const i=LU.lang;LU.$("#legalNav").innerHTML='<span class="eyebrow" style="padding:0 14px 6px">'+LU.esc(LU.t("policies"))+"</span>"+J[i].map(r=>'<a href="'+r[0]+'"'+(r[0]===e?' class="on" aria-current="page"':"")+">"+LU.esc(r[1])+"</a>").join(""),LU.$("#doc").innerHTML='<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px"><h1>'+LU.esc(f.title[i])+'</h1><span class="updated">'+LU.esc(f.updated[i])+'</span></div><div class="legal-body">'+o(f.body[i])+"</div>"}})}})();
 </script>
-<script src="/lu-account.js?v=1"></script>
+<script src="/lu-account.js?v=2"></script>
+<script src="/lu-app.js?v=2"></script>
 <script>
 /* tools dropdown in the header */
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-tsdd]');document.querySelectorAll('.ts-dd.open').forEach(function(d){if(!b||!d.contains(b)){d.classList.remove('open');var x=d.querySelector('[data-tsdd]');x&&x.setAttribute('aria-expanded','false')}});if(b){var d=b.parentNode,o=d.classList.toggle('open');b.setAttribute('aria-expanded',String(o))}});
