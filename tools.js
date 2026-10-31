@@ -48,7 +48,13 @@
     startSetup: ['Start setup', 'Mulai'],
     orTry: ['What you’ll find here', 'Isi alat-alatnya'], orTryP: ['Set up your child first, then every tool is ready to use.', 'Atur profil anak dulu, lalu semua alat siap dipakai.'],
     parentSetup: ['Parent setup', 'Pengaturan orang tua'],
-    startChild: ['Start in child mode', 'Mulai mode anak'],
+    startChild: ['Hand to child', 'Serahkan ke anak'], forName: [function (n) { return 'for ' + n; }, function (n) { return 'untuk ' + n; }],
+    step4: [function (a) { return 'Step ' + a + ' of 4'; }, function (a) { return 'Langkah ' + a + ' dari 4'; }], callChild: ['What do you call your child?', 'Siapa nama panggilan anakmu?'],
+    kidLike: [function (n) { return 'Which character looks more like ' + n + '?'; }, function (n) { return 'Karakter mana yang lebih mirip ' + n + '?'; }], kidLikeP: ['Cards that show a child use this character. You can switch it any time, even for a single card.', 'Kartu yang menampilkan anak memakai karakter ini. Bisa diganti kapan saja, bahkan per kartu.'],
+    noPhotoCol: ['No photo? Pick a colour', 'Tanpa foto? Pilih warna'], nickLabel: ['Nickname', 'Nama panggilan'], takePhoto: ['Take a photo', 'Ambil foto'], fromGallery: ['From gallery', 'Dari galeri'],
+    wordsCards: ['Words on the cards', 'Kata di kartu'], loveP: ['Pick a few. They become rewards.', 'Pilih beberapa. Ini akan jadi hadiah.'], nPicked: [function (n) { return 'Next · ' + n + ' picked'; }, function (n) { return 'Lanjut · ' + n + ' dipilih'; }],
+    allSet: ['All set!', 'Siap!'], allSetP: [function (n) { return n + '’s tools are ready. You can change anything later in the Child tab.'; }, function (n) { return 'Alat untuk ' + n + ' sudah siap. Kamu bisa mengubah apa saja nanti di menu Anak.'; }], openTools: ['Open the tools', 'Buka alat'],
+    lEnEx: ['Eat', 'Eat'], lIdEx: ['Makan', 'Makan'], lBothEx: ['Makan · Eat', 'Makan · Eat'], lNoneEx: ['Pictures only', 'Gambar saja'], lEnName: ['English', 'Inggris'], lIdName: ['Indonesian', 'Indonesia'], lBothName: ['Both', 'Keduanya'], lNoneName: ['No words', 'Tanpa kata'],
     download: ['Download', 'Unduh'],
     whoHelp: ['Who are we helping?', 'Untuk siapa?'],
     addChild: ['Add a child', 'Tambah anak'], editProfiles: ['Edit profiles', 'Ubah profil'], saveBackupShare: ['Save backup to share with a teacher', 'Simpan cadangan untuk dibagikan ke guru'],
@@ -415,6 +421,9 @@
   function toggle(name, on) { return '<button type="button" class="tl-tog" role="switch" aria-checked="' + !!on + '" data-tog="' + name + '"></button>'; }
   function row(title, desc, ctrl) { return '<div class="tl-row"><div><b>' + title + '</b>' + (desc ? '<small>' + desc + '</small>' : '') + '</div>' + ctrl + '</div>'; }
   var ICO = {
+    cam: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="3"/><path d="M8.5 7l1.5-3h4l1.5 3"/><circle cx="12" cy="13.5" r="3.2"/></svg>',
+    img: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="2"/><path d="M4 18l5-5 4 4 3-3 4 4"/></svg>',
+    hand: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 13V6.5a1.5 1.5 0 0 1 3 0V12M11 11V5a1.5 1.5 0 0 1 3 0v6M14 11V6.5a1.5 1.5 0 0 1 3 0V14c0 4-2.5 7-6 7-2.5 0-4-1.5-5.5-4L4 14.5a1.5 1.5 0 0 1 2.5-1.6L8 15"/></svg>',
     x: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
     back: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>',
     dl: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>',
@@ -432,7 +441,7 @@
   function topbar(title, sub, opts) {
     opts = opts || {};
     return '<div class="tl-top">' + (opts.backAct ? '<button type="button" class="tl-iconbtn" data-act="' + opts.backAct + '" aria-label="' + esc(tr('back')) + '">' + ICO.back + '</button>' : '<a class="tl-iconbtn" href="' + (opts.back || '#/tools') + '" aria-label="' + esc(tr('back')) + '">' + ICO.back + '</a>') +
-      '<div class="tl-toptx"><h1>' + esc(title) + '</h1>' + (sub ? '<small>' + esc(sub) + '</small>' : '') + '</div>' +
+      '<div class="tl-toptx"><h1>' + esc(title) + '</h1>' + (sub ? '<small>' + esc(sub === tr('parentSetup') && prof() ? tr('forName', prof().name) : sub) + '</small>' : '') + '</div>' +
       (opts.dl ? '<button type="button" class="tl-iconbtn" data-act="download" aria-label="' + esc(tr('download')) + '">' + ICO.dl + '</button>' : '') +
       (opts.noProf ? '' : '<button type="button" class="tl-profbtn" data-act="profiles" aria-label="' + esc(tr('whoHelp')) + '">' + avatar(prof(), 30) + '<span aria-hidden="true">▾</span></button>') + '</div>';
   }
@@ -1134,35 +1143,42 @@
   /* ---------- setup ---------- */
   var SETUP = null;
   function pageSetup(modal) {
-    if (!SETUP) SETUP = { step: 1, name: '', color: COLORS[0], photo: null, rewards: DEFAULT_REWARDS.slice(), labels: S.settings.labels || 'both', kid: 'boy' };
-    var st = SETUP, nm = st.name.trim() || (L() === 'id' ? 'anakmu' : 'your child');
-    var h = '<div class="tl-page narrow setup">' + (modal
-      ? '<div class="tl-top">' + (st.step > 1 ? '<button type="button" class="tl-iconbtn" data-act="setupBack" aria-label="' + esc(tr('back')) + '">' + ICO.back + '</button>' : '') + '<span class="tl-eyebrow">' + esc(tr('beforeStart')) + '</span><button type="button" class="tl-iconbtn tl-setupx" data-act="setupClose" aria-label="' + esc(tr('close')) + '">' + ICO.x + '</button></div>'
-      : '<div class="tl-top"><button type="button" class="tl-iconbtn" data-act="setupBack">' + ICO.back + '</button></div>') +
-      '<div class="tl-progress"><i class="' + (st.step >= 1 ? 'on' : '') + (st.step === 1 ? ' cur' : '') + '"></i><i class="' + (st.step >= 2 ? 'on' : '') + (st.step === 2 ? ' cur' : '') + '"></i><i class="' + (st.step === 3 ? 'on cur' : '') + '"></i><span>' + esc(tr('stepOf', st.step, 3)) + '</span></div>';
+    if (!SETUP) SETUP = { step: 1, name: '', color: COLORS[0], photo: null, rewards: DEFAULT_REWARDS.slice(), labels: S.settings.labels || (L() === 'id' ? 'id' : 'en'), kid: 'boy' };
+    var st = SETUP, nm = st.name.trim() || (L() === 'id' ? 'anakmu' : 'your child'), ini = esc((st.name.trim()[0] || 'A').toUpperCase());
+    if (st.done) {
+      return '<div class="tl-page narrow setup done"><div class="tl-allset"><i class="d1"></i><i class="d2"></i><i class="d3"></i><i class="d4"></i>' +
+        '<div class="tl-allheart">' + A.heart(170, '#FFC94A') + '<span class="tl-allini" style="background:' + st.color + '">' + (st.photo && PH[st.photo] ? '<img src="' + PH[st.photo] + '" alt="">' : ini) + '</span></div>' +
+        '<h1 class="tl-h1">' + esc(tr('allSet')) + '</h1><p class="tl-lead">' + esc(tr('allSetP', st.name.trim() || nm)) + '</p></div>' +
+        '<div class="tl-foot"><button type="button" class="tl-btn dark lg block" data-act="setupDone">' + esc(tr('openTools')) + '</button></div></div>';
+    }
+    var h = '<div class="tl-page narrow setup s' + st.step + '"><div class="tl-sethead"><div class="tl-bars">' + [1, 2, 3, 4].map(function (n) { return '<i class="' + (n <= st.step ? 'on' : '') + '"></i>'; }).join('') + '</div>' +
+      '<button type="button" class="tl-iconbtn tl-setupx" data-act="setupClose" aria-label="' + esc(tr('close')) + '">' + ICO.x + '</button></div>' +
+      '<span class="tl-stepeye">' + esc(tr('step4', st.step)) + '</span>';
     if (st.step === 1) {
-      h += (modal ? '<div class="tl-tip">' + A.heart(22) + '<span>' + esc(tr('setupWhy')) + '</span></div>' : '') + '<h1 class="tl-h1">' + esc(tr('whoFor')) + '</h1><p class="tl-lead">' + esc(tr('whoForP')) + '</p>' +
-        '<div class="tl-center col"><button type="button" class="tl-photodrop" data-act="setupPhoto">' + (st.photo && PH[st.photo] ? '<img src="' + PH[st.photo] + '" alt="">' : '<span>+</span><small>' + esc(tr('addPhoto')) + '</small>') + '</button>' +
-        '<div class="tl-row2"><button type="button" class="tl-btn outline sm" data-act="setupCam">' + esc(tr('camera')) + '</button><button type="button" class="tl-btn outline sm" data-act="setupGal">' + esc(tr('gallery')) + '</button></div></div>' +
-        '<label class="tl-field"><span>' + esc(tr('nick')) + '</span><input id="tlNick" value="' + esc(st.name) + '" maxlength="24" autocomplete="off"></label>' +
-        '<div class="tl-lab2">' + esc(tr('kidPick')) + '</div><div class="tl-kidpick">' +
-        ['boy', 'girl'].map(function (g) { return '<button type="button" class="tl-opt' + (st.kid === g ? ' on' : '') + '" data-kid="' + g + '" aria-label="' + esc(tr(g)) + '" aria-pressed="' + (st.kid === g) + '">' + '<span class="tl-kidfig">' + (window.LUArt && LUArt.kid ? LUArt.kid(g) : '') + '</span>' + '</button>'; }).join('') +
-        '</div><p class="tl-note2">' + esc(tr('kidNote')) + '</p>' +
-        '<div class="tl-lab2">' + esc(tr('pickColour')) + '</div><div class="tl-swatches">' + COLORS.map(function (c) { return '<button type="button" class="tl-sw ini' + (st.color === c ? ' on' : '') + '" style="background:' + c + '" data-col="' + c + '">' + esc((st.name.trim()[0] || 'A').toUpperCase()) + '</button>'; }).join('') + '</div>' +
-        '<div class="tl-tip">' + A.heart(22) + '<span>' + esc(tr('savedPhone')) + '</span></div>';
+      h += '<h1 class="tl-h1">' + esc(tr('callChild')) + '</h1>' +
+        '<div class="tl-center col"><button type="button" class="tl-bigava" data-act="setupPhoto" style="background:' + st.color + '" aria-label="' + esc(tr('addPhoto')) + '">' + (st.photo && PH[st.photo] ? '<img src="' + PH[st.photo] + '" alt="">' : '<span class="tl-sw ini">' + ini + '</span>') + '</button></div>' +
+        '<label class="tl-field"><span>' + esc(tr('nickLabel')) + '</span><input id="tlNick" value="' + esc(st.name) + '" maxlength="24" autocomplete="off"></label>' +
+        '<div class="tl-row2 photo"><button type="button" class="tl-btn outline" data-act="setupCam">' + ICO.cam + esc(tr('takePhoto')) + '</button><button type="button" class="tl-btn outline" data-act="setupGal">' + ICO.img + esc(tr('fromGallery')) + '</button></div>' +
+        '<div class="tl-lab2">' + esc(tr('noPhotoCol')) + '</div><div class="tl-swatches">' + COLORS.map(function (c) { return '<button type="button" class="tl-sw ini' + (st.color === c ? ' on' : '') + '" style="background:' + c + '" data-col="' + c + '">' + ini + '</button>'; }).join('') + '</div>' +
+        '<div class="tl-tip quiet">' + A.heart(22) + '<span>' + esc(tr('savedPhone')) + '</span></div>';
     } else if (st.step === 2) {
+      h += '<h1 class="tl-h1">' + esc(tr('kidLike', nm)) + '</h1><div class="tl-kidpick big">' +
+        ['boy', 'girl'].map(function (g) { return '<button type="button" class="tl-opt' + (st.kid === g ? ' on' : '') + '" data-kid="' + g + '" aria-label="' + esc(tr(g)) + '" aria-pressed="' + (st.kid === g) + '"><span class="tl-kidfig">' + (window.LUArt && LUArt.kid ? LUArt.kid(g) : '') + '</span></button>'; }).join('') +
+        '</div><p class="tl-lead">' + esc(tr('kidLikeP')) + '</p>';
+    } else if (st.step === 3) {
       var opts = ['lego', 'gelembung', 'ayunan', 'nonton', 'stiker', 'biskuit', 'pelukan', 'mobil-mobilan', 'es-krim', 'bola', 'boneka', 'main-tablet', 'menggambar', 'musik', 'taman', 'puzzle'];
       st.rewards.forEach(function (r) { if (opts.indexOf(r) < 0) opts.push(r); });
-      h += '<h1 class="tl-h1">' + esc(tr('whatLove', nm)) + '</h1><p class="tl-lead">' + esc(tr('whatLoveP')) + '</p><div class="tl-grid setuprw">' +
+      h += '<h1 class="tl-h1">' + esc(tr('whatLove', nm)) + '</h1><p class="tl-lead">' + esc(tr('loveP')) + '</p><div class="tl-grid setuprw">' +
         '<button type="button" class="tl-card tl-addcard" data-act="setupOwn"><span>+</span><small>' + esc(tr('ownPhoto')) + '</small></button>' +
         opts.map(function (r) { return cardHTML(r, { state: st.rewards.indexOf(r) >= 0 ? 'selected' : '', attrs: ' data-rw="' + r + '"', labels: L() === 'id' ? 'id' : 'en' }); }).join('') + '</div>';
     } else {
-      h += '<h1 class="tl-h1">' + esc(tr('howLabel')) + '</h1><p class="tl-lead">' + esc(tr('howLabelP')) + '</p><div class="tl-grid two">' +
-        [['id', 'lId'], ['en', 'lEn'], ['both', 'lBoth'], ['none', 'lNone']].map(function (m) {
-          return '<button type="button" class="tl-opt' + (st.labels === m[0] ? ' on' : '') + '" data-lab="' + m[0] + '">' + cardHTML('makan', { labels: m[0], size: 's' }) + '<b>' + esc(tr(m[1])) + '</b></button>';
+      h += '<h1 class="tl-h1">' + esc(tr('wordsCards')) + '</h1><div class="tl-labsample">' + cardHTML('makan', { labels: st.labels, size: 'm' }) + '</div><div class="tl-radios">' +
+        [['en', 'lEnName', 'lEnEx'], ['id', 'lIdName', 'lIdEx'], ['both', 'lBothName', 'lBothEx'], ['none', 'lNoneName', 'lNoneEx']].map(function (m) {
+          return '<button type="button" class="tl-radio' + (st.labels === m[0] ? ' on' : '') + '" data-lab="' + m[0] + '" aria-pressed="' + (st.labels === m[0]) + '"><i></i><b>' + esc(tr(m[1])) + '</b><small>' + esc(tr(m[2])) + '</small></button>';
         }).join('') + '</div>';
     }
-    h += '<div class="tl-foot"><button type="button" class="tl-btn primary lg block" data-act="setupNext">' + esc(st.step === 1 ? tr('next') : st.step === 2 ? tr('nChosen', st.rewards.length) : tr('finish')) + '</button></div></div>';
+    h += '<div class="tl-foot setfoot">' + (st.step > 1 ? '<button type="button" class="tl-btn quiet lg" data-act="setupBack">' + esc(tr('back')) + '</button>' : '') +
+      '<button type="button" class="tl-btn primary lg block" data-act="setupNext">' + esc(st.step === 3 ? tr('nPicked', st.rewards.length) : st.step === 4 ? tr('finish') : tr('next')) + '</button></div></div>';
     return h;
   }
   function setupPhoto(cap) {
@@ -1185,12 +1201,16 @@
     if (p.rewards[0]) S.data[id].tokens.reward = p.rewards[0];
     S.current = id;
     if (!skip) S.settings.labels = st.labels;
+    save();
+    if (!skip) { SETUP = { done: true, name: name, color: st.color, photo: st.photo }; if (SETUPSH) SETUPSH.el.scrollTop = 0; window.scrollTo(0, 0); return setupRender(true); }
     var modal = !!SETUPSH;
-    SETUP = null; save();
+    SETUP = null;
     if (modal) { SETUPSH.close(); refreshAll(); } else go('#/tools');
   }
   var SETUPSH = null, MOUNTING = false;
-  function needSetup() { return !S.profiles.length && /^tools\/(timer|tokens|first-then|schedule|library|breathe|feelings|worry)$/.test(ROUTE); }
+  function useDefaults() { try { return localStorage.getItem('lu_defaults_ok') === '1'; } catch (e) { return false; } }
+  function appMode() { return document.documentElement.classList.contains('lu-app'); }
+  function needSetup() { return !S.profiles.length && !useDefaults() && /^tools\/(timer|tokens|first-then|schedule|library|breathe|feelings|worry)$/.test(ROUTE); }
   function openSetupModal() {
     if (SETUPSH) return;
     SETUP = null;
@@ -1534,7 +1554,7 @@
     var r = ROUTE;
     fixLocked();
     var html = EXT[r] ? EXT[r].page() : r === 'tools/timer' ? pageTimer() : r === 'tools/tokens' ? pageTokens() : r === 'tools/first-then' ? pageFT() : r === 'tools/schedule' ? pageSched() :
-      r === 'tools/library' ? pageLibrary() : r === 'tools/settings' ? pageSettings() : r === 'tools/setup' ? pageHub() : r === 'tools/backup' ? pageBackup() : pageHub();
+      r === 'tools/library' ? pageLibrary() : r === 'tools/settings' ? pageSettings() : r === 'tools/setup' ? (appMode() ? pageSetup(false) : pageHub()) : r === 'tools/backup' ? pageBackup() : pageHub();
     var y = window.scrollY;
     ROOT.innerHTML = html;
     if (PAGE.keepScroll) window.scrollTo(0, y);
@@ -1595,14 +1615,15 @@
     // setup
     if (act === 'startSetup') return openSetupModal();
     if (ROUTE === 'tools/setup' || scope !== ROOT) {
-      if (act === 'setupClose') { if (SETUPSH) SETUPSH.close(); return; }
+      if (act === 'setupClose') { if (SETUPSH) SETUPSH.close(); else { SETUP = null; go('#/tools'); } return; }
+      if (act === 'setupDone') { SETUP = null; if (SETUPSH) { SETUPSH.close(); refreshAll(); } else go('#/tools'); return; }
       if (act === 'setupBack') { if (SETUP.step > 1) { SETUP.step--; window.scrollTo(0, 0); return setupRender(true); } if (scope !== ROOT) return; SETUP = null; return go('#/tools'); }
       if (act === 'setupNext' && SETUP.step === 1 && !(SETUP.name || '').trim()) {
         toast(tr('needName'));
         var nk = document.getElementById('tlNick'); if (nk) { nk.focus(); nk.classList.add('tl-needed'); }
         return;
       }
-      if (act === 'setupNext') { if (SETUP.step < 3) { SETUP.step++; window.scrollTo(0, 0); return setupRender(true); } return setupFinish(false); }
+      if (act === 'setupNext') { if (SETUP.step < 4) { SETUP.step++; window.scrollTo(0, 0); return setupRender(true); } return setupFinish(false); }
       if (act === 'setupPhoto') return setupPhoto(null);
       if (act === 'setupCam') return setupPhoto(true);
       if (act === 'setupGal') return setupPhoto(false);
@@ -1735,7 +1756,7 @@
     PH: PH, tr: tr, L: L, esc: esc, sheet: sheet, save: save, keep: keep, rerender: rerender, openPicker: openPicker, topbar: topbar, row: row, toggle: toggle, seg: seg,
     childOpen: childOpen, childClose: childClose, childClear: childClear, addTimer: function (t) { CH.timers.push(t); }, childEl: function () { return CH.el; }, exitPill: exitPill, wireExit: wireExit,
     chime: chime, say: say, buzz: buzz, setLast: setLast, runTimer: runTimer, photoPut: photoPut, photoDel: photoDel, cardLabel: cardLabel, adultCheck: adultCheck, openDownload: openDownload,
-    profName: profName, route: function () { return ROUTE; }, A: A, fmt: fmt, schedName: schedName, activeSched: activeSched, timerSVG: timerSVG, timerSet: timerSet, T: T, canUse: canUse, toast: toast, heart: A.heart
+    profName: profName, route: function () { return ROUTE; }, openProfiles: function () { return openProfiles(); }, photosLoad: function () { return READY = READY || photosLoad(); }, COLORS: COLORS, DEFAULT_REWARDS: DEFAULT_REWARDS, appMode: appMode, A: A, fmt: fmt, schedName: schedName, activeSched: activeSched, timerSVG: timerSVG, timerSet: timerSet, T: T, canUse: canUse, toast: toast, heart: A.heart
   };
   window.LUTools = {
     version: VERSION,
@@ -1748,6 +1769,7 @@
       DD = null;
       if (ROUTE !== 'tools/library') { LIB.select = false; LIB.sel = []; }
       if (ROUTE === 'tools/setup' && window.LU && LU.qs.get('new') && !SETUP) SETUP = null;
+      if (ROUTE === 'tools/setup' && appMode() && !(SETUP && SETUP.step)) SETUP = null;
       if (ROUTE === 'tools/setup' && window.LUAcc && S.profiles.length && !LUAcc.canAddChild()) { LUAcc.childLockSheet(); ROUTE = 'tools'; if (window.LU) LU.go('#/tools', true); }
       if (ROUTE !== 'tools/backup') RESTORE = null;
       root.addEventListener('click', onClick);
@@ -1755,6 +1777,8 @@
       return READY.then(function () {
         if (ROUTE === 'tools/library' && window.LU && LU.qs.get('q')) { LIB.q = LU.qs.get('q'); }
         render();
+        if (ROUTE === 'tools/setup' && appMode()) return;
+        if (needSetup() && appMode()) { if (window.LU) LU.go('#/tools/setup', true); return; }
         if (needSetup() || ROUTE === 'tools/setup') openSetupModal();
         if (location.hash === '#profiles') { var el = document.getElementById('profiles'); el && el.scrollIntoView(); }
       });
