@@ -210,7 +210,9 @@
     hiReady: [function (n, c) { return 'Hi ' + n + '! Ready for ' + c + '’s day?'; }, function (n, c) { return 'Hai ' + n + '! Siap untuk hari ' + c + '?'; }],
     hiReady0: [function (n) { return 'Hi ' + n + '! Ready for today?'; }, function (n) { return 'Hai ' + n + '! Siap untuk hari ini?'; }],
     syncedEvery: ['Their tools and downloads are synced on every device.', 'Alat dan unduhan tersimpan di semua perangkat.'],
-    pickUp: ['Pick up where you left off', 'Lanjutkan dari terakhir kali'], allTools: ['All tools', 'Semua alat'], open: ['Open', 'Buka'],
+    pickUp: ['Pick up where you left off', 'Lanjutkan dari terakhir kali'], usedLast: [function (n) { return n + ' used last'; }, function (n) { return 'Terakhir dipakai ' + n; }],
+    daysLeftN: [function (n) { return n + (n === 1 ? ' day left' : ' days left'); }, function (n) { return 'Sisa ' + n + ' hari'; }], planEnds: [function (p, d) { return p + ' plan · ends ' + d; }, function (p, d) { return 'Paket ' + p + ' · berakhir ' + d; }],
+    m12: ['12 Months', '12 Bulan'], m3: ['3 Months', '3 Bulan'], managePlan: ['Manage plan', 'Kelola paket'], activeP: ['Active', 'Aktif'], allTools: ['All tools', 'Semua alat'], open: ['Open', 'Buka'],
     emptyLibH: ['Nothing here yet', 'Belum ada apa-apa'], emptyLibP: ['Anything you buy is kept here, on every device.', 'Semua yang kamu beli tersimpan di sini, di semua perangkat.'],
     browseFree: ['Browse free printables', 'Lihat materi gratis'], plusLibH: ['Every worksheet is yours to download', 'Semua lembar kerja bisa kamu unduh'],
     plusLibP: ['Little Us Plus includes every worksheet, social story and bundle in the Shop.', 'Little Us Plus mencakup semua lembar kerja, cerita sosial, dan paket di Toko.'], browseShop: ['Browse the shop', 'Lihat toko'],
@@ -1268,17 +1270,20 @@
     tools = tools.filter(function (k) { return TOOLS_META[k]; }).slice(0, 3);
     var used = tools.map(function (k, i) {
       var m = TOOLS_META[k];
-      return '<a class="la-used" href="' + m[3] + '"><span class="ic" style="background:' + m[2] + '">' + heartFace(22) + '</span><span><b>' + esc(L() === 'id' ? m[1] : m[0]) + '</b>' + (i === 0 && store.json(TKEY, {}) && (store.json(TKEY, {}).last || {}).at ? '<small>' + esc(fmtDate(store.json(TKEY, {}).last.at)) + '</small>' : '') + '</span><span class="op">' + esc(t('open')) + ' →</span></a>';
+      var art = ''; try { var AR = window.LUArt, tk = { timer: 'timer', tokens: 'tokens', ft: 'ft', sched: 'sched' }[k]; if (AR && AR.toolArt && tk) art = AR.toolArt(tk).replace('<svg ', '<svg style="width:100%;height:100%;display:block" '); } catch (e) {}
+      return '<a class="la-used" href="' + m[3] + '"><span class="ic" style="background:' + m[2] + '">' + (art || heartFace(22)) + '</span><span><b>' + esc(L() === 'id' ? m[1] : m[0]) + '</b>' + (i === 0 && store.json(TKEY, {}) && (store.json(TKEY, {}).last || {}).at ? '<small>' + esc(fmtDate(store.json(TKEY, {}).last.at)) + '</small>' : '') + '</span><span class="op">' + esc(t('open')) + ' →</span></a>';
     }).join('');
     var owned = (A.purchases || []).filter(function (p) { return p.kind === 'product' && p.status === 'paid'; });
     var lib;
     if (s === 'plus' || s === 'expiring') lib = '<div class="la-empty" style="border-style:solid;border-color:var(--mint);background:var(--mint)"><h3>' + esc(t('plusLibH')) + '</h3><p>' + esc(t('plusLibP')) + '</p><a class="la-btn primary sm" href="#/catalogue">' + esc(t('browseShop')) + '</a></div>';
     else if (owned.length) lib = '<div class="la-stack" data-la-lib>' + owned.slice(0, 4).map(function (p) { return '<a class="la-libitem" href="#/product/' + encodeURIComponent(p.product_id) + '"><span class="la-pill plain">PDF</span><b data-pid="' + esc(p.product_id) + '">' + esc(p.product_id) + '</b></a>'; }).join('') + '</div>';
     else lib = '<div class="la-empty"><h3>' + esc(t('emptyLibH')) + '</h3><p>' + esc(t('emptyLibP')) + '</p><a class="la-btn primary sm" href="#/catalogue?free=1">' + esc(t('browseFree')) + '</a></div>';
-    var up = s === 'free' || s === 'expired' ? '<div class="la-upbar">' + pill('plus') + '<b>' + esc(t('upBarH')) + '</b><span class="d">' + esc(t('upBarP')) + '</span><a class="la-btn primary sm" href="#/plus">' + esc(t('seePlans', st.p3)) + '</a></div>' : '';
-    var kidChip = kid ? '<a class="la-kid" href="#/tools/settings#profiles"><span class="av" style="background:' + esc(kid.color || '#DDF2E4') + '">' + esc(initials(kid.name)) + '</span><span><small>' + esc(t('childProfile')) + '</small><b>' + esc(kid.name) + '</b></span><span class="sw">' + esc(t('switchC')) + ' ▾</span></a>' : '';
+    var up = s === 'free' || s === 'expired' ? '<div class="la-upbar">' + pill('plus') + '<b>' + esc(t('upBarH')) + '</b><span class="d">' + esc(t('upBarP')) + '</span><a class="la-btn primary sm" href="#/plus">' + esc(t('seePlans', st.p3)) + '</a></div>'
+      : '<div class="la-upbar">' + pill('plus') + '<span class="la-pill free">' + esc(t('activeP')) + '</span><b>' + esc(t('daysLeftN', daysLeft())) + '</b><span class="d">' + esc(t('planEnds', (A.profile && A.profile.plus_plan === '3m') ? t('m3') : t('m12'), fmtDate(plusUntil()))) + '</span><a class="la-btn outline sm" href="#/account">' + esc(t('managePlan')) + '</a></div>';
+    var kids = []; try { kids = (store.json(TKEY, {}).profiles || []).filter(function (p) { return p.id !== kid.id; }).slice(0, 2); } catch (e) {}
+    var kidChip = kid ? '<a class="la-kid" href="#/tools/settings#profiles"><span class="avs"><span class="av" style="background:' + esc(kid.color || '#DDF2E4') + '">' + esc(initials(kid.name)) + '</span>' + kids.map(function (o) { return '<span class="av sm" style="background:' + esc(o.color || '#F3EEE6') + '">' + esc(initials(o.name)) + '</span>'; }).join('') + '</span><span><small>' + esc(t('childProfile')) + '</small><b>' + esc(kid.name) + '</b></span><span class="sw">' + esc(t('switchC')) + ' ▾</span></a>' : '';
     return '<div class="la-dash" aria-label="' + esc(t('account')) + '"><div class="head"><div><h1>' + esc(kid ? t('hiReady', firstName(u.name), kid.name) : t('hiReady0', firstName(u.name))) + '</h1><p>' + esc(t('syncedEvery')) + '</p></div>' + kidChip + '</div>' +
-      '<div class="la-dgrid"><div class="la-panel"><div class="la-ph"><h2>' + esc(t('pickUp')) + '</h2><a class="la-lk" href="#/tools">' + esc(t('allTools')) + ' →</a></div>' + used + '</div><div class="la-panel"><div class="la-ph"><h2>' + esc(t('yourLibrary')) + '</h2></div>' + lib + '</div></div>' + up + '</div>';
+      '<div class="la-dgrid"><div class="la-panel"><div class="la-ph"><h2>' + esc(kid ? t('usedLast', kid.name) : t('pickUp')) + '</h2><a class="la-lk" href="#/tools">' + esc(t('allTools')) + ' →</a></div>' + used + '</div><div class="la-panel"><div class="la-ph"><h2>' + esc(t('yourLibrary')) + '</h2></div>' + lib + '</div></div>' + up + '</div>';
   }
   function homeRender() {
     injectCSS();
