@@ -235,16 +235,16 @@ label.f small{font-weight:500;color:var(--muted)}
   // ---------------------------------------------------------------- payments
   var PAY = { f: 'all' };
   VIEWS.payments = function () {
-    shell('<div class="head"><div><h1>Plus payments</h1><p>Every Gumroad sale that reached Little Us. Plus switches on automatically; only <b>unclaimed</b> sales need you.</p></div></div>' +
+    shell('<div class="head"><div><h1>Plus payments</h1><p>Every Gumroad and Midtrans payment that reached Little Us. Plus switches on automatically; only <b>unclaimed</b> sales need you.</p></div></div>' +
       '<div class="bar"><div class="seg" id="pf">' + [['all', 'All'], ['unclaimed', 'Unclaimed'], ['plus', 'Plus passes'], ['product', 'Single products'], ['disputed', 'Disputes and refunds']].map(function (a) { return '<button type="button" data-f="' + a[0] + '" class="' + (PAY.f === a[0] ? 'on' : '') + '">' + a[1] + '</button>'; }).join('') + '</div></div><div id="pl" class="muted">Loading…</div>');
     $$('#pf button').forEach(function (b) { b.onclick = function () { PAY.f = b.dataset.f; $$('#pf button').forEach(function (x) { x.classList.toggle('on', x === b); }); load(); }; });
     function load() {
       var q = '/rest/v1/purchases?select=id,sale_id,email,kind,plan,product_id,price_label,status,plus_to,note,created_at,user_id&order=created_at.desc&limit=200';
       if (PAY.f === 'unclaimed') q += '&status=eq.unclaimed'; else if (PAY.f === 'plus') q += '&kind=eq.plus'; else if (PAY.f === 'product') q += '&kind=eq.product'; else if (PAY.f === 'disputed') q += '&status=in.(disputed,refunded)';
       api(q).then(function (rows) {
-        $('#pl').innerHTML = '<table><tr><th>Date</th><th>Gumroad email</th><th>What</th><th>Paid</th><th>Status</th><th>Plus until</th><th></th></tr>' + (rows.length ? rows.map(function (r) {
+        $('#pl').innerHTML = '<table><tr><th>Date</th><th>Email</th><th>What</th><th>Paid</th><th>Status</th><th>Plus until</th><th></th></tr>' + (rows.length ? rows.map(function (r) {
           var st = { paid: '<span class="pill p-free">PAID</span>', unclaimed: '<span class="pill p-unc">UNCLAIMED</span>', disputed: '<span class="pill p-dis">DISPUTED</span>', refunded: '<span class="pill p-end">REFUNDED</span>' }[r.status] || esc(r.status);
-          return '<tr><td class="small">' + d(r.created_at) + '</td><td>' + esc(r.email) + '<div class="small muted">' + esc(r.sale_id) + '</div></td><td>' + (r.kind === 'plus' ? '<span class="pill p-plus">PLUS</span> ' + (r.plan === '12m' ? '12 months' : '3 months') : esc(r.product_id || 'product')) + '</td><td>' + esc(r.price_label) + '</td><td>' + st + '</td><td class="small">' + (r.plus_to ? d(r.plus_to) : '–') + '</td>' +
+          return '<tr><td class="small">' + d(r.created_at) + '</td><td>' + esc(r.email) + '<div class="small muted">' + (/^mt-/.test(r.sale_id) ? 'Midtrans · ' : 'Gumroad · ') + esc(r.sale_id) + '</div></td><td>' + (r.kind === 'plus' ? '<span class="pill p-plus">PLUS</span> ' + (r.plan === '12m' ? '12 months' : '3 months') : esc(r.product_id || 'product')) + '</td><td>' + esc(r.price_label) + '</td><td>' + st + '</td><td class="small">' + (r.plus_to ? d(r.plus_to) : '–') + '</td>' +
             '<td style="text-align:right">' + (r.status === 'unclaimed' ? '<button class="btn sm primary" data-a="' + r.id + '" data-e="' + esc(r.email) + '">Assign to account</button>' : '') + '</td></tr>';
         }).join('') : '<tr><td colspan="7" class="muted">Nothing here.</td></tr>') + '</table>';
         $$('[data-a]').forEach(function (b) {
@@ -283,6 +283,7 @@ label.f small{font-weight:500;color:var(--muted)}
   // ---------------------------------------------------------------- settings
   var FIELDS = [
     ['Gumroad', [['gumroad_3m_url', '3 Months pass · Gumroad link', 'url'], ['gumroad_12m_url', '12 Months pass · Gumroad link', 'url']]],
+    ['Midtrans (rupiah payments)', [['midtrans_enabled', 'Offer Midtrans (GoPay, QRIS, bank transfer) next to Gumroad', 'bool'], ['usd_3m', '3 Months price in US dollars (the rupiah amount is worked out from today\'s rate)', 'dec'], ['usd_12m', '12 Months price in US dollars', 'dec'], ['midtrans_round', 'Round the rupiah amount to the nearest (e.g. 10000)', 'int']]],
     ['Prices shown on the website', [['price_3m_label', '3 Months price', 'text'], ['per_month_3m', '3 Months, per month', 'text'], ['price_12m_label', '12 Months price', 'text'], ['per_month_12m', '12 Months, per month', 'text']]],
     ['Free accounts', [['free_child_limit', 'Child profiles on a free account', 'number']]],
     ['Upgrade popup', [['popup_title_en', 'Title (English) · {name} becomes the style name', 'text'], ['popup_title_id', 'Title (Indonesian)', 'text'], ['popup_body_en', 'Text (English)', 'area'], ['popup_body_id', 'Text (Indonesian)', 'area']]],
@@ -295,13 +296,13 @@ label.f small{font-weight:500;color:var(--muted)}
       var s = rows[0] || {};
       $('#sl').innerHTML = '<form id="sf" style="display:flex;flex-direction:column;gap:16px">' + FIELDS.map(function (g) {
         return '<div class="card" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px"><h3 style="grid-column:1/-1;font-size:18px">' + g[0] + '</h3>' + g[1].map(function (f) {
-          return '<label class="f">' + esc(f[1]) + (f[2] === 'area' ? '<textarea name="' + f[0] + '">' + esc(s[f[0]]) + '</textarea>' : '<input type="' + f[2] + '" name="' + f[0] + '" value="' + esc(s[f[0]]) + '"' + (f[2] === 'number' ? ' min="1" max="20"' : '') + '>') + '</label>';
+          return '<label class="f">' + esc(f[1]) + (f[2] === 'area' ? '<textarea name="' + f[0] + '">' + esc(s[f[0]]) + '</textarea>' : f[2] === 'bool' ? '<select name="' + f[0] + '" data-k="bool"><option value="false"' + (s[f[0]] ? '' : ' selected') + '>No, Gumroad only</option><option value="true"' + (s[f[0]] ? ' selected' : '') + '>Yes, offer both</option></select>' : f[2] === 'dec' || f[2] === 'int' ? '<input type="number" data-k="' + f[2] + '" name="' + f[0] + '" value="' + esc(s[f[0]]) + '" min="' + (f[2] === 'dec' ? '0.5' : '1') + '"' + (f[2] === 'dec' ? ' step="0.01"' : ' step="1"') + '>' : '<input type="' + f[2] + '" name="' + f[0] + '" value="' + esc(s[f[0]]) + '"' + (f[2] === 'number' ? ' min="1" max="20"' : '') + '>') + '</label>';
         }).join('') + '</div>';
       }).join('') + '<div><button class="btn primary" type="submit">Save settings</button></div></form>';
       $('#sf').onsubmit = function (e) {
         e.preventDefault();
         var body = { updated_at: new Date().toISOString() };
-        $$('[name]', $('#sf')).forEach(function (i) { body[i.name] = i.type === 'number' ? Math.max(1, Number(i.value) || 1) : i.value.trim(); });
+        $$('[name]', $('#sf')).forEach(function (i) { var k = i.getAttribute('data-k'); body[i.name] = k === 'bool' ? i.value === 'true' : k === 'dec' ? Math.max(0.5, Number(i.value) || 9) : k === 'int' ? Math.max(1, Math.round(Number(i.value)) || 10000) : i.type === 'number' ? Math.max(1, Number(i.value) || 1) : i.value.trim(); });
         api('/rest/v1/plus_settings?id=eq.1', { method: 'PATCH', body: body }).then(function () { toast('Settings saved'); }).catch(function (er) { toast(er.message); });
       };
     }).catch(function (e) { $('#sl').innerHTML = errBox(e); });

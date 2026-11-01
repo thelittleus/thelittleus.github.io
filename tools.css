@@ -962,3 +962,25 @@ body.tl-childon{overflow:hidden}
 .tl-child{isolation:isolate}
 .tl-child::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(rgba(255,255,255,.55) 1px,transparent 1.5px) 0 0/12px 12px,linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,0) 55%)}
 .tl-child::after{content:"";position:fixed;left:-4%;right:-4%;bottom:0;height:22vh;z-index:-1;pointer-events:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 100' preserveAspectRatio='none'%3E%3Cpath d='M0 40C60 14 120 16 190 34C260 10 330 12 400 32V100H0Z' fill='%23fff' fill-opacity='.4'/%3E%3Cpath d='M0 66C80 46 150 50 220 62C290 46 350 48 400 58V100H0Z' fill='%232B2A35' fill-opacity='.045'/%3E%3C/svg%3E") bottom/100% 100% no-repeat}
+
+/* schedule checklist */
+.tl-step.has-box{position:relative}
+.tl-step .tl-tick{margin-left:auto;flex:none;width:34px;height:34px;border-radius:50%;border:3px solid var(--line);background:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;color:#fff}
+.tl-step .tl-tick.on{background:var(--success);border-color:var(--success)}
+.tl-step.nxt{border-style:dashed;border-color:var(--ink)}
+.tl-cwrap.sched.horizontal .tl-step .tl-tick{margin-left:0}
+
+/* digital time picker */
+.tl-digital{display:flex;align-items:center;justify-content:center;gap:6px;background:#23222B;border-radius:22px;padding:14px 22px;box-shadow:inset 0 2px 8px rgba(0,0,0,.45),0 0 0 4px #E4DCCF;width:max-content;max-width:100%;margin:0 auto}
+.tl-dcol{display:flex;flex-direction:column;align-items:center;gap:2px}
+.tl-ddig,.tl-dcolon,.tl-dsec{font:700 72px/1 "Courier New",ui-monospace,Menlo,monospace;color:#FFC94A;text-shadow:0 0 14px rgba(255,201,74,.55);font-variant-numeric:tabular-nums}
+.tl-ddig{min-width:.66em;text-align:center}
+.tl-dsec,.tl-dcolon{opacity:.45;text-shadow:none}
+.tl-dcolon{padding:0 2px}
+.tl-dunit{align-self:flex-end;margin:0 0 10px 10px;color:#BDB6C8;font:700 15px Figtree,sans-serif;text-transform:uppercase;letter-spacing:.08em}
+.tl-dbtn{width:48px;height:34px;border:0;border-radius:10px;background:#38364A;color:#FFC94A;font-size:15px;cursor:pointer}
+.tl-dbtn:hover{background:#46435C}.tl-dbtn:active{transform:translateY(1px)}
+.tl-dbtn:focus-visible{outline:3px solid #FFC94A;outline-offset:2px}
+@media (max-width:420px){.tl-ddig,.tl-dcolon,.tl-dsec{font-size:54px}}
+
+.tl-donecard{border:0;background:none;padding:0;cursor:pointer;font:inherit;color:inherit}

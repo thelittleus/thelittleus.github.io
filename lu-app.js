@@ -15,7 +15,7 @@
     home: ['Home', 'Beranda'], tools: ['Tools', 'Alat'], shop: ['Shop', 'Toko'], articles: ['Articles', 'Artikel'], settings: ['Settings', 'Pengaturan'],
     ready: ['Getting your tools ready…', 'Menyiapkan alatmu…'],
     hiWelcome: ['Hi, welcome!', 'Halo, selamat datang!'], hiAgain: ['Hi again!', 'Halo lagi!'],
-    welcomeP: ['Picture tools, printables and tips for children 4 to 10, including autistic children.', 'Alat bergambar, materi cetak, dan tips untuk anak usia 4 sampai 10 tahun, termasuk anak autis.'],
+    welcomeP: ['Picture tools, printables and tips for little learners.', 'Alat bergambar, materi cetak, dan tips untuk si kecil.'],
     againP: [function (n) { return 'What would you like to do with ' + n + ' today?'; }, function (n) { return 'Mau melakukan apa bersama ' + n + ' hari ini?'; }],
     againP0: ['What would you like to do today?', 'Mau melakukan apa hari ini?'],
     three: ['Three quick things', 'Tiga hal singkat'], threeP: ['Language and child first. A free account keeps it all on every device.', 'Bahasa dan anak dulu. Akun gratis menyimpan semuanya di setiap perangkat.'],
@@ -134,8 +134,8 @@
   function accStatus() { var a = acc(); try { return a ? a.status() : 'none'; } catch (e) { return 'none'; } }
   function load() {
     if (!window.luLoad) return Promise.resolve();
-    return luLoad('/tools.css?v=13').then(function () { return luLoad('/tools-art.js?v=13'); }).then(function () { return luLoad('/tools.js?v=14'); })
-      .then(function () { return Promise.all([luLoad('/tools-calm.js?v=13'), luLoad('/tools-talk.js?v=1')]); }).then(function () { var a = api(); return a && a.photosLoad ? a.photosLoad() : null; }).catch(function () { });
+    return luLoad('/tools.css?v=14').then(function () { return luLoad('/tools-art.js?v=15'); }).then(function () { return luLoad('/tools.js?v=15'); })
+      .then(function () { return Promise.all([luLoad('/tools-calm.js?v=13'), luLoad('/tools-talk.js?v=3')]); }).then(function () { var a = api(); return a && a.photosLoad ? a.photosLoad() : null; }).catch(function () { });
   }
   function photo(p) { var a = api(); return p && p.photo && a && a.PH && a.PH[p.photo] ? a.PH[p.photo] : ''; }
   function ava(p, size, cls) {
@@ -434,7 +434,6 @@
       '<div class="ua-panel"><div class="ua-prow"><span class="ua-rowtx"><b>' + esc(t('sounds')) + '</b><small>' + esc(t('soundsP')) + '</small></span>' + tog('sound', set.sound !== false) + '</div>' +
       '<div class="ua-prow vol"><small>' + esc(t('soft')) + '</small><input type="range" min="0" max="100" value="' + vol + '" data-vol aria-label="' + esc(t('sounds')) + '" style="--v:' + vol + '%"><small>' + esc(t('loud')) + '</small></div>' +
       '<div class="ua-prow"><span class="ua-rowtx"><b>' + esc(t('reduce')) + '</b><small>' + esc(t('reduceP')) + '</small></span>' + tog('reduce', !!set.reduce) + '</div></div>' +
-      '<h3 class="ua-lab">' + esc(t('leaving')) + '</h3>' + seg('exit', [['hold', t('hold3')], ['check', t('adultCheck')]], set.exit || 'hold') +
       '<h3 class="ua-lab">' + esc(t('more')) + '</h3><div class="ua-panel links">' +
       [['#/tools/library', t('cardLibrary')], ['#/tools/backup', t('backupShare')], ['#/find-order', t('findOrder')], ['#/faq', t('help')], ['#/about', t('about')]].map(function (l) { return '<a class="ua-prow link" href="' + l[0] + '"><b>' + esc(l[1]) + '</b><span class="ua-chev">›</span></a>'; }).join('') + '</div>';
     if (MODE === 'land') return '<div class="ua-page ua-settings land"><div class="ua-setL">' + left + '</div><div class="ua-setR">' + right + '</div></div>';
@@ -576,10 +575,12 @@
     freeAcc: ['Free account', 'Akun gratis'], freeAccP: ['Your child’s setup on every phone, tablet and computer.', 'Pengaturan anakmu di setiap HP, tablet, dan komputer.'], makeAcc: ['Make an account', 'Buat akun'],
     upgradeH: ['Upgrade to Little Us', 'Upgrade ke Little Us'], upgradeP: ['Get more tool styles and all our resources', 'Dapatkan lebih banyak gaya alat dan semua materi kami'], seePlans: ['See plans · from $9', 'Lihat paket · mulai $9'], seePlans0: ['See plans', 'Lihat paket'],
     moreDev: ['Use them on more than one device?', 'Mau memakainya di lebih dari satu perangkat?'], moreDevP: ['Without an account, your setup stays on this computer. A free account keeps it on your phone and tablet too.', 'Tanpa akun, pengaturanmu hanya tersimpan di komputer ini. Akun gratis menyimpannya juga di HP dan tablet.'],
-    popSub: ['Buy one at a time, or get every download with <b>Little Us Plus</b> from $9.', 'Beli satu per satu, atau dapatkan semua unduhan dengan <b>Little Us Plus</b> mulai $9.'],
+    popSub: ['Every download is included with <b>Little Us Plus</b>, from $9.', 'Semua unduhan termasuk dalam <b>Little Us Plus</b>, mulai $9.'],
     m3: ['3 Months', '3 Bulan'], m12: ['12 Months', '12 Bulan'],
     tools: ['Tools', 'Alat'], shop: ['Shop', 'Toko'], articles: ['Articles', 'Artikel'], allTools: ['All tools →', 'Semua alat →'], browseShop: ['Browse the shop →', 'Lihat toko →'], allArticles: ['All articles →', 'Semua artikel →'],
-    account: ['Account', 'Akun']
+    account: ['Account', 'Akun'],
+    cWork: ['Worksheet', 'Lembar kerja'], cStory: ['Social story', 'Cerita sosial'], cPrint: ['Printable', 'Materi cetak'],
+    cTimer: ['Visual Timer', 'Timer Visual'], cTokens: ['Token Board', 'Papan Token'], cSched: ['Visual Schedule', 'Jadwal Visual']
   };
   function dt(k) { return DW[k][isId() ? 1 : 0]; }
   function deskHome() {
@@ -623,8 +624,58 @@
     }
   }
   // art that other scripts may redraw: put back on every pass
+  /* banner collage: real resource covers (when the catalogue has loaded) mixed with the free tools */
+  function heroCollage(main, Ar) {
+    var art = main.querySelector('.h2-art'); if (!art) return;
+    var covers = (window.LUHeroCovers || []).slice(0, 3);
+    var sig = lang() + '|' + covers.map(function (c) { return c.id || c.cover_url; }).join(',');
+    var old = art.querySelector('.ud-collage');
+    if (old && old.dataset.sig === sig) return;
+    if (old) old.remove();
+    var fb = [['sekolah-gedung', 'cWork', '#DCEBFA'], ['makan', 'cStory', '#DDF2E4'], ['taman', 'cPrint', '#FFF1C7']];
+    function res(i) {
+      var c = covers[i], f = fb[i];
+      if (c) {
+        var ttl = (window.LU && LU.title ? LU.title(c) : c.title_en) || '';
+        return '<div class="ud-ct"><div class="ud-cimg" style="background:' + f[2] + '"><img src="' + esc(window.LU && LU.imgAt ? LU.imgAt(c.cover_url, 420) : c.cover_url) + '" alt="" loading="lazy"></div><b>' + esc(ttl) + '</b></div>';
+      }
+      return '<div class="ud-ct"><div class="ud-cimg fb" style="background:' + f[2] + '">' + fit(Ar.svg(f[0], { gender: 'boy' })) + '</div><b>' + esc(dt(f[1])) + '</b></div>';
+    }
+    function tool(k, lab, bg) { return '<div class="ud-ct tool"><div class="ud-cimg" style="background:' + bg + '">' + fit(Ar.toolArt ? Ar.toolArt(k) : '') + '</div><b>' + esc(dt(lab)) + '<i>' + (isId() ? 'GRATIS' : 'FREE') + '</i></b></div>'; }
+    var el = document.createElement('div');
+    el.className = 'ud-collage ud-x'; el.dataset.sig = sig; el.setAttribute('aria-hidden', 'true');
+    el.innerHTML = res(0) + tool('timer', 'cTimer', '#DCEBFA') + res(1) + tool('tokens', 'cTokens', '#FFF1C7') + res(2) + tool('sched', 'cSched', '#E9E1F7');
+    art.appendChild(el); art.classList.add('ud-hascol');
+  }
+  // desktop banner: the hills are one low strip along the bottom, drawn in full (never cropped)
+  function flatHills(main) {
+    var h = main.querySelector('.h2-hills');
+    if (h && h.getAttribute('preserveAspectRatio') !== 'none') h.setAttribute('preserveAspectRatio', 'none');
+    var hero = main.querySelector('.h2-hero');
+    if (hero && !hero.querySelector('.ud-flowers')) hero.insertAdjacentHTML('beforeend', meadowHTML());
+  }
+  // flowers, grass and a butterfly on the hills; drawn separately so they keep their shape
+  function meadowHTML() {
+    var INK = '#2B2A35';
+    function flower(c, mid) {
+      return '<svg viewBox="0 0 40 56" aria-hidden="true"><path d="M20 55V26" stroke="#4FA772" stroke-width="3" stroke-linecap="round"/><path d="M20 44c-6-1-10-5-10-10 6 0 9 4 10 10z" fill="#9ED9B0" stroke="' + INK + '" stroke-width="2" stroke-linejoin="round"/>' +
+        '<g stroke="' + INK + '" stroke-width="2.2"><circle cx="20" cy="10" r="7" fill="' + c + '"/><circle cx="30" cy="18" r="7" fill="' + c + '"/><circle cx="20" cy="26" r="7" fill="' + c + '"/><circle cx="10" cy="18" r="7" fill="' + c + '"/><circle cx="20" cy="18" r="5.2" fill="' + (mid || '#FFC94A') + '"/></g></svg>';
+    }
+    function tuft() { return '<svg viewBox="0 0 40 30" aria-hidden="true"><path d="M8 29c-2-10 2-18 8-20M18 29c0-12 6-20 14-21M27 29c1-7 4-11 9-12" fill="none" stroke="#4FA772" stroke-width="3.2" stroke-linecap="round"/></svg>'; }
+    var bfly = '<svg viewBox="0 0 44 36" aria-hidden="true"><g class="ud-wings" stroke="' + INK + '" stroke-width="2" stroke-linejoin="round"><path d="M22 18C14 4 4 4 4 12s8 10 18 6z" fill="#F7A8C4"/><path d="M22 18c8-14 18-14 18-6s-8 10-18 6z" fill="#F7A8C4"/><path d="M22 19c-7 3-12 8-9 13s7-4 9-13z" fill="#FFC94A"/><path d="M22 19c7 3 12 8 9 13s-7-4-9-13z" fill="#FFC94A"/></g><path d="M22 10v18" stroke="' + INK + '" stroke-width="3" stroke-linecap="round"/></svg>';
+    var items = [
+      ['t', 1.2, 4, 34], ['f', 4.2, 6, 40, '#F7A8C4'], ['f', 9.5, 2, 30, '#fff'], ['t', 15, 0, 30],
+      ['f', 33.6, 4, 32, '#FFE07A', '#F0694F'], ['t', 36.5, 0, 28], ['f', 50, 2, 34, '#F7A8C4'], ['t', 64.8, 2, 30],
+      ['f', 67.6, 5, 30, '#fff'], ['f', 86, 3, 34, '#FFE07A', '#F0694F'], ['t', 90.5, 0, 30], ['f', 95, 6, 40, '#fff'], ['t', 97.8, 2, 32]
+    ];
+    return '<div class="ud-flowers" aria-hidden="true">' + items.map(function (x, i) {
+      var st = 'left:' + x[1] + '%;bottom:' + x[2] + 'px;width:' + x[3] + 'px;animation-delay:-' + (i * 0.7 % 3).toFixed(1) + 's;animation-duration:' + (3 + i % 3) + 's';
+      return '<span class="ud-fl ' + (x[0] === 't' ? 'tuft' : 'flower') + '" style="' + st + '">' + (x[0] === 't' ? tuft() : flower(x[4], x[5])) + '</span>';
+    }).join('') + '<span class="ud-bfly">' + bfly + '</span></div>';
+  }
   function deskArt(main, Ar) {
     if (!Ar) return;
+    flatHills(main);
     var cov = main.querySelector('#heroCover');
     if (cov && !cov.querySelector('.ud-page')) { cov.classList.add('ud-cov'); cov.insertAdjacentHTML('beforeend', '<span class="ud-page ud-x"><u></u><u class="s"></u><i>' + fit(Ar.svg('sekolah-gedung', { gender: 'boy' })) + '</i><u></u><u class="s"></u></span>'); }
     var tv = main.querySelector('.h2-tool[href$="tools/timer"] .h2-vis');
@@ -640,7 +691,7 @@
   function deskHeader() {
     if (isApp()) return;
     var btn = document.querySelector('.la-hdr-login');
-    if (btn && !btn.classList.contains('ud-icon')) { btn.classList.add('ud-icon'); btn.setAttribute('aria-label', btn.textContent.trim()); btn.innerHTML = svgI('<circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20.5c1-4 4-6.2 7.5-6.2s6.5 2.2 7.5 6.2"/>', 22, '#2B2A35', 2); }
+    if (btn && !btn.classList.contains('ud-icon')) { btn.classList.add('ud-icon'); var lbl = isId() ? 'Masuk' : 'Login'; btn.setAttribute('aria-label', lbl); btn.innerHTML = svgI('<circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20.5c1-4 4-6.2 7.5-6.2s6.5 2.2 7.5 6.2"/>', 22, '#2B2A35', 2) + '<span>' + esc(lbl) + '</span>'; }
   }
   var dq = 0;
   function deskTick() { clearTimeout(dq); dq = setTimeout(function () { if (!isApp()) { if (routeName() !== '') DOC.classList.remove('ud-home', 'ud-in', 'ud-out'); deskHome(); deskHeader(); } }, 60); }

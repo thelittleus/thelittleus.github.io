@@ -361,7 +361,7 @@ html:not(.lu-app) .nav2>a,html:not(.lu-app) .navdd>button{padding:10px 18px;bord
 html:not(.lu-app) .nav2>a:hover,html:not(.lu-app) .navdd>button:hover{background:#F3EEE6;color:#2B2A35}
 html:not(.lu-app) .nav2>a.on,html:not(.lu-app) .navdd>button.on{background:#FFF1C7;color:#2B2A35;font-weight:700;border:0}
 html:not(.lu-app) .nav2 .free-pill{display:none}
-.la-hdr-login.ud-icon{width:44px;height:44px;border-radius:50%;border:1px solid #ECE6DC;background:#fff;display:inline-flex;align-items:center;justify-content:center;padding:0;text-decoration:none}
+.la-hdr-login.ud-icon{height:44px;border-radius:999px;border:1px solid #ECE6DC;background:#fff;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 18px 0 14px;text-decoration:none;font:700 14.5px Figtree,sans-serif;color:#2B2A35;white-space:nowrap}
 .la-hdr-login.ud-icon:hover{background:#F3EEE6}
 /* visitor banner */
 html.ud-home .h2-hero{grid-template-rows:auto auto}
@@ -378,7 +378,7 @@ html.ud-out #laHome .la-hcard.acc{display:none}
 .ud-tag{font:800 10.5px Figtree,sans-serif;font-style:normal;letter-spacing:.06em;background:#F3EEE6;color:#4A4855;padding:4px 8px;border-radius:999px}
 .ud-tag.green{background:#DDF2E4;color:#1E6B45}
 .ud-plus{font:800 10.5px Figtree,sans-serif;font-style:normal;letter-spacing:.06em;background:#2B2A35;color:#FFC94A;padding:4px 9px;border-radius:999px;vertical-align:middle}
-@media (min-width:960px){html.ud-home .h2-hero{padding:44px 48px 24px}html.ud-home .h2-hero .h2-art{height:300px}}
+@media (min-width:960px){html.ud-home .h2-hero{padding:36px 48px 74px;row-gap:26px}html.ud-home .h2-hero .h2-art{display:none}html.ud-home .h2-hero .h2-copy{grid-column:1 / -1;max-width:860px}html.ud-home .h2-hero .h2-copy p{max-width:720px}html.ud-home .h2-hero h1{font-size:clamp(30px,2.7vw,40px)}html.ud-home .h2-hero p{font-size:16px}}
 @media (max-width:959px){.ud-wgrid{grid-template-columns:1fr}}
 /* the worksheet in the banner art */
 .ud-cov{background:#DCEBFA!important;padding:14px}
@@ -429,3 +429,80 @@ html.ud-in .ud-popsub{display:none}
 .ud-ic{display:block;width:100%;height:100%}
 .ud-cov>*:not(.ud-page){display:none!important}
 html.ud-home .h2-scene .h2-hills{height:14%!important}
+
+/* signed-in home: a smaller banner, and centred tool names */
+button.la-kid{font:inherit;cursor:pointer;text-align:left}
+html.ud-in .la-dash{margin-top:20px;padding:16px 22px 18px;gap:12px;border-radius:24px}
+html.ud-in .la-dash h1{font-size:28px}
+html.ud-in .la-dash .head{align-items:center;gap:14px}
+html.ud-in .la-dash .head p{margin:2px 0 0;font-size:14px}
+html.ud-in .la-kid{padding:4px 6px}
+html.ud-in .la-kid .av{width:34px;height:34px;font-size:16px}
+html.ud-in .la-dgrid{gap:12px}
+html.ud-in .la-panel{padding:10px 14px 12px;gap:6px;border-radius:18px}
+html.ud-in .la-panel h2{font-size:18px}
+html.ud-in .la-used{padding:5px 10px;gap:10px}
+html.ud-in .la-used .ic{width:34px;height:34px}
+html.ud-in .la-empty{padding:12px 16px;gap:6px}
+html.ud-in .la-empty h3{font-size:16px;margin:0}
+html.ud-in .la-empty p{margin:0;font-size:13.5px}
+html.ud-in .la-empty .la-btn{min-height:38px;padding:0 16px;font-size:14px;border-radius:12px}
+html.ud-in .la-upbar{padding:6px 10px 6px 16px;gap:10px}
+html.ud-in .la-upbar .la-btn{min-height:38px;padding:0 16px;font-size:14px;border-radius:12px}
+html.ud-in .h2-tool,html.ud-in .h2-tool h3{text-align:center}
+html.ud-in .h2-tool{align-items:stretch}
+
+/* shop: the skill-area strip under the header is gone */
+.skills-d{display:none!important}
+
+/* resources are included in Plus now, so there is no shop currency to switch */
+.strip .cur-seg{display:none!important}
+
+/* visitor banner: full hills along the bottom, the three ways sitting on them */
+html.ud-home .h2-scene .h2-hills{height:230px!important;aspect-ratio:auto!important}
+html.ud-home .h2-scene .h2-hills *{vector-effect:non-scaling-stroke}
+html.ud-home .h2-fl{display:none}
+.ud-flowers{display:none}
+@media (min-width:960px){
+  html.ud-home .ud-flowers{display:block;position:absolute;left:0;right:0;bottom:0;height:120px;z-index:1;pointer-events:none}
+  .ud-fl{position:absolute;transform-origin:50% 100%;animation:udSway 4s ease-in-out infinite alternate}
+  .ud-fl svg{display:block;width:100%;height:auto;overflow:visible}
+  .ud-fl.tuft{animation-name:udSwayS}
+  .ud-bfly{position:absolute;left:66%;bottom:250px;width:38px;animation:udFly 14s ease-in-out infinite}
+  .ud-bfly svg{display:block;width:100%;height:auto}
+  .ud-bfly .ud-wings{transform-origin:50% 50%;transform-box:fill-box;animation:udFlap .35s ease-in-out infinite alternate}
+}
+@keyframes udSway{from{transform:rotate(-5deg)}to{transform:rotate(5deg)}}
+@keyframes udSwayS{from{transform:skewX(-6deg)}to{transform:skewX(6deg)}}
+@keyframes udFlap{from{transform:scaleX(1)}to{transform:scaleX(.35)}}
+@keyframes udFly{0%{transform:translate(0,0) rotate(-6deg)}25%{transform:translate(-120px,-26px) rotate(4deg)}50%{transform:translate(-260px,-8px) rotate(-4deg)}75%{transform:translate(-120px,-40px) rotate(6deg)}100%{transform:translate(0,0) rotate(-6deg)}}
+@media (prefers-reduced-motion:reduce){.ud-fl,.ud-bfly,.ud-bfly .ud-wings{animation:none!important}}
+html.tl-still .ud-fl,html.tl-still .ud-bfly,html.tl-still .ud-bfly .ud-wings{animation:none!important}
+html.ud-in .ud-ways{display:none}
+
+/* homepage (desktop): hover motion on tools and resources, like the Tools page */
+@media (min-width:960px){
+  html.ud-home .h2-tool{transition:transform .28s cubic-bezier(.2,.8,.3,1.25),box-shadow .28s ease;will-change:transform}
+  html.ud-home .h2-tool:hover,html.ud-home .h2-tool:focus-visible{transform:translateY(-6px) scale(1.015);box-shadow:0 16px 32px rgba(43,42,53,.13),0 2px 6px rgba(43,42,53,.06)}
+  html.ud-home .h2-tool:active{transform:translateY(-2px) scale(1.005)}
+  html.ud-home .h2-tool .h2-vis>*{transition:transform .32s cubic-bezier(.2,.8,.3,1.3)}
+  html.ud-home:not(.ud-in) .h2-tool:hover .h2-vis>*{transform:scale(1.08) rotate(-3deg)}
+  html.ud-home.ud-in .h2-tool:hover .h2-vis>*{transform:scale(.8) rotate(-3deg)}
+  html.ud-home .h2-tool .btn{transition:transform .2s ease,box-shadow .2s ease}
+  html.ud-home .h2-tool:hover .btn{transform:translateY(-1px)}
+  html.ud-home .card .cover{transition:transform .3s cubic-bezier(.2,.8,.3,1.25),box-shadow .3s ease}
+  html.ud-home .card .cover>img{transition:transform .5s ease}
+  html.ud-home .card:hover .cover,html.ud-home .card:focus-visible .cover{transform:translateY(-6px) rotate(-1deg);box-shadow:0 16px 30px rgba(43,42,53,.14)}
+  html.ud-home .card:hover .cover>img{transform:scale(1.05)}
+  html.ud-home .card .title{transition:color .2s}
+  html.ud-home .la-used{transition:transform .25s cubic-bezier(.2,.8,.3,1.25),box-shadow .25s,background .2s}
+  html.ud-home .la-used:hover{transform:translateY(-3px);background:#fff;box-shadow:0 10px 24px rgba(43,42,53,.11)}
+  html.ud-home .la-used .ic{transition:transform .3s cubic-bezier(.2,.8,.3,1.3)}
+  html.ud-home .la-used:hover .ic{transform:scale(1.12) rotate(-6deg)}
+  html.ud-home .la-used .op{transition:transform .2s ease}
+  html.ud-home .la-used:hover .op{transform:translateX(4px)}
+  html.ud-home .la-libitem{transition:transform .25s cubic-bezier(.2,.8,.3,1.25),box-shadow .25s}
+  html.ud-home .la-libitem:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(43,42,53,.11)}
+}
+@media (prefers-reduced-motion:reduce){html.ud-home .h2-tool,html.ud-home .h2-tool .h2-vis>*,html.ud-home .card .cover,html.ud-home .card .cover>img,html.ud-home .la-used,html.ud-home .la-used .ic,html.ud-home .la-libitem{transition:none!important}html.ud-home .h2-tool:hover,html.ud-home .card:hover .cover,html.ud-home .la-used:hover,html.ud-home .la-libitem:hover{transform:none!important}}
+html.tl-still.ud-home .h2-tool,html.tl-still.ud-home .card .cover,html.tl-still.ud-home .la-used{transition:none!important}

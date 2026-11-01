@@ -90,7 +90,7 @@
     shownUnder: ['Shown under the timer', 'Tampil di bawah timer'],
     endSig: ['End signal', 'Tanda selesai'], chime: ['Soft chime', 'Bunyi lembut'], vibrate: ['Vibrate', 'Getar'], silent: ['Silent', 'Senyap'],
     alsoOpens: ['Also opens from First–Then and schedule steps', 'Juga bisa dibuka dari Pertama–Lalu dan langkah jadwal'],
-    customMin: ['How many minutes?', 'Berapa menit?'],
+    customMin: ['How many minutes?', 'Berapa menit?'], moreMin: ['More minutes', 'Tambah menit'], lessMin: ['Fewer minutes', 'Kurangi menit'],
     // tokens
     working: ["I'm working for…", 'Aku sedang bekerja untuk…'], favs: [function (n) { return n + "'s favourites"; }, function (n) { return 'Favorit ' + n; }],
     nTokens: ['Number of tokens', 'Jumlah token'], tokensRange: ['tokens · 1 to 10', 'token · 1 sampai 10'],
@@ -123,7 +123,7 @@
     steps: ['Steps', 'Langkah'], addStep: ['+ Add step from library', '+ Tambah langkah dari perpustakaan'],
     layout: ['Layout', 'Tata letak'], vertical: ['Vertical', 'Vertikal'], horizontal: ['Horizontal', 'Horizontal'],
     show: ['Show', 'Tampilkan'], wholeDay: ['Whole day', 'Seharian'], next3: ['Next 3 steps', '3 langkah berikutnya'],
-    whenDone: ['When a step is done', 'Saat langkah selesai'], crossOut: ['Cross out', 'Coret'], moveDone: ['Move to Done', 'Pindah ke Selesai'], fade: ['Fade', 'Pudar'],
+    whenDone: ['When a step is done', 'Saat langkah selesai'], crossOut: ['Cross out', 'Coret'], moveDone: ['Move to Done', 'Pindah ke Selesai'], checklist: ['Checklist', 'Daftar centang'],
     save: ['Save', 'Simpan'], saved: ['Saved', 'Tersimpan'], savedScheds: ['Saved schedules', 'Jadwal tersimpan'], newSched: ['+ New schedule', '+ Jadwal baru'],
     readyEx: ['Ready-made examples', 'Contoh siap pakai'], use: ['Use', 'Pakai'], nSteps: [function (n) { return n + ' steps'; }, function (n) { return n + ' langkah'; }],
     rename: ['Rename', 'Ganti nama'], del: ['Delete', 'Hapus'], dup: ['Duplicate', 'Duplikat'], schedName: ['Schedule name', 'Nama jadwal'],
@@ -132,7 +132,7 @@
     emptySched: ['No steps yet. Add a few from the library, or start from an example.', 'Belum ada langkah. Tambahkan dari perpustakaan, atau mulai dari contoh.'],
     allDone: ['All done!', 'Semua selesai!'], newPlan: ['What happens instead?', 'Apa yang terjadi sebagai gantinya?'],
     // child mode
-    holdExit: ['Hold to exit', 'Tahan untuk keluar'], holding: ['Hold for 3 seconds to exit', 'Tahan 3 detik untuk keluar'], holdingD: ['Keep holding to return to parent setup', 'Terus tahan untuk kembali ke pengaturan'],
+    holdExit: ['Hold to exit', 'Tahan untuk keluar'], holding: ['Hold for 2 seconds to exit', 'Tahan 2 detik untuk keluar'], holdingD: ['Keep holding to return to parent setup', 'Terus tahan untuk kembali ke pengaturan'],
     adultCheck: ['Adult check', 'Cek orang dewasa'], tapNum: [function (n, w) { return 'Tap the number ' + w; }, function (n, w) { return 'Ketuk angka ' + w; }],
     stay: ['Stay in child mode', 'Tetap di mode anak'],
     wait: ['Wait', 'Tunggu'], timeFinish: ['Time to finish', 'Waktunya selesai'], left: [function (m) { return m + ' min left'; }, function (m) { return m + ' menit lagi'; }],
@@ -744,7 +744,6 @@
   }
   function wireExit(el) {
     var b = el.querySelector('[data-exit]'); if (!b) return;
-    if (S.settings.exit === 'check') { b.onclick = function () { adultCheck(); }; return; }
     var t = null, ov = null;
     function start(e) {
       e.preventDefault();
@@ -755,7 +754,7 @@
       CH.el.appendChild(ov);
       var arc = ov.querySelector('.tl-holdarc'), t0 = Date.now();
       t = setInterval(function () {
-        var p = Math.min(1, (Date.now() - t0) / 3000);
+        var p = Math.min(1, (Date.now() - t0) / 2000);
         arc.setAttribute('stroke-dashoffset', String(327 * (1 - p)));
         if (p >= 1) { stop(); childClose(); }
       }, 40);
@@ -1033,7 +1032,8 @@
     childOpen(function (el) {
       function render() {
         var steps = st.steps.map(function (x, i) { return { i: i, card: x.card, min: x.min }; });
-        var cur = steps.filter(function (x) { return st.done.indexOf(x.i) < 0; })[0];
+        var pending = steps.filter(function (x) { return st.done.indexOf(x.i) < 0; });
+        var cur = pending[0], nxt = pending[1];
         var visible = steps;
         if (cfg.done === 'move') visible = steps.filter(function (x) { return st.done.indexOf(x.i) < 0; });
         if (cfg.show === 'next3') {
@@ -1051,14 +1051,16 @@
               cardHTML(st.change.from, { size: 's', state: 'crossed' }) + '<span>→</span>' + cardHTML(x.card, { size: 's', state: 'selected' }) + '</div></div>';
           }
           var i = cardInfo(x.card), lb = labelsFor(i);
-          h += '<button type="button" class="tl-step' + (isCur ? ' cur' : '') + (isDone ? ' is-' + (cfg.done === 'fade' ? 'faded' : 'crossed') : '') + '" data-step="' + x.i + '">' +
-            cardHTML(x.card, { size: isCur ? 'm' : 's', state: isDone ? (cfg.done === 'fade' ? 'faded' : 'crossed') : '', labels: 'none' }) +
+          var asCheck = cfg.done !== 'cross' && cfg.done !== 'move';
+          h += '<button type="button" class="tl-step' + (isCur ? ' cur' : '') + (isDone ? ' is-' + (asCheck ? 'checked' : 'crossed') : '') + (asCheck ? ' has-box' : '') + (nxt && x.i === nxt.i ? ' nxt' : '') + '" data-step="' + x.i + '">' +
+            cardHTML(x.card, { size: isCur ? 'm' : 's', state: isDone ? (asCheck ? '' : 'crossed') : '', labels: 'none' }) +
             '<span class="tl-steptx">' + (isCur ? '<span class="tl-nowpill">' + dual(T.now[1], T.now[0]) + '</span>' : '') + (lb.main ? '<b>' + esc(lb.main) + '</b>' : '') + (lb.sub ? '<small>' + esc(lb.sub) + '</small>' : '') +
-            (isCur && x.min ? '<span class="tl-minchip" data-steptimer="' + x.i + '">⏱ ' + esc(L() === 'id' ? x.min + ' menit' : x.min + ' min') + '</span>' : '') + '</span></button>';
+            (isCur && x.min ? '<span class="tl-minchip" data-steptimer="' + x.i + '">⏱ ' + esc(L() === 'id' ? x.min + ' menit' : x.min + ' min') + '</span>' : '') + '</span>' +
+            (asCheck ? '<span class="tl-tick' + (isDone ? ' on' : '') + '" aria-hidden="true">' + (isDone ? '✓' : '') + '</span>' : '') + '</button>';
         });
         h += '</div>';
         if (cfg.done === 'move' && st.done.length) {
-          h += '<div class="tl-donebox"><div>' + A.heart(30) + dual(T.done[1], T.done[0]) + '</div><div class="tl-donecards">' + st.done.map(function (i) { return cardHTML(st.steps[i].card, { size: 'xs', state: 'done', labels: 'none' }); }).join('') + '</div></div>';
+          h += '<div class="tl-donebox"><div>' + A.heart(30) + dual(T.done[1], T.done[0]) + '</div><div class="tl-donecards">' + st.done.map(function (i) { return '<button type="button" class="tl-donecard" data-step="' + i + '">' + cardHTML(st.steps[i].card, { size: 'xs', state: 'done', labels: 'none' }) + '</button>'; }).join('') + '</div></div>';
         }
         h += '</div>';
         el.innerHTML = h;
@@ -1083,8 +1085,12 @@
         var b = e.target.closest('[data-step]');
         if (b) {
           var i = Number(b.dataset.step);
-          var first = st.steps.map(function (x, k) { return k; }).filter(function (k) { return st.done.indexOf(k) < 0; })[0];
-          if (i === first) { st.done.push(i); st.change = null; chime(st.done.length === st.steps.length ? 'done' : 'pop'); render(); }
+          /* tap a finished task to go back to it (for a misclick); later ones become to-do again */
+          if (st.done.indexOf(i) >= 0) { st.done = st.done.filter(function (k) { return k < i; }); st.change = null; chime('pop'); render(); return; }
+          var pend = st.steps.map(function (x, k) { return k; }).filter(function (k) { return st.done.indexOf(k) < 0; });
+          /* tap the NEXT task to finish the current one; the last task is finished by tapping itself */
+          var adv = pend.length > 1 ? pend[1] : pend[0];
+          if (i === adv) { st.done.push(pend[0]); st.change = null; chime(st.done.length === st.steps.length ? 'done' : 'pop'); render(); }
         }
       });
       render();
@@ -1234,10 +1240,20 @@
   // re-draws the page and the site header (the header shows the current child)
   function refreshAll() { if (window.LU && LU.setLang) LU.setLang(LU.lang); else rerender(); }
 
+  /* digital time picker: tens and ones of the minutes, like a digital clock */
+  function digitalTime(m) {
+    m = clamp(Math.round(Number(m) || 1), 1, 99);
+    var t = Math.floor(m / 10), o = m % 10;
+    function col(label, up, down, val) {
+      return '<div class="tl-dcol"><button type="button" class="tl-dbtn" data-act="tdig" data-delta="' + up + '" aria-label="' + esc(tr('moreMin')) + ' ' + label + '">▲</button><span class="tl-ddig">' + val + '</span><button type="button" class="tl-dbtn" data-act="tdig" data-delta="' + down + '" aria-label="' + esc(tr('lessMin')) + ' ' + label + '">▼</button></div>';
+    }
+    return '<div class="tl-digital" role="group" aria-label="' + esc(tr('time')) + '">' + col('10', 10, -10, t) + col('1', 1, -1, o) +
+      '<span class="tl-dcolon">:</span><span class="tl-dsec">00</span><small class="tl-dunit">' + esc(tr('min')) + '</small></div>';
+  }
+
   /* ---------- timer page ---------- */
   function pageTimer() {
     var c = D().timer;
-    var opts = [1, 2, 5, 10];
     return '<div class="tl-page narrow">' + topbar(tr('timer'), tr('parentSetup'), { dl: true }) +
       '<div class="tl-previewbox" style="background:#DCEBFA"><div class="tl-pv' + (isFun(c.style) ? ' wide' : '') + '">' + timerSVG(c.style, c.style === 'bar' || isFun(c.style) ? 0.6 : 0.75) + '</div><div><div class="tl-pvtime">' + c.minutes + ':00</div><small>' + esc(tr('preview')) + '</small></div></div>' +
       '<div class="tl-lab2">' + esc(tr('style')) + '</div><div class="tl-grid three">' + [['circle', 'circle'], ['sand', 'sand'], ['bar', 'bar']].map(function (s) {
@@ -1246,8 +1262,7 @@
       '<div class="tl-lab2 between"><span>' + esc(tr('funTimers')) + '</span><small>' + esc(tr('funTimersD')) + '</small></div><div class="tl-grid three fun">' + [['bunny', 'tBunny'], ['dino', 'tDino'], ['car', 'tCar']].map(function (s) {
         return '<button type="button" class="tl-opt' + (c.style === s[0] ? ' on' : '') + '" data-tstyle="' + s[0] + '"><span class="tl-optvis wide">' + timerSVG(s[0], 0.55) + '</span><b>' + esc(tr(s[1])) + '</b></button>';
       }).join('') + '</div>' +
-      '<div class="tl-lab2">' + esc(tr('time')) + '</div><div class="tl-chips wrap">' + opts.map(function (m) { return '<button type="button" class="tl-chip big' + (c.minutes === m ? ' on yellow' : '') + '" data-tmin="' + m + '">' + m + ' ' + esc(tr('min')) + '</button>'; }).join('') +
-      '<button type="button" class="tl-chip big' + (opts.indexOf(c.minutes) < 0 ? ' on yellow' : '') + '" data-act="tcustom">' + (opts.indexOf(c.minutes) < 0 ? c.minutes + ' ' + esc(tr('min')) : esc(tr('custom'))) + '</button></div>' +
+      '<div class="tl-lab2">' + esc(tr('time')) + '</div>' + digitalTime(c.minutes) +
       '<div class="tl-lab2">' + esc(tr('warns')) + '</div><div class="tl-panel">' + row(esc(tr('w2')), esc(tr('w2d')), toggle('w2', c.w2)) + row(esc(tr('w1')), esc(tr('w1d')), toggle('w1', c.w1)) + row(esc(tr('speak')), esc(tr('speakD')), toggle('speak', c.speak)) + '</div>' +
       '<div class="tl-lab2 between"><span>' + esc(tr('whatsNext')) + '</span><small>' + esc(tr('fromLib')) + '</small></div>' +
       '<div class="tl-panel pick">' + (c.next && cardInfo(c.next) ? cardHTML(c.next, { size: 'xs' }) : '<span class="tl-card tl-xs tl-addcard"><span>+</span></span>') + '<div><b>' + esc(c.next ? cardLabel(c.next) : '—') + '</b><small>' + esc(tr('shownUnder')) + '</small></div><button type="button" class="tl-link" data-act="tnext">' + esc(tr('change')) + '</button></div>' +
@@ -1277,7 +1292,7 @@
   var DD = null;
   function miniCards(refs) { return '<span class="tl-ddcards">' + refs.filter(Boolean).slice(0, 4).map(function (x) { return '<span class="tl-ddcard">' + artHTML(x) + '</span>'; }).join('') + '</span>'; }
   function ddButton(kind, label, placeholder) {
-    return '<button type="button" class="tl-select' + (placeholder ? ' placeholder' : '') + '" data-act="dd" data-dd="' + kind + '" aria-haspopup="menu" aria-expanded="' + (DD === kind) + '"><b>' + esc(label) + '</b><span class="tl-ddchev' + (DD === kind ? ' up' : '') + '" aria-hidden="true"></span></button>';
+    return '<button type="button" class="tl-select' + (placeholder ? ' placeholder' : '') + '" data-act="dd" data-delta="' + kind + '" aria-haspopup="menu" aria-expanded="' + (DD === kind) + '"><b>' + esc(label) + '</b><span class="tl-ddchev' + (DD === kind ? ' up' : '') + '" aria-hidden="true"></span></button>';
   }
 
   /* ---------- first-then page ---------- */
@@ -1298,7 +1313,7 @@
     }
     h += '</div>';
     if (!b) {
-      return h + '<div class="tl-emptypick">' + A.heart(30) + '<p>' + esc(tr('emptyBoardPick')) + '</p><div class="tl-two"><button type="button" class="tl-btn primary" data-act="fnew">' + esc(tr('newBoard')) + '</button><button type="button" class="tl-btn outline" data-act="dd" data-dd="ft">' + esc(tr('chooseReady')) + '</button></div></div></div>';
+      return h + '<div class="tl-emptypick">' + A.heart(30) + '<p>' + esc(tr('emptyBoardPick')) + '</p><div class="tl-two"><button type="button" class="tl-btn primary" data-act="fnew">' + esc(tr('newBoard')) + '</button><button type="button" class="tl-btn outline" data-act="dd" data-delta="ft">' + esc(tr('chooseReady')) + '</button></div></div></div>';
     }
     var slot = function (ref, act, idx) {
       var small = c.choice && act === 'fthen';
@@ -1336,7 +1351,7 @@
     }
     h += '</div>';
     if (!s) {
-      return h + '<div class="tl-emptypick">' + A.heart(30) + '<p>' + esc(tr('emptySchedPick')) + '</p><div class="tl-two"><button type="button" class="tl-btn primary" data-act="snew">' + esc(tr('newSched')) + '</button><button type="button" class="tl-btn outline" data-act="dd" data-dd="sched">' + esc(tr('chooseReady')) + '</button></div></div></div>';
+      return h + '<div class="tl-emptypick">' + A.heart(30) + '<p>' + esc(tr('emptySchedPick')) + '</p><div class="tl-two"><button type="button" class="tl-btn primary" data-act="snew">' + esc(tr('newSched')) + '</button><button type="button" class="tl-btn outline" data-act="dd" data-delta="sched">' + esc(tr('chooseReady')) + '</button></div></div></div>';
     }
     var nm = s.name ? (L() === 'id' ? s.name.id || s.name.en : s.name.en || s.name.id) : '';
     h += '<label class="tl-field"><span>' + esc(tr('schedName')) + '</span><input id="tlSchedName" value="' + esc(nm) + '" placeholder="' + esc(tr('schedNamePh')) + '" maxlength="40" autocomplete="off"></label>' +
@@ -1351,7 +1366,7 @@
       '<button type="button" class="tl-addstep" data-act="sadd">' + esc(tr('addStep')) + '</button>' +
       '<div class="tl-lab2">' + esc(tr('layout')) + '</div>' + seg('slayout', [['vertical', tr('vertical')], ['horizontal', tr('horizontal')]], c.layout) +
       '<div class="tl-lab2">' + esc(tr('show')) + '</div>' + seg('sshow', [['all', tr('wholeDay')], ['next3', tr('next3')]], c.show) +
-      '<div class="tl-lab2">' + esc(tr('whenDone')) + '</div>' + seg('sdone', [['cross', tr('crossOut')], ['move', tr('moveDone')], ['fade', tr('fade')]], c.done) +
+      '<div class="tl-lab2">' + esc(tr('whenDone')) + '</div>' + seg('sdone', [['cross', tr('crossOut')], ['move', tr('moveDone')], ['check', tr('checklist')]], c.done === 'fade' ? 'check' : c.done) +
       '<div class="tl-foot"><button type="button" class="tl-btn primary lg block" data-act="sstart"' + (s.steps.length ? '' : ' disabled') + '>' + esc(tr('startChild')) + '</button></div></div>';
     return h;
   }
@@ -1440,7 +1455,6 @@
       '<div class="tl-lab2">' + esc(tr('sound')) + '</div><div class="tl-panel">' + row(esc(tr('sounds')), esc(tr('soundsD')), toggle('sound', s.sound)) +
       '<div class="tl-row col"><b>' + esc(tr('volume')) + '</b><div class="tl-vol"><small>' + esc(tr('soft')) + '</small><input type="range" min="0" max="1" step="0.05" value="' + s.volume + '" id="tlVol" class="tl-range light"><small>' + esc(tr('loud')) + '</small></div></div></div>' +
       '<div class="tl-lab2">' + esc(tr('comfort')) + '</div><div class="tl-panel">' + row(esc(tr('reduce')), esc(tr('reduceD')), toggle('reduce', s.reduce)) + '</div>' +
-      '<div class="tl-lab2">' + esc(tr('leaving')) + '</div>' + seg('sexit', [['hold', tr('longPress')], ['check', tr('adultCheck')]], s.exit) +
       '<div class="tl-lab2" id="profiles">' + esc(tr('childData')) + '</div><div class="tl-panel">' +
       S.profiles.map(function (pp) { return '<div class="tl-row">' + avatar(pp, 34) + '<div style="flex:1"><b>' + esc(pp.name) + '</b><small>' + esc(tr('nRewards', (pp.rewards || []).length)) + '</small></div><button type="button" class="tl-link" data-act="pedit" data-pid="' + pp.id + '">' + esc(tr('edit')) + '</button></div>'; }).join('') +
       '<a class="tl-row act" href="#/tools/setup?new=1"><div><b>' + esc(tr('addChild')) + '</b></div><span>+</span></a>' +
@@ -1637,6 +1651,7 @@
     // timer
     if (ds.tstyle) { d.timer.style = ds.tstyle; return keep(); }
     if (ds.tmin) { d.timer.minutes = Number(ds.tmin); return keep(); }
+    if (act === 'tdig') { d.timer.minutes = clamp(Math.round(Number(d.timer.minutes) || 1) + Number(ds.delta), 1, 99); return keep(); }
     if (act === 'tcustom') {
       var sh = sheet('<h2 class="tl-h2">' + esc(tr('customMin')) + '</h2><div class="tl-panel stepper"><button type="button" class="tl-iconbtn" data-m="-1">−</button><div><b id="tlCm">' + d.timer.minutes + '</b><small>' + esc(tr('minutes')) + '</small></div><button type="button" class="tl-iconbtn" data-m="1">+</button></div><div class="tl-chips wrap" style="justify-content:center">' + [3, 15, 20, 30, 45, 60].map(function (m) { return '<button type="button" class="tl-chip big" data-set="' + m + '">' + m + '</button>'; }).join('') + '</div><button type="button" class="tl-btn primary lg block" data-ok>' + esc(tr('save')) + '</button>');
       var cm = d.timer.minutes;

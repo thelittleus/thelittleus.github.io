@@ -1057,10 +1057,10 @@
       var cloud = function (x, y, sc, cls) { return '<g class="lu-drift ' + cls + '"><path d="M' + x + ' ' + y + 'c-14 0-16-14-4-16c0-12 18-14 22-5c6-10 24-8 24 4c10-2 16 10 7 17z" transform="translate(' + (x - x * sc).toFixed(1) + ' ' + (y - y * sc).toFixed(1) + ') scale(' + sc + ')" fill="#fff" stroke="' + K + '" stroke-width="' + (3 / sc).toFixed(2) + '"/></g>'; };
       var rays = ''; for (var i = 0; i < 10; i++) { var a = i * Math.PI / 5; rays += 'M' + (Math.cos(a) * 50).toFixed(1) + ' ' + (Math.sin(a) * 50).toFixed(1) + 'L' + (Math.cos(a) * 61).toFixed(1) + ' ' + (Math.sin(a) * 61).toFixed(1); }
       var flower = function (x, y, c) { return P('M' + (x + 7) + ' ' + (y - 2) + 'v12', 'none', ' stroke="#4FA772"' + s(2.6)) + G('translate(' + x + ' ' + y + ')', O(0, -8, 5, c, s(2)) + O(8, -12, 5, c, s(2)) + O(14, -5, 5, c, s(2)) + O(6, -2, 5, c, s(2)) + O(7, -7, 3.6, C.yellow, s(2))); };
-      var hills = '<path d="M0 72C150 40 260 46 380 62C520 38 640 38 760 56V140H0Z" fill="#FBD9C2"/>' +
-        FX.enrich('<path d="M0 90C120 56 220 60 330 82C440 52 560 50 760 78V140H0Z" fill="#F7C9A8"/>' +
-          '<path d="M0 120C90 94 170 98 250 112C330 88 420 88 520 106C600 92 680 94 760 108V140H0Z" fill="#C3E8CF"/>', { d: 4, maxW: 700 }) +
-        P('M48 118c-4-10 2-16 6-12M58 118c0-12 8-16 12-10M712 110c-4-10 2-16 6-12M722 110c0-12 8-16 12-10', 'none', ' stroke="#4FA772"' + s(3)) + flower(110, 112, C.pink) + flower(640, 106, '#fff');
+      var hills = '<path d="M-20 72L0 72C150 40 260 46 380 62C520 38 640 38 760 56L780 56V170H-20Z" fill="#FBD9C2"/>' +
+        FX.enrich('<path d="M-20 90L0 90C120 56 220 60 330 82C440 52 560 50 760 78L780 78V170H-20Z" fill="#F7C9A8"/>' +
+          '<path d="M-20 120L0 120C90 94 170 98 250 112C330 88 420 88 520 106C600 92 680 94 760 108L780 108V170H-20Z" fill="#C3E8CF"/>', { d: 4, maxW: 700 }) +
+        '<g class="h2-fl">' + P('M48 118c-4-10 2-16 6-12M58 118c0-12 8-16 12-10M712 110c-4-10 2-16 6-12M722 110c0-12 8-16 12-10', 'none', ' stroke="#4FA772"' + s(3)) + flower(110, 112, C.pink) + flower(640, 106, '#fff') + '</g>';
       var sky = '<g transform="translate(222 84)"><g class="lu-spin"><path d="' + rays + '" stroke="' + C.yellow + '" stroke-width="7" stroke-linecap="round"/></g></g>' +
         '<g fill="none" stroke="' + K + '" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">' + FX.enrich(O(222, 84, 40, C.yellow), { d: 4 }) + O(210, 76, 3, K, NS) + O(234, 76, 3, K, NS) + P('M212 92q10 8 20 0', 'none', s(3)) + '</g>' +
         cloud(96, 70, 1, 'c1') + cloud(150, 160, 0.7, 'c2') +

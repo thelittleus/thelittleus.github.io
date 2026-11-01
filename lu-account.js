@@ -1,6 +1,6 @@
 /* little us · accounts and Little Us Plus
    Free accounts (email + password), the child setup that follows a parent to every device,
-   Little Us Plus passes bought on Gumroad (3 or 12 months, never renews), locked tool styles,
+   Little Us Plus passes bought on Gumroad or Midtrans (3 or 12 months, never renews), locked tool styles,
    Plus downloads and the account pages.
    Needs: window.LU_CONFIG (SUPABASE_URL, SUPABASE_KEY) and the shop script in index.html.
    Everything that decides access lives in Supabase (profiles.plus_until, plus_features). */
@@ -110,9 +110,16 @@
     contPay: [function (p) { return 'Continue to payment · ' + p; }, function (p) { return 'Lanjut ke pembayaran · ' + p; }],
     contCheckout: [function (p) { return 'Continue to checkout · ' + p; }, function (p) { return 'Lanjut ke pembayaran · ' + p; }],
     addedTo: [function (e) { return 'Plus is added to <b>' + e + '</b>.'; }, function (e) { return 'Plus ditambahkan ke <b>' + e + '</b>.'; }],
-    opensTab: ['Opens Gumroad’s secure checkout in a new tab', 'Membuka pembayaran aman Gumroad di tab baru'],
+    opensTab: ['You choose how to pay on the next step', 'Kamu memilih cara membayar di langkah berikutnya'],
     oneTime: ['One-time payment, no automatic renewal', 'Sekali bayar, tanpa perpanjangan otomatis'],
-    oneTimeP: ['Payment is handled securely by Gumroad. No Gumroad account needed.', 'Pembayaran diproses dengan aman oleh Gumroad. Tidak perlu akun Gumroad.'],
+    oneTimeP: ['Payment is handled securely by Gumroad or Midtrans. You don’t need an account with either.', 'Pembayaran diproses dengan aman oleh Gumroad atau Midtrans. Kamu tidak perlu akun di keduanya.'],
+    payH: ['How would you like to pay?', 'Mau bayar dengan apa?'], payHP: ['You pay once. Plus ends by itself and never renews.', 'Kamu membayar sekali. Plus berakhir sendiri dan tidak diperpanjang otomatis.'],
+    payGum: ['Card or PayPal', 'Kartu atau PayPal'], payGumP: ['Visa, Mastercard, American Express and PayPal. Paid in US dollars through Gumroad.', 'Visa, Mastercard, American Express, dan PayPal. Dibayar dalam dolar AS lewat Gumroad.'],
+    payMid: ['GoPay, QRIS and bank transfer', 'GoPay, QRIS, dan transfer bank'], payMidP: ['Mandiri, BRI, BNI, PermataBank and more. Paid in rupiah through Midtrans.', 'Mandiri, BRI, BNI, PermataBank, dan lainnya. Dibayar dalam rupiah lewat Midtrans.'],
+    payMidAmt: [function (n) { return 'About ' + n + ' today'; }, function (n) { return 'Sekitar ' + n + ' hari ini'; }],
+    payOpening: ['Opening payment…', 'Membuka pembayaran…'], payFail: ['We couldn’t start the payment. Please try again, or choose the other way to pay.', 'Pembayaran belum bisa dimulai. Coba lagi, atau pilih cara bayar yang lain.'],
+    pendingH: ['Waiting for your payment', 'Menunggu pembayaranmu'], pendingP: ['Finish paying in your banking or e-wallet app. Plus switches on by itself as soon as the payment arrives, so you can close this page.', 'Selesaikan pembayaran di aplikasi bank atau dompet digitalmu. Plus aktif sendiri begitu pembayaran masuk, jadi halaman ini boleh ditutup.'],
+    pendingNote: ['Bank transfers can take a little while. The payment code stays valid for 24 hours.', 'Transfer bank bisa butuh waktu. Kode pembayaran berlaku selama 24 jam.'],
     b1: ['About 60% more styles in every tool', 'Sekitar 60% gaya lebih banyak di setiap alat'],
     b2: ['Every worksheet, social story and bundle in the Shop', 'Semua lembar kerja, cerita sosial, dan paket di Toko'],
     b3: ['A profile for each child, not just one', 'Profil untuk setiap anak, tidak hanya satu'],
@@ -128,9 +135,9 @@
     ],
     faq: [
       [['Does it renew?', 'Apakah diperpanjang otomatis?'], ['No. You pay once, and Plus simply ends on the date shown. Nothing is charged again.', 'Tidak. Kamu bayar sekali, dan Plus berakhir di tanggal yang tertera. Tidak ada tagihan lagi.']],
-      [['What happens when it ends?', 'Apa yang terjadi saat berakhir?'], ['You go back to a free account with one child profile. The free tools stay, and so does anything you bought on its own. Nothing is deleted.', 'Kamu kembali ke akun gratis dengan satu profil anak. Alat gratis tetap ada, begitu juga produk yang kamu beli satuan. Tidak ada yang dihapus.']],
+      [['What happens when it ends?', 'Apa yang terjadi saat berakhir?'], ['You go back to a free account with one child profile. The free tools stay, and so does anything you bought on its own earlier. Nothing is deleted.', 'Kamu kembali ke akun gratis dengan satu profil anak. Alat gratis tetap ada, begitu juga produk yang dulu kamu beli satuan. Tidak ada yang dihapus.']],
       [['Can I add more time?', 'Bisa menambah waktu?'], ['Yes. Buying again before it ends adds the time to your current end date.', 'Bisa. Membeli lagi sebelum berakhir akan menambah waktu dari tanggal berakhir saat ini.']],
-      [['Do I need a Gumroad account?', 'Perlu akun Gumroad?'], ['No. Just an email and a card or PayPal. Log in with the same Little Us account on any device to use Plus.', 'Tidak. Cukup email dan kartu atau PayPal. Masuk dengan akun Little Us yang sama di perangkat mana pun untuk memakai Plus.']],
+      [['Which payment methods can I use?', 'Metode pembayaran apa yang bisa dipakai?'], ['Card or PayPal through Gumroad (US dollars), or GoPay, QRIS and bank transfer through Midtrans (rupiah). You don’t need an account with either. Log in with the same Little Us account on any device to use Plus.', 'Kartu atau PayPal lewat Gumroad (dolar AS), atau GoPay, QRIS, dan transfer bank lewat Midtrans (rupiah). Kamu tidak perlu akun di keduanya. Masuk dengan akun Little Us yang sama di perangkat mana pun untuk memakai Plus.']],
       [['Can I get a refund?', 'Bisa minta pengembalian dana?'], ['Passes are final, so we don’t refund a change of mind or an unused pass. If Plus doesn’t work and we can’t fix it, we refund you. See our Refund Policy.', 'Pass bersifat final, jadi kami tidak mengembalikan dana karena berubah pikiran atau pass yang tidak dipakai. Jika Plus tidak berfungsi dan tidak bisa kami perbaiki, dana kamu dikembalikan. Lihat Kebijakan Pengembalian Dana kami.']]
     ],
     questions: ['Questions', 'Pertanyaan'], refundLink: ['Refund Policy', 'Kebijakan Pengembalian Dana'],
@@ -153,7 +160,7 @@
     thanksH: ['Thank you for joining Little Us Plus', 'Terima kasih sudah bergabung dengan Little Us Plus'],
     plan: ['Plan', 'Paket'], paid: ['Paid', 'Dibayar'], oneTimeSfx: [', one-time', ', sekali bayar'],
     addedTime: [function (p, d) { return 'Added ' + p + ' · Plus now until ' + d; }, function (p, d) { return 'Ditambah ' + p + ' · Plus sekarang sampai ' + d; }],
-    receipt: [function (e) { return 'Gumroad emailed your receipt to ' + e + '.'; }, function (e) { return 'Gumroad mengirim tanda terima ke ' + e + '.'; }],
+    receipt: [function (e) { return 'Plus is added to your account (' + e + ').'; }, function (e) { return 'Plus ditambahkan ke akunmu (' + e + ').'; }],
     goTools: ['Go to tools', 'Ke alat'], goDownloads: ['Go to downloads', 'Ke unduhan'],
     delayedH: ['Payment received. Plus is on its way.', 'Pembayaran diterima. Plus sedang diproses.'],
     delayedP: [function (e) { return 'Sometimes it takes a little longer. You don’t need to pay again. We’ll keep checking and email ' + e + ' the moment it’s ready.'; }, function (e) { return 'Kadang butuh waktu sedikit lebih lama. Kamu tidak perlu bayar lagi. Kami terus mengecek dan akan email ke ' + e + ' begitu siap.'; }],
@@ -175,7 +182,7 @@
     inclPlusP: [function (p) { return 'This and every other worksheet, plus more tool styles. From ' + p + '.'; }, function (p) { return 'Ini dan semua lembar kerja lainnya, plus lebih banyak gaya alat. Mulai ' + p + '.'; }],
     justThis: ['Buy just this one', 'Beli yang ini saja'], yoursKeep: ['yours to keep', 'jadi milikmu'], buyNow: ['Buy now', 'Beli sekarang'],
     download: ['Download', 'Unduh'], inPlus: ['IN PLUS', 'DI PLUS'], inclWithPlus: ['Included with your Plus', 'Termasuk Plus-mu'], youOwn: ['You bought this', 'Kamu sudah membeli ini'],
-    notOnSale: ['Not on sale yet. Ask us on WhatsApp.', 'Belum dijual. Tanya kami lewat WhatsApp.'],
+    notOnSale: ['Not on sale yet. Ask us by email.', 'Belum dijual. Tanya kami lewat email.'],
     preparing: ['Preparing your download…', 'Menyiapkan unduhan…'], dlFail: ['The download couldn’t start. Please try again.', 'Unduhan gagal dimulai. Coba lagi ya.'],
     // account
     account: ['Account', 'Akun'], signedInEmail: ['Signed in with email', 'Masuk dengan email'],
@@ -311,7 +318,7 @@
     var s = FEAT.settings || {};
     return {
       childLimit: s.free_child_limit || 1,
-      url3: s.gumroad_3m_url || '', url12: s.gumroad_12m_url || '',
+      url3: s.gumroad_3m_url || '', url12: s.gumroad_12m_url || '', midtrans: !!s.midtrans_enabled,
       p3: s.price_3m_label || '$9', p12: s.price_12m_label || '$29',
       pm3: perMonth(s.per_month_3m || '$3 a month'), pm12: perMonth(s.per_month_12m || '$2.42 a month'),
       support: s.support_email || (CFG.CONTACT && CFG.CONTACT.email) || 'littleus.business@gmail.com',
@@ -999,7 +1006,7 @@
     var st = settings(), u = me(), kid = childName() || t('yourChild'), price = PL.plan === '12m' ? st.p12 : st.p3, end = newEnd(PL.plan);
     var left = '<div><span class="la-pill">' + esc(t('plus')) + '</span><h1>' + esc(t('upgradeH')) + '</h1><p class="la-p" style="font-size:17px">' + esc(st.note || t('choosePass')) + '</p>' +
       '<ul class="la-checks" style="margin-top:22px">' + ['b1', 'b2', 'b3', 'b4'].map(function (k) { return '<li><span class="la-chk">' + IC.check + '</span>' + esc(t(k)) + '</li>'; }).join('') + '</ul></div>';
-    var ready = !!(PL.plan === '12m' ? st.url12 : st.url3);
+    var ready = !!(PL.plan === '12m' ? st.url12 : st.url3) || st.midtrans;
     var right = '<div class="la-choose"><h2>' + esc(t('choosePlan')) + '</h2>' + planCard('3m', st, true) + planCard('12m', st, true) +
       '<div class="la-until">' + esc(t(isPlus() ? 'plusAddedUntil' : 'plusFromToday')) + '<b>' + esc(fmtDate(end)) + '</b></div>' +
       '<div class="la-safe">' + IC.shield + '<span><b>' + esc(t('oneTime')) + '</b>' + esc(t('oneTimeP')) + '</span></div>' +
@@ -1035,10 +1042,61 @@
       SU.step = 'form';
       return sh;
     }
+    var st2 = settings(), gOk = !!checkoutUrl(plan);
+    if (st2.midtrans && gOk) return payChooser(plan);
+    if (st2.midtrans) return startMidtrans(plan);
+    return startGumroad(plan, auto);
+  }
+  function startGumroad(plan, auto) {
     var url = checkoutUrl(plan); if (!url) return toast(t('notSet'));
     ss.setJson('lu_checkout', { plan: plan, base: (A.profile && A.profile.plus_until) || null, at: Date.now(), opened: !auto });
     if (!auto) window.open(url, '_blank', 'noopener');
     go('#/plus/checkout?plan=' + plan);
+  }
+  // The popup that lets the parent pick Gumroad (card, PayPal) or Midtrans (GoPay, QRIS, bank transfer).
+  function payChooser(plan) {
+    var st = settings(), price = plan === '12m' ? st.p12 : st.p3;
+    var sh = sheet('<div><span class="la-own2" style="display:inline-flex;padding:6px 12px;border-radius:999px">' + pill('plus') + ' <b style="font-size:14px">' + esc(t(plan === '12m' ? 'm12' : 'm3')) + ' · ' + esc(price) + '</b></span></div>' +
+      '<h2>' + esc(t('payH')) + '</h2><p class="la-p">' + esc(t('payHP')) + '</p>' +
+      '<button type="button" class="la-btn outline block" data-pay="gumroad" style="flex-direction:column;align-items:flex-start;gap:2px;text-align:left;padding:14px 16px;height:auto"><b>' + esc(t('payGum')) + '</b><small style="font-weight:500;font-size:13.5px;line-height:1.4;color:var(--body)">' + esc(t('payGumP')) + '</small></button>' +
+      '<button type="button" class="la-btn outline block" data-pay="midtrans" style="flex-direction:column;align-items:flex-start;gap:2px;text-align:left;padding:14px 16px;height:auto"><b>' + esc(t('payMid')) + '</b><small style="font-weight:500;font-size:13.5px;line-height:1.4;color:var(--body)">' + esc(t('payMidP')) + ' <span data-mt-amt></span></small></button>' +
+      '<button type="button" class="la-btn soft block" data-close>' + esc(t('cancel')) + '</button>');
+    // show roughly what it will be in rupiah today
+    http('/functions/v1/plus', { method: 'POST', auth: false, body: { action: 'midtrans_quote', plan: plan } }).then(function (q) {
+      var el = sh.el.querySelector('[data-mt-amt]'); if (el && q && q.idr) el.innerHTML = '<b style="color:var(--ink)">' + esc(t('payMidAmt', 'Rp ' + Number(q.idr).toLocaleString('id-ID'))) + '</b>';
+    }).catch(function () {});
+    sh.el.querySelector('[data-pay=gumroad]').onclick = function () { sh.close(); startGumroad(plan, false); };
+    sh.el.querySelector('[data-pay=midtrans]').onclick = function () { startMidtrans(plan, this, sh); };
+    return sh;
+  }
+  function loadSnap(r) {
+    if (window.snap) return Promise.resolve();
+    return new Promise(function (ok, bad) {
+      var el = document.createElement('script'); el.src = r.snap_js; el.setAttribute('data-client-key', r.client_key);
+      el.onload = function () { window.snap ? ok() : bad(new Error('snap')); }; el.onerror = function () { bad(new Error('snap')); };
+      document.head.appendChild(el);
+    });
+  }
+  function mtGo(plan, state) {
+    var c = ss.json('lu_checkout', null) || {}; c.mt_state = state; ss.setJson('lu_checkout', c);
+    go('#/plus/checkout?plan=' + plan);
+  }
+  // Midtrans Snap: ask our server for a token, open Snap, then wait for the payment to be confirmed by Midtrans.
+  function startMidtrans(plan, btn, sheetRef) {
+    if (btn) busy(btn, true);
+    http('/functions/v1/plus', { method: 'POST', body: { action: 'midtrans_create', plan: plan, lang: L() } }).then(function (r) {
+      if (!r || !r.token) throw new Error('midtrans');
+      ss.setJson('lu_checkout', { plan: plan, base: (A.profile && A.profile.plus_until) || null, at: Date.now(), provider: 'midtrans', order: r.order_id });
+      return loadSnap(r).then(function () {
+        if (sheetRef) sheetRef.close();
+        window.snap.pay(r.token, {
+          onSuccess: function () { mtGo(plan, 'activating'); },
+          onPending: function () { mtGo(plan, 'pending'); },
+          onError: function () { toast(t('payFail'), 'error'); },
+          onClose: function () {}
+        });
+      });
+    }).catch(function () { if (btn) busy(btn, false); toast(t('payFail'), 'error'); });
   }
 
   // ----- C04 → C05 → C06 → C07 / C08: checkout handoff
@@ -1054,6 +1112,9 @@
         '<div class="la-card" style="display:flex;flex-direction:column;gap:4px"><div style="display:flex;align-items:center;gap:8px">' + pill('plus') + '<b style="font:600 20px Fredoka,sans-serif;flex:1">' + esc(t(plan === '12m' ? 'm12' : 'm3')) + '</b><b style="font:600 22px Fredoka,sans-serif">' + esc(price) + '</b></div><small class="la-small">' + esc(t('oneTimeUntil', fmtDate(newEndFrom(c.base, plan)))) + '</small></div>' +
         '<div class="la-steps"><div class="on"><span>1</span>' + esc(t('st1')) + '</div><div><span>2</span>' + esc(t('st2')) + '</div><div><span>3</span>' + esc(t('st3')) + '</div></div><div class="grow"></div>' +
         '<button type="button" class="la-btn primary block" data-act="paid">' + esc(t('ivePaid')) + '</button><button type="button" class="la-btn line block" data-act="reopen">' + IC.ext + ' ' + esc(t('reopen')) + '</button><a class="la-link" style="align-self:center" href="#/plus">' + esc(t('diffPlan')) + '</a></div>';
+    }
+    if (CO.state === 'pending') {
+      return topBar() + '<div class="la-flow"><div class="grow"></div><div class="la-center">' + heartFace(72) + '<h1 class="la-h1" style="font-size:28px">' + esc(t('pendingH')) + '</h1><p class="la-p">' + esc(t('pendingP')) + '</p><p class="la-small">' + esc(t('pendingNote')) + '</p></div><div class="grow"></div><a class="la-btn line block" href="#/">' + esc(t('backHome')) + '</a></div>';
     }
     if (CO.state === 'activating') {
       return topBar() + '<div class="la-flow"><div class="grow"></div><div class="la-center">' + heartFace(72) + '<div class="la-prog"><i></i></div><h1 class="la-h1" style="font-size:28px">' + esc(t('activatingH')) + '</h1><p class="la-p">' + esc(t('activatingP')) + '</p><p class="la-small">' + esc(t('lastChecked')) + '</p></div><div class="grow"></div></div>';
@@ -1092,7 +1153,7 @@
     paidYet().then(function (ok) {
       if (ok) { CO.state = 'thanks'; ss.del('lu_checkout'); emit(); rerender(); return; }
       if (CO.state === 'activating' && Date.now() - CO.startedActivating > 120000) { CO.state = 'delayed'; rerender(); }
-      CO.timer = setTimeout(pollLoop, CO.state === 'delayed' ? 15000 : 3000);
+      CO.timer = setTimeout(pollLoop, CO.state === 'delayed' ? 15000 : CO.state === 'pending' ? 6000 : 3000);
     });
   }
   function wireCheckout(root) {
@@ -1185,7 +1246,8 @@
         if (!signedIn()) { go('#/plus', true); return; }
         var c = ss.json('lu_checkout', null);
         CO.state = c && c.opened ? 'opening' : 'waiting'; if (c) { c.opened = false; ss.setJson('lu_checkout', c); }
-        CO.result = null; setTimeout(pollLoop, 3000);
+        if (c && c.provider === 'midtrans') { CO.state = c.mt_state === 'pending' ? 'pending' : 'activating'; CO.startedActivating = Date.now(); }
+        CO.result = null; setTimeout(pollLoop, c && c.provider === 'midtrans' ? 1500 : 3000);
       },
       leave: function () { clearTimeout(CO.timer); }
     },
@@ -1281,9 +1343,29 @@
     var up = s === 'free' || s === 'expired' ? '<div class="la-upbar">' + pill('plus') + '<b>' + esc(t('upBarH')) + '</b><span class="d">' + esc(t('upBarP')) + '</span><a class="la-btn primary sm" href="#/plus">' + esc(t('seePlans', st.p3)) + '</a></div>'
       : '<div class="la-upbar">' + pill('plus') + '<span class="la-pill free">' + esc(t('activeP')) + '</span><b>' + esc(t('daysLeftN', daysLeft())) + '</b><span class="d">' + esc(t('planEnds', (A.profile && A.profile.plus_plan === '3m') ? t('m3') : t('m12'), fmtDate(plusUntil()))) + '</span><a class="la-btn outline sm" href="#/account">' + esc(t('managePlan')) + '</a></div>';
     var kids = []; try { kids = (store.json(TKEY, {}).profiles || []).filter(function (p) { return p.id !== kid.id; }).slice(0, 2); } catch (e) {}
-    var kidChip = kid ? '<a class="la-kid" href="#/tools/settings#profiles"><span class="avs"><span class="av" style="background:' + esc(kid.color || '#DDF2E4') + '">' + esc(initials(kid.name)) + '</span>' + kids.map(function (o) { return '<span class="av sm" style="background:' + esc(o.color || '#F3EEE6') + '">' + esc(initials(o.name)) + '</span>'; }).join('') + '</span><span><small>' + esc(t('childProfile')) + '</small><b>' + esc(kid.name) + '</b></span><span class="sw">' + esc(t('switchC')) + ' ▾</span></a>' : '';
+    var kidChip = kid ? '<button type="button" class="la-kid" data-la-prof aria-haspopup="dialog"><span class="avs"><span class="av" style="background:' + esc(kid.color || '#DDF2E4') + '">' + esc(initials(kid.name)) + '</span>' + kids.map(function (o) { return '<span class="av sm" style="background:' + esc(o.color || '#F3EEE6') + '">' + esc(initials(o.name)) + '</span>'; }).join('') + '</span><span><small>' + esc(t('childProfile')) + '</small><b>' + esc(kid.name) + '</b></span><span class="sw">' + esc(t('switchC')) + ' ▾</span></button>' : '';
     return '<div class="la-dash" aria-label="' + esc(t('account')) + '"><div class="head"><div><h1>' + esc(kid ? t('hiReady', firstName(u.name), kid.name) : t('hiReady0', firstName(u.name))) + '</h1><p>' + esc(t('syncedEvery')) + '</p></div>' + kidChip + '</div>' +
       '<div class="la-dgrid"><div class="la-panel"><div class="la-ph"><h2>' + esc(kid ? t('usedLast', kid.name) : t('pickUp')) + '</h2><a class="la-lk" href="#/tools">' + esc(t('allTools')) + ' →</a></div>' + used + '</div><div class="la-panel"><div class="la-ph"><h2>' + esc(t('yourLibrary')) + '</h2></div>' + lib + '</div></div>' + up + '</div>';
+  }
+  /* the same "Who is this for?" popup as in the tools settings, opened right on the home page */
+  function openProfilePopup() {
+    function show() {
+      var T = window.LUTools && LUTools.api;
+      if (!T || !T.openProfiles) return go('#/tools/settings#profiles');
+      T.openProfiles();
+      // when the popup closes, refresh the banner so it shows the child that was picked
+      var seen = false, mo = new MutationObserver(function () {
+        var open = !!document.querySelector('.tl-scrim');
+        if (open) seen = true;
+        else if (seen) { mo.disconnect(); homeRender(); }
+      });
+      mo.observe(document.body, { childList: true, subtree: true });
+      setTimeout(function () { mo.disconnect(); }, 600000);
+    }
+    if (window.LUTools && LUTools.api && LUTools.api.openProfiles) return show();
+    if (!window.luLoad) return show();
+    luLoad('/tools.css?v=14').then(function () { return luLoad('/tools-art.js?v=15'); }).then(function () { return luLoad('/tools.js?v=15'); })
+      .then(function () { var a = window.LUTools && LUTools.api; return a && a.photosLoad ? a.photosLoad() : null; }).then(show, show);
   }
   function homeRender() {
     injectCSS();
@@ -1295,6 +1377,7 @@
     if (hero) hero.style.display = signedIn() && desk ? 'none' : '';
     box.className = 'la-home';
     box.innerHTML = (signedIn() ? dashHTML() : '') + homeCardHTML();
+    $$('[data-la-prof]', box).forEach(function (b) { b.onclick = openProfilePopup; });
     $$('[data-la-hide]', box).forEach(function (b) { b.onclick = function () { store.set(b.dataset.laHide, b.dataset.laHide === 'lu_hide_acccard' ? '1' : String(Date.now())); homeRender(); }; });
     var libEl = box.querySelector('[data-la-lib]');
     if (libEl && window.LU && LU.api && LU.api.byIds) {
@@ -1336,15 +1419,15 @@
     var desk = document.getElementById('buyDesk'), bar = document.getElementById('lu-buybar');
     if (!bar) { bar = document.createElement('div'); bar.id = 'lu-buybar'; bar.className = 'buybar'; document.body.appendChild(bar); }
     function draw() {
-      var info = prodInfo(p.id), st = settings(), plusOk = isPlus() && info.plus, mine = owns(p.id), url = productBuyUrl(p);
+      var st = settings(), plusOk = isPlus(), mine = owns(p.id);
       var full, short;
       if (plusOk || mine) {
         full = '<div class="la-buy"><span class="la-small" style="display:flex;gap:6px;align-items:center;font-weight:700">' + (plusOk ? pill('plus') + esc(t('inclWithPlus')) : esc(t('youOwn'))) + '</span><button type="button" class="la-btn primary block" data-la-dl>' + IC.dl + esc(t('download')) + '</button></div>';
         short = '<button type="button" class="btn btn-primary" data-la-dl style="flex:1">' + esc(t('download')) + '</button>';
       } else {
-        full = '<div class="la-buy">' + (info.plus ? '<div class="la-own"><b style="display:flex;gap:8px;align-items:center">' + pill('plus') + esc(t('inclPlus')) + '</b><span class="la-p" style="font-size:14px">' + esc(t('inclPlusP', st.p3)) + '</span><a class="la-btn primary block sm" href="#/plus">' + esc(t('getPlus')) + '</a></div>' : '') +
-          '<div class="la-own2"><span style="flex:1"><b style="display:block">' + esc(t('justThis')) + '</b><small class="la-small">' + esc(priceText(p)) + ' · ' + esc(t('yoursKeep')) + '</small></span>' + (url ? '<a class="la-btn soft sm" href="' + esc(url) + '" target="_blank" rel="noopener">' + esc(t('buyNow')) + '</a>' : '<span class="la-small">' + esc(t('notOnSale')) + '</span>') + '</div></div>';
-        short = (info.plus ? '<a class="btn btn-primary" href="#/plus" style="flex:1">' + esc(t('getPlus')) + '</a>' : '') + (url ? '<a class="btn btn-outline" href="' + esc(url) + '" target="_blank" rel="noopener" style="flex:1">' + esc(t('buyNow')) + '</a>' : '');
+        // every Shop resource is part of Little Us Plus; there are no single-resource prices any more
+        full = '<div class="la-buy"><div class="la-own"><b style="display:flex;gap:8px;align-items:center">' + pill('plus') + esc(t('inclPlus')) + '</b><span class="la-p" style="font-size:14px">' + esc(t('inclPlusP', st.p3)) + '</span><a class="la-btn primary block sm" href="#/plus">' + esc(t('getPlus')) + '</a></div></div>';
+        short = '<a class="btn btn-primary" href="#/plus" style="flex:1">' + esc(t('getPlus')) + '</a>';
       }
       if (desk) desk.innerHTML = full;
       bar.innerHTML = '<div class="la-buybar-wrap">' + short + '</div>';
@@ -1355,8 +1438,7 @@
   }
   function cardTag(p) {
     try { if (window.LU && LU.isFree && LU.isFree(p)) return ''; } catch (e) {}
-    var info = prodInfo(p.id); if (!info.plus) return '';
-    return '<span class="la-pill la-cardtag">' + esc(t('inPlus')) + '</span>';
+    return '';
   }
 
   /* ===================== boot ===================== */
