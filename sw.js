@@ -1,8 +1,8 @@
 /* little us · service worker
    Lets the free tools open without internet once they have been opened before.
    It never caches the admin page, the shop database or payments. */
-const CACHE = 'littleus-v21';
-const ASSETS = ['/', '/tools.js?v=15', '/lu-account.js?v=4', '/tools-calm.js?v=13', '/tools-talk.js?v=3', '/lu-app.js?v=6', '/lu-app.css?v=7', '/tools-art.js?v=15', '/tools-print.js?v=12', '/tools.css?v=14', '/articles.js?v=12', '/logo.png'];
+const CACHE = 'littleus-v22';
+const ASSETS = ['/', '/tools.js?v=16', '/lu-account.js?v=4', '/tools-calm.js?v=13', '/tools-talk.js?v=4', '/lu-app.js?v=7', '/lu-app.css?v=8', '/tools-art.js?v=16', '/tools-print.js?v=12', '/tools.css?v=15', '/articles.js?v=12', '/logo.png'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(ASSETS)).catch(() => {}).then(() => self.skipWaiting()));

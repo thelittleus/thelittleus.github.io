@@ -34,8 +34,8 @@
     langEn: ['English', 'Bahasa Inggris'], langId: ['Indonesian', 'Bahasa Indonesia'],
     whoFor: ['Who is this for?', 'Untuk siapa ini?'], usingNow: ['Using now', 'Sedang dipakai'], addChild: ['Add a child', 'Tambah anak'], editProfiles: ['Edit profiles', 'Ubah profil'],
     cards: ['Cards', 'Kartu'], pickTool: [function (n) { return 'Pick a tool, set it up in a minute, then hand it to ' + n + '.'; }, function (n) { return 'Pilih alat, atur dalam semenit, lalu serahkan ke ' + n + '.'; }],
-    pickTool0: ['Pick a tool, set it up in a minute, then hand it to your child.', 'Pilih alat, atur dalam semenit, lalu serahkan ke anakmu.'],
-    grpRoutine: ['Everyday routines', 'Rutinitas sehari-hari'], grpCalm: ['Emotional Regulation', 'Regulasi Emosi'], grpTalk: ['Talk & play', 'Ngobrol & bermain'],
+    pickTool0: ['Pick a tool, set it up in a minute, then use it together with your child.', 'Pilih alat, atur dalam semenit, lalu gunakan bersama anakmu.'],
+    grpRoutine: ['Everyday routines', 'Rutinitas sehari-hari'], grpCalm: ['Emotional Regulation', 'Regulasi Emosi'], grpTalk: ['Social skills', 'Keterampilan sosial'], grpTeach: ['Teaching tools', 'Alat mengajar'], soon: ['Coming soon', 'Segera hadir'],
     usingDefaults: ['Using default settings.', 'Memakai pengaturan bawaan.'], setUpFor: ['Set up for your child', 'Atur untuk anakmu'],
     close: ['Close', 'Tutup'], open: ['Open', 'Buka'],
     skipH: ['No problem! Until you set up a child, the tools use:', 'Tidak apa-apa! Sebelum anak diatur, alat memakai:'],
@@ -134,8 +134,8 @@
   function accStatus() { var a = acc(); try { return a ? a.status() : 'none'; } catch (e) { return 'none'; } }
   function load() {
     if (!window.luLoad) return Promise.resolve();
-    return luLoad('/tools.css?v=14').then(function () { return luLoad('/tools-art.js?v=15'); }).then(function () { return luLoad('/tools.js?v=15'); })
-      .then(function () { return Promise.all([luLoad('/tools-calm.js?v=13'), luLoad('/tools-talk.js?v=3')]); }).then(function () { var a = api(); return a && a.photosLoad ? a.photosLoad() : null; }).catch(function () { });
+    return luLoad('/tools.css?v=15').then(function () { return luLoad('/tools-art.js?v=16'); }).then(function () { return luLoad('/tools.js?v=16'); })
+      .then(function () { return Promise.all([luLoad('/tools-calm.js?v=13'), luLoad('/tools-talk.js?v=4')]); }).then(function () { var a = api(); return a && a.photosLoad ? a.photosLoad() : null; }).catch(function () { });
   }
   function photo(p) { var a = api(); return p && p.photo && a && a.PH && a.PH[p.photo] ? a.PH[p.photo] : ''; }
   function ava(p, size, cls) {
@@ -178,7 +178,7 @@
     var d = a.D(), sub = '', ref = null;
     try {
       if (s.last.tool === 'tokens') { var tk = d.tokens; sub = (tk.earned || 0) + (isId() ? ' dari ' : ' of ') + (tk.count || 5); ref = tk.reward; }
-      else if (s.last.tool === 'timer') { sub = d.timer.minutes + (isId() ? ' menit' : ' min'); ref = d.timer.next; }
+      else if (s.last.tool === 'timer') { sub = d.timer.minutes + (isId() ? ' menit' : ' min'); ref = d.timer.showNext ? d.timer.next : null; }
       else if (s.last.tool === 'ft') { if (!d.ft.first) return null; sub = a.cardLabel(d.ft.first) + ' → ' + a.cardLabel(d.ft.then[0]); ref = d.ft.first; }
       else if (s.last.tool === 'sched') { var sc = a.activeSched(); if (!sc) return null; sub = a.schedName(sc); ref = (sc.steps[0] || {}).card; }
     } catch (e) { }
@@ -210,11 +210,13 @@
     var s = S(); if (!s) return;
     var cur = prof();
     var h = '<h2 class="ua-sh2">' + esc(t('whoFor')) + '</h2><div class="ua-list">' +
-      s.profiles.map(function (p) { var on = cur && cur.id === p.id; return '<button type="button" class="ua-row" data-pick="' + esc(p.id) + '">' + ava(p, 44) + '<span class="ua-rowtx"><b>' + esc(p.name) + '</b>' + (on ? '<small>' + esc(t('usingNow')) + '</small>' : '') + '</span>' + (on ? '<span class="ua-tick">' + ic('check', 16, '#2B2A35', 3) + '</span>' : '') + '</button>'; }).join('') +
+      s.profiles.map(function (p) { var on = cur && cur.id === p.id; return '<div class="tl-prow"><button type="button" class="ua-row" style="flex:1;min-width:0" data-pick="' + esc(p.id) + '">' + ava(p, 44) + '<span class="ua-rowtx"><b>' + esc(p.name) + '</b>' + (on ? '<small>' + esc(t('usingNow')) + '</small>' : '') + '</span>' + (on ? '<span class="ua-tick">' + ic('check', 16, '#2B2A35', 3) + '</span>' : '') + '</button>' + api().delBtn(p) + '</div>'; }).join('') +
       '<a class="ua-row" href="#/tools/setup" data-ua-close><span class="ua-ava add">' + ic('plus', 20) + '</span><span class="ua-rowtx"><b>' + esc(t('addChild')) + '</b></span></a></div>' +
       (s.profiles.length ? '<a class="ua-link center" href="#/child" data-ua-close>' + esc(t('editProfiles')) + '</a>' : '');
     var w = sheet(h);
     w.addEventListener('click', function (e) {
+      var d = e.target.closest('[data-delp]');
+      if (d) { if (api().delConfirm(d)) { api().deleteProfile(d.dataset.delp); closeSheet(); refresh(); } return; }
       var b = e.target.closest('[data-pick]'); if (!b) return;
       var st = S(); st.current = b.dataset.pick; api().save(); closeSheet(); refresh();
     });
@@ -394,16 +396,23 @@
   function toolsHTML() {
     var p = prof(), first = !profiles().length, land = MODE === 'land';
     var head = '<div class="ua-head"><button type="button" class="ua-avabtn" data-switch aria-label="' + esc(t('whoFor')) + '">' + (p ? ava(p, 44) : '<span class="ua-ava none" style="width:44px;height:44px">' + ic('home', 0) + '</span>') + '</button><h1>' + esc(t('tools')) + '</h1>' +
-      (land ? contCard(false) : '') + '<a class="ua-chipbtn" href="#/tools/library">' + ic('cards', 20) + '<span>' + esc(t('cards')) + '</span></a></div>';
+      (land ? contCard(false) : '') + '</div>';
     var top = '';
     if (first && !store('lu_defaults_hint_hide') && store('lu_defaults_ok') === '1') top = '<div class="ua-defaults"><span>' + esc(t('usingDefaults')) + ' <a href="#/tools/setup">' + esc(t('setUpFor')) + '</a></span><button type="button" class="ua-x sm" data-hide="lu_defaults_hint_hide" aria-label="' + esc(t('close')) + '">' + ic('close', 14) + '</button></div>';
     else if (!land) top = contCard(true) || '<div class="ua-hint">' + (A() ? A().heart(30) : '') + '<span>' + esc(p ? t('pickTool', p.name) : t('pickTool0')) + '</span></div>';
     var grp = function (g, title) {
       return '<h2 class="ua-h2">' + esc(title) + '</h2><div class="ua-tiles">' + TOOLS.filter(function (x) { return x.g === g; }).map(function (x) {
         return '<div class="ua-tile" style="background:' + x.tint + '"><a class="ua-tilelink" href="#/' + x.r + '" data-tool="' + x.r + '">' + toolArt(x.k) + '<b>' + esc(toolName(x.k)) + '</b></a><button type="button" class="ua-q" data-info="' + x.k + '" aria-label="' + esc(toolName(x.k)) + ': ?">?</button></div>';
-      }).join('') + '</div>';
+      }).join('') + soon(g) + '</div>';
     };
-    return '<div class="ua-page ua-tools">' + head + top + grp('routine', t('grpRoutine')) + grp('calm', t('grpCalm')) + grp('talk', t('grpTalk')) + '</div>';
+    // tools still being made: same tile, no link, a "Coming soon" badge
+    var soon = function (g) {
+      var Ar = A(); if (!Ar || !Ar.soon) return '';
+      return Ar.soon.filter(function (x) { return x.grp === g; }).map(function (x) {
+        return '<div class="ua-tile soon" style="background:' + x.tint + '"><div class="ua-tilelink"><div class="ua-art one">' + fit(Ar.toolArt(x.k)) + '</div><b>' + esc(isId() ? x.idn : x.en) + '</b><i class="ua-soon">' + esc(t('soon')) + '</i></div></div>';
+      }).join('');
+    };
+    return '<div class="ua-page ua-tools">' + head + top + grp('routine', t('grpRoutine')) + grp('calm', t('grpCalm')) + grp('talk', t('grpTalk')) + grp('teach', t('grpTeach')) + '</div>';
   }
   function wireTools(el) {
     el.addEventListener('click', function (e) {
@@ -464,10 +473,10 @@
     }
     var others = profiles().filter(function (x) { return x.id !== p.id; });
     var rewards = (p.rewards || []).slice(0, 10);
-    var left = '<div class="ua-kidcard">' + ava(p, 76, 'big') + '<b>' + esc(p.name) + '</b><button type="button" class="ua-btn white sm" data-edit>' + esc(t('edit')) + '</button></div>' +
+    var left = '<div class="ua-kidcard">' + ava(p, 76, 'big') + '<b>' + esc(p.name) + '</b><span style="display:flex;gap:8px;align-items:center"><button type="button" class="ua-btn white sm" data-edit>' + esc(t('edit')) + '</button>' + a.delBtn(p) + '</span></div>' +
       '<div class="ua-panel"><button type="button" class="ua-prow link" data-char><b>' + esc(t('character')) + '</b><span class="ua-charthumb">' + (Ar ? fit(Ar.kid(p.kid || 'boy')).replace('height:100%', 'height:150%') : '') + '</span><span class="ua-chev">›</span></button>' +
       '<div class="ua-prow col"><div class="ua-between"><b>' + esc(t('favRewards')) + '</b><button type="button" class="ua-link" data-rewards>' + esc(t('edit')) + '</button></div><div class="ua-rewards">' + rewards.map(function (r) { return a.cardHTML(r, { size: 'xs', labels: 'none' }); }).join('') + '</div></div></div>';
-    var right = '<h3 class="ua-lab">' + esc(t('otherChildren')) + '</h3><div class="ua-panel">' + others.map(function (o) { return '<div class="ua-prow">' + ava(o, 36) + '<b class="ua-grow">' + esc(o.name) + '</b><button type="button" class="ua-link" data-pick="' + esc(o.id) + '">' + esc(t('sw')) + '</button></div>'; }).join('') +
+    var right = '<h3 class="ua-lab">' + esc(t('otherChildren')) + '</h3><div class="ua-panel">' + others.map(function (o) { return '<div class="ua-prow">' + ava(o, 36) + '<b class="ua-grow">' + esc(o.name) + '</b><button type="button" class="ua-link" data-pick="' + esc(o.id) + '">' + esc(t('sw')) + '</button>' + a.delBtn(o) + '</div>'; }).join('') +
       '<a class="ua-prow link" href="#/tools/setup"><span class="ua-ava add" style="width:36px;height:36px">' + ic('plus', 18) + '</span><b class="ua-grow">' + esc(t('addChild')) + '</b></a></div>' +
       '<h3 class="ua-lab">' + esc(t('backupH')) + '</h3><div class="ua-panel"><a class="ua-prow link" href="#/tools/backup"><span class="ua-rowtx"><b>' + esc(t('saveBackup')) + '</b><small>' + esc(t('saveBackupP')) + '</small></span><span class="ua-chev">›</span></a>' +
       '<a class="ua-prow link" href="#/tools/backup"><span class="ua-rowtx"><b>' + esc(t('sendTeacher')) + '</b><small>' + esc(t('sendTeacherP')) + '</small></span><span class="ua-chev">›</span></a></div>';
@@ -477,6 +486,7 @@
   function wireChild(el) {
     el.addEventListener('click', function (e) {
       var s = S(), a = api(), p = prof(), b; if (!s || !a) return;
+      if ((b = e.target.closest('[data-delp]'))) { if (a.delConfirm(b)) { a.deleteProfile(b.dataset.delp); refresh(); } return; }
       if ((b = e.target.closest('[data-pick]'))) { s.current = b.dataset.pick; a.save(); refresh(); return; }
       if (e.target.closest('[data-edit]')) { a.openProfiles(); return; }
       if (e.target.closest('[data-char]') && p) {

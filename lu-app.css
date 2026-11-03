@@ -506,3 +506,7 @@ html.ud-in .ud-ways{display:none}
 }
 @media (prefers-reduced-motion:reduce){html.ud-home .h2-tool,html.ud-home .h2-tool .h2-vis>*,html.ud-home .card .cover,html.ud-home .card .cover>img,html.ud-home .la-used,html.ud-home .la-used .ic,html.ud-home .la-libitem{transition:none!important}html.ud-home .h2-tool:hover,html.ud-home .card:hover .cover,html.ud-home .la-used:hover,html.ud-home .la-libitem:hover{transform:none!important}}
 html.tl-still.ud-home .h2-tool,html.tl-still.ud-home .card .cover,html.tl-still.ud-home .la-used{transition:none!important}
+
+/* coming-soon tool tiles */
+.ua-tile.soon .ua-tilelink{cursor:default}
+.ua-soon{display:inline-flex;align-self:center;margin-top:2px;padding:3px 10px;border-radius:999px;background:#fff;border:1.5px dashed #CFC6B6;font:800 11.5px Figtree,sans-serif;font-style:normal;color:var(--ink)}

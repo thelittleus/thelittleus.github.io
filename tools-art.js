@@ -1045,6 +1045,49 @@
           P('M56 52H102C109 52 114 57 114 64V82C114 89 109 94 102 94H98V104L87 94H56C49 94 44 89 44 82V64C44 57 49 52 56 52Z', C.blueL) +
           P('M66 70q4-5 8 0q4 5 8 0q4-5 8 0', 'none', s(2.6)) +
           G('rotate(-12 26 92)', R(12, 78, 28, 28, 7, '#fff') + O(20, 86, 2.6, K, NS) + O(32, 98, 2.6, K, NS) + O(26, 92, 2.6, K, NS));
+      },
+      // coming soon: Safe People Map, Social Scenarios Talk, Personal Space, Discrete Trial Teaching, Early Reading
+      safe: function () {
+        return E(60, 108, 44, 4.5, K, NS + ' opacity=".14"') +
+          P('M12 30L42 22L78 32L108 24V92L78 100L42 90L12 98Z', C.greenL) + P('M42 22V90M78 32V100', 'none', s(2.4)) +
+          P('M28 80C38 70 50 78 58 66S78 56 88 50', 'none', ' stroke-dasharray="5 6"' + s(2.6)) +
+          O(26, 76, 7, C.yellow) + P('M17 92C17 86 21 83 26 83S35 86 35 92Z', C.blue, s(2.4)) +
+          P('M90 56C84 50 76 45 76 37 76 31 80 27 85 27 87.5 27 89.4 28.6 90 31 90.6 28.6 92.5 27 95 27 100 27 104 31 104 37 104 45 96 50 90 56Z', C.coral) +
+          HL('M81 34c0-2 1.5-3.5 3.5-3.5');
+      },
+      scenarios: function () {
+        var face = function (x, y, r, col, hair) { return O(x, y, r, col) + hair + O(x - 7, y, 2.6, K, NS) + O(x + 7, y, 2.6, K, NS) + P('M' + (x - 6) + ' ' + (y + 8) + 'q6 5 12 0', 'none', s(2.6)) + E(x - 12, y + 6, 4, 2.6, C.cheek, NS + ' opacity=".85"') + E(x + 12, y + 6, 4, 2.6, C.cheek, NS + ' opacity=".85"'); };
+        return E(60, 108, 44, 4.5, K, NS + ' opacity=".14"') +
+          P('M62 12H104C110 12 114 16 114 22V40C114 46 110 50 104 50H88L78 59V50H62C56 50 52 46 52 40V22C52 16 56 12 62 12Z', C.lilacL) +
+          P('M78 24c0-7 11-7 11 0 0 5-5.5 5-5.5 10', 'none', s(3)) + O(83.5, 42, 2, K, NS) +
+          face(34, 78, 20, C.skin, P('M14 74C14 60 23 54 34 54 45 54 54 60 54 74 47 67 40 66 34 68 28 66 20 68 14 74Z', C.hair)) +
+          face(86, 84, 18, C.brownL, P('M68 80C68 68 76 64 86 64 96 64 104 68 104 80 98 74 92 72 86 74 80 72 74 74 68 80Z', C.brownD));
+      },
+      space: function () {
+        return E(60, 110, 34, 4, K, NS + ' opacity=".14"') +
+          O(60, 62, 44, '#EEF6FD', ' stroke="' + C.blue + '" stroke-dasharray="7 7"' + s(3)) +
+          P('M42 98C42 80 50 72 60 72 70 72 78 80 78 98Z', C.coral) +
+          O(60, 50, 16, C.skin) + P('M44 48C44 36 52 32 60 32 68 32 76 36 76 48 70 42 64 41 60 43 56 41 50 42 44 48Z', C.hair) +
+          O(54, 52, 2.4, K, NS) + O(66, 52, 2.4, K, NS) + P('M55 59q5 4 10 0', 'none', s(2.6)) +
+          P('M42 80L28 70M78 80L92 70', 'none', s(3.4)) +
+          P('M8 62h8M12 58l-4 4 4 4M112 62h-8M108 58l4 4-4 4', 'none', ' stroke="' + C.coralD + '"' + s(2.8));
+      },
+      dtt: function () {
+        return E(60, 108, 46, 4.5, K, NS + ' opacity=".14"') +
+          P('M6 96H114', 'none', s(3)) +
+          G('rotate(-6 25 70)', R(10, 50, 30, 40, 7, '#fff') + O(25, 70, 8, C.blue)) +
+          R(45, 42, 30, 48, 7, C.yellowL, s(3.4)) + P('M51 66l6 6 12-13', 'none', ' stroke="' + C.greenD + '"' + s(4)) +
+          G('rotate(6 95 70)', R(80, 50, 30, 40, 7, '#fff') + R(87, 62, 16, 16, 3, C.coral)) +
+          P('M60 8l3.9 8.3 9 1.1-6.6 6.2 1.7 8.9-8-4.5-8 4.5 1.7-8.9-6.6-6.2 9-1.1z', C.yellow, s(2.6));
+      },
+      read: function () {
+        return E(60, 108, 46, 4.5, K, NS + ' opacity=".14"') +
+          P('M60 40C48 32 30 30 12 34V94C30 90 48 92 60 100Z', '#fff') +
+          P('M60 40C72 32 90 30 108 34V94C90 90 72 92 60 100Z', C.yellowL) + P('M60 40V100', 'none', s(3)) +
+          P('M26 80l8-24 8 24M29.5 71h9', 'none', ' stroke="' + C.coralD + '"' + s(3.4)) +
+          P('M76 54V82M76 74c0-6 4-9 8-9s8 3 8 9-4 9-8 9-8-3-8-9', 'none', ' stroke="' + C.blue + '"' + s(3.4)) +
+          P('M98 10l2.4 5.6 5.6 2.4-5.6 2.4-2.4 5.6-2.4-5.6-5.6-2.4 5.6-2.4z', C.yellow, s(2.2)) +
+          P('M20 18l1.6 3.8 3.8 1.6-3.8 1.6-1.6 3.8-1.6-3.8-3.8-1.6 3.8-1.6z', C.pink, s(2));
       }
     };
     function draw(kind, opts) {
@@ -1072,7 +1115,22 @@
     return { draw: draw, hero: hero };
   })();
 
+  // tools still in the works: shown with a "Coming soon" badge on the home page, the tools list and the menus
+  var SOON = [
+    { k: 'safe', grp: 'talk', tint: '#DDF2E4', en: 'Safe People Map', idn: 'Peta Orang Aman',
+      d: ["Map out the trusted grown-ups in your child's world, and when to go to each of them.", 'Petakan orang dewasa tepercaya di sekitar anak, dan kapan harus menghampiri mereka.'] },
+    { k: 'scenarios', grp: 'talk', tint: '#E9E1F7', en: 'Social Scenarios Talk', idn: 'Ngobrol Situasi Sosial',
+      d: ['Everyday social situations in pictures, with prompts to talk through what to say and do.', 'Situasi sosial sehari-hari dalam gambar, dengan pertanyaan untuk membahas apa yang dikatakan dan dilakukan.'] },
+    { k: 'space', grp: 'talk', tint: '#DCEBFA', en: 'Personal Space', idn: 'Ruang Pribadi',
+      d: ['Learn about personal space and body boundaries through simple, playful activities.', 'Belajar tentang ruang pribadi dan batasan tubuh lewat aktivitas sederhana dan seru.'] },
+    { k: 'dtt', grp: 'teach', tint: '#FFF1C7', en: 'Discrete Trial Teaching', idn: 'Discrete Trial Teaching',
+      d: ['Run short teaching trials with picture cards, prompts and simple data tracking.', 'Jalankan sesi latihan singkat dengan kartu gambar, bantuan (prompt), dan pencatatan data sederhana.'] },
+    { k: 'read', grp: 'teach', tint: '#FFE9DA', en: 'Early Reading', idn: 'Membaca Awal',
+      d: ['Letters, sounds and first words, one small step at a time.', 'Huruf, bunyi, dan kata pertama, satu langkah kecil setiap kali.'] }
+  ];
+
   window.LUArt = {
+    soon: SOON,
     toolArt: TOOLART.draw,
     heroScene: TOOLART.hero,
     fx: FX,

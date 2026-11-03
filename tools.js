@@ -22,12 +22,12 @@
   /* ===================== words ===================== */
   var T = {
     freeTools: ['Free tools', 'Alat gratis'],
-    grpRoutine: ['Everyday routines', 'Rutinitas sehari-hari'], grpCalm: ['Emotional Regulation', 'Regulasi Emosi'], grpTalk: ['Talk & play', 'Ngobrol & bermain'],
+    grpRoutine: ['Everyday routines', 'Rutinitas sehari-hari'], grpCalm: ['Emotional Regulation', 'Regulasi Emosi'], grpTalk: ['Social skills', 'Keterampilan sosial'], grpTeach: ['Teaching tools', 'Alat mengajar'], soon: ['Coming soon', 'Segera hadir'],
     timerL: ['A countdown your child can see, not just hear. It helps with waiting, taking turns and knowing when an activity will end.', 'Hitungan mundur yang bisa dilihat anak. Membantu saat menunggu, bergantian, dan tahu kapan kegiatan akan selesai.'],
     tokensL: ['Your child earns a star for each step or good effort, and gets the reward they chose when the board is full. Great for building new habits.', 'Anak mendapat bintang untuk setiap langkah atau usaha baik, lalu mendapat hadiah pilihannya saat papan penuh. Bagus untuk membangun kebiasaan baru.'],
     ftL: ['Shows the task that comes first and the fun thing that comes after, so “first bath, then play” is easy to understand.', 'Menunjukkan tugas yang dilakukan dulu dan hal menyenangkan sesudahnya, agar “mandi dulu, lalu main” mudah dipahami.'],
     schedL: ['The steps of a routine or the whole day in pictures, so your child knows what is happening now and what comes next.', 'Langkah rutinitas atau kegiatan seharian dalam gambar, agar anak tahu apa yang sedang terjadi dan apa selanjutnya.'], newTag: ['New', 'Baru'],
-    hubP: ['Pick a tool, set it up in a minute, then hand it over.', 'Pilih alat, atur dalam semenit, lalu serahkan ke anak.'],
+    hubP: ['Pick a tool, set it up in a minute, then use it together.', 'Pilih alat, atur dalam semenit, lalu gunakan bersama anak.'],
     setUpFor: ['Setting up for', 'Untuk'],
     sw: ['Switch', 'Ganti'],
     open: ['Open', 'Buka'],
@@ -87,7 +87,7 @@
     w1: ['“1 minute left”', '“1 menit lagi”'], w1d: ['Shown on screen', 'Tampil di layar'],
     speak: ['Say warnings out loud', 'Ucapkan peringatan'], speakD: ['Uses the language set for labels', 'Memakai bahasa label'],
     whatsNext: ["What's next", 'Selanjutnya'], fromLib: ['From the card library', 'Dari perpustakaan kartu'], change: ['Change', 'Ganti'],
-    shownUnder: ['Shown under the timer', 'Tampil di bawah timer'],
+    shownUnder: ['Shown under the timer', 'Tampil di bawah timer'], showNext: ['Show what comes next', 'Tampilkan yang selanjutnya'], showNextD: ['A picture card under the timer, so your child knows what happens after.', 'Kartu gambar di bawah timer, agar anak tahu apa yang terjadi sesudahnya.'],
     endSig: ['End signal', 'Tanda selesai'], chime: ['Soft chime', 'Bunyi lembut'], vibrate: ['Vibrate', 'Getar'], silent: ['Silent', 'Senyap'],
     alsoOpens: ['Also opens from First–Then and schedule steps', 'Juga bisa dibuka dari Pertama–Lalu dan langkah jadwal'],
     customMin: ['How many minutes?', 'Berapa menit?'], moreMin: ['More minutes', 'Tambah menit'], lessMin: ['Fewer minutes', 'Kurangi menit'],
@@ -189,7 +189,7 @@
     seePlus: ["See what's in Plus", 'Lihat isi Plus'], notNow: ['Not now', 'Nanti saja'],
     goesWell: ['Goes well with this', 'Cocok dipakai bersama'], shop: ['Shop', 'Toko'],
     close: ['Close', 'Tutup'], edit: ['Edit', 'Ubah'], name: ['Name', 'Nama'], deleteChild: ['Delete this child', 'Hapus anak ini'],
-    confirmDel: ['Delete? This cannot be undone.', 'Hapus? Ini tidak bisa dibatalkan.'],
+    confirmDel: ['Delete? This cannot be undone.', 'Hapus? Ini tidak bisa dibatalkan.'], delQ: ['Delete?', 'Hapus?'],
     photoFail: ["We couldn't open that photo. Try another one.", 'Foto itu tidak bisa dibuka. Coba foto lain.'],
     childModeTip: ['Child mode is full-screen. Hold the button in the corner to come back.', 'Mode anak tampil layar penuh. Tahan tombol di pojok untuk kembali.']
   };
@@ -218,7 +218,7 @@
 
   function freshProfileData() {
     return {
-      timer: { style: 'circle', minutes: 5, w2: true, w1: true, speak: false, next: 'main', end: 'chime' },
+      timer: { style: 'circle', minutes: 5, w2: true, w1: true, speak: false, showNext: false, next: 'main', end: 'chime' },
       tokens: { reward: 'ayunan', count: 5, shape: 'star', full: 'stars', earned: 0 },
       ft: { first: null, then: [], choice: false, timerBtn: true, timerMin: 5, boardId: null }, boards: [],
       sched: { layout: 'vertical', show: 'all', done: 'move' },
@@ -504,7 +504,7 @@
       } else {
         h += '<p class="tl-note2">' + tr('matches', res.length, st.q) + '</p>';
       }
-      if (res.length) h += '<div class="tl-grid">' + res.map(function (r) { return cardHTML(r, { state: st.sel === r ? 'selected' : '', attrs: ' data-pick="' + r + '"' }); }).join('') + '</div>';
+      if (res.length) h += '<div class="tl-grid tl-pickgrid">' + res.map(function (r) { return cardHTML(r, { state: st.sel === r ? 'selected' : '', attrs: ' data-pick="' + r + '"' }); }).join('') + '</div>';
       else if (st.tab === 'photos' && !st.q) h += '<div class="tl-empty"><b>' + esc(tr('noPhotos')) + '</b><p>' + esc(tr('noPhotosP')) + '</p></div>';
       else if (st.tab === 'text' && !st.q) h += '<div class="tl-empty"><p>' + esc(tr('textOnlyD')) + '</p></div>';
       if (st.q) h += '<div class="tl-tip">' + A.heart(22) + '<span>' + tr('cantFind') + '</span></div>';
@@ -693,7 +693,7 @@
       var h = '<div class="tl-sheethead"><h2>' + esc(tr('whoHelp')) + '</h2><button type="button" class="tl-iconbtn round" data-x>✕</button></div><div class="tl-plist">';
       S.profiles.forEach(function (p) {
         var d = S.data[p.id] || {};
-        h += '<button type="button" class="tl-pitem' + (p.id === S.current ? ' on' : '') + '" data-p="' + p.id + '">' + avatar(p, 44) + '<span><b>' + esc(p.name) + '</b><small>' + esc(tr('nRewards', (p.rewards || []).length)) + ' · ' + esc(tr('nScheds', (d.schedules || []).length)) + '</small></span>' + (p.id === S.current ? '<span class="tl-tick">✓</span>' : '') + '</button>';
+        h += '<div class="tl-prow"><button type="button" class="tl-pitem' + (p.id === S.current ? ' on' : '') + '" data-p="' + p.id + '">' + avatar(p, 44) + '<span><b>' + esc(p.name) + '</b><small>' + esc(tr('nRewards', (p.rewards || []).length)) + ' · ' + esc(tr('nScheds', (d.schedules || []).length)) + '</small></span>' + (p.id === S.current ? '<span class="tl-tick">✓</span>' : '') + '</button>' + delBtn(p) + '</div>';
       });
       h += '<a class="tl-pitem add" href="#/tools/setup?new=1"><span class="tl-ava plus">+</span><b>' + esc(tr('addChild')) + '</b></a></div>' +
         '<div class="tl-links">' + (S.profiles.length ? '<a href="#/tools/settings#profiles">' + esc(tr('editProfiles')) + '<span>›</span></a>' : '') + '<a href="#/tools/backup">' + esc(tr('saveBackupShare')) + '<span>›</span></a></div>';
@@ -703,6 +703,7 @@
       if (e.target.closest('a')) return sh.close();
       var b = e.target.closest('button'); if (!b) return;
       if (b.hasAttribute('data-x')) return sh.close();
+      if (b.dataset.delp) { if (delConfirm(b)) { deleteProfile(b.dataset.delp); if (!S.profiles.length) sh.close(); else render(); refreshAll(); } return; }
       if (b.dataset.p) { S.current = b.dataset.p; save(); sh.close(); refreshAll(); }
     };
     render();
@@ -891,6 +892,8 @@
 
   /* ---------- visual timer: child view ---------- */
   // the next activity, shown in the speech bubble at the end of a fun timer's path
+  // a bold yellow arrow pointing down (rotated by CSS when the layout runs sideways)
+  var ARROW = '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M17 5h14v19h9L24 43 8 24h9z" fill="#FFC94A" stroke="#2B2A35" stroke-width="3.6" stroke-linejoin="round"/></svg>';
   function jcard(ref) { return '<div class="tl-jcard">' + artHTML(ref) + '<b>' + esc(cardLabel(ref)) + '</b></div>'; }
   function fmt(ms) { var s = Math.ceil(ms / 1000), m = Math.floor(s / 60); return m + ':' + String(s % 60).padStart(2, '0'); }
   function runTimer(cfg, opts) {
@@ -994,7 +997,7 @@
         var thens = (cfg.choice ? cfg.then.slice(0, 2) : cfg.then.slice(0, 1)).filter(Boolean);
         el.innerHTML = '<div class="tl-cwrap ft">' + exitPill() +
           '<div class="tl-ftbox first' + (st.done ? ' done' : ' active') + '" data-first><div class="tl-fthead">' + dual(T.first[1], T.first[0], 'big') + '</div>' + cardHTML(cfg.first, { size: 'l', state: st.done ? 'done' : '' }) + '</div>' +
-          '<div class="tl-ftarrow" aria-hidden="true">↓</div>' +
+          '<div class="tl-ftarrow" aria-hidden="true">' + ARROW + '</div>' +
           '<div class="tl-ftbox then' + (st.done ? ' active' : '') + '"><div class="tl-fthead">' + dual(T.then[1], T.then[0], 'big') + '</div><div class="tl-ftthens">' +
           thens.map(function (r) { return cardHTML(r, { size: thens.length > 1 ? 'm' : 'l', state: st.pick === r ? 'selected' : '', attrs: ' data-then="' + r + '"' }); }).join('') + '</div>' +
           (thens.length > 1 && st.done ? '<div class="tl-pickone">' + dual(T.pickOne[1], T.pickOne[0]) + '</div>' : '') + '</div>' +
@@ -1044,8 +1047,9 @@
           '<div class="tl-schedbar"><div class="tl-eyebrow">' + esc(schedName(s)) + '</div>' +
           (cur ? '<button type="button" class="tl-replan" data-replan>' + ICO.replan + '<span>' + dual(T.changePlan[1], T.changePlan[0]) + '</span></button>' : '') + '</div><div class="tl-steps">';
         if (!cur) h += '<div class="tl-fin">' + A.heart(64) + '<h2>' + dual(T.allDone[1], T.allDone[0], 'big') + '</h2></div>';
-        visible.forEach(function (x) {
+        visible.forEach(function (x, vi) {
           var isDone = st.done.indexOf(x.i) >= 0, isCur = cur && x.i === cur.i;
+          if (vi) h += '<div class="tl-steparrow" aria-hidden="true">' + ARROW + '</div>';
           if (st.change && st.change.i === x.i && isCur) {
             h += '<div class="tl-change"><div class="tl-chhead">' + ICO.replan + dual(T.changePlan[1], T.changePlan[0]) + '</div><div class="tl-chrow">' +
               cardHTML(st.change.from, { size: 's', state: 'crossed' }) + '<span>→</span>' + cardHTML(x.card, { size: 's', state: 'selected' }) + '</div></div>';
@@ -1110,17 +1114,21 @@
       ['tokens', 'tokensL', '#FFF1C7', 'tools/tokens', vis('tokens')],
       ['ft', 'ftL', '#DDF2E4', 'tools/first-then', vis('ft')],
       ['sched', 'schedL', '#E9E1F7', 'tools/schedule', vis('sched')]];
+    var GRP = { routine: 'grpRoutine', emo: 'grpCalm', talk: 'grpTalk', teach: 'grpTeach' };
     function row(x, grp) {
-      var title = x[5] || tr(x[0]);
-      return '<a class="tl-trow" href="#/' + x[3] + '"><span class="tl-tart" style="background:' + x[2] + '" aria-hidden="true"><span class="tl-tartin">' + x[4] + '</span></span>' +
+      var title = x[5] || tr(x[0]), soon = !!x[8];
+      return (soon ? '<div class="tl-trow soon">' : '<a class="tl-trow" href="#/' + x[3] + '">') + '<span class="tl-tart" style="background:' + x[2] + '" aria-hidden="true"><span class="tl-tartin">' + x[4] + '</span></span>' +
         '<span class="tl-ttx"><b>' + esc(title) + '</b><small>' + esc(x[6] || tr(x[1])) + '</small></span>' +
-        '<span class="tl-tcat ' + grp + '">' + esc(tr(grp === 'emo' ? 'grpCalm' : grp === 'talk' ? 'grpTalk' : 'grpRoutine')) + '</span>' +
-        '<span class="tl-topen">' + esc(tr('open')) + ' <span aria-hidden="true">→</span></span></a>';
+        '<span class="tl-tcat ' + grp + '">' + esc(tr(GRP[grp] || 'grpRoutine')) + '</span>' +
+        (soon ? '<span class="tl-soon">' + esc(tr('soon')) + '</span></div>' : '<span class="tl-topen">' + esc(tr('open')) + ' <span aria-hidden="true">→</span></span></a>');
     }
     var ext = EXT_ORDER.map(function (r) { var e = EXT[r]; return e.card ? [r, '', e.card.tint, r, e.card.vis(), e.card.title(), e.card.desc(), e.card.grp || 'emo'] : null; }).filter(Boolean);
-    return '<div class="tl-tlist">' + t.map(function (x) { return row(x, 'routine'); }).join('') + ext.filter(function (x) { return x[7] === 'emo'; }).map(function (x) { return row(x, 'emo'); }).join('') + ext.filter(function (x) { return x[7] !== 'emo'; }).map(function (x) { return row(x, x[7]); }).join('') + '</div>';
+    var soon = (A.soon || []).map(function (s) { return [s.k, '', s.tint, '', vis(s.k), L() === 'id' ? s.idn : s.en, L() === 'id' ? s.d[1] : s.d[0], s.grp, true]; });
+    var all = t.map(function (x) { return x.concat(['', '', '', 'routine']); }).concat(ext, soon);
+    return '<div class="tl-tlist">' + ['routine', 'emo', 'talk', 'teach'].map(function (g) {
+      return all.filter(function (x) { return x[7] === g; }).map(function (x) { return row(x, g); }).join('');
+    }).join('') + '</div>';
   }
-  var PRIV = function () { return '<div class="tl-privacy">' + A.heart(26) + '<span>' + tr('privacy') + '</span></div>'; };
 
   function pageHub() {
     var p = prof();
@@ -1136,13 +1144,11 @@
       var m = map[S.last.tool];
       if (m && ((S.last.tool === 'sched' && activeSched()) || (S.last.tool === 'ft' && D().ft.first) || S.last.tool === 'tokens' || S.last.tool === 'timer')) {
         var sub = S.last.tool === 'sched' ? schedName(activeSched()) : S.last.tool === 'tokens' ? cardLabel(D().tokens.reward) : S.last.tool === 'ft' ? cardLabel(D().ft.first) + ' → ' + cardLabel(D().ft.then[0]) : (D().timer.minutes + ' ' + tr('min'));
-        var ref = S.last.tool === 'sched' ? (activeSched().steps[0] || {}).card : S.last.tool === 'tokens' ? D().tokens.reward : S.last.tool === 'ft' ? D().ft.first : D().timer.next;
+        var ref = S.last.tool === 'sched' ? (activeSched().steps[0] || {}).card : S.last.tool === 'tokens' ? D().tokens.reward : S.last.tool === 'ft' ? D().ft.first : (D().timer.showNext ? D().timer.next : null);
         h += '<h2 class="tl-h3">' + esc(tr('cont')) + '</h2><a class="tl-contcard" href="#/' + m[0] + '">' + (ref ? cardHTML(ref, { size: 'xs', labels: 'none' }) : '') + '<span><b>' + esc(sub) + '</b><small>' + esc(tr(m[1])) + '</small></span><span class="tl-openlink">' + esc(tr('open')) + ' ›</span></a>';
       }
     }
-    h += '<div class="tl-hubfoot"><div><h2 class="tl-h3">' + esc(tr('how')) + '</h2><ol class="tl-how">' +
-      [['how1', 'how1d', '#FFF1C7'], ['how2', 'how2d', '#DDF2E4'], ['how3', 'how3d', '#DCEBFA']].map(function (x, i) { return '<li><span style="background:' + x[2] + '">' + (i + 1) + '</span><div><b>' + esc(tr(x[0])) + '</b><small>' + esc(tr(x[1])) + '</small></div></li>'; }).join('') +
-      '</ol></div><div class="tl-hublinks"><a class="tl-linkcard" href="#/tools/library">' + ICO.lib + '<span>' + esc(tr('library')) + '</span>›</a><a class="tl-linkcard" href="#/tools/settings">' + ICO.gear + '<span>' + esc(tr('settings')) + '</span>›</a>' + PRIV() + '</div></div></div>';
+    h += '</div>';
     return h;
   }
 
@@ -1264,8 +1270,8 @@
       }).join('') + '</div>' +
       '<div class="tl-lab2">' + esc(tr('time')) + '</div>' + digitalTime(c.minutes) +
       '<div class="tl-lab2">' + esc(tr('warns')) + '</div><div class="tl-panel">' + row(esc(tr('w2')), esc(tr('w2d')), toggle('w2', c.w2)) + row(esc(tr('w1')), esc(tr('w1d')), toggle('w1', c.w1)) + row(esc(tr('speak')), esc(tr('speakD')), toggle('speak', c.speak)) + '</div>' +
-      '<div class="tl-lab2 between"><span>' + esc(tr('whatsNext')) + '</span><small>' + esc(tr('fromLib')) + '</small></div>' +
-      '<div class="tl-panel pick">' + (c.next && cardInfo(c.next) ? cardHTML(c.next, { size: 'xs' }) : '<span class="tl-card tl-xs tl-addcard"><span>+</span></span>') + '<div><b>' + esc(c.next ? cardLabel(c.next) : '—') + '</b><small>' + esc(tr('shownUnder')) + '</small></div><button type="button" class="tl-link" data-act="tnext">' + esc(tr('change')) + '</button></div>' +
+      '<div class="tl-lab2">' + esc(tr('whatsNext')) + '</div><div class="tl-panel">' + row(esc(tr('showNext')), esc(tr('showNextD')), toggle('showNext', c.showNext)) + '</div>' +
+      (c.showNext ? '<div class="tl-panel pick">' + (c.next && cardInfo(c.next) ? cardHTML(c.next, { size: 'xs' }) : '<span class="tl-card tl-xs tl-addcard"><span>+</span></span>') + '<div><b>' + esc(c.next ? cardLabel(c.next) : '—') + '</b><small>' + esc(tr('fromLib')) + '</small></div><button type="button" class="tl-link" data-act="tnext">' + esc(tr('change')) + '</button></div>' : '') +
       '<div class="tl-lab2">' + esc(tr('endSig')) + '</div>' + seg('tend', [['chime', tr('chime')], ['vibrate', tr('vibrate')], ['silent', tr('silent')]], c.end) +
       '<div class="tl-foot"><button type="button" class="tl-btn primary lg block" data-act="tstart">' + esc(tr('startChild')) + '</button><small>' + esc(tr('alsoOpens')) + '</small></div></div>';
   }
@@ -1456,7 +1462,7 @@
       '<div class="tl-row col"><b>' + esc(tr('volume')) + '</b><div class="tl-vol"><small>' + esc(tr('soft')) + '</small><input type="range" min="0" max="1" step="0.05" value="' + s.volume + '" id="tlVol" class="tl-range light"><small>' + esc(tr('loud')) + '</small></div></div></div>' +
       '<div class="tl-lab2">' + esc(tr('comfort')) + '</div><div class="tl-panel">' + row(esc(tr('reduce')), esc(tr('reduceD')), toggle('reduce', s.reduce)) + '</div>' +
       '<div class="tl-lab2" id="profiles">' + esc(tr('childData')) + '</div><div class="tl-panel">' +
-      S.profiles.map(function (pp) { return '<div class="tl-row">' + avatar(pp, 34) + '<div style="flex:1"><b>' + esc(pp.name) + '</b><small>' + esc(tr('nRewards', (pp.rewards || []).length)) + '</small></div><button type="button" class="tl-link" data-act="pedit" data-pid="' + pp.id + '">' + esc(tr('edit')) + '</button></div>'; }).join('') +
+      S.profiles.map(function (pp) { return '<div class="tl-row">' + avatar(pp, 34) + '<div style="flex:1"><b>' + esc(pp.name) + '</b><small>' + esc(tr('nRewards', (pp.rewards || []).length)) + '</small></div><button type="button" class="tl-link" data-act="pedit" data-pid="' + pp.id + '">' + esc(tr('edit')) + '</button>' + delBtn(pp) + '</div>'; }).join('') +
       '<a class="tl-row act" href="#/tools/setup?new=1"><div><b>' + esc(tr('addChild')) + '</b></div><span>+</span></a>' +
       '<a class="tl-row act" href="#/tools/backup"><div><b>' + esc(tr('backup')) + '</b><small>' + esc(s.lastBackup ? tr('lastSaved', relDate(s.lastBackup)) : tr('never')) + '</small></div><span>›</span></a>' +
       '<div class="tl-row"><div><b>' + esc(tr('storage')) + '</b><small>' + mb + ' MB · ' + esc(tr('worksOff')) + '</small></div><span class="tl-badge">' + esc(tr('ready')) + '</span></div></div></div>';
@@ -1477,12 +1483,26 @@
       if (b.hasAttribute('data-s')) { p.name = (sh.el.querySelector('#tlPName').value || '').trim() || p.name; save(); sh.close(); return refreshAll(); }
       if (b.hasAttribute('data-d')) {
         if (!b.dataset.sure) { b.dataset.sure = '1'; b.textContent = tr('confirmDel'); return; }
-        S.profiles = S.profiles.filter(function (x) { return x.id !== pid; }); delete S.data[pid];
-        if (p.photo) photoDel(p.photo);
-        S.current = S.profiles[0] ? S.profiles[0].id : 'default';
-        save(); sh.close(); refreshAll();
+        deleteProfile(pid); sh.close(); refreshAll();
       }
     };
+  }
+  // removing a child: a trash button that asks once ("Delete?") before it removes the profile, its tools and photo
+  function delBtn(p) { return '<button type="button" class="tl-delp" data-delp="' + p.id + '" aria-label="' + esc(tr('deleteChild') + ': ' + p.name) + '" title="' + esc(tr('deleteChild')) + '"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg><span>' + esc(tr('delQ')) + '</span></button>'; }
+  function delConfirm(b) {
+    if (b.classList.contains('sure')) return true;
+    document.querySelectorAll('.tl-delp.sure').forEach(function (x) { x.classList.remove('sure'); });
+    b.classList.add('sure'); b.setAttribute('aria-label', tr('confirmDel'));
+    setTimeout(function () { b.classList.remove('sure'); }, 4000);
+    return false;
+  }
+  function deleteProfile(pid) {
+    var p = S.profiles.filter(function (x) { return x.id === pid; })[0]; if (!p) return;
+    S.profiles = S.profiles.filter(function (x) { return x.id !== pid; }); delete S.data[pid];
+    if (p.photo) photoDel(p.photo);
+    if (S.current === pid) S.current = S.profiles[0] ? S.profiles[0].id : 'default';
+    if (!S.data[S.current]) S.data[S.current] = freshProfileData();
+    save();
   }
 
   /* ---------- backup page ---------- */
@@ -1594,6 +1614,7 @@
     var b = e.target.closest('button,[data-act],[data-lcard],[data-reward],[data-rw]');
     if (DD && scope === ROOT && !e.target.closest('.tl-ddpanel') && !(b && b.dataset.act === 'dd')) { DD = null; PAGE.keepScroll = true; render(); return; }
     if (!b || !scope || !scope.contains(b)) return;
+    if (b.dataset.delp) { if (delConfirm(b)) { deleteProfile(b.dataset.delp); refreshAll(); } return; }
     var d = D(), ds = b.dataset, act = ds.act;
     // shared
     if (act === 'profiles') return openProfiles();
@@ -1665,7 +1686,7 @@
       return;
     }
     if (act === 'tnext') return openPicker({ current: d.timer.next, onPick: function (r) { d.timer.next = r; keep(); } });
-    if (act === 'tstart') { setLast('timer'); return runTimer(d.timer, { onExit: rerender }); }
+    if (act === 'tstart') { setLast('timer'); return runTimer(d.timer, { next: d.timer.showNext ? d.timer.next : null, onExit: rerender }); }
     // tokens
     if (act === 'kreward') return openPicker({ title: tr('chooseReward'), rewards: true, current: d.tokens.reward, onPick: function (r) { d.tokens.reward = r; d.tokens.earned = 0; var p = prof(); if (p && p.rewards.indexOf(r) < 0) p.rewards.push(r); keep(); } });
     if (ds.reward) { d.tokens.reward = ds.reward; d.tokens.earned = 0; return keep(); }
@@ -1771,7 +1792,7 @@
     PH: PH, tr: tr, L: L, esc: esc, sheet: sheet, save: save, keep: keep, rerender: rerender, openPicker: openPicker, topbar: topbar, row: row, toggle: toggle, seg: seg,
     childOpen: childOpen, childClose: childClose, childClear: childClear, addTimer: function (t) { CH.timers.push(t); }, childEl: function () { return CH.el; }, exitPill: exitPill, wireExit: wireExit,
     chime: chime, say: say, buzz: buzz, setLast: setLast, runTimer: runTimer, photoPut: photoPut, photoDel: photoDel, cardLabel: cardLabel, adultCheck: adultCheck, openDownload: openDownload,
-    profName: profName, route: function () { return ROUTE; }, openProfiles: function () { return openProfiles(); }, photosLoad: function () { return READY = READY || photosLoad(); }, COLORS: COLORS, DEFAULT_REWARDS: DEFAULT_REWARDS, appMode: appMode, A: A, fmt: fmt, schedName: schedName, activeSched: activeSched, timerSVG: timerSVG, timerSet: timerSet, T: T, canUse: canUse, toast: toast, heart: A.heart
+    profName: profName, route: function () { return ROUTE; }, openProfiles: function () { return openProfiles(); }, deleteProfile: deleteProfile, delConfirm: delConfirm, delBtn: delBtn, photosLoad: function () { return READY = READY || photosLoad(); }, COLORS: COLORS, DEFAULT_REWARDS: DEFAULT_REWARDS, appMode: appMode, A: A, fmt: fmt, schedName: schedName, activeSched: activeSched, timerSVG: timerSVG, timerSet: timerSet, T: T, canUse: canUse, toast: toast, heart: A.heart
   };
   window.LUTools = {
     version: VERSION,
