@@ -320,7 +320,7 @@
       STATE = 'ready';
       if (KIND === 'article') CUR = (CACHE || []).filter(function (a) { return a.slug === ST.slug; })[0] || null;
       render();
-      if (window.LU && LU.page && KIND === 'article' && CUR) { try { document.title = ver(CUR).title + ' · little us'; } catch (e) {} }
+      if (window.LU && LU.page && KIND === 'article' && CUR) { try { document.title = ver(CUR).title + ' · Little Us'; } catch (e) {} }
     }).catch(function (err) { console.error('[little us] articles failed', err); STATE = 'error'; render(); });
   }
   function render() { if (!ROOT || !document.body.contains(ROOT)) return; if (KIND === 'index') renderIndex(); else renderArticle(); }

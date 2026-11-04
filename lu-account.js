@@ -48,7 +48,7 @@
     document.querySelectorAll('[data-face]:not([data-done])').forEach(function (el) { el.innerHTML = el.getAttribute('data-face') === 'adult' ? Ar.adult() : Ar.face(el.getAttribute('data-face')); el.setAttribute('data-done', '1'); });
   }
   new MutationObserver(function () { if (!faceQ && document.querySelector('[data-face]:not([data-done])')) faceQ = requestAnimationFrame(fillFaces); }).observe(document.documentElement, { childList: true, subtree: true });
-  if (window.luLoad) window.luLoad('/tools-art.js?v=17').then(fillFaces).catch(function () {});
+  if (window.luLoad) window.luLoad('/tools-art.js?v=18').then(fillFaces).catch(function () {});
   function firstName(n) { return String(n || '').trim().split(/\s+/)[0] || ''; }
   function toast(msg, kind) { if (window.LU && LU.toast) LU.toast(msg, { kind: kind || 'info' }); }
 
@@ -1418,7 +1418,7 @@
     }
     if (window.LUTools && LUTools.api && LUTools.api.openProfiles) return show();
     if (!window.luLoad) return show();
-    luLoad('/tools.css?v=16').then(function () { return luLoad('/tools-art.js?v=17'); }).then(function () { return luLoad('/tools.js?v=18'); })
+    luLoad('/tools.css?v=16').then(function () { return luLoad('/tools-art.js?v=18'); }).then(function () { return luLoad('/tools.js?v=18'); })
       .then(function () { var a = window.LUTools && LUTools.api; return a && a.photosLoad ? a.photosLoad() : null; }).then(show, show);
   }
   function homeRender() {

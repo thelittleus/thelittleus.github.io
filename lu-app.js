@@ -136,7 +136,7 @@
   function accStatus() { var a = acc(); try { return a ? a.status() : 'none'; } catch (e) { return 'none'; } }
   function load() {
     if (!window.luLoad) return Promise.resolve();
-    return luLoad('/tools.css?v=16').then(function () { return luLoad('/tools-art.js?v=17'); }).then(function () { return luLoad('/tools.js?v=18'); })
+    return luLoad('/tools.css?v=16').then(function () { return luLoad('/tools-art.js?v=18'); }).then(function () { return luLoad('/tools.js?v=18'); })
       .then(function () { return Promise.all([luLoad('/tools-calm.js?v=14'), luLoad('/tools-talk.js?v=4')]); }).then(function () { var a = api(); return a && a.photosLoad ? a.photosLoad() : null; }).catch(function () { });
   }
   function photo(p) { var a = api(); return p && p.photo && a && a.PH && a.PH[p.photo] ? a.PH[p.photo] : ''; }
@@ -364,7 +364,7 @@
     return '<div class="ua-note line"><span><span class="ua-plusrow"><em class="ua-plus">PLUS</em><b>' + esc(t('plusCard')) + '</b></span><small>' + esc(t('plusCardP')) + '</small></span><a class="ua-btn primary sm" href="#/plus">' + esc(t('upgrade')) + '</a><button type="button" class="ua-x sm" data-hide="lu_plus_hide" aria-label="' + esc(t('close')) + '">' + ic('close', 14) + '</button></div>';
   }
   function childRow(p) {
-    return '<div class="ua-childrow">' + ava(p, 44) + '<span class="ua-rowtx"><b>' + esc(p.name) + '</b><small>' + esc(labelsText()) + '</small></span><button type="button" class="ua-btn quiet sm" data-switch>' + esc(t('change')) + '</button></div>';
+    return '<div class="ua-childrow">' + ava(p, 44) + '<span class="ua-rowtx"><b>' + esc(p.name) + '</b></span><button type="button" class="ua-btn quiet sm" data-switch>' + esc(t('change')) + '</button></div>';
   }
   function homeHTML() {
     var p = prof(), first = !profiles().length, st = accStatus(), land = MODE === 'land';
@@ -541,7 +541,7 @@
     };
   }
   function install() {
-    override('', homeHTML, wireHome, function () { return isId() ? 'little us · Alat bantu visual dan materi cetak' : 'little us · Visual-support tools and printables'; });
+    override('', homeHTML, wireHome, function () { return 'Little Us'; });
     override('tools', toolsHTML, wireTools, function () { return t('tools'); });
     override('tools/settings', settingsHTML, wireSettings, function () { return t('settings'); });
     override('child', childHTML, wireChild, function () { return t('child'); });
@@ -581,10 +581,10 @@
      Tools, Shop and Articles rows. The illustrations are the shaded ones from tools-art.js. */
   var DW = {
     threeWays: ['Three ways to use Little Us', 'Tiga cara memakai Little Us'],
-    justStart: ['Just start', 'Langsung mulai'], noAccount: ['NO ACCOUNT', 'TANPA AKUN'], justStartP: ['Every tool and free printable. Setup stays on this computer.', 'Semua alat dan materi gratis. Pengaturan tersimpan di komputer ini.'], tryTools: ['Try the free tools', 'Coba alat gratis'],
+    justStart: ['Just start', 'Langsung mulai'], noAccount: ['NO ACCOUNT', 'TANPA AKUN'], justStartP: ['Every tool and free printable. Setup stays on this device.', 'Semua alat dan materi gratis. Pengaturan tersimpan di perangkat ini.'], tryTools: ['Try the free tools', 'Coba alat gratis'],
     freeAcc: ['Free account', 'Akun gratis'], freeAccP: ['Your child’s setup on every phone, tablet and computer.', 'Pengaturan anakmu di setiap HP, tablet, dan komputer.'], makeAcc: ['Make an account', 'Buat akun'],
     upgradeH: ['Upgrade to Little Us', 'Upgrade ke Little Us'], upgradeP: ['Get more tool styles and all our resources', 'Dapatkan lebih banyak gaya alat dan semua materi kami'], seePlans: ['See plans · from $9', 'Lihat paket · mulai $9'], seePlans0: ['See plans', 'Lihat paket'],
-    moreDev: ['Use them on more than one device?', 'Mau memakainya di lebih dari satu perangkat?'], moreDevP: ['Without an account, your setup stays on this computer. A free account keeps it on your phone and tablet too.', 'Tanpa akun, pengaturanmu hanya tersimpan di komputer ini. Akun gratis menyimpannya juga di HP dan tablet.'],
+    moreDev: ['Use them on more than one device?', 'Mau memakainya di lebih dari satu perangkat?'], moreDevP: ['Without an account, your setup stays on this device. A free account keeps it on your phone and tablet too.', 'Tanpa akun, pengaturanmu hanya tersimpan di perangkat ini. Akun gratis menyimpannya juga di HP dan tablet.'],
     popSub: ['Every download is included with <b>Little Us Plus</b>, from $9.', 'Semua unduhan termasuk dalam <b>Little Us Plus</b>, mulai $9.'],
     m3: ['3 Months', '3 Bulan'], m12: ['12 Months', '12 Bulan'],
     tools: ['Tools', 'Alat'], shop: ['Shop', 'Toko'], articles: ['Articles', 'Artikel'], allTools: ['All tools →', 'Semua alat →'], browseShop: ['Browse the shop →', 'Lihat toko →'], allArticles: ['All articles →', 'Semua artikel →'],

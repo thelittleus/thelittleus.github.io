@@ -1181,14 +1181,14 @@
     },
     // the account's picture: a friendly bald grown-up in a suit, so it suits anyone
     adult: function () {
-      var body = R(43, 58, 14, 16, 5, C.skinD) +
+      var body = R(43, 62, 14, 12, 5, C.skinD) +
         P('M10 106C10 84 26 72 50 72 74 72 90 84 90 106Z', '#4A5578') +
         P('M40 72L50 92 60 72Z', '#fff') + P('M47 75H53L55 80 52 96 50 98 48 96 45 80Z', C.coral) +
         P('M40 72 50 92 43 99 33 77Z', '#3B4566') + P('M60 72 50 92 57 99 67 77Z', '#3B4566') +
-        O(28, 42, 5.5, C.skin) + O(72, 42, 5.5, C.skin) + O(50, 38, 22, C.skin) +
-        HL('M37 24c4-4 10-5 15-4') +
-        O(42, 40, 2.6, K, NS) + O(58, 40, 2.6, K, NS) + P('M44 48q6 5 12 0', 'none', SW(2.8)) +
-        E(35, 47, 4, 2.6, C.cheek, NS + ' opacity=".8"') + E(65, 47, 4, 2.6, C.cheek, NS + ' opacity=".8"');
+        O(28, 47, 5.5, C.skin) + O(72, 47, 5.5, C.skin) + O(50, 44, 22, C.skin) +
+        HL('M37 30c4-4 10-5 15-4') +
+        O(42, 46, 2.6, K, NS) + O(58, 46, 2.6, K, NS) + P('M44 54q6 5 12 0', 'none', SW(2.8)) +
+        E(35, 53, 4, 2.6, C.cheek, NS + ' opacity=".8"') + E(65, 53, 4, 2.6, C.cheek, NS + ' opacity=".8"');
       return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="' + K + '" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">' + FX.outline(body, 5) + FX.enrich(body) + '</g></svg>';
     },
     // the little us heart with a face (brand signature for finish moments and print footers)
