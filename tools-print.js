@@ -1,4 +1,4 @@
-/* little us · downloads for the tools (PDF and picture)
+/* Little Us · downloads for the tools (PDF and picture)
    Pages are drawn as SVG in millimetres, turned into images on this device, then saved as a
    PDF (built here, no outside service) or a PNG picture. Loaded on demand by tools.js. */
 (function () {
@@ -113,7 +113,7 @@
   function footer(pw, ph) {
     var y = ph - 10;
     return '<line x1="14" y1="' + (y - 6) + '" x2="' + (pw - 14) + '" y2="' + (y - 6) + '" stroke="#ECE6DC" stroke-width=".4"/>' +
-      (LOGO ? '<image href="' + LOGO + '" x="14" y="' + (y - 4) + '" height="5" width="24" preserveAspectRatio="xMinYMid meet"/>' : text(14, y, 'little us', 4.2)) +
+      (LOGO ? '<image href="' + LOGO + '" x="14" y="' + (y - 4) + '" height="5" width="24" preserveAspectRatio="xMinYMid meet"/>' : text(14, y, 'Little Us', 4.2)) +
       text(pw - 14, y, 'thelittleus.com', 3.4, { anchor: 'end', fill: MUTED, body: true, weight: 500 });
   }
   function page(pw, ph, inner) { return { w: pw, h: ph, body: '<rect width="' + pw + '" height="' + ph + '" fill="#fff"/>' + inner + footer(pw, ph) }; }
@@ -154,7 +154,7 @@
       y += Math.max(1, wrapText(ln, pw - 48, 4.6).length) * 6.4 + 7;
     });
     g += '<rect x="14" y="' + (y + 4) + '" width="' + (pw - 28) + '" height="22" rx="5" fill="#FFF8EC"/>' + nest(A.heart(30), 20, y + 9, 12) +
-      text(36, y + 14, lang === 'id' ? 'Dibuat oleh little us, alat bantu visual gratis.' : 'Made with little us, free visual-support tools.', 4.4, { body: true, weight: 600 }) +
+      text(36, y + 14, lang === 'id' ? 'Dibuat oleh Little Us, alat bantu visual gratis.' : 'Made with Little Us, free visual-support tools.', 4.4, { body: true, weight: 600 }) +
       text(36, y + 20.5, 'thelittleus.com/tools', 4, { body: true, weight: 500, fill: MUTED });
     return page(pw, ph, g);
   }
@@ -382,7 +382,7 @@
       if (b.dataset.t) { OPT[b.dataset.t] = !OPT[b.dataset.t]; return render(); }
       if (b.hasAttribute('data-go')) {
         b.disabled = true; b.textContent = w('making');
-        make(kind, ctx, opts()).then(function () { b.disabled = false; render(); }).catch(function (err) { console.error('[little us] download failed', err); X.toast(w('fail')); render(); });
+        make(kind, ctx, opts()).then(function () { b.disabled = false; render(); }).catch(function (err) { console.error('[Little Us] download failed', err); X.toast(w('fail')); render(); });
       }
     };
     loadAssets().then(function () { if (document.body.contains(sh.el)) render(); });

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
-<title>little us · Plus and accounts (admin)</title>
+<title>Little Us · Plus and accounts (admin)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Figtree:wght@400..800&display=swap" rel="stylesheet">
 <style>
@@ -70,7 +70,7 @@ label.f small{font-weight:500;color:var(--muted)}
 <body>
 <div id="app"></div>
 <script>
-/* little us · admin for accounts and Little Us Plus
+/* Little Us · admin for accounts and Little Us Plus
    Uses the same Supabase project and admin login as admin.html (admins table).
    Settings live in the database, so changes here show on the website straight away. */
 (function () {
@@ -110,7 +110,7 @@ label.f small{font-weight:500;color:var(--muted)}
   var state = { tab: (location.hash.replace('#', '') || 'overview'), ov: null };
 
   function shell(inner) {
-    $('#app').innerHTML = '<div class="shell"><aside class="side"><div class="brand"><img src="logo.png" alt="little us"><span class="tag">PLUS</span></div><nav class="nav">' +
+    $('#app').innerHTML = '<div class="shell"><aside class="side"><div class="brand"><img src="logo.png" alt="Little Us"><span class="tag">PLUS</span></div><nav class="nav">' +
       TABS.map(function (t) { return '<a href="#' + t[0] + '" class="' + (state.tab === t[0] ? 'on' : '') + '">' + t[1] + (t[0] === 'payments' && state.ov && state.ov.unclaimed ? '<span class="b">' + state.ov.unclaimed + '</span>' : '') + '</a>'; }).join('') +
       '</nav><div class="foot"><a href="admin.html">← Shop admin</a><a href="./" target="_blank" rel="noopener">View site ↗</a><span class="muted small">' + esc(S && S.user && S.user.email || '') + '</span><a href="#" id="out">Log out</a></div></aside><main id="main">' + inner + '</main></div>';
     $('#out').onclick = function (e) { e.preventDefault(); setS(null); login(); };
@@ -118,7 +118,7 @@ label.f small{font-weight:500;color:var(--muted)}
   function errBox(e) { return '<div class="err">' + esc(e && e.message || 'Something went wrong') + '</div>'; }
 
   function login(msg) {
-    $('#app').innerHTML = '<form class="login card" id="lf"><div class="brand" style="padding:0"><img src="logo.png" alt="little us" style="height:28px"><span class="tag">PLUS</span></div><h1 style="font-size:24px">Admin log in</h1>' + (msg ? '<div class="err">' + esc(msg) + '</div>' : '') +
+    $('#app').innerHTML = '<form class="login card" id="lf"><div class="brand" style="padding:0"><img src="logo.png" alt="Little Us" style="height:28px"><span class="tag">PLUS</span></div><h1 style="font-size:24px">Admin log in</h1>' + (msg ? '<div class="err">' + esc(msg) + '</div>' : '') +
       '<label class="f">Email<input type="email" id="le" autocomplete="email"></label><label class="f">Password<input type="password" id="lp" autocomplete="current-password"></label><button class="btn primary" type="submit">Log in</button></form>';
     $('#lf').onsubmit = function (e) {
       e.preventDefault();

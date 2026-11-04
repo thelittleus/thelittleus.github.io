@@ -1,4 +1,4 @@
-/* little us · Calm & feelings tools
+/* Little Us · Calm & feelings tools
    Breathing Buddy, Feelings (check-in, body map and calm-down menu) and Worry jar.
    Loaded after tools.js on the /tools pages and registers its pages there. Settings are saved per child on this
    device with the other tools. Nothing from the check-in or body map is recorded; the worry jar keeps its notes
@@ -789,7 +789,7 @@
           '<div class="tl-tip">' + heartSVG(22) + '<span>' + w('menuTip') + '</span></div>';
       }
     }
-    if (c.mode !== 'menu') h += '<div class="tl-tip mint">' + heartSVG(22) + '<span>' + w('nothingSaved') + '</span></div>';
+
     h += '<div class="tl-foot"><button type="button" class="tl-btn primary lg block" data-lc="fstart">' + esc(w(c.mode === 'check' ? 'startCheck' : c.mode === 'body' ? 'startBody' : 'startMenu')) + '</button><small>' + esc(w('stayAwake')) + '</small></div></div>';
     return h;
   }

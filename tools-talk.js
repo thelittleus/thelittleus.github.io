@@ -1,4 +1,4 @@
-/* little us · Conversation Starters
+/* Little Us · Conversation Starters
    Board and party games for a grown-up and children to play together. Every game opens up questions from the
    Little Us conversation curriculum (feelings, friends, choices and lighter themes). Snakes and Ladders, the
    Fishing Game, the Spinner and Balloon Pop are ready. Nothing anyone says is recorded; the last settings are

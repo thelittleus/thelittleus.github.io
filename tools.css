@@ -1,4 +1,4 @@
-/* little us · tools styles (loaded with tools.js) */
+/* Little Us · tools styles (loaded with tools.js) */
 .tl-main{flex:1;padding-bottom:24px}
 .tl-page{max-width:1080px;margin:0 auto;padding:16px var(--pad,16px) 32px;display:flex;flex-direction:column;gap:14px}
 .tl-page.narrow{max-width:620px}

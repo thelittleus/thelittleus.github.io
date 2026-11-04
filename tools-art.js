@@ -1,5 +1,5 @@
-/* little us · picture card illustrations
-   Each card is drawn as a small SVG (120 x 120) in the little us style:
+/* Little Us · picture card illustrations
+   Each card is drawn as a small SVG (120 x 120) in the Little Us style:
    warm ink outline, flat pastel fills, and a soft brush-shape backdrop tinted by category.
    Cards that show a child have a boy and a girl version.
    To add a card: add an entry to CARDS with an id, category, labels and a draw function. */
@@ -1191,7 +1191,7 @@
         E(35, 53, 4, 2.6, C.cheek, NS + ' opacity=".8"') + E(65, 53, 4, 2.6, C.cheek, NS + ' opacity=".8"');
       return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="' + K + '" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">' + FX.outline(body, 5) + FX.enrich(body) + '</g></svg>';
     },
-    // the little us heart with a face (brand signature for finish moments and print footers)
+    // the Little Us heart with a face (brand signature for finish moments and print footers)
     heart: function (size, col) {
       return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 60" width="' + (size || 40) + '" height="' + Math.round((size || 40) * 60 / 64) + '" aria-hidden="true">' +
         '<path d="M31 54C24 49 6 37 6 21 6 12 12 6 20 6 26 6 30 10 32 15 34 10 38 6 44 6 52 6 58 12 58 21 58 34 46 44 38 50" fill="' + (col || 'none') + '" stroke="' + K + '" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>' +

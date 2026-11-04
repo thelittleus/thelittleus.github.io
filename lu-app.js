@@ -1,4 +1,4 @@
-/* little us · app layout for phones and tablets
+/* Little Us · app layout for phones and tablets
    On phones and tablets the site becomes the Little Us app: an opening screen, a tab bar (phone and tablet
    portrait) or a left rail (tablet landscape) with Home · Tools · Shop · Articles · Settings, and app versions
    of Home, Tools, Settings and Child. Laptops and desktops keep the website layout.
@@ -22,8 +22,8 @@
     q1: ['1 · Language', '1 · Bahasa'], q2: ['2 · Your child', '2 · Anakmu'], setUp: ['Set up', 'Atur'],
     q3: ['3 · Free account', '3 · Akun gratis'], recommended: ['RECOMMENDED', 'DISARANKAN'], q3P: ['Save your setup on every phone, tablet and computer', 'Simpan pengaturanmu di setiap HP, tablet, dan komputer'], create: ['Create', 'Buat'],
     whereTo: ['Where to?', 'Mau ke mana?'],
-    toolsP: ['Timers, boards and calm-down tools', 'Timer, papan, dan alat menenangkan diri'], toolsPL: ['Timers, boards and calm-down tools. Works offline.', 'Timer, papan, dan alat menenangkan diri. Bisa offline.'],
-    shopP: ['Printable cards and activities', 'Kartu dan aktivitas untuk dicetak'], articlesP: ['Tips from a special educator', 'Tips dari pendidik khusus'], free: ['FREE', 'GRATIS'],
+    toolsP: ['Customizable tools for learning and everyday routines', 'Alat yang bisa disesuaikan untuk belajar dan rutinitas sehari-hari'], toolsPL: ['Customizable tools for learning and everyday routines', 'Alat yang bisa disesuaikan untuk belajar dan rutinitas sehari-hari'],
+    shopP: ['Printable files and activities', 'File dan aktivitas untuk dicetak'], articlesP: ['A short read on what’s new', 'Bacaan singkat tentang hal terbaru'], free: ['FREE', 'GRATIS'],
     change: ['Change', 'Ganti'], cont: ['Continue', 'Lanjutkan'],
     plusCard: ['More styles, every download', 'Lebih banyak gaya, semua unduhan'], plusCardP: ['One payment, never renews', 'Sekali bayar, tidak diperpanjang otomatis'], upgrade: ['Upgrade', 'Upgrade'],
     unlocked: ['Everything is unlocked', 'Semuanya sudah terbuka'], plusUntil: [function (d) { return 'Little Us Plus until ' + d; }, function (d) { return 'Little Us Plus sampai ' + d; }],
@@ -42,15 +42,15 @@
     skip1: ['English, with English card labels', 'Bahasa Inggris, dengan label kartu bahasa Inggris'], skip1id: ['Indonesian, with Indonesian card labels', 'Bahasa Indonesia, dengan label kartu bahasa Indonesia'],
     skip2: ['The boy character on the cards', 'Karakter anak laki-laki di kartu'], skip3: ['A starter set of favourite rewards', 'Satu set hadiah favorit bawaan'], skip4: ['No child name or photo', 'Tanpa nama atau foto anak'],
     skipNote: ['You can set up a child any time from the Child tab.', 'Kamu bisa mengatur anak kapan saja dari menu Anak.'], setUpNow: ['Set up now', 'Atur sekarang'], contDefaults: ['Continue with defaults', 'Lanjut dengan bawaan'],
-    a2hsH: ['Keep little us on your home screen', 'Simpan little us di layar utama'], a2hsP: ['Opens full screen and works offline.', 'Terbuka layar penuh dan bisa offline.'], notNow: ['Not now', 'Nanti saja'], a2hsBtn: ['Add to home screen', 'Tambah ke layar utama'],
-    iosH: ['Add little us to your Home Screen', 'Tambahkan little us ke Layar Utama'], ios1: ['Tap <b>Share</b> in the bar below', 'Ketuk <b>Bagikan</b> di bilah bawah'], ios2: ['Choose <b>Add to Home Screen</b>', 'Pilih <b>Tambah ke Layar Utama</b>'], ios3: ['Tap <b>Add</b>. Done!', 'Ketuk <b>Tambah</b>. Selesai!'],
-    language: ['Language', 'Bahasa'], cardLabels: ['Card labels', 'Label kartu'], both: ['Both', 'Keduanya'], none: ['None', 'Tanpa'],
+    a2hsH: ['Keep Little Us on your home screen', 'Simpan Little Us di layar utama'], a2hsP: ['Opens full screen and works offline.', 'Terbuka layar penuh dan bisa offline.'], notNow: ['Not now', 'Nanti saja'], a2hsBtn: ['Add to home screen', 'Tambah ke layar utama'],
+    iosH: ['Add Little Us to your Home Screen', 'Tambahkan Little Us ke Layar Utama'], ios1: ['Tap <b>Share</b> in the bar below', 'Ketuk <b>Bagikan</b> di bilah bawah'], ios2: ['Choose <b>Add to Home Screen</b>', 'Pilih <b>Tambah ke Layar Utama</b>'], ios3: ['Tap <b>Add</b>. Done!', 'Ketuk <b>Tambah</b>. Selesai!'],
+    language: ['App Language', 'Bahasa Aplikasi'], cardLabels: ['Card labels', 'Label kartu'], both: ['Both', 'Keduanya'], none: ['None', 'Tanpa'],
     sounds: ['Sounds', 'Suara'], soundsP: ['Chimes and spoken warnings', 'Bunyi dan peringatan suara'], soft: ['Soft', 'Pelan'], loud: ['Loud', 'Keras'],
     reduce: ['Reduce motion', 'Kurangi gerakan'], reduceP: ['No movement at all. Already on if your phone asks for it.', 'Tanpa gerakan sama sekali. Otomatis aktif jika HP-mu memintanya.'],
     leaving: ['Leaving child mode', 'Keluar dari mode anak'], hold3: ['Hold 3 seconds', 'Tahan 3 detik'], adultCheck: ['Adult check', 'Cek orang dewasa'],
     children: ['Children', 'Anak'], childrenP: ['backup and share', 'cadangan dan berbagi'], noChildYet: ['No child set up yet', 'Belum ada anak'],
     plusRow: ['Little Us Plus', 'Little Us Plus'], fromPrice: ['From $9', 'Mulai $9'], plusRowP: ['More styles, every download', 'Lebih banyak gaya, semua unduhan'], getPlus: ['Get Plus', 'Dapatkan Plus'],
-    more: ['More', 'Lainnya'], cardLibrary: ['Card library', 'Perpustakaan kartu'], backupShare: ['Backup & share', 'Cadangan & berbagi'], findOrder: ['Find my order', 'Cari pesanan saya'], about: ['About little us', 'Tentang little us'], help: ['Help and FAQ', 'Bantuan dan FAQ'],
+    more: ['More', 'Lainnya'], cardLibrary: ['Card library', 'Perpustakaan kartu'], backupShare: ['Backup & share', 'Cadangan & berbagi'], findOrder: ['Find my order', 'Cari pesanan saya'], about: ['About Little Us', 'Tentang Little Us'], help: ['Help and FAQ', 'Bantuan dan FAQ'],
     child: ['Child', 'Anak'], edit: ['Edit', 'Ubah'], character: ['Character', 'Karakter'], favRewards: ['Favourite rewards', 'Hadiah favorit'], otherChildren: ['Other children', 'Anak lainnya'], sw: ['Switch', 'Ganti'],
     backupH: ['Backup and share', 'Cadangan dan berbagi'], saveBackup: ['Save a backup file', 'Simpan file cadangan'], saveBackupP: ['Keep a copy of every board and setting', 'Simpan salinan semua papan dan pengaturan'],
     sendTeacher: ['Send to a teacher or therapist', 'Kirim ke guru atau terapis'], sendTeacherP: ['Shares one file through WhatsApp, email…', 'Bagikan satu file lewat WhatsApp, email…'],
@@ -136,8 +136,8 @@
   function accStatus() { var a = acc(); try { return a ? a.status() : 'none'; } catch (e) { return 'none'; } }
   function load() {
     if (!window.luLoad) return Promise.resolve();
-    return luLoad('/tools.css?v=16').then(function () { return luLoad('/tools-art.js?v=18'); }).then(function () { return luLoad('/tools.js?v=18'); })
-      .then(function () { return Promise.all([luLoad('/tools-calm.js?v=14'), luLoad('/tools-talk.js?v=4')]); }).then(function () { var a = api(); return a && a.photosLoad ? a.photosLoad() : null; }).catch(function () { });
+    return luLoad('/tools.css?v=17').then(function () { return luLoad('/tools-art.js?v=19'); }).then(function () { return luLoad('/tools.js?v=19'); })
+      .then(function () { return Promise.all([luLoad('/tools-calm.js?v=15'), luLoad('/tools-talk.js?v=5')]); }).then(function () { var a = api(); return a && a.photosLoad ? a.photosLoad() : null; }).catch(function () { });
   }
   function photo(p) { var a = api(); return p && p.photo && a && a.PH && a.PH[p.photo] ? a.PH[p.photo] : ''; }
   function ava(p, size, cls) {
@@ -368,7 +368,7 @@
   }
   function homeHTML() {
     var p = prof(), first = !profiles().length, st = accStatus(), land = MODE === 'land';
-    var logo = '<span class="ua-logo"><img src="/logo.png" alt="little us">' + (st === 'plus' || st === 'expiring' ? '<em class="ua-plus">PLUS</em>' : '') + '</span>';
+    var logo = '<span class="ua-logo"><img src="/logo.png" alt="Little Us">' + (st === 'plus' || st === 'expiring' ? '<em class="ua-plus">PLUS</em>' : '') + '</span>';
     var hero = '<div class="ua-hero"><div class="ua-herotx">' + logo + '<h1>' + esc(first ? t('hiWelcome') : t('hiAgain')) + '</h1><p>' + esc(first ? t('welcomeP') : p ? t('againP', p.name) : t('againP0')) + '</p></div>' + kidsArt() + '</div>';
     var quick = '';
     if (first) {
@@ -439,10 +439,10 @@
     var left = '<h1 class="ua-title">' + esc(t('settings')) + '</h1>' + accCard + (accCard ? '' : plusRow) + kidsRow;
     var right =
       '<h3 class="ua-lab">' + esc(t('language')) + '</h3>' + seg('lang', [['en', 'English'], ['id', 'Indonesia']].map(function (x) { return [x[0], x[0] === 'en' ? (isId() ? 'Inggris' : 'English') : (isId() ? 'Indonesia' : 'Indonesian')]; }), lang()) +
-      '<h3 class="ua-lab">' + esc(t('cardLabels')) + '</h3>' + seg('labels', [['en', 'EN'], ['id', 'ID'], ['both', t('both')], ['none', t('none')]], set.labels) +
+      '<h3 class="ua-lab">' + esc(t('cardLabels')) + '</h3>' + seg('labels', [['en', 'Eng'], ['id', 'Indo'], ['both', t('both')], ['none', t('none')]], set.labels) +
       '<div class="ua-panel"><div class="ua-prow"><span class="ua-rowtx"><b>' + esc(t('sounds')) + '</b><small>' + esc(t('soundsP')) + '</small></span>' + tog('sound', set.sound !== false) + '</div>' +
       '<div class="ua-prow vol"><small>' + esc(t('soft')) + '</small><input type="range" min="0" max="100" value="' + vol + '" data-vol aria-label="' + esc(t('sounds')) + '" style="--v:' + vol + '%"><small>' + esc(t('loud')) + '</small></div>' +
-      '<div class="ua-prow"><span class="ua-rowtx"><b>' + esc(t('reduce')) + '</b><small>' + esc(t('reduceP')) + '</small></span>' + tog('reduce', !!set.reduce) + '</div></div>' +
+      '<div class="ua-prow"><span class="ua-rowtx"><b>' + esc(t('reduce')) + '</b></span>' + tog('reduce', !!set.reduce) + '</div></div>' +
       '<h3 class="ua-lab">' + esc(t('more')) + '</h3><div class="ua-panel links">' +
       [['#/tools/library', t('cardLibrary')], ['#/tools/backup', t('backupShare')], ['#/find-order', t('findOrder')], ['#/faq', t('help')], ['#/about', t('about')]].map(function (l) { return '<a class="ua-prow link" href="' + l[0] + '"><b>' + esc(l[1]) + '</b><span class="ua-chev">›</span></a>'; }).join('') + '</div>';
     if (MODE === 'land') return '<div class="ua-page ua-settings land"><div class="ua-setL">' + left + '</div><div class="ua-setR">' + right + '</div></div>';

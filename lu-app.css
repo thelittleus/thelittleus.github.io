@@ -1,4 +1,4 @@
-/* little us · app layout for phones and tablets (see lu-app.js). Only applies when <html> has .lu-app. */
+/* Little Us · app layout for phones and tablets (see lu-app.js). Only applies when <html> has .lu-app. */
 html.lu-app{--ua-bar:84px;--ua-rail:96px;background:#FBF8F3}
 html.lu-app body{padding-bottom:calc(var(--ua-bar) + env(safe-area-inset-bottom));background:#FBF8F3}
 html.lu-app.lu-land body{padding-bottom:0;padding-left:var(--ua-rail)}
@@ -513,3 +513,6 @@ html.tl-still.ud-home .h2-tool,html.tl-still.ud-home .card .cover,html.tl-still.
 
 /* phone and tablet Settings: account and children buttons show just their name, no description line */
 html.lu-app .la-setcard .la-accbox small,html.lu-app .la-setcard .la-accbox>.la-small,html.lu-app .ua-srow.kids .ua-rowtx small{display:none}
+
+/* Articles on phones and tablets: the 'coming soon' heading is the title, so drop the extra 'Articles' heading above it */
+html.lu-app .ar-h1:has(+ .ar-empty){display:none}

@@ -1,4 +1,4 @@
-/* little us · accounts and Little Us Plus
+/* Little Us · accounts and Little Us Plus
    Free accounts (email + password), the child setup that follows a parent to every device,
    Little Us Plus passes bought on Gumroad or Midtrans (3 or 12 months, never renews), locked tool styles,
    Plus downloads and the account pages.
@@ -48,7 +48,7 @@
     document.querySelectorAll('[data-face]:not([data-done])').forEach(function (el) { el.innerHTML = el.getAttribute('data-face') === 'adult' ? Ar.adult() : Ar.face(el.getAttribute('data-face')); el.setAttribute('data-done', '1'); });
   }
   new MutationObserver(function () { if (!faceQ && document.querySelector('[data-face]:not([data-done])')) faceQ = requestAnimationFrame(fillFaces); }).observe(document.documentElement, { childList: true, subtree: true });
-  if (window.luLoad) window.luLoad('/tools-art.js?v=18').then(fillFaces).catch(function () {});
+  if (window.luLoad) window.luLoad('/tools-art.js?v=19').then(fillFaces).catch(function () {});
   function firstName(n) { return String(n || '').trim().split(/\s+/)[0] || ''; }
   function toast(msg, kind) { if (window.LU && LU.toast) LU.toast(msg, { kind: kind || 'info' }); }
 
@@ -710,7 +710,7 @@
   }
   function topBar(opts) {
     opts = opts || {};
-    return '<div class="la-top"><a href="#/" aria-label="little us home"><img src="/logo.png" alt="little us"></a><span class="sp"></span>' +
+    return '<div class="la-top"><a href="#/" aria-label="Little Us home"><img src="/logo.png" alt="Little Us"></a><span class="sp"></span>' +
       (window.LU ? '<div class="lang-tog" role="group"><button type="button" data-set-lang="en"' + (L() === 'en' ? ' class="on"' : '') + '>EN</button><button type="button" data-set-lang="id"' + (L() === 'id' ? ' class="on"' : '') + '>ID</button></div>' : '') +
       '<a class="la-xlink" href="' + esc(opts.back || '#/') + '">' + IC.x + '<span class="desk-inline">' + esc(t('backToLU')) + '</span></a></div>';
   }
@@ -1418,7 +1418,7 @@
     }
     if (window.LUTools && LUTools.api && LUTools.api.openProfiles) return show();
     if (!window.luLoad) return show();
-    luLoad('/tools.css?v=16').then(function () { return luLoad('/tools-art.js?v=18'); }).then(function () { return luLoad('/tools.js?v=18'); })
+    luLoad('/tools.css?v=17').then(function () { return luLoad('/tools-art.js?v=19'); }).then(function () { return luLoad('/tools.js?v=19'); })
       .then(function () { var a = window.LUTools && LUTools.api; return a && a.photosLoad ? a.photosLoad() : null; }).then(show, show);
   }
   function homeRender() {

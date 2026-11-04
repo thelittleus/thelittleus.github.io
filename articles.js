@@ -1,4 +1,4 @@
-/* little us · Articles (the blog)
+/* Little Us · Articles (the blog)
    Shows the Articles list (/articles), single articles (/articles/<name>) and the "From the blog"
    section on the homepage. Articles are written in the admin (admin.html → Articles) and stored in
    the Supabase "articles" table. Loaded on demand by index.html; admin.html also uses it for previews. */
@@ -25,10 +25,10 @@
       min: 'min read', enOnly: 'English only', updated: 'Updated', onPage: 'On this page', tip: 'Quick tip', freeTool: 'Free tool', open: 'Open',
       fromShop: 'From the shop', seeRes: 'See resource', share: 'Share', copy: 'Copy link', copied: 'Link copied',
       aboutWriter: 'About the writer', role: 'Special education practitioner',
-      bio: 'I’m a special education practitioner in Jakarta. I make every tool and resource on little us, and I write these articles myself.',
+      bio: 'I’m a special education practitioner in Jakarta. I make every tool and resource on Little Us, and I write these articles myself.',
       moreAbout: 'More about me', keepReading: 'Keep reading', seeAll: 'See all articles →', loadMore: 'Show more articles',
       emptyH: 'No articles here yet', emptyP: 'Try another category, or browse all articles.', showAll: 'Show all articles',
-      noneYetH: 'Articles are coming soon', noneYetP: 'I’m writing the first ones now. In the meantime, try the free tools or browse the shop.',
+      noneYetH: 'Articles are coming soon', noneYetP: 'We’re writing the first ones now. In the meantime, try the free tools or browse the shop.',
       tryTools: 'Try the free tools', nfH: 'This article isn’t here', nfP: 'It may have been renamed or taken down. Have a look at the other articles.',
       errH: 'Hmm, the articles didn’t load', errP: 'Check your connection and try again.', retry: 'Try again',
       fromBlog: 'From the blog', blogH: 'Tips, tool guides and new things', blogP: 'Practical ideas for home and the classroom, written by Haikal.',
@@ -39,10 +39,10 @@
       min: 'menit baca', enOnly: 'Hanya bahasa Inggris', updated: 'Diperbarui', onPage: 'Di halaman ini', tip: 'Tips singkat', freeTool: 'Alat gratis', open: 'Buka',
       fromShop: 'Dari toko', seeRes: 'Lihat sumber', share: 'Bagikan', copy: 'Salin link', copied: 'Link tersalin',
       aboutWriter: 'Tentang penulis', role: 'Praktisi pendidikan khusus',
-      bio: 'Saya praktisi pendidikan khusus di Jakarta. Saya membuat semua alat dan sumber di little us, dan menulis sendiri artikel-artikel ini.',
+      bio: 'Saya praktisi pendidikan khusus di Jakarta. Saya membuat semua alat dan sumber di Little Us, dan menulis sendiri artikel-artikel ini.',
       moreAbout: 'Kenali saya lebih jauh', keepReading: 'Baca juga', seeAll: 'Lihat semua artikel →', loadMore: 'Tampilkan artikel lainnya',
       emptyH: 'Belum ada artikel di sini', emptyP: 'Coba kategori lain, atau lihat semua artikel.', showAll: 'Lihat semua artikel',
-      noneYetH: 'Artikel segera hadir', noneYetP: 'Saya sedang menulis artikel pertama. Sementara itu, coba alat gratis atau lihat toko.',
+      noneYetH: 'Artikel segera hadir', noneYetP: 'Kami sedang menulis artikel pertama. Sementara itu, coba alat gratis atau lihat toko.',
       tryTools: 'Coba alat gratis', nfH: 'Artikel ini tidak ditemukan', nfP: 'Mungkin sudah diganti nama atau diturunkan. Silakan lihat artikel lainnya.',
       errH: 'Hmm, artikelnya belum termuat', errP: 'Periksa koneksi lalu coba lagi.', retry: 'Coba lagi',
       fromBlog: 'Dari blog', blogH: 'Tips, panduan alat, dan kabar terbaru', blogP: 'Ide praktis untuk di rumah dan di kelas, ditulis oleh Haikal.',
@@ -216,7 +216,7 @@
     return m;
   }
   function setSeo(o) {
-    if (!DEF) DEF = { desc: (document.querySelector('meta[name="description"]') || {}).content || '', ogT: (document.querySelector('meta[property="og:title"]') || {}).content || 'little us', ogD: (document.querySelector('meta[property="og:description"]') || {}).content || '', ogI: (document.querySelector('meta[property="og:image"]') || {}).content || '' };
+    if (!DEF) DEF = { desc: (document.querySelector('meta[name="description"]') || {}).content || '', ogT: (document.querySelector('meta[property="og:title"]') || {}).content || 'Little Us', ogD: (document.querySelector('meta[property="og:description"]') || {}).content || '', ogI: (document.querySelector('meta[property="og:image"]') || {}).content || '' };
     metaTag('meta[name="description"]', 'name', 'description').setAttribute('content', o.desc || DEF.desc);
     metaTag('meta[property="og:title"]', 'property', 'og:title').setAttribute('content', o.title || DEF.ogT);
     metaTag('meta[property="og:description"]', 'property', 'og:description').setAttribute('content', o.desc || DEF.ogD);
@@ -268,7 +268,7 @@
     setSeo({
       title: v.title, desc: v.meta || v.ex, image: coverOf(a),
       ld: { '@context': 'https://schema.org', '@type': 'Article', headline: v.title, description: v.meta || v.ex, image: coverOf(a) ? [coverOf(a)] : undefined, datePublished: a.published_at, dateModified: a.updated_at || a.published_at,
-        inLanguage: v.l === 'id' ? 'id-ID' : 'en', mainEntityOfPage: absUrl(a), author: { '@type': 'Person', name: 'Haikal Ilham Adlan', url: location.origin + '/about' }, publisher: { '@type': 'Organization', name: 'little us', logo: { '@type': 'ImageObject', url: location.origin + '/logo.png' } } }
+        inLanguage: v.l === 'id' ? 'id-ID' : 'en', mainEntityOfPage: absUrl(a), author: { '@type': 'Person', name: 'Haikal Ilham Adlan', url: location.origin + '/about' }, publisher: { '@type': 'Organization', name: 'Little Us', logo: { '@type': 'ImageObject', url: location.origin + '/logo.png' } } }
     });
   }
   // shared by the site and by the admin preview
@@ -321,7 +321,7 @@
       if (KIND === 'article') CUR = (CACHE || []).filter(function (a) { return a.slug === ST.slug; })[0] || null;
       render();
       if (window.LU && LU.page && KIND === 'article' && CUR) { try { document.title = ver(CUR).title + ' · Little Us'; } catch (e) {} }
-    }).catch(function (err) { console.error('[little us] articles failed', err); STATE = 'error'; render(); });
+    }).catch(function (err) { console.error('[Little Us] articles failed', err); STATE = 'error'; render(); });
   }
   function render() { if (!ROOT || !document.body.contains(ROOT)) return; if (KIND === 'index') renderIndex(); else renderArticle(); }
 

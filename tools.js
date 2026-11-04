@@ -1,4 +1,4 @@
-/* little us · free visual-support tools
+/* Little Us · free visual-support tools
    Visual Timer, Token Board, First–Then Board and Visual Schedule, plus the shared card library,
    child profiles, settings and backup. Everything is saved on this device only (localStorage + IndexedDB).
    Loaded on demand by the /tools pages in index.html. Needs tools-art.js. Downloads live in tools-print.js. */
@@ -7,7 +7,7 @@
   if (window.LUTools) return;
 
   /* ===================== access (subscription-ready) =====================
-     Everything is free at launch. When "little us Plus" starts, set PLUS_ON to true and mark
+     Everything is free at launch. When "Little Us Plus" starts, set PLUS_ON to true and mark
      tools or picture packs with tier: 'plus'. canUse() is the only place that decides access. */
   var PLUS_ON = true;
   function hasPlus() { return !!(window.LUAcc && LUAcc.isPlus()); }
@@ -39,7 +39,7 @@
     cont: ['Continue', 'Lanjutkan'],
     how: ['How it works', 'Cara pakainya'],
     how1: ['Pick a tool', 'Pilih alat'], how1d: ['Routines, tokens, breathing, feelings and more.', 'Rutinitas, token, napas, perasaan, dan lainnya.'],
-    how2: ['Make it yours', 'Sesuaikan'], how2d: ['Use little us pictures or your own photos.', 'Pakai gambar little us atau foto sendiri.'],
+    how2: ['Make it yours', 'Sesuaikan'], how2d: ['Use Little Us pictures or your own photos.', 'Pakai gambar Little Us atau foto sendiri.'],
     how3: ['Hand it over', 'Serahkan ke anak'], how3d: ['Child mode shows only what your child needs.', 'Mode anak hanya menampilkan yang dibutuhkan anak.'],
     privacy: ['<b>Saved on your device.</b> No account needed, and it works offline once opened. A free account keeps your setup on every device.', '<b>Tersimpan di perangkatmu.</b> Tanpa perlu akun, dan bisa offline setelah dibuka. Akun gratis menyimpan pengaturanmu di semua perangkat.'],
     letsSet: ["Let's set things up for your child", 'Yuk, siapkan untuk anakmu'],
@@ -138,7 +138,7 @@
     wait: ['Wait', 'Tunggu'], timeFinish: ['Time to finish', 'Waktunya selesai'], left: [function (m) { return m + ' min left'; }, function (m) { return m + ' menit lagi'; }],
     nextL: ['Next', 'Lalu'], nowL: ['Now', 'Sekarang'], backSched: ['Back to the schedule', 'Kembali ke jadwal'], backBoard: ['Back to the board', 'Kembali ke papan'],
     // library
-    searchCards: ['Search cards', 'Cari kartu'], tabLu: ['little us', 'little us'], tabPhotos: ['My photos', 'Foto saya'], tabText: ['Text', 'Teks'],
+    searchCards: ['Search cards', 'Cari kartu'], tabLu: ['Little Us', 'Little Us'], tabPhotos: ['My photos', 'Foto saya'], tabText: ['Text', 'Teks'],
     favourites: ['Favourites', 'Favorit'], recent: ['Recently used', 'Terakhir dipakai'], all: ['All', 'Semua'],
     photo: ['+ Photo', '+ Foto'], textCard: ['Aa Text card', 'Aa Kartu teks'], useX: [function (x) { return 'Use “' + x + '”'; }, function (x) { return 'Pakai “' + x + '”'; }],
     chooseCard: ['Choose a card', 'Pilih kartu'], chooseReward: ['Choose a reward', 'Pilih hadiah'],
@@ -146,7 +146,7 @@
     cantFind: ["Can't find it? <b>Add your own photo</b> or make a text card.", 'Tidak ketemu? <b>Tambah foto sendiri</b> atau buat kartu teks.'],
     noCardFor: [function (q) { return 'No card for “' + q + '”'; }, function (q) { return 'Belum ada kartu untuk “' + q + '”'; }],
     makeOne: ['Make one now with your own photo or words.', 'Buat sekarang dengan foto atau kata-katamu sendiri.'],
-    wantIllus: ['Want a little us illustration for this?', 'Mau ilustrasi little us untuk ini?'], wantIllusP: ["Request picture cards. They'll appear here in your library.", 'Minta kartu bergambar. Nanti muncul di perpustakaanmu.'],
+    wantIllus: ['Want a Little Us illustration for this?', 'Mau ilustrasi Little Us untuk ini?'], wantIllusP: ["Request picture cards. They'll appear here in your library.", 'Minta kartu bergambar. Nanti muncul di perpustakaanmu.'],
     reqCards: ['Request picture cards →', 'Minta kartu bergambar →'],
     noPhotos: ['No photos yet', 'Belum ada foto'], noPhotosP: ['A photo of the real toothbrush, the real school gate. Children often recognise these fastest.', 'Foto sikat gigi asli, gerbang sekolah asli. Anak sering paling cepat mengenali ini.'],
     photosNever: ['Photos never leave this device.', 'Foto tidak pernah keluar dari perangkat ini.'],
@@ -167,24 +167,24 @@
     // settings
     language: ['Language', 'Bahasa'], cardLabels: ['Card labels', 'Label kartu'], childInCards: ['Child in cards', 'Anak di kartu'], forX: [function (n) { return 'For ' + n; }, function (n) { return 'Untuk ' + n; }],
     sound: ['Sound', 'Suara'], sounds: ['Sounds', 'Suara'], soundsD: ['Chimes and spoken warnings', 'Bunyi dan peringatan suara'], volume: ['Volume', 'Volume'], soft: ['Soft', 'Pelan'], loud: ['Loud', 'Keras'],
-    comfort: ['Comfort', 'Kenyamanan'], reduce: ['Reduce motion', 'Kurangi gerakan'], reduceD: ['No movement at all, even soft fades', 'Tanpa gerakan sama sekali, termasuk transisi'],
+    comfort: ['Comfort', 'Kenyamanan'], reduce: ['Reduce motion', 'Kurangi gerakan'], reduceD: ['', ''],
     leaving: ['Leaving child mode', 'Keluar dari mode anak'], longPress: ['Long press', 'Tekan lama'],
     childData: ['Children & data', 'Anak & data'], profiles: ['Profiles', 'Profil'], backup: ['Backup & restore', 'Cadangkan & pulihkan'],
     lastSaved: [function (d) { return 'Last saved ' + d; }, function (d) { return 'Terakhir disimpan ' + d; }], never: ['Not saved yet', 'Belum pernah'],
     storage: ['Storage on this device', 'Penyimpanan di perangkat ini'], ready: ['Ready', 'Siap'], worksOff: ['works offline', 'bisa offline'],
     // backup
-    backupShare: ['Backup & share', 'Cadangan & berbagi'], backupP: ['Your setup lives on this device only. A backup is one file you keep, or send to a teacher or therapist so they see the same cards.', 'Pengaturanmu hanya ada di perangkat ini. Cadangan adalah satu file yang bisa kamu simpan, atau kirim ke guru/terapis agar mereka memakai kartu yang sama.'],
+    backupShare: ['Backup & share', 'Cadangan & berbagi'], backupP: ['Download your saved settings and send to another person.', 'Unduh pengaturan yang tersimpan dan kirim ke orang lain.'],
     saveBackup: ['Save backup', 'Simpan cadangan'], saveBackupFile: ['↓ Save backup file', '↓ Simpan file cadangan'], thenShare: ['Then share it on WhatsApp, Drive or email.', 'Lalu bagikan lewat WhatsApp, Drive, atau email.'],
-    restore: ['Restore backup', 'Pulihkan cadangan'], restoreP: ["Open a .lu file from this device. You'll see what's inside before anything changes.", 'Buka file .lu dari perangkat ini. Kamu akan melihat isinya dulu sebelum ada yang berubah.'],
+    restore: ['Restore backup', 'Pulihkan cadangan'], restoreP: ['Open a .lu file to import data.', 'Buka file .lu untuk mengimpor data.'],
     chooseFile: ['Choose file', 'Pilih file'], lastBackup: ['Last backup', 'Cadangan terakhir'],
     howAdd: ['How to add it', 'Cara menambahkannya'], addTo: ["Add to what's here", 'Tambahkan ke yang ada'], addToD: ['Keeps your current children and cards', 'Anak dan kartu saat ini tetap ada'],
     replaceAll: ['Replace everything', 'Ganti semuanya'], replaceAllD: ['This device will match the backup', 'Perangkat ini akan sama dengan cadangan'],
-    restoreBtn: ['Restore', 'Pulihkan'], restored: ['Backup restored', 'Cadangan dipulihkan'], badFile: ["That file isn't a little us backup.", 'File itu bukan cadangan little us.'],
+    restoreBtn: ['Restore', 'Pulihkan'], restored: ['Backup restored', 'Cadangan dipulihkan'], badFile: ["That file isn't a Little Us backup.", 'File itu bukan cadangan Little Us.'],
     childrenN: [function (n) { return n + (n === 1 ? ' child' : ' children'); }, function (n) { return n + ' anak'; }],
     cardsN: [function (n) { return n + ' cards'; }, function (n) { return n + ' kartu'; }], photosN: [function (n) { return n + ' photos'; }, function (n) { return n + ' foto'; }],
     profileWith: [function (n) { return 'Profile with ' + n + ' rewards'; }, function (n) { return 'Profil dengan ' + n + ' hadiah'; }],
     // plus (hidden)
-    plusPart: [function (n) { return '“' + n + '” is part of little us Plus'; }, function (n) { return '“' + n + '” termasuk little us Plus'; }],
+    plusPart: [function (n) { return '“' + n + '” is part of Little Us Plus'; }, function (n) { return '“' + n + '” termasuk Little Us Plus'; }],
     plusP: ["All four tools, your photos and every card you've made stay free, always.", 'Keempat alat, fotomu, dan semua kartu buatanmu tetap gratis, selamanya.'],
     seePlus: ["See what's in Plus", 'Lihat isi Plus'], notNow: ['Not now', 'Nanti saja'],
     goesWell: ['Goes well with this', 'Cocok dipakai bersama'], shop: ['Shop', 'Toko'],
@@ -662,7 +662,7 @@
     function render() {
       var preview = Object.assign({}, i, { idn: st.idn || i.idn, en: st.en || i.en });
       var lb = labelsFor(preview, st.mode);
-      sh.set('<div class="tl-top" style="padding:0 0 8px"><button type="button" class="tl-iconbtn" data-n="back">' + ICO.back + '</button><div class="tl-toptx"><h1>' + esc(tr('editLabel')) + '</h1><small>' + esc(i.type === 'illus' ? 'little us' : (L() === 'id' ? 'Foto' : 'Photo')) + '</small></div></div>' +
+      sh.set('<div class="tl-top" style="padding:0 0 8px"><button type="button" class="tl-iconbtn" data-n="back">' + ICO.back + '</button><div class="tl-toptx"><h1>' + esc(tr('editLabel')) + '</h1><small>' + esc(i.type === 'illus' ? 'Little Us' : (L() === 'id' ? 'Foto' : 'Photo')) + '</small></div></div>' +
         '<div class="tl-center"><div class="tl-card tl-m is-selected">' + artHTML(ref) + (lb.main ? '<span class="tl-lab">' + esc(lb.main) + '</span>' : '') + (lb.sub ? '<span class="tl-sub">' + esc(lb.sub) + '</span>' : '') + '</div></div>' +
         '<label class="tl-field"><span>' + esc(tr('indonesian')) + '</span><input data-f="idn" value="' + esc(st.idn) + '"></label>' +
         '<label class="tl-field"><span>' + esc(tr('english')) + '</span><input data-f="en" value="' + esc(st.en) + '"></label>' +
@@ -711,7 +711,7 @@
 
   /* ---------- hidden Plus sheet (designed, not active at launch) ---------- */
   function openPlus(name) {
-    var sh = sheet('<div class="tl-center col"><span class="tl-plus">' + A.heart(14, '#FFC94A') + ' little us Plus</span><h2 class="tl-h2" style="text-align:center">' + esc(tr('plusPart', name)) + '</h2><p class="tl-p" style="text-align:center">' + esc(tr('plusP')) + '</p></div>' +
+    var sh = sheet('<div class="tl-center col"><span class="tl-plus">' + A.heart(14, '#FFC94A') + ' Little Us Plus</span><h2 class="tl-h2" style="text-align:center">' + esc(tr('plusPart', name)) + '</h2><p class="tl-p" style="text-align:center">' + esc(tr('plusP')) + '</p></div>' +
       '<button type="button" class="tl-btn primary lg block" data-x>' + esc(tr('seePlus')) + '</button><button type="button" class="tl-btn quiet lg block" data-x>' + esc(tr('notNow')) + '</button>');
     sh.el.onclick = function (e) { if (e.target.closest('[data-x]')) sh.close(); };
   }
@@ -1420,7 +1420,7 @@
     var fav = D().favs.indexOf(ref) >= 0;
     var a = A.get(ref);
     var catName = (A.CATS.filter(function (c) { return c.id === i.cat; })[0] || {});
-    var sh = sheet('<div class="tl-optshead">' + cardHTML(ref, { size: 's' }) + '<div><h2 class="tl-h2">' + esc(i.idn) + '</h2><small>' + esc(i.en + ' · ' + (i.type === 'illus' ? 'little us' : (L() === 'id' ? 'Foto' : 'Photo')) + ' · ' + (L() === 'id' ? catName.idn : catName.en)) + '</small></div></div>' +
+    var sh = sheet('<div class="tl-optshead">' + cardHTML(ref, { size: 's' }) + '<div><h2 class="tl-h2">' + esc(i.idn) + '</h2><small>' + esc(i.en + ' · ' + (i.type === 'illus' ? 'Little Us' : (L() === 'id' ? 'Foto' : 'Photo')) + ' · ' + (L() === 'id' ? catName.idn : catName.en)) + '</small></div></div>' +
       '<div class="tl-panel">' +
       '<button type="button" class="tl-row act" data-o="label"><div><b>' + esc(tr('editLabel')) + '</b><small>' + esc(tr('editLabelD')) + '</small></div><span>›</span></button>' +
       '<button type="button" class="tl-row act" data-o="fav"><div><b>' + esc(fav ? tr('removeFav') : tr('addFav')) + '</b><small>' + esc(tr('favD')) + '</small></div><span class="tl-hearticon' + (fav ? ' on' : '') + '">♥</span></button>' +
@@ -1539,7 +1539,7 @@
     var photos = {};
     Object.keys(S.custom).forEach(function (k) { var c = S.custom[k]; if (c.photo && PH[c.photo]) photos[c.photo] = PH[c.photo]; });
     S.profiles.forEach(function (p) { if (p.photo && PH[p.photo]) photos[p.photo] = PH[p.photo]; });
-    var blob = new Blob([JSON.stringify({ app: 'little us', kind: 'tools-backup', v: 1, at: new Date().toISOString(), state: S, photos: photos })], { type: 'application/json' });
+    var blob = new Blob([JSON.stringify({ app: 'Little Us', kind: 'tools-backup', v: 1, at: new Date().toISOString(), state: S, photos: photos })], { type: 'application/json' });
     var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = backupName(); document.body.appendChild(a); a.click(); a.remove();
     setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
     S.settings.lastBackup = Date.now(); save(); rerender();
@@ -1788,7 +1788,7 @@
   }
 
   /* ===================== mount ===================== */
-  var VERSION = '12';
+  var VERSION = '13';
   var READY = null;
   var API = {
     S: function () { return S; }, D: D, activeBoard: activeBoard, prof: prof, cardInfo: cardInfo, labelsFor: labelsFor, artHTML: artHTML, cardHTML: cardHTML, kidFor: kidFor,
