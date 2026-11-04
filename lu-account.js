@@ -110,7 +110,7 @@
     pwUpdatedP: [function (e) { return 'You’re logged in. Next time, use your new password with ' + e + '.'; }, function (e) { return 'Kamu sudah masuk. Lain kali, pakai kata sandi baru dengan ' + e + '.'; }],
     goDash: ['Go to my dashboard', 'Ke beranda saya'],
     // plans
-    upgradeH: ['Upgrade to Little Us Plus', 'Upgrade ke Little Us Plus'],
+    upgradeH: ['Upgrade to Little Us Plus', 'Upgrade ke Little Us Plus'], upgradeTo: ['Upgrade to Little Us', 'Upgrade ke Little Us'],
     moreForH: [function (c) { return 'More for ' + c + ', every download for you'; }, function (c) { return 'Lebih banyak untuk ' + c + ', semua unduhan untukmu'; }],
     choosePass: ['Choose a pass. You pay once and it simply ends; nothing renews.', 'Pilih pass. Bayar sekali lalu selesai; tidak ada perpanjangan otomatis.'],
     choosePlan: ['Choose a plan', 'Pilih paket'], m3: ['3 Months', '3 Bulan'], m12: ['12 Months', '12 Bulan'], bestValue: ['BEST VALUE', 'PALING HEMAT'],
@@ -564,6 +564,7 @@
     '.la-table.cmp .r:first-child span:last-child{display:flex;align-items:center;gap:6px}',
     '.la-pluspage .la-choose{gap:12px;padding:22px}.la-pluspage .la-plan{padding:14px 18px}.la-pluspage .la-plan .pr b{font-size:26px}',
     '.la-pluspage .la-safe{display:block;font-size:13.5px;line-height:1.5}.la-pluspage .la-safe b{display:inline;font-size:13.5px}',
+    '.la-plan .pr{white-space:nowrap}.la-plan .pr.long b{font-size:19px!important;letter-spacing:-.01em}.la-plan .pr.long small{font-size:11.5px}',
     '.la-chfoot{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:13px;color:var(--body)}.la-chfoot a{font-weight:700;color:var(--ink)}',
     '.la-fx{margin:0;font-size:12.5px;color:var(--muted);line-height:1.45}',
     '@media(min-width:960px){.la-pluspage .la-plans{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:44px}.la-pluspage .la-plansl h1{font-size:40px}.la-pluspage .la-h2{margin-top:36px}}',
@@ -854,7 +855,7 @@
   // ----- A01 / A02 / A03: sign up
   var SU = { step: 'intro', name: '', email: '', pw: '', pw2: '', exists: false };
   function sideHTML() {
-    return '<aside class="la-side"><span class="sun"></span><span class="ring"></span><h2>' + esc(t('sideH')) + '</h2><ul class="la-checks big"><li><span class="la-chk">' + IC.check + '</span>' + esc(t('inc1')) + '</li><li><span class="la-chk">' + IC.check + '</span>' + esc(t('inc2')) + '</li><li><span class="la-chk">' + IC.check + '</span>' + esc(t('inc3')) + '</li></ul><p class="la-p">' + esc(t('sideNote')) + '</p></aside>';
+    return '<aside class="la-side"><span class="sun"></span><span class="ring"></span><h2>' + esc(t('sideH')) + '</h2><ul class="la-checks big"><li><span class="la-chk">' + IC.check + '</span>' + esc(t('inc1')) + '</li><li><span class="la-chk">' + IC.check + '</span>' + esc(t('inc2')) + '</li><li><span class="la-chk">' + IC.check + '</span>' + esc(t('inc3')) + '</li></ul></aside>';
   }
   function pwHints() {
     var ok8 = SU.pw.length >= 8, m = SU.pw2 && SU.pw === SU.pw2;
@@ -960,7 +961,7 @@
     var last = store.get('lu_last_email');
     if (!LI.email && last) LI.email = last;
     return topBar() + '<div class="la-auth">' + sideHTML() + '<div class="la-formcol"><form class="la-form" novalidate>' +
-      '<h1 class="la-h1">' + esc(t('welcomeBack')) + '</h1><p class="la-p">' + esc(t('loginP')) + '</p>' +
+      '<h1 class="la-h1">' + esc(t('welcomeBack')) + '</h1>' +
       field('liEmail', t('email'), 'email', LI.email, ' autocomplete="email" inputmode="email"') +
       field('liPw', t('password'), 'password', '', ' autocomplete="current-password"') +
       '<a href="#/forgot-password" class="la-link" style="align-self:flex-end;font-size:14px" data-act="forgot">' + esc(t('forgot')) + '</a>' +
@@ -1053,14 +1054,14 @@
   function planCard(plan, st, compact) {
     var on = PL.plan === plan, end = newEnd(plan);
     return '<button type="button" class="la-plan' + (on ? ' on' : '') + '" data-plan="' + plan + '" aria-pressed="' + on + '"><span class="la-radio"></span><span class="nm"><b>' + esc(t(plan === '12m' ? 'm12' : 'm3')) + (plan === '12m' ? ' <span class="la-pill best">' + esc(t('bestValue')) + '</span>' : '') + '</b>' +
-      (compact ? '<small>' + esc(t('untilD', fmtDate(end))) + '</small>' : '') + '</span><span class="pr"><b>' + esc(plan === '12m' ? st.p12 : st.p3) + '</b><small>' + esc(plan === '12m' ? st.pm12 : st.pm3) + '</small></span></button>';
+      (compact ? '<small>' + esc(t('untilD', fmtDate(end))) + '</small>' : '') + '</span><span class="pr' + (String(plan === '12m' ? st.p12 : st.p3).length > 6 ? ' long' : '') + '"><b>' + esc(plan === '12m' ? st.p12 : st.p3) + '</b><small>' + esc(plan === '12m' ? st.pm12 : st.pm3) + '</small></span></button>';
   }
   function renderPlans() {
     var st = settings(), u = me(), price = PL.plan === '12m' ? st.p12 : st.p3;
     // left: title and the Free / Plus comparison; right: the plan picker
-    var cmp = '<div class="la-table cmp"><div class="r"><span></span><span>' + (L() === 'id' ? 'Gratis' : 'Free') + '</span><span>Plus ' + pill('plus') + '</span></div>' +
+    var cmp = '<div class="la-table cmp"><div class="r"><span></span><span>' + (L() === 'id' ? 'Gratis' : 'Free') + '</span><span>' + pill('plus') + '</span></div>' +
       W.cmp.map(function (r) { var i = L() === 'id' ? 1 : 0; return '<div class="r"><span>' + esc(r[0][i]) + '</span><span style="font-weight:500;color:var(--body)">' + esc(r[1][i]) + '</span><span>' + esc(r[2][i]) + '</span></div>'; }).join('') + '</div>';
-    var left = '<div class="la-plansl"><h1>' + esc(t('upgradeH')) + ' ' + pill('plus') + '</h1>' + cmp + '</div>';
+    var left = '<div class="la-plansl"><h1>' + esc(t('upgradeTo')) + ' ' + pill('plus') + '</h1>' + cmp + '</div>';
     var ready = !!(PL.plan === '12m' ? st.url12 : st.url3) || st.midtrans;
     var right = '<div class="la-choose"><h2>' + esc(t('choosePlan')) + '</h2>' + planCard('3m', st, true) + planCard('12m', st, true) +
       '<div class="la-safe"><span><b>' + esc(t('oneTime')) + '</b> ' + esc(t('oneTimeP')) + '</span></div>' +
@@ -1417,7 +1418,7 @@
     }
     if (window.LUTools && LUTools.api && LUTools.api.openProfiles) return show();
     if (!window.luLoad) return show();
-    luLoad('/tools.css?v=16').then(function () { return luLoad('/tools-art.js?v=17'); }).then(function () { return luLoad('/tools.js?v=17'); })
+    luLoad('/tools.css?v=16').then(function () { return luLoad('/tools-art.js?v=17'); }).then(function () { return luLoad('/tools.js?v=18'); })
       .then(function () { var a = window.LUTools && LUTools.api; return a && a.photosLoad ? a.photosLoad() : null; }).then(show, show);
   }
   function homeRender() {

@@ -283,11 +283,10 @@ label.f small{font-weight:500;color:var(--muted)}
   // ---------------------------------------------------------------- settings
   var FIELDS = [
     ['Gumroad', [['gumroad_3m_url', '3 Months pass · Gumroad link', 'url'], ['gumroad_12m_url', '12 Months pass · Gumroad link', 'url']]],
-    ['Midtrans (rupiah payments)', [['midtrans_enabled', 'Offer Midtrans (GoPay, QRIS, bank transfer) next to Gumroad', 'bool'], ['usd_3m', '3 Months price in US dollars (the rupiah amount is worked out from today\'s rate)', 'dec'], ['usd_12m', '12 Months price in US dollars', 'dec'], ['midtrans_round', 'Round the rupiah amount to the nearest (e.g. 10000)', 'int']]],
-    ['Prices shown on the website', [['price_3m_label', '3 Months price', 'text'], ['per_month_3m', '3 Months, per month', 'text'], ['price_12m_label', '12 Months price', 'text'], ['per_month_12m', '12 Months, per month', 'text']]],
+    ['Plus prices (US dollars) · the website shows them in each visitor\'s currency and Midtrans converts them to rupiah. Set the same prices on the Gumroad products.', [['usd_3m', '3 Months price in US dollars', 'dec'], ['usd_12m', '12 Months price in US dollars', 'dec']]],
+    ['Midtrans (rupiah payments)', [['midtrans_enabled', 'Offer Midtrans (GoPay, QRIS, bank transfer) next to Gumroad', 'bool'], ['midtrans_round', 'Round the rupiah amount to the nearest (e.g. 10000)', 'int']]],
     ['Free accounts', [['free_child_limit', 'Child profiles on a free account', 'number']]],
     ['Upgrade popup', [['popup_title_en', 'Title (English) · {name} becomes the style name', 'text'], ['popup_title_id', 'Title (Indonesian)', 'text'], ['popup_body_en', 'Text (English)', 'area'], ['popup_body_id', 'Text (Indonesian)', 'area']]],
-    ['Plus page', [['plus_page_note_en', 'Intro (English)', 'area'], ['plus_page_note_id', 'Intro (Indonesian)', 'area']]],
     ['Help', [['support_email', 'Support email shown when Plus is slow to switch on', 'email']]]
   ];
   VIEWS.settings = function () {
@@ -302,7 +301,7 @@ label.f small{font-weight:500;color:var(--muted)}
       $('#sf').onsubmit = function (e) {
         e.preventDefault();
         var body = { updated_at: new Date().toISOString() };
-        $$('[name]', $('#sf')).forEach(function (i) { var k = i.getAttribute('data-k'); body[i.name] = k === 'bool' ? i.value === 'true' : k === 'dec' ? Math.max(0.5, Number(i.value) || 9) : k === 'int' ? Math.max(1, Math.round(Number(i.value)) || 10000) : i.type === 'number' ? Math.max(1, Number(i.value) || 1) : i.value.trim(); });
+        $$('[name]', $('#sf')).forEach(function (i) { var k = i.getAttribute('data-k'); body[i.name] = k === 'bool' ? i.value === 'true' : k === 'dec' ? Math.max(0.5, Number(i.value) || (i.name === 'usd_12m' ? 21 : 7)) : k === 'int' ? Math.max(1, Math.round(Number(i.value)) || 10000) : i.type === 'number' ? Math.max(1, Number(i.value) || 1) : i.value.trim(); });
         api('/rest/v1/plus_settings?id=eq.1', { method: 'PATCH', body: body }).then(function () { toast('Settings saved'); }).catch(function (er) { toast(er.message); });
       };
     }).catch(function (e) { $('#sl').innerHTML = errBox(e); });

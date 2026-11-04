@@ -1124,7 +1124,7 @@
     }
     var ext = EXT_ORDER.map(function (r) { var e = EXT[r]; return e.card ? [r, '', e.card.tint, r, e.card.vis(), e.card.title(), e.card.desc(), e.card.grp || 'emo'] : null; }).filter(Boolean);
     var soon = (A.soon || []).map(function (s) { return [s.k, '', s.tint, '', vis(s.k), L() === 'id' ? s.idn : s.en, L() === 'id' ? s.d[1] : s.d[0], s.grp, true]; });
-    var all = t.map(function (x) { return x.concat(['', '', '', 'routine']); }).concat(ext, soon);
+    var all = t.map(function (x) { return x.concat(['', '', 'routine']); }).concat(ext, soon);
     return '<div class="tl-tlist">' + ['routine', 'emo', 'talk', 'teach'].map(function (g) {
       return all.filter(function (x) { return x[7] === g; }).map(function (x) { return row(x, g); }).join('');
     }).join('') + '</div>';

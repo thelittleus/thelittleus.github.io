@@ -136,7 +136,7 @@
   function accStatus() { var a = acc(); try { return a ? a.status() : 'none'; } catch (e) { return 'none'; } }
   function load() {
     if (!window.luLoad) return Promise.resolve();
-    return luLoad('/tools.css?v=16').then(function () { return luLoad('/tools-art.js?v=17'); }).then(function () { return luLoad('/tools.js?v=17'); })
+    return luLoad('/tools.css?v=16').then(function () { return luLoad('/tools-art.js?v=17'); }).then(function () { return luLoad('/tools.js?v=18'); })
       .then(function () { return Promise.all([luLoad('/tools-calm.js?v=14'), luLoad('/tools-talk.js?v=4')]); }).then(function () { var a = api(); return a && a.photosLoad ? a.photosLoad() : null; }).catch(function () { });
   }
   function photo(p) { var a = api(); return p && p.photo && a && a.PH && a.PH[p.photo] ? a.PH[p.photo] : ''; }
@@ -612,9 +612,6 @@
       '<div class="ud-way"><div class="ud-wh"><b>' + esc(dt('freeAcc')) + '</b><em class="ud-tag green">' + esc(isId() ? 'GRATIS' : 'FREE') + '</em></div><p>' + esc(dt('freeAccP')) + '</p><a class="btn btn-primary" href="#/signup">' + esc(dt('makeAcc')) + '</a></div>' +
       '<div class="ud-way plus"><div class="ud-wh"><b>' + esc(dt('upgradeH')) + '</b><em class="ud-plus">PLUS</em></div><p>' + esc(dt('upgradeP')) + '</p><a class="btn btn-primary" href="#/plus">' + esc(dt('seePlans')) + '</a></div></div>';
     hero.appendChild(ways);
-    // more than one device (visitors), replacing the "no account" note
-    var note = main.querySelector('.h2-note');
-    if (note && !inn) note.insertAdjacentHTML('afterend', '<div class="ud-moredev ud-x"><div><b>' + esc(dt('moreDev')) + '</b><p>' + esc(dt('moreDevP')) + '</p></div><a class="btn btn-outline" href="#/signup">' + esc(dt('makeAcc')) + '</a></div>');
     // Popular resources: the Plus line under the heading
     var ph = main.querySelector('#hPop');
     if (ph && st !== 'plus' && st !== 'expiring') ph.insertAdjacentHTML('afterend', '<p class="ud-popsub ud-x">' + dt('popSub') + ' <a href="#/plus">' + esc(dt('seePlans0')) + '</a></p>');
