@@ -993,7 +993,7 @@ body.tl-childon{overflow:hidden}
 .tl-ddig{min-width:.9em;text-align:center;background:#FFF1C7;border-radius:16px;padding:6px 4px 8px}
 .tl-dsec,.tl-dcolon{color:#B9B2A6}
 .tl-dcolon{padding:0 2px}
-.tl-dunit{align-self:flex-end;margin:0 0 12px 8px;color:var(--muted,#6B6875);font:700 14px Figtree,sans-serif;text-transform:uppercase;letter-spacing:.08em}
+.tl-dlabels{display:flex;justify-content:center;gap:120px;margin:6px auto 0;font:700 12.5px Figtree,sans-serif;text-transform:uppercase;letter-spacing:.08em;color:var(--muted,#6B6875)}
 .tl-dbtn{width:48px;height:34px;border:0;border-radius:12px;background:#F6F1E8;color:var(--ink,#2B2A35);font-size:14px;cursor:pointer;transition:background-color .15s}
 .tl-dbtn:hover{background:var(--sunny,#FFC94A)}.tl-dbtn:active{transform:translateY(1px)}
 .tl-dbtn:focus-visible{outline:3px solid var(--sunny,#FFC94A);outline-offset:2px}

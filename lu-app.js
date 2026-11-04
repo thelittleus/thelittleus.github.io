@@ -71,7 +71,9 @@
   };
   function lang() { return (window.LU && LU.lang) || 'en'; }
   function isId() { return lang() === 'id'; }
-  function t(k) { var v = W[k]; if (!v) return k; v = v[isId() ? 1 : 0]; return typeof v === 'function' ? v.apply(null, [].slice.call(arguments, 1)) : v; }
+  function t(k) { var v = W[k]; if (!v) return k; v = v[isId() ? 1 : 0]; return px(typeof v === 'function' ? v.apply(null, [].slice.call(arguments, 1)) : v); }
+  // Plus prices in the words are written in US dollars; show them in the visitor's currency (see LUAcc.priceLabel)
+  function px(s) { var a = window.LUAcc; if (typeof s !== 'string' || !a || !a.priceLabel || s.indexOf('$') < 0) return s; return s.replace(/\$29\b/g, function () { return a.priceLabel('12m'); }).replace(/\$9\b/g, function () { return a.priceLabel('3m'); }); }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) { return null; } }
   function go(h) { if (window.LU && LU.go) LU.go(h); else location.hash = h; }
@@ -134,13 +136,13 @@
   function accStatus() { var a = acc(); try { return a ? a.status() : 'none'; } catch (e) { return 'none'; } }
   function load() {
     if (!window.luLoad) return Promise.resolve();
-    return luLoad('/tools.css?v=15').then(function () { return luLoad('/tools-art.js?v=16'); }).then(function () { return luLoad('/tools.js?v=16'); })
-      .then(function () { return Promise.all([luLoad('/tools-calm.js?v=13'), luLoad('/tools-talk.js?v=4')]); }).then(function () { var a = api(); return a && a.photosLoad ? a.photosLoad() : null; }).catch(function () { });
+    return luLoad('/tools.css?v=16').then(function () { return luLoad('/tools-art.js?v=17'); }).then(function () { return luLoad('/tools.js?v=17'); })
+      .then(function () { return Promise.all([luLoad('/tools-calm.js?v=14'), luLoad('/tools-talk.js?v=4')]); }).then(function () { var a = api(); return a && a.photosLoad ? a.photosLoad() : null; }).catch(function () { });
   }
   function photo(p) { var a = api(); return p && p.photo && a && a.PH && a.PH[p.photo] ? a.PH[p.photo] : ''; }
   function ava(p, size, cls) {
     var s = size || 44, ph = photo(p), col = (p && p.color) || '#F3EEE6';
-    return '<span class="ua-ava ' + (cls || '') + '" style="width:' + s + 'px;height:' + s + 'px;background:' + col + ';font-size:' + Math.round(s * 0.45) + 'px">' + (ph ? '<img src="' + ph + '" alt="">' : esc(p ? (p.name || '?').trim().charAt(0).toUpperCase() : '')) + '</span>';
+    return '<span class="ua-ava ' + (cls || '') + '" style="width:' + s + 'px;height:' + s + 'px;background:' + col + ';font-size:' + Math.round(s * 0.45) + 'px">' + (ph ? '<img src="' + ph + '" alt="">' : p && A() && A().face ? '<span class="lu-face" data-face="' + (p.kid === 'girl' ? 'girl' : 'boy') + '" data-done="1">' + A().face(p.kid) + '</span>' : esc(p ? (p.name || '?').trim().charAt(0).toUpperCase() : '')) + '</span>';
   }
   function labelsText() { var s = S(), l = (s && s.settings.labels) || (isId() ? 'id' : 'en'); return (isId() ? t('langId') : t('langEn')) + ' · ' + t(l === 'id' ? 'labId' : l === 'both' ? 'labBoth' : l === 'none' ? 'labNone' : 'labEn'); }
 
@@ -178,7 +180,7 @@
     var d = a.D(), sub = '', ref = null;
     try {
       if (s.last.tool === 'tokens') { var tk = d.tokens; sub = (tk.earned || 0) + (isId() ? ' dari ' : ' of ') + (tk.count || 5); ref = tk.reward; }
-      else if (s.last.tool === 'timer') { sub = d.timer.minutes + (isId() ? ' menit' : ' min'); ref = d.timer.showNext ? d.timer.next : null; }
+      else if (s.last.tool === 'timer') { sub = Math.floor(((d.timer.minutes || 0) * 60 + (d.timer.seconds || 0)) / 60) + ':' + String((d.timer.seconds || 0) % 60).padStart(2, '0'); ref = d.timer.showNext ? d.timer.next : null; }
       else if (s.last.tool === 'ft') { if (!d.ft.first) return null; sub = a.cardLabel(d.ft.first) + ' → ' + a.cardLabel(d.ft.then[0]); ref = d.ft.first; }
       else if (s.last.tool === 'sched') { var sc = a.activeSched(); if (!sc) return null; sub = a.schedName(sc); ref = (sc.steps[0] || {}).card; }
     } catch (e) { }
@@ -329,7 +331,7 @@
       ['#/articles', t('articles'), t('articlesP'), '#DCEBFA', sheetArt('art'), false]
     ];
     return '<div class="ua-where' + (land ? ' big' : '') + '">' + rows.map(function (r) {
-      return '<a class="ua-wrow" href="' + r[0] + '"><span class="ua-wart" style="background:' + r[3] + '">' + r[4] + '</span><span class="ua-wtx"><b>' + esc(r[1]) + (r[5] ? '<em class="ua-free">' + esc(t('free')) + '</em>' : '') + '</b><small>' + esc(r[2]) + '</small></span><span class="ua-chev">›</span></a>';
+      return '<a class="ua-wrow" href="' + r[0] + '"><span class="ua-wart" style="background:' + r[3] + '">' + r[4] + '</span><span class="ua-wtx"><b>' + esc(r[1]) + '' + '</b><small>' + esc(r[2]) + '</small></span><span class="ua-chev">›</span></a>';
     }).join('') + '</div>';
   }
   function toolsCluster() {
@@ -348,9 +350,7 @@
     var st = accStatus(), a = acc(), p = prof(), nm = p ? p.name : (isId() ? 'anakmu' : 'your child');
     var until = a && a.plusUntil ? a.plusUntil() : null;
     if (st === 'plus') {
-      var k = 'lu_plus_seen', seen = Number(store(k) || 0); if (!seen) { seen = Date.now(); store(k, String(seen)); }
-      if (Date.now() - seen > 7 * 86400000) return '';
-      return '<div class="ua-note green"><span class="ua-okic">' + ic('check', 18, '#1E6B45', 3) + '</span><span><b>' + esc(t('unlocked')) + '</b><small>' + esc(t('plusUntil', until ? fmtDate(until) : '')) + '</small></span></div>';
+      return ''; // Plus members don't need an 'Everything is unlocked' banner
     }
     if (st === 'expiring') {
       var days = until ? Math.max(1, Math.ceil((until - new Date()) / 86400000)) : 14;
@@ -592,7 +592,7 @@
     cWork: ['Worksheet', 'Lembar kerja'], cStory: ['Social story', 'Cerita sosial'], cPrint: ['Printable', 'Materi cetak'],
     cTimer: ['Visual Timer', 'Timer Visual'], cTokens: ['Token Board', 'Papan Token'], cSched: ['Visual Schedule', 'Jadwal Visual']
   };
-  function dt(k) { return DW[k][isId() ? 1 : 0]; }
+  function dt(k) { return px(DW[k][isId() ? 1 : 0]); }
   function deskHome() {
     if (isApp() || routeName() !== '') return;
     var main = document.getElementById('lu-main'), hero = main && main.querySelector('.h2-hero');
@@ -630,7 +630,7 @@
     // closing: the Upgrade card in place of the list signup (not for members)
     var closing = main.querySelector('.closing'), sg = closing && closing.querySelector('.signup');
     if (sg && st !== 'plus' && st !== 'expiring') {
-      sg.insertAdjacentHTML('afterend', '<div class="ud-upcard ud-x"><span class="ud-blob"></span><h3>' + esc(dt('upgradeH')) + ' <em class="ud-plus">PLUS</em></h3><p>' + esc(dt('upgradeP')) + '</p><div class="ud-plans"><a href="#/plus?plan=3m"><b>' + esc(dt('m3')) + '</b><span>$9</span></a><a href="#/plus?plan=12m" class="on"><b>' + esc(dt('m12')) + '</b><span>$29</span></a><a class="btn btn-primary" href="#/plus">' + esc(dt('seePlans0')) + '</a></div></div>');
+      sg.insertAdjacentHTML('afterend', '<div class="ud-upcard ud-x"><span class="ud-blob"></span><h3>' + esc(dt('upgradeH')) + ' <em class="ud-plus">PLUS</em></h3><p>' + esc(dt('upgradeP')) + '</p><div class="ud-plans"><a href="#/plus?plan=3m"><b>' + esc(dt('m3')) + '</b><span>' + esc(px('$9')) + '</span></a><a href="#/plus?plan=12m" class="on"><b>' + esc(dt('m12')) + '</b><span>' + esc(px('$29')) + '</span></a><a class="btn btn-primary" href="#/plus">' + esc(dt('seePlans0')) + '</a></div></div>');
     }
   }
   // art that other scripts may redraw: put back on every pass

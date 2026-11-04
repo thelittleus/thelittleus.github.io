@@ -360,7 +360,7 @@ html:not(.lu-app) .nav2{gap:4px}
 html:not(.lu-app) .nav2>a,html:not(.lu-app) .navdd>button{padding:10px 18px;border:0;border-radius:999px;color:#4A4855;font-weight:600}
 html:not(.lu-app) .nav2>a:hover,html:not(.lu-app) .navdd>button:hover{background:#F3EEE6;color:#2B2A35}
 html:not(.lu-app) .nav2>a.on,html:not(.lu-app) .navdd>button.on{background:#FFF1C7;color:#2B2A35;font-weight:700;border:0}
-html:not(.lu-app) .nav2 .free-pill{display:none}
+.nav2 .free-pill,.dr-h .free-pill,.tabbar .free-pill{display:none}
 .la-hdr-login.ud-icon{height:44px;border-radius:999px;border:1px solid #ECE6DC;background:#fff;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 18px 0 14px;text-decoration:none;font:700 14.5px Figtree,sans-serif;color:#2B2A35;white-space:nowrap}
 .la-hdr-login.ud-icon:hover{background:#F3EEE6}
 /* visitor banner */
@@ -510,3 +510,6 @@ html.tl-still.ud-home .h2-tool,html.tl-still.ud-home .card .cover,html.tl-still.
 /* coming-soon tool tiles */
 .ua-tile.soon .ua-tilelink{cursor:default}
 .ua-soon{display:inline-flex;align-self:center;margin-top:2px;padding:3px 10px;border-radius:999px;background:#fff;border:1.5px dashed #CFC6B6;font:800 11.5px Figtree,sans-serif;font-style:normal;color:var(--ink)}
+
+/* phone and tablet Settings: account and children buttons show just their name, no description line */
+html.lu-app .la-setcard .la-accbox small,html.lu-app .la-setcard .la-accbox>.la-small,html.lu-app .ua-srow.kids .ua-rowtx small{display:none}

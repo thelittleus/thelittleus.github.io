@@ -1172,6 +1172,25 @@
       body += G('translate(60 38) scale(1.15)', head(g, { mouth: 'smile' }));
       return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 156"' + (opts.size ? ' width="' + opts.size + '"' : '') + ' aria-hidden="true"><g fill="none" stroke="' + K + '" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">' + FX.outline(body, 6) + FX.enrich(body) + '</g></svg>';
     },
+    // profile pictures: a child's head and shoulders (boy or girl, as chosen in setup)
+    face: function (g) {
+      var girl = g === 'girl';
+      var body = P('M14 106C14 84 28 74 50 74 72 74 86 84 86 106Z', girl ? C.coralL : C.yellow) + P('M41 75Q50 83 59 75', 'none', SW(2.6)) +
+        G('translate(50 44) scale(1.55)', head(g, { mouth: 'smile' }));
+      return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="' + K + '" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">' + FX.outline(body, 5) + FX.enrich(body) + '</g></svg>';
+    },
+    // the account's picture: a friendly bald grown-up in a suit, so it suits anyone
+    adult: function () {
+      var body = R(43, 58, 14, 16, 5, C.skinD) +
+        P('M10 106C10 84 26 72 50 72 74 72 90 84 90 106Z', '#4A5578') +
+        P('M40 72L50 92 60 72Z', '#fff') + P('M47 75H53L55 80 52 96 50 98 48 96 45 80Z', C.coral) +
+        P('M40 72 50 92 43 99 33 77Z', '#3B4566') + P('M60 72 50 92 57 99 67 77Z', '#3B4566') +
+        O(28, 42, 5.5, C.skin) + O(72, 42, 5.5, C.skin) + O(50, 38, 22, C.skin) +
+        HL('M37 24c4-4 10-5 15-4') +
+        O(42, 40, 2.6, K, NS) + O(58, 40, 2.6, K, NS) + P('M44 48q6 5 12 0', 'none', SW(2.8)) +
+        E(35, 47, 4, 2.6, C.cheek, NS + ' opacity=".8"') + E(65, 47, 4, 2.6, C.cheek, NS + ' opacity=".8"');
+      return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="' + K + '" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">' + FX.outline(body, 5) + FX.enrich(body) + '</g></svg>';
+    },
     // the little us heart with a face (brand signature for finish moments and print footers)
     heart: function (size, col) {
       return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 60" width="' + (size || 40) + '" height="' + Math.round((size || 40) * 60 / 64) + '" aria-hidden="true">' +

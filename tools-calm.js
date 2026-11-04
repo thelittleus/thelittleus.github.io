@@ -910,7 +910,7 @@
             if (e.target.closest('[data-again]')) { st = { step: c.steps === 'size' ? 'size' : 'face', feel: null, lv: null, help: null }; render(); return; }
             if (e.target.closest('[data-done]')) return X.childClose();
             if (e.target.closest('[data-breathe]')) return runBreathe({ fromOther: true, onDone: function () { runCheck(st); } });
-            if (e.target.closest('[data-timer]')) return X.runTimer(Object.assign({}, X.D().timer, { minutes: mm, next: null }), { next: null, backLabel: w('back'), onBack: function () { runCheck(st); }, onExit: function () { X.rerender(); } });
+            if (e.target.closest('[data-timer]')) return X.runTimer(Object.assign({}, X.D().timer, { minutes: mm, seconds: 0, next: null }), { next: null, backLabel: w('back'), onBack: function () { runCheck(st); }, onExit: function () { X.rerender(); } });
           };
         }
       }

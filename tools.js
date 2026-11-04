@@ -90,7 +90,7 @@
     shownUnder: ['Shown under the timer', 'Tampil di bawah timer'], showNext: ['Show what comes next', 'Tampilkan yang selanjutnya'], showNextD: ['A picture card under the timer, so your child knows what happens after.', 'Kartu gambar di bawah timer, agar anak tahu apa yang terjadi sesudahnya.'],
     endSig: ['End signal', 'Tanda selesai'], chime: ['Soft chime', 'Bunyi lembut'], vibrate: ['Vibrate', 'Getar'], silent: ['Silent', 'Senyap'],
     alsoOpens: ['Also opens from First–Then and schedule steps', 'Juga bisa dibuka dari Pertama–Lalu dan langkah jadwal'],
-    customMin: ['How many minutes?', 'Berapa menit?'], moreMin: ['More minutes', 'Tambah menit'], lessMin: ['Fewer minutes', 'Kurangi menit'],
+    customMin: ['How many minutes?', 'Berapa menit?'], moreMin: ['More minutes', 'Tambah menit'], lessMin: ['Fewer minutes', 'Kurangi menit'], moreSec: ['More seconds', 'Tambah detik'], lessSec: ['Fewer seconds', 'Kurangi detik'], secs: ['sec', 'detik'],
     // tokens
     working: ["I'm working for…", 'Aku sedang bekerja untuk…'], favs: [function (n) { return n + "'s favourites"; }, function (n) { return 'Favorit ' + n; }],
     nTokens: ['Number of tokens', 'Jumlah token'], tokensRange: ['tokens · 1 to 10', 'token · 1 sampai 10'],
@@ -436,7 +436,7 @@
     if (!p) return '<span class="tl-ava" style="width:' + size + 'px;height:' + size + 'px;background:#F3EEE6">' + A.heart(Math.round(size * 0.55)) + '</span>';
     var ini = (p.name || '?').trim().split(/\s+/).map(function (w) { return w[0]; }).join('').slice(0, 2).toUpperCase() || '?';
     return '<span class="tl-ava" style="width:' + size + 'px;height:' + size + 'px;background:' + esc(p.color || COLORS[0]) + ';font-size:' + Math.round(size * 0.4) + 'px">' +
-      (p.photo && PH[p.photo] ? '<img src="' + PH[p.photo] + '" alt="">' : esc(ini)) + '</span>';
+      (p.photo && PH[p.photo] ? '<img src="' + PH[p.photo] + '" alt="">' : A.face ? '<span class="lu-face" data-face="' + (p.kid === 'girl' ? 'girl' : 'boy') + '" data-done="1">' + A.face(p.kid) + '</span>' : esc(ini)) + '</span>';
   }
   function topbar(title, sub, opts) {
     opts = opts || {};
@@ -898,7 +898,7 @@
   function fmt(ms) { var s = Math.ceil(ms / 1000), m = Math.floor(s / 60); return m + ':' + String(s % 60).padStart(2, '0'); }
   function runTimer(cfg, opts) {
     opts = opts || {};
-    var total = Math.max(5, Math.round(cfg.minutes * 60)) * 1000;
+    var total = Math.max(5, Math.round(cfg.minutes * 60 + (Number(cfg.seconds) || 0))) * 1000;
     var endAt = Date.now() + total;
     var warned = {};
     var nextRef = opts.next !== undefined ? opts.next : cfg.next;
@@ -1010,7 +1010,7 @@
         var t = e.target.closest('[data-then]');
         if (t && st.done) { st.pick = t.dataset.then; chime('pop'); return render(); }
         if (e.target.closest('[data-timer]')) {
-          var tc = Object.assign({}, D().timer, { minutes: cfg.timerMin });
+          var tc = Object.assign({}, D().timer, { minutes: cfg.timerMin, seconds: 0 });
           runTimer(tc, { next: st.done ? (st.pick || cfg.then[0]) : cfg.first, backLabel: tr('backBoard'), onBack: function () { runFT(st); }, onExit: function () { rerender(); } });
         }
       });
@@ -1077,7 +1077,7 @@
           e.stopPropagation();
           var idx = Number(tmr.dataset.steptimer), step = st.steps[idx], nxt = st.steps[idx + 1];
           var snapshot = { done: st.done.slice(), change: st.change, steps: st.steps };
-          runTimer(Object.assign({}, D().timer, { minutes: step.min }), { next: nxt ? nxt.card : step.card, backLabel: tr('backSched'), onBack: function () { snapshot.done.push(idx); runSched(snapshot); }, onExit: function () { rerender(); } });
+          runTimer(Object.assign({}, D().timer, { minutes: step.min, seconds: 0 }), { next: nxt ? nxt.card : step.card, backLabel: tr('backSched'), onBack: function () { snapshot.done.push(idx); runSched(snapshot); }, onExit: function () { rerender(); } });
           return;
         }
         if (e.target.closest('[data-replan]')) {
@@ -1143,7 +1143,7 @@
       var map = { timer: ['tools/timer', 'timer'], tokens: ['tools/tokens', 'tokens'], ft: ['tools/first-then', 'ft'], sched: ['tools/schedule', 'sched'] };
       var m = map[S.last.tool];
       if (m && ((S.last.tool === 'sched' && activeSched()) || (S.last.tool === 'ft' && D().ft.first) || S.last.tool === 'tokens' || S.last.tool === 'timer')) {
-        var sub = S.last.tool === 'sched' ? schedName(activeSched()) : S.last.tool === 'tokens' ? cardLabel(D().tokens.reward) : S.last.tool === 'ft' ? cardLabel(D().ft.first) + ' → ' + cardLabel(D().ft.then[0]) : (D().timer.minutes + ' ' + tr('min'));
+        var sub = S.last.tool === 'sched' ? schedName(activeSched()) : S.last.tool === 'tokens' ? cardLabel(D().tokens.reward) : S.last.tool === 'ft' ? cardLabel(D().ft.first) + ' → ' + cardLabel(D().ft.then[0]) : fmt(timerSecs(D().timer) * 1000);
         var ref = S.last.tool === 'sched' ? (activeSched().steps[0] || {}).card : S.last.tool === 'tokens' ? D().tokens.reward : S.last.tool === 'ft' ? D().ft.first : (D().timer.showNext ? D().timer.next : null);
         h += '<h2 class="tl-h3">' + esc(tr('cont')) + '</h2><a class="tl-contcard" href="#/' + m[0] + '">' + (ref ? cardHTML(ref, { size: 'xs', labels: 'none' }) : '') + '<span><b>' + esc(sub) + '</b><small>' + esc(tr(m[1])) + '</small></span><span class="tl-openlink">' + esc(tr('open')) + ' ›</span></a>';
       }
@@ -1246,29 +1246,31 @@
   // re-draws the page and the site header (the header shows the current child)
   function refreshAll() { if (window.LU && LU.setLang) LU.setLang(LU.lang); else rerender(); }
 
-  /* digital time picker: tens and ones of the minutes, like a digital clock */
-  function digitalTime(m) {
-    m = clamp(Math.round(Number(m) || 1), 1, 99);
-    var t = Math.floor(m / 10), o = m % 10;
-    function col(label, up, down, val) {
-      return '<div class="tl-dcol"><button type="button" class="tl-dbtn" data-act="tdig" data-delta="' + up + '" aria-label="' + esc(tr('moreMin')) + ' ' + label + '">▲</button><span class="tl-ddig">' + val + '</span><button type="button" class="tl-dbtn" data-act="tdig" data-delta="' + down + '" aria-label="' + esc(tr('lessMin')) + ' ' + label + '">▼</button></div>';
+  /* digital time picker: tens and ones of the minutes and the seconds, like a digital clock (deltas are in seconds) */
+  function timerSecs(c) { return clamp(Math.round((Number(c.minutes) || 0) * 60 + (Number(c.seconds) || 0)), 5, 99 * 60 + 59); }
+  function digitalTime(c) {
+    var s = timerSecs(c), m = Math.floor(s / 60), sec = s % 60;
+    function col(label, up, val, more, less) {
+      return '<div class="tl-dcol"><button type="button" class="tl-dbtn" data-act="tdig" data-delta="' + up + '" aria-label="' + esc(more + ' ' + label) + '">▲</button><span class="tl-ddig">' + val + '</span><button type="button" class="tl-dbtn" data-act="tdig" data-delta="' + (-up) + '" aria-label="' + esc(less + ' ' + label) + '">▼</button></div>';
     }
-    return '<div class="tl-digital" role="group" aria-label="' + esc(tr('time')) + '">' + col('10', 10, -10, t) + col('1', 1, -1, o) +
-      '<span class="tl-dcolon">:</span><span class="tl-dsec">00</span><small class="tl-dunit">' + esc(tr('min')) + '</small></div>';
+    var mm = [tr('moreMin'), tr('lessMin')], ss = [tr('moreSec'), tr('lessSec')];
+    return '<div class="tl-digital" role="group" aria-label="' + esc(tr('time')) + '">' + col('10', 600, Math.floor(m / 10), mm[0], mm[1]) + col('1', 60, m % 10, mm[0], mm[1]) +
+      '<span class="tl-dcolon">:</span>' + col('10', 10, Math.floor(sec / 10), ss[0], ss[1]) + col('1', 1, sec % 10, ss[0], ss[1]) + '</div>' +
+      '<div class="tl-dlabels"><span>' + esc(tr('min')) + '</span><span>' + esc(tr('secs')) + '</span></div>';
   }
 
   /* ---------- timer page ---------- */
   function pageTimer() {
     var c = D().timer;
     return '<div class="tl-page narrow">' + topbar(tr('timer'), tr('parentSetup'), { dl: true }) +
-      '<div class="tl-previewbox" style="background:#DCEBFA"><div class="tl-pv' + (isFun(c.style) ? ' wide' : '') + '">' + timerSVG(c.style, c.style === 'bar' || isFun(c.style) ? 0.6 : 0.75) + '</div><div><div class="tl-pvtime">' + c.minutes + ':00</div><small>' + esc(tr('preview')) + '</small></div></div>' +
+      '<div class="tl-previewbox" style="background:#DCEBFA"><div class="tl-pv' + (isFun(c.style) ? ' wide' : '') + '">' + timerSVG(c.style, c.style === 'bar' || isFun(c.style) ? 0.6 : 0.75) + '</div><div><div class="tl-pvtime">' + fmt(timerSecs(c) * 1000) + '</div><small>' + esc(tr('preview')) + '</small></div></div>' +
       '<div class="tl-lab2">' + esc(tr('style')) + '</div><div class="tl-grid three">' + [['circle', 'circle'], ['sand', 'sand'], ['bar', 'bar']].map(function (s) {
         return '<button type="button" class="tl-opt' + (c.style === s[0] ? ' on' : '') + '" data-tstyle="' + s[0] + '"><span class="tl-optvis">' + timerSVG(s[0], 0.6) + '</span><b>' + esc(tr(s[1])) + '</b></button>';
       }).join('') + '</div>' +
       '<div class="tl-lab2 between"><span>' + esc(tr('funTimers')) + '</span><small>' + esc(tr('funTimersD')) + '</small></div><div class="tl-grid three fun">' + [['bunny', 'tBunny'], ['dino', 'tDino'], ['car', 'tCar']].map(function (s) {
         return '<button type="button" class="tl-opt' + (c.style === s[0] ? ' on' : '') + '" data-tstyle="' + s[0] + '"><span class="tl-optvis wide">' + timerSVG(s[0], 0.55) + '</span><b>' + esc(tr(s[1])) + '</b></button>';
       }).join('') + '</div>' +
-      '<div class="tl-lab2">' + esc(tr('time')) + '</div>' + digitalTime(c.minutes) +
+      '<div class="tl-lab2">' + esc(tr('time')) + '</div>' + digitalTime(c) +
       '<div class="tl-lab2">' + esc(tr('warns')) + '</div><div class="tl-panel">' + row(esc(tr('w2')), esc(tr('w2d')), toggle('w2', c.w2)) + row(esc(tr('w1')), esc(tr('w1d')), toggle('w1', c.w1)) + row(esc(tr('speak')), esc(tr('speakD')), toggle('speak', c.speak)) + '</div>' +
       '<div class="tl-lab2">' + esc(tr('whatsNext')) + '</div><div class="tl-panel">' + row(esc(tr('showNext')), esc(tr('showNextD')), toggle('showNext', c.showNext)) + '</div>' +
       (c.showNext ? '<div class="tl-panel pick">' + (c.next && cardInfo(c.next) ? cardHTML(c.next, { size: 'xs' }) : '<span class="tl-card tl-xs tl-addcard"><span>+</span></span>') + '<div><b>' + esc(c.next ? cardLabel(c.next) : '—') + '</b><small>' + esc(tr('fromLib')) + '</small></div><button type="button" class="tl-link" data-act="tnext">' + esc(tr('change')) + '</button></div>' : '') +
@@ -1602,7 +1604,7 @@
     if (snm) snm.oninput = function () {
       var sc = activeSched(); if (!sc) return;
       sc.name = { id: snm.value.trim(), en: snm.value.trim() }; save();
-      var lb = ROOT.querySelector('[data-dd=sched] b'); if (lb) lb.textContent = schedName(sc);
+      var lb = ROOT.querySelector('[data-act=dd][data-delta=sched] b'); if (lb) lb.textContent = schedName(sc);
     };
     var nick = ROOT.querySelector('#tlNick');
     if (nick) nick.oninput = function () { SETUP.name = nick.value; ROOT.querySelectorAll('.tl-sw.ini').forEach(function (b) { b.textContent = (nick.value.trim()[0] || 'A').toUpperCase(); }); };
@@ -1672,7 +1674,7 @@
     // timer
     if (ds.tstyle) { d.timer.style = ds.tstyle; return keep(); }
     if (ds.tmin) { d.timer.minutes = Number(ds.tmin); return keep(); }
-    if (act === 'tdig') { d.timer.minutes = clamp(Math.round(Number(d.timer.minutes) || 1) + Number(ds.delta), 1, 99); return keep(); }
+    if (act === 'tdig') { var ns = clamp(timerSecs(d.timer) + Number(ds.delta), 5, 99 * 60 + 59); d.timer.minutes = Math.floor(ns / 60); d.timer.seconds = ns % 60; return keep(); }
     if (act === 'tcustom') {
       var sh = sheet('<h2 class="tl-h2">' + esc(tr('customMin')) + '</h2><div class="tl-panel stepper"><button type="button" class="tl-iconbtn" data-m="-1">−</button><div><b id="tlCm">' + d.timer.minutes + '</b><small>' + esc(tr('minutes')) + '</small></div><button type="button" class="tl-iconbtn" data-m="1">+</button></div><div class="tl-chips wrap" style="justify-content:center">' + [3, 15, 20, 30, 45, 60].map(function (m) { return '<button type="button" class="tl-chip big" data-set="' + m + '">' + m + '</button>'; }).join('') + '</div><button type="button" class="tl-btn primary lg block" data-ok>' + esc(tr('save')) + '</button>');
       var cm = d.timer.minutes;
@@ -1694,7 +1696,8 @@
     if (ds.shape) { d.tokens.shape = ds.shape; return keep(); }
     if (act === 'kstart') { setLast('tokens'); if (d.tokens.earned >= d.tokens.count) d.tokens.earned = 0; return runTokens(); }
     // dropdowns
-    if (act === 'dd') { DD = DD === ds.dd ? null : ds.dd; PAGE.keepScroll = true; return render(); }
+    // the dropdown buttons name their menu in data-delta ('sched' or 'ft')
+    if (act === 'dd') { var kind = ds.dd || ds.delta; DD = DD === kind ? null : kind; PAGE.keepScroll = true; return render(); }
     // first-then
     if (act === 'fnew') { var nb = { id: uid('b'), first: null, then: [] }; d.boards.push(nb); d.ft.boardId = nb.id; DD = null; syncFT(); return keep(); }
     if (ds.board) { d.ft.boardId = ds.board; DD = null; syncFT(); return keep(); }

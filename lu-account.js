@@ -40,6 +40,15 @@
   function fmtDate(d, noYear) { d = new Date(d); if (isNaN(d)) return ''; return d.getDate() + ' ' + MONTHS[L() === 'id' ? 'id' : 'en'][d.getMonth()] + (noYear ? '' : ' ' + d.getFullYear()); }
   function addMonths(d, m) { d = new Date(d); var day = d.getDate(); d.setMonth(d.getMonth() + m); if (d.getDate() < day) d.setDate(0); return d; }
   function initials(n) { return String(n || '?').trim().split(/\s+/).map(function (w) { return w[0] || ''; }).join('').slice(0, 1).toUpperCase() || '?'; }
+  // profile pictures: a drawn character (boy, girl, or the grown-up in a suit) replaces the initial once the art has loaded
+  function face(kind, fallback) { return '<span class="lu-face" data-face="' + (kind === 'girl' || kind === 'adult' ? kind : 'boy') + '">' + esc(fallback || '') + '</span>'; }
+  var faceQ = 0;
+  function fillFaces() {
+    faceQ = 0; var Ar = window.LUArt; if (!Ar || !Ar.face) return;
+    document.querySelectorAll('[data-face]:not([data-done])').forEach(function (el) { el.innerHTML = el.getAttribute('data-face') === 'adult' ? Ar.adult() : Ar.face(el.getAttribute('data-face')); el.setAttribute('data-done', '1'); });
+  }
+  new MutationObserver(function () { if (!faceQ && document.querySelector('[data-face]:not([data-done])')) faceQ = requestAnimationFrame(fillFaces); }).observe(document.documentElement, { childList: true, subtree: true });
+  if (window.luLoad) window.luLoad('/tools-art.js?v=17').then(fillFaces).catch(function () {});
   function firstName(n) { return String(n || '').trim().split(/\s+/)[0] || ''; }
   function toast(msg, kind) { if (window.LU && LU.toast) LU.toast(msg, { kind: kind || 'info' }); }
 
@@ -106,13 +115,14 @@
     choosePass: ['Choose a pass. You pay once and it simply ends; nothing renews.', 'Pilih pass. Bayar sekali lalu selesai; tidak ada perpanjangan otomatis.'],
     choosePlan: ['Choose a plan', 'Pilih paket'], m3: ['3 Months', '3 Bulan'], m12: ['12 Months', '12 Bulan'], bestValue: ['BEST VALUE', 'PALING HEMAT'],
     plusUntil: [function (d) { return 'Plus until ' + d; }, function (d) { return 'Plus sampai ' + d; }],
+    untilD: [function (d) { return 'Until ' + d; }, function (d) { return 'Sampai ' + d; }], fxNote: [function (a, b) { return 'Shown in your currency at today’s rate. Card or PayPal is charged ' + a + ' or ' + b + ' by Gumroad; your bank does the conversion.'; }, function (a, b) { return 'Ditampilkan dalam mata uangmu dengan kurs hari ini. Kartu atau PayPal ditagih ' + a + ' atau ' + b + ' oleh Gumroad; bankmu yang mengonversinya.'; }],
     plusFromToday: ['Plus from today until', 'Plus mulai hari ini sampai'], plusAddedUntil: ['Plus now runs until', 'Plus sekarang berlaku sampai'],
     contPay: [function (p) { return 'Continue to payment · ' + p; }, function (p) { return 'Lanjut ke pembayaran · ' + p; }],
     contCheckout: [function (p) { return 'Continue to checkout · ' + p; }, function (p) { return 'Lanjut ke pembayaran · ' + p; }],
     addedTo: [function (e) { return 'Plus is added to <b>' + e + '</b>.'; }, function (e) { return 'Plus ditambahkan ke <b>' + e + '</b>.'; }],
-    opensTab: ['You choose how to pay on the next step', 'Kamu memilih cara membayar di langkah berikutnya'],
-    oneTime: ['One-time payment, no automatic renewal', 'Sekali bayar, tanpa perpanjangan otomatis'],
-    oneTimeP: ['Payment is handled securely by Gumroad or Midtrans. You don’t need an account with either.', 'Pembayaran diproses dengan aman oleh Gumroad atau Midtrans. Kamu tidak perlu akun di keduanya.'],
+    opensTab: ['Choose how to pay next', 'Pilih cara bayar berikutnya'],
+    oneTime: ['One-time payment, no auto-renewal.', 'Sekali bayar, tanpa perpanjangan otomatis.'],
+    oneTimeP: ['Handled securely by Gumroad or Midtrans.', 'Diproses dengan aman oleh Gumroad atau Midtrans.'],
     payH: ['How would you like to pay?', 'Mau bayar dengan apa?'], payHP: ['You pay once. Plus ends by itself and never renews.', 'Kamu membayar sekali. Plus berakhir sendiri dan tidak diperpanjang otomatis.'],
     payGum: ['Card or PayPal', 'Kartu atau PayPal'], payGumP: ['Visa, Mastercard, American Express and PayPal. Paid in US dollars through Gumroad.', 'Visa, Mastercard, American Express, dan PayPal. Dibayar dalam dolar AS lewat Gumroad.'],
     payMid: ['GoPay, QRIS and bank transfer', 'GoPay, QRIS, dan transfer bank'], payMidP: ['Mandiri, BRI, BNI, PermataBank and more. Paid in rupiah through Midtrans.', 'Mandiri, BRI, BNI, PermataBank, dan lainnya. Dibayar dalam rupiah lewat Midtrans.'],
@@ -126,18 +136,17 @@
     b4: ['Works on every phone, tablet and computer you sign in on', 'Berlaku di setiap HP, tablet, dan komputer tempat kamu masuk'],
     freeAndPlus: ['Free and Plus', 'Gratis dan Plus'], freeAcc: ['Free account', 'Akun gratis'],
     cmp: [
-      [['Visual tools: timers, token boards, schedules', 'Alat visual: timer, papan token, jadwal'], ['All tools', 'Semua alat'], ['All tools', 'Semua alat']],
-      [['Tool styles', 'Gaya alat'], ['Starter set', 'Set dasar'], ['About 60% more', 'Sekitar 60% lebih banyak']],
-      [['Child profiles', 'Profil anak'], ['1 child', '1 anak'], ['More than one child', 'Lebih dari satu anak']],
-      [['Free printables', 'Materi cetak gratis'], ['Included', 'Termasuk'], ['Included', 'Termasuk']],
-      [['Paid worksheets, stories and bundles', 'Lembar kerja, cerita, dan paket berbayar'], ['Buy one at a time', 'Beli satu per satu'], ['All included', 'Semua termasuk']],
-      [['Setup on every device', 'Pengaturan di setiap perangkat'], ['Included', 'Termasuk'], ['Included', 'Termasuk']]
+      [['Visual tools', 'Alat visual'], ['All tools', 'Semua alat'], ['All tools', 'Semua alat']],
+      [['Tool styles', 'Gaya alat'], ['Starter set', 'Set dasar'], ['~60% more', '~60% lebih banyak']],
+      [['Child profiles', 'Profil anak'], ['1 child', '1 anak'], ['More than 1 child', 'Lebih dari 1 anak']],
+      [['Resources', 'Materi'], ['Free resources only', 'Hanya materi gratis'], ['All resources', 'Semua materi']],
+      [['Every device', 'Semua perangkat'], ['Included', 'Termasuk'], ['Included', 'Termasuk']]
     ],
     faq: [
       [['Does it renew?', 'Apakah diperpanjang otomatis?'], ['No. You pay once, and Plus simply ends on the date shown. Nothing is charged again.', 'Tidak. Kamu bayar sekali, dan Plus berakhir di tanggal yang tertera. Tidak ada tagihan lagi.']],
       [['What happens when it ends?', 'Apa yang terjadi saat berakhir?'], ['You go back to a free account with one child profile. The free tools stay, and so does anything you bought on its own earlier. Nothing is deleted.', 'Kamu kembali ke akun gratis dengan satu profil anak. Alat gratis tetap ada, begitu juga produk yang dulu kamu beli satuan. Tidak ada yang dihapus.']],
       [['Can I add more time?', 'Bisa menambah waktu?'], ['Yes. Buying again before it ends adds the time to your current end date.', 'Bisa. Membeli lagi sebelum berakhir akan menambah waktu dari tanggal berakhir saat ini.']],
-      [['Which payment methods can I use?', 'Metode pembayaran apa yang bisa dipakai?'], ['Card or PayPal through Gumroad (US dollars), or GoPay, QRIS and bank transfer through Midtrans (rupiah). You don’t need an account with either. Log in with the same Little Us account on any device to use Plus.', 'Kartu atau PayPal lewat Gumroad (dolar AS), atau GoPay, QRIS, dan transfer bank lewat Midtrans (rupiah). Kamu tidak perlu akun di keduanya. Masuk dengan akun Little Us yang sama di perangkat mana pun untuk memakai Plus.']],
+      [['Which payment methods can I use?', 'Metode pembayaran apa yang bisa dipakai?'], ['Card or PayPal through Gumroad (international payment), or GoPay, QRIS and bank transfer through Midtrans (rupiah). You don’t need an account with either. Log in with the same Little Us account on any device to use Plus.', 'Kartu atau PayPal lewat Gumroad (pembayaran internasional), atau GoPay, QRIS, dan transfer bank lewat Midtrans (rupiah). Kamu tidak perlu akun di keduanya. Masuk dengan akun Little Us yang sama di perangkat mana pun untuk memakai Plus.']],
       [['Can I get a refund?', 'Bisa minta pengembalian dana?'], ['Passes are final, so we don’t refund a change of mind or an unused pass. If Plus doesn’t work and we can’t fix it, we refund you. See our Refund Policy.', 'Pass bersifat final, jadi kami tidak mengembalikan dana karena berubah pikiran atau pass yang tidak dipakai. Jika Plus tidak berfungsi dan tidak bisa kami perbaiki, dana kamu dikembalikan. Lihat Kebijakan Pengembalian Dana kami.']]
     ],
     questions: ['Questions', 'Pertanyaan'], refundLink: ['Refund Policy', 'Kebijakan Pengembalian Dana'],
@@ -313,14 +322,46 @@
     if (u) return 'expired';
     return 'free';
   }
-  function perMonth(x) { return L() === 'id' ? String(x).replace(/\s*a month$/i, ' per bulan') : x; }
+  /* Plus prices are set in US dollars (usd_3m / usd_12m in the admin). Each visitor sees them in their own
+     currency at today's rate, worked out from their time zone; the payment itself is unchanged. */
+  var TZCUR = { 'Asia/Jakarta': 'IDR', 'Asia/Pontianak': 'IDR', 'Asia/Makassar': 'IDR', 'Asia/Jayapura': 'IDR', 'Asia/Kuala_Lumpur': 'MYR', 'Asia/Kuching': 'MYR',
+    'Asia/Singapore': 'SGD', 'Asia/Manila': 'PHP', 'Asia/Bangkok': 'THB', 'Asia/Tokyo': 'JPY', 'Asia/Seoul': 'KRW', 'Asia/Shanghai': 'CNY', 'Asia/Hong_Kong': 'HKD',
+    'Asia/Kolkata': 'INR', 'Asia/Calcutta': 'INR', 'Pacific/Auckland': 'NZD', 'Europe/London': 'GBP', 'Europe/Zurich': 'CHF', 'Europe/Stockholm': 'SEK', 'Europe/Oslo': 'NOK',
+    'Europe/Copenhagen': 'DKK', 'Europe/Warsaw': 'PLN', 'Europe/Prague': 'CZK', 'Europe/Budapest': 'HUF', 'Europe/Istanbul': 'TRY', 'Europe/Bucharest': 'RON',
+    'America/Sao_Paulo': 'BRL', 'America/Mexico_City': 'MXN', 'Africa/Johannesburg': 'ZAR', 'Asia/Jerusalem': 'ILS',
+    'America/Toronto': 'CAD', 'America/Vancouver': 'CAD', 'America/Edmonton': 'CAD', 'America/Winnipeg': 'CAD', 'America/Halifax': 'CAD' };
+  var FX = { cur: 'USD', rate: 1 };
+  (function initFx() {
+    var tz = ''; try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) {}
+    var cur = TZCUR[tz] || (/^Australia\//.test(tz) ? 'AUD' : /^Europe\/(Berlin|Paris|Madrid|Rome|Amsterdam|Brussels|Vienna|Dublin|Lisbon|Helsinki|Athens|Luxembourg|Bratislava|Ljubljana|Vilnius|Riga|Tallinn|Zagreb|Valletta|Nicosia|Monaco)$/.test(tz) ? 'EUR' : 'USD');
+    if (cur === 'USD') return;
+    var cached = store.json('lu_fx', null);
+    function use(rates) { var r = Number(rates && rates[cur]); if (r > 0) { FX = { cur: cur, rate: r }; return true; } return false; }
+    if (cached && Date.now() - cached.at < 12 * 3600 * 1000 && use(cached.rates)) return;
+    if (cached) use(cached.rates);
+    fetch('https://api.frankfurter.dev/v1/latest?base=USD').then(function (r) { return r.json(); }).then(function (j) {
+      if (!j || !j.rates) return;
+      store.setJson('lu_fx', { at: Date.now(), rates: j.rates });
+      if (use(j.rates)) { if (window.LU && LU.route === 'plus') rerender(); emit(); }
+    }).catch(function () {});
+  })();
+  function money(usd) {
+    var cur = FX.cur, v = usd * FX.rate, whole = /^(IDR|JPY|KRW|HUF)$/.test(cur);
+    if (cur === 'IDR') v = Math.round(v / 1000) * 1000; else if (whole) v = Math.round(v);
+    var dec = whole || Math.abs(v - Math.round(v)) < 0.005 ? 0 : 2;
+    try { return (cur === 'USD' ? '' : '≈ ') + new Intl.NumberFormat(cur === 'IDR' ? 'id-ID' : (L() === 'id' ? 'id-ID' : 'en-US'), { style: 'currency', currency: cur, minimumFractionDigits: dec, maximumFractionDigits: dec }).format(v).replace(/ /g, ' '); }
+    catch (e) { return '$' + usd; }
+  }
+  function usdText(usd) { return 'US$' + (Math.abs(usd - Math.round(usd)) < 0.005 ? Math.round(usd) : usd.toFixed(2)); }
   function settings() {
     var s = FEAT.settings || {};
+    var u3 = Number(s.usd_3m) || 7, u12 = Number(s.usd_12m) || 21, mo = L() === 'id' ? '/bln' : '/mo';
     return {
       childLimit: s.free_child_limit || 1,
       url3: s.gumroad_3m_url || '', url12: s.gumroad_12m_url || '', midtrans: !!s.midtrans_enabled,
-      p3: s.price_3m_label || '$9', p12: s.price_12m_label || '$29',
-      pm3: perMonth(s.per_month_3m || '$3 a month'), pm12: perMonth(s.per_month_12m || '$2.42 a month'),
+      usd3: u3, usd12: u12, local: FX.cur !== 'USD', fromLocal: money(u3).replace(/^≈ /, ''),
+      p3: money(u3), p12: money(u12),
+      pm3: money(u3 / 3).replace(/^≈ /, '') + mo, pm12: money(u12 / 12).replace(/^≈ /, '') + mo,
       support: s.support_email || (CFG.CONTACT && CFG.CONTACT.email) || 'littleus.business@gmail.com',
       popTitle: L() === 'id' ? s.popup_title_id : s.popup_title_en,
       popBody: L() === 'id' ? s.popup_body_id : s.popup_body_en,
@@ -516,6 +557,16 @@
     '@media(min-width:900px){.la-faqs{grid-template-columns:repeat(3,1fr)}}',
     '.la-faq{background:#fff;border:1px solid var(--line);border-radius:22px;padding:20px}.la-faq h3{font:600 18px Fredoka,sans-serif;margin:0 0 8px}.la-faq p{margin:0;font-size:14px;color:var(--body);line-height:1.5}',
     '.la-h2{font:600 28px Fredoka,sans-serif;margin:44px 0 16px}',
+    /* Upgrade page: comparison table under the title on the left, plan picker on the right */
+    '.la-pluspage .la-plansl h1{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font:600 34px/1.1 Fredoka,sans-serif;margin:8px 0 22px}',
+    '.la-pluspage .la-plansl h1 .la-pill{height:24px;font-size:11.5px}',
+    '.la-table.cmp{border-radius:18px}.la-table.cmp .r{grid-template-columns:1.25fr 1fr 1fr;padding:11px 18px;font-size:14px}.la-table.cmp .r:first-child{font-size:13.5px}',
+    '.la-table.cmp .r:first-child span:last-child{display:flex;align-items:center;gap:6px}',
+    '.la-pluspage .la-choose{gap:12px;padding:22px}.la-pluspage .la-plan{padding:14px 18px}.la-pluspage .la-plan .pr b{font-size:26px}',
+    '.la-pluspage .la-safe{display:block;font-size:13.5px;line-height:1.5}.la-pluspage .la-safe b{display:inline;font-size:13.5px}',
+    '.la-chfoot{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:13px;color:var(--body)}.la-chfoot a{font-weight:700;color:var(--ink)}',
+    '.la-fx{margin:0;font-size:12.5px;color:var(--muted);line-height:1.45}',
+    '@media(min-width:960px){.la-pluspage .la-plans{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:44px}.la-pluspage .la-plansl h1{font-size:40px}.la-pluspage .la-h2{margin-top:36px}}',
     /* sheets */
     '.la-scrim{position:fixed;inset:0;background:#2B2A3566;z-index:900;display:flex;align-items:flex-end;justify-content:center;animation:laFade .15s}',
     '@media(min-width:700px){.la-scrim{align-items:center}}',
@@ -540,6 +591,8 @@
     '.la-card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:16px 18px}',
     '.la-me{display:flex;gap:14px;align-items:center}',
     '.la-ava{width:52px;height:52px;border-radius:16px;background:var(--lilac);display:flex;align-items:center;justify-content:center;font:600 24px Fredoka,sans-serif;flex:none}',
+    '.lu-face{display:flex;width:100%;height:100%;align-items:flex-end;justify-content:center;overflow:hidden;border-radius:inherit;line-height:1}.lu-face[data-done]>svg{width:100%;height:100%;display:block}',
+    ':is(.la-ava,.av,.ts-ava,.tl-ava,.ua-ava):has(>.lu-face[data-done]),:is(.la-ava,.av,.ts-ava,.tl-ava,.ua-ava):has(>.lu-face[data-done]){overflow:hidden;padding:0}',
     '.la-ava.sm{width:44px;height:44px;border-radius:999px;font-size:19px}',
     '.la-me b{font:600 20px Fredoka,sans-serif;display:flex;gap:8px;align-items:center}.la-me small{display:block;color:var(--body);font-size:13.5px}',
     '.la-passcard{background:var(--ink);color:#fff;border-radius:22px;padding:18px;display:flex;flex-direction:column;gap:12px}',
@@ -1000,23 +1053,23 @@
   function planCard(plan, st, compact) {
     var on = PL.plan === plan, end = newEnd(plan);
     return '<button type="button" class="la-plan' + (on ? ' on' : '') + '" data-plan="' + plan + '" aria-pressed="' + on + '"><span class="la-radio"></span><span class="nm"><b>' + esc(t(plan === '12m' ? 'm12' : 'm3')) + (plan === '12m' ? ' <span class="la-pill best">' + esc(t('bestValue')) + '</span>' : '') + '</b>' +
-      (compact ? '<small>' + esc(t('plusUntil', fmtDate(end))) + '</small>' : '') + '</span><span class="pr"><b>' + esc(plan === '12m' ? st.p12 : st.p3) + '</b><small>' + esc(plan === '12m' ? st.pm12 : st.pm3) + '</small></span></button>';
+      (compact ? '<small>' + esc(t('untilD', fmtDate(end))) + '</small>' : '') + '</span><span class="pr"><b>' + esc(plan === '12m' ? st.p12 : st.p3) + '</b><small>' + esc(plan === '12m' ? st.pm12 : st.pm3) + '</small></span></button>';
   }
   function renderPlans() {
-    var st = settings(), u = me(), kid = childName() || t('yourChild'), price = PL.plan === '12m' ? st.p12 : st.p3, end = newEnd(PL.plan);
-    var left = '<div><span class="la-pill">' + esc(t('plus')) + '</span><h1>' + esc(t('upgradeH')) + '</h1><p class="la-p" style="font-size:17px">' + esc(st.note || t('choosePass')) + '</p>' +
-      '<ul class="la-checks" style="margin-top:22px">' + ['b1', 'b2', 'b3', 'b4'].map(function (k) { return '<li><span class="la-chk">' + IC.check + '</span>' + esc(t(k)) + '</li>'; }).join('') + '</ul></div>';
+    var st = settings(), u = me(), price = PL.plan === '12m' ? st.p12 : st.p3;
+    // left: title and the Free / Plus comparison; right: the plan picker
+    var cmp = '<div class="la-table cmp"><div class="r"><span></span><span>' + (L() === 'id' ? 'Gratis' : 'Free') + '</span><span>Plus ' + pill('plus') + '</span></div>' +
+      W.cmp.map(function (r) { var i = L() === 'id' ? 1 : 0; return '<div class="r"><span>' + esc(r[0][i]) + '</span><span style="font-weight:500;color:var(--body)">' + esc(r[1][i]) + '</span><span>' + esc(r[2][i]) + '</span></div>'; }).join('') + '</div>';
+    var left = '<div class="la-plansl"><h1>' + esc(t('upgradeH')) + ' ' + pill('plus') + '</h1>' + cmp + '</div>';
     var ready = !!(PL.plan === '12m' ? st.url12 : st.url3) || st.midtrans;
     var right = '<div class="la-choose"><h2>' + esc(t('choosePlan')) + '</h2>' + planCard('3m', st, true) + planCard('12m', st, true) +
-      '<div class="la-until">' + esc(t(isPlus() ? 'plusAddedUntil' : 'plusFromToday')) + '<b>' + esc(fmtDate(end)) + '</b></div>' +
-      '<div class="la-safe">' + IC.shield + '<span><b>' + esc(t('oneTime')) + '</b>' + esc(t('oneTimeP')) + '</span></div>' +
+      '<div class="la-safe"><span><b>' + esc(t('oneTime')) + '</b> ' + esc(t('oneTimeP')) + '</span></div>' +
       (ready ? '<button type="button" class="la-btn primary block" data-act="continue">' + esc(t('contPay', price)) + '</button>' : '<div class="la-note">' + esc(t('notSet')) + '</div>') +
-      '<p class="la-small" style="text-align:center;margin:0"><a href="#/refund">' + esc(t('refundLink')) + '</a></p>' +
-      (u ? '<p class="la-small" style="text-align:center;margin:0">' + t('addedTo', esc(u.email || '')) + '</p>' : '<p class="la-small" style="text-align:center;margin:0">' + IC.ext + ' ' + esc(t('opensTab')) + '</p>') + '</div>';
-    var cmp = '<h2 class="la-h2">' + esc(t('freeAndPlus')) + '</h2><div class="la-table"><div class="r"><span></span><span>' + esc(t('freeAcc')) + '</span><span>Little Us ' + pill('plus') + '</span></div>' +
-      W.cmp.map(function (r) { var i = L() === 'id' ? 1 : 0; return '<div class="r"><span>' + esc(r[0][i]) + '</span><span style="font-weight:500">' + esc(r[1][i]) + '</span><span>' + esc(r[2][i]) + '</span></div>'; }).join('') + '</div>';
+      '<div class="la-chfoot"><a href="#/refund">' + esc(t('refundLink')) + '</a><span>' + esc(t('opensTab')) + '</span></div>' +
+      (st.local ? '<p class="la-small la-fx">' + esc(t('fxNote', usdText(st.usd3), usdText(st.usd12))) + '</p>' : '') +
+      (u ? '<p class="la-small" style="margin:0">' + t('addedTo', esc(u.email || '')) + '</p>' : '') + '</div>';
     var faq = '<h2 class="la-h2">' + esc(t('questions')) + '</h2><div class="la-faqs">' + W.faq.map(function (q) { var i = L() === 'id' ? 1 : 0; return '<div class="la-faq"><h3>' + esc(q[0][i]) + '</h3><p>' + esc(q[1][i]) + '</p></div>'; }).join('') + '</div>';
-    return '<div class="la-page"><a href="#/" class="la-xlink" style="font-size:14.5px">← ' + esc(t('backHome')) + '</a><div class="la-plans" style="margin-top:12px">' + left + right + '</div>' + cmp + faq + '</div>';
+    return '<div class="la-page la-pluspage"><a href="#/" class="la-xlink" style="font-size:14.5px">← ' + esc(t('backHome')) + '</a><div class="la-plans" style="margin-top:12px">' + left + right + '</div>' + faq + '</div>';
   }
   function wirePlans(root) {
     $$('[data-plan]', root).forEach(function (b) { b.onclick = function () { PL.plan = b.dataset.plan; rerender(); }; });
@@ -1194,7 +1247,7 @@
       return '<div class="la-row" style="cursor:default"><span>' + (p.kind === 'plus' ? pill('plus') + ' ' + esc(t(p.plan === '12m' ? 'm12' : 'm3')) : esc(p.product_id || '')) + '</span><span class="sp"></span><small class="la-small">' + esc(fmtDate(p.created_at)) + ' · ' + esc(p.price_label || '') + '</small></div>';
     }).join('') + '</div>' : '';
     return '<div class="la-page"><div class="la-acc"><div style="display:flex;align-items:center;gap:12px"><a class="la-iconbtn" href="#/tools/settings" aria-label="' + esc(t('back')) + '">' + IC.back + '</a><h1 class="la-h1" style="font-size:26px">' + esc(t('account')) + '</h1></div>' +
-      '<div class="la-card la-me"><span class="la-ava">' + esc(initials(u.name || u.email)) + '</span><div style="flex:1;min-width:0"><b>' + esc(u.name || '') + '</b><small>' + esc(u.email || '') + '</small><small style="display:flex;gap:6px;align-items:center">' + IC.mail.replace('20', '13').replace('20', '13') + esc(t('signedInEmail')) + '</small></div><button type="button" class="la-link" style="font-size:13.5px" data-act="editname">' + esc(t('editName')) + '</button></div>' +
+      '<div class="la-card la-me"><span class="la-ava">' + face('adult', initials(u.name || u.email)) + '</span><div style="flex:1;min-width:0"><b>' + esc(u.name || '') + '</b><small>' + esc(u.email || '') + '</small><small style="display:flex;gap:6px;align-items:center">' + IC.mail.replace('20', '13').replace('20', '13') + esc(t('signedInEmail')) + '</small></div><button type="button" class="la-link" style="font-size:13.5px" data-act="editname">' + esc(t('editName')) + '</button></div>' +
       card + '<div class="la-rows"><button type="button" class="la-row" data-act="pw">' + esc(t('changePw')) + '<span class="sp"></span>' + IC.chev + '</button><button type="button" class="la-row red" data-act="logout">' + esc(t('logOut')) + '</button></div>' + list + '</div></div>';
   }
   function wireAccount(root) {
@@ -1264,7 +1317,7 @@
   function headerHTML() {
     if (!signedIn()) return '<a class="la-hdr-login" href="#/login">' + esc(t('logIn')) + '</a>';
     var u = me() || {};
-    return '<div class="la-hdr-me"><button type="button" class="la-hdr-btn" data-la-menu aria-expanded="false"><span class="av">' + esc(initials(u.name || u.email)) + '</span>' + esc(firstName(u.name) || '') + ' <span aria-hidden="true" style="font-size:11px">▾</span></button></div>';
+    return '<div class="la-hdr-me"><button type="button" class="la-hdr-btn" data-la-menu aria-expanded="false"><span class="av">' + face('adult', initials(u.name || u.email)) + '</span>' + esc(firstName(u.name) || '') + ' <span aria-hidden="true" style="font-size:11px">▾</span></button></div>';
   }
   document.addEventListener('click', function (e) {
     var b = e.target.closest && e.target.closest('[data-la-menu]');
@@ -1293,7 +1346,7 @@
     }
     var sync = syncState === 'syncing' || syncState === 'pending' ? t('syncing') : store.get('lu_sync_at') ? t('synced') : '';
     var sub = s === 'plus' ? t('plusUntil', fmtDate(plusUntil())) + (sync ? ' · ' + sync : '') : s === 'expiring' ? t('plusEndsAdd', fmtDate(plusUntil(), true)) : (u.email || '') + (sync ? ' · ' + sync : '');
-    return '<div class="la-setcard"><a class="la-accbox" href="#/account"><span class="la-accrow"><span class="la-ava sm" style="background:var(--lilac);border-radius:14px">' + esc(initials(u.name || u.email)) + '</span><span class="tx"><b>' + esc(u.name || '') + ' ' + (s === 'plus' || s === 'expiring' ? pill('plus') : pill('free')) + '</b><small>' + esc(sub) + '</small></span>' + IC.chev + '</span></a>' +
+    return '<div class="la-setcard"><a class="la-accbox" href="#/account"><span class="la-accrow"><span class="la-ava sm" style="background:var(--lilac);border-radius:14px">' + face('adult', initials(u.name || u.email)) + '</span><span class="tx"><b>' + esc(u.name || '') + ' ' + (s === 'plus' || s === 'expiring' ? pill('plus') : pill('free')) + '</b><small>' + esc(sub) + '</small></span>' + IC.chev + '</span></a>' +
       (s === 'plus' || s === 'expiring' ? '' : '<a class="la-plusrow" href="#/plus">' + pill('plus') + '<span class="tx"><b>Little Us Plus</b><small>' + esc(t('moreStyles')) + '</small></span><span class="la-btn primary sm" style="min-height:40px">' + esc(t('getPlusShort')) + '</span></a>') + '</div>';
   }
 
@@ -1343,7 +1396,7 @@
     var up = s === 'free' || s === 'expired' ? '<div class="la-upbar">' + pill('plus') + '<b>' + esc(t('upBarH')) + '</b><span class="d">' + esc(t('upBarP')) + '</span><a class="la-btn primary sm" href="#/plus">' + esc(t('seePlans', st.p3)) + '</a></div>'
       : '<div class="la-upbar">' + pill('plus') + '<span class="la-pill free">' + esc(t('activeP')) + '</span><b>' + esc(t('daysLeftN', daysLeft())) + '</b><span class="d">' + esc(t('planEnds', (A.profile && A.profile.plus_plan === '3m') ? t('m3') : t('m12'), fmtDate(plusUntil()))) + '</span><a class="la-btn outline sm" href="#/account">' + esc(t('managePlan')) + '</a></div>';
     var kids = []; try { kids = (store.json(TKEY, {}).profiles || []).filter(function (p) { return p.id !== kid.id; }).slice(0, 2); } catch (e) {}
-    var kidChip = kid ? '<button type="button" class="la-kid" data-la-prof aria-haspopup="dialog"><span class="avs"><span class="av" style="background:' + esc(kid.color || '#DDF2E4') + '">' + esc(initials(kid.name)) + '</span>' + kids.map(function (o) { return '<span class="av sm" style="background:' + esc(o.color || '#F3EEE6') + '">' + esc(initials(o.name)) + '</span>'; }).join('') + '</span><span><small>' + esc(t('childProfile')) + '</small><b>' + esc(kid.name) + '</b></span><span class="sw">' + esc(t('switchC')) + ' ▾</span></button>' : '';
+    var kidChip = kid ? '<button type="button" class="la-kid" data-la-prof aria-haspopup="dialog"><span class="avs"><span class="av" style="background:' + esc(kid.color || '#DDF2E4') + '">' + face(kid.kid, initials(kid.name)) + '</span>' + kids.map(function (o) { return '<span class="av sm" style="background:' + esc(o.color || '#F3EEE6') + '">' + face(o.kid, initials(o.name)) + '</span>'; }).join('') + '</span><span><small>' + esc(t('childProfile')) + '</small><b>' + esc(kid.name) + '</b></span><span class="sw">' + esc(t('switchC')) + ' ▾</span></button>' : '';
     return '<div class="la-dash" aria-label="' + esc(t('account')) + '"><div class="head"><div><h1>' + esc(kid ? t('hiReady', firstName(u.name), kid.name) : t('hiReady0', firstName(u.name))) + '</h1><p>' + esc(t('syncedEvery')) + '</p></div>' + kidChip + '</div>' +
       '<div class="la-dgrid"><div class="la-panel"><div class="la-ph"><h2>' + esc(kid ? t('usedLast', kid.name) : t('pickUp')) + '</h2><a class="la-lk" href="#/tools">' + esc(t('allTools')) + ' →</a></div>' + used + '</div><div class="la-panel"><div class="la-ph"><h2>' + esc(t('yourLibrary')) + '</h2></div>' + lib + '</div></div>' + up + '</div>';
   }
@@ -1364,7 +1417,7 @@
     }
     if (window.LUTools && LUTools.api && LUTools.api.openProfiles) return show();
     if (!window.luLoad) return show();
-    luLoad('/tools.css?v=15').then(function () { return luLoad('/tools-art.js?v=16'); }).then(function () { return luLoad('/tools.js?v=16'); })
+    luLoad('/tools.css?v=16').then(function () { return luLoad('/tools-art.js?v=17'); }).then(function () { return luLoad('/tools.js?v=17'); })
       .then(function () { var a = window.LUTools && LUTools.api; return a && a.photosLoad ? a.photosLoad() : null; }).then(show, show);
   }
   function homeRender() {
@@ -1500,6 +1553,8 @@
     canAddChild: canAddChild, childLimit: function () { return settings().childLimit; }, childLockSheet: childLockSheet, lockSheet: lockSheet,
     stateChanged: stateChanged, pullState: pullState, fixState: fixState,
     headerHTML: headerHTML, logoBadge: logoBadge, tabPlus: tabPlus, settingsCard: settingsCard, homeRender: homeRender,
+    face: face,
+    priceLabel: function (plan) { var s = settings(); return String(plan === '12m' ? s.p12 : s.p3).replace(/^≈ /, ''); },
     productBuy: productBuy, cardTag: cardTag, onChange: function (f) { listeners.push(f); },
     t: t, _auth: auth, _http: http, _session: function () { return session; }
   };
