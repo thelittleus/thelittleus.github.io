@@ -1427,7 +1427,7 @@
       : ''; // paying members don't need a Plus row on the banner
     var kids = []; try { kids = (store.json(TKEY, {}).profiles || []).filter(function (p) { return p.id !== kid.id; }).slice(0, 2); } catch (e) {}
     var kidChip = kid ? '<button type="button" class="la-kid" data-la-prof aria-haspopup="dialog"><span class="avs"><span class="av" style="background:' + esc(kid.color || '#DDF2E4') + '">' + face(kid.kid, initials(kid.name)) + '</span>' + kids.map(function (o) { return '<span class="av sm" style="background:' + esc(o.color || '#F3EEE6') + '">' + face(o.kid, initials(o.name)) + '</span>'; }).join('') + '</span><span><small>' + esc(t('childProfile')) + '</small><b>' + esc(kid.name) + '</b></span><span class="sw">' + esc(t('switchC')) + ' ▾</span></button>' : '';
-    return '<div class="la-dash" aria-label="' + esc(t('account')) + '"><div class="head"><div><h1>' + esc(kid ? t('hiReady', firstName(u.name), kid.name) : t('hiReady0', firstName(u.name))) + '</h1><p>' + esc(t('syncedEvery')) + '</p></div>' + kidChip + '</div>' +
+    return '<div class="la-dash" aria-label="' + esc(t('account')) + '"><div class="head"><div><h1>' + esc(kid ? t('hiReady', firstName(u.name), kid.name) : t('hiReady0', firstName(u.name))) + '</h1></div>' + kidChip + '</div>' +
       '<div class="la-dgrid"><div class="la-panel"><div class="la-ph"><h2>' + esc(kid ? t('usedLast', kid.name) : t('pickUp')) + '</h2><a class="la-lk" href="#/tools">' + esc(t('allTools')) + ' →</a></div>' + used + '</div><div class="la-panel"><div class="la-ph"><h2>' + esc(t('yourLibrary')) + '</h2></div>' + lib + '</div></div>' + up + '</div>';
   }
   /* the same "Who is this for?" popup as in the tools settings, opened right on the home page */
@@ -1447,7 +1447,7 @@
     }
     if (window.LUTools && LUTools.api && LUTools.api.openProfiles) return show();
     if (!window.luLoad) return show();
-    luLoad('/tools.css?v=19').then(function () { return luLoad('/tools-art.js?v=22'); }).then(function () { return luLoad('/tools.js?v=22'); })
+    luLoad('/tools.css?v=20').then(function () { return luLoad('/tools-art.js?v=22'); }).then(function () { return luLoad('/tools.js?v=23'); })
       .then(function () { var a = window.LUTools && LUTools.api; return a && a.photosLoad ? a.photosLoad() : null; }).then(show, show);
   }
   function homeRender() {

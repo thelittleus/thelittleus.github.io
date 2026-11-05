@@ -136,8 +136,8 @@
   function accStatus() { var a = acc(); try { return a ? a.status() : 'none'; } catch (e) { return 'none'; } }
   function load() {
     if (!window.luLoad) return Promise.resolve();
-    return luLoad('/tools.css?v=19').then(function () { return luLoad('/tools-art.js?v=22'); }).then(function () { return luLoad('/tools.js?v=22'); })
-      .then(function () { return luLoad('/tools-calm.js?v=15'); }).then(function () { var a = api(); return a && a.photosLoad ? a.photosLoad() : null; }).catch(function () { });
+    return luLoad('/tools.css?v=20').then(function () { return luLoad('/tools-art.js?v=22'); }).then(function () { return luLoad('/tools.js?v=23'); })
+      .then(function () { return luLoad('/tools-calm.js?v=16'); }).then(function () { var a = api(); return a && a.photosLoad ? a.photosLoad() : null; }).catch(function () { });
   }
   function photo(p) { var a = api(); return p && p.photo && a && a.PH && a.PH[p.photo] ? a.PH[p.photo] : ''; }
   function ava(p, size, cls) {
@@ -705,32 +705,59 @@
       vis.insertAdjacentHTML('beforeend', '<span class="ud-q ud-x" role="button" tabindex="0" aria-label="' + esc((isId() ? 'Tentang ' : 'About ') + name) + '" style="background:' + (QCOL[k] || '#2B2A35') + '">?</span>');
     });
   }
+  // tapping "?" opens a small popup next to it with what the tool is for, and a button to open it
+  var POP = null;
+  function closeInfo() { if (POP) { var q = POP.q; POP.el.remove(); POP = null; if (q) q.setAttribute('aria-expanded', 'false'); } }
   function toggleInfo(e) {
-    var q = e.target.closest && e.target.closest('.ud-q'); if (!q) return;
+    var q = e.target.closest && e.target.closest('.ud-q');
+    if (!q) { if (POP && e.type === 'click' && !POP.el.contains(e.target)) closeInfo(); if (POP && e.type === 'keydown' && e.key === 'Escape') closeInfo(); return; }
     if (e.type === 'keydown' && e.key !== 'Enter' && e.key !== ' ') return;
     e.preventDefault(); e.stopPropagation();
-    var card = q.closest('.h2-tool'), open = card.classList.toggle('ud-info');
-    [].slice.call(document.querySelectorAll('.h2-tool.ud-info')).forEach(function (c) { if (c !== card) c.classList.remove('ud-info'); });
-    q.setAttribute('aria-expanded', String(open));
+    var same = POP && POP.q === q; closeInfo(); if (same) return;
+    var card = q.closest('.h2-tool'), name = ((card.querySelector('h3') || {}).textContent || '').trim(), desc = ((card.querySelector('p') || {}).textContent || '').trim();
+    var el = document.createElement('div');
+    el.className = 'ud-pop'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-label', name);
+    el.innerHTML = '<b>' + esc(name) + '</b><p>' + esc(desc) + '</p><a class="btn btn-primary btn-sm" href="' + esc(card.getAttribute('href') || '#/tools') + '">' + esc(isId() ? 'Buka alat' : 'Open tool') + ' →</a>';
+    document.body.appendChild(el);
+    var r = q.getBoundingClientRect(), w = el.offsetWidth, x = Math.min(Math.max(12, r.left + r.width / 2 - w / 2), window.innerWidth - w - 12);
+    el.style.left = x + window.scrollX + 'px'; el.style.top = r.bottom + window.scrollY + 10 + 'px';
+    el.style.setProperty('--ax', (r.left + r.width / 2 - x) + 'px');
+    POP = { el: el, q: q }; q.setAttribute('aria-expanded', 'true');
+    el.addEventListener('click', function (ev) { if (ev.target.closest('a')) closeInfo(); });
   }
   document.addEventListener('click', toggleInfo, true);
   document.addEventListener('keydown', toggleInfo, true);
+  window.addEventListener('resize', closeInfo);
   // shrink each preview drawing so it fits inside its box (stars, schedule cards and faces used to spill over)
+  // previews are drawn in after the page appears, so each box refits whenever its drawing changes
+  var fitWatch = window.MutationObserver ? new MutationObserver(function (list) {
+    var seen = []; list.forEach(function (m) { var v = m.target.closest && m.target.closest('.h2-vis'); if (v && seen.indexOf(v) < 0) seen.push(v); });
+    if (seen.length) requestAnimationFrame(function () { var m = document.getElementById('lu-main'); if (m && DOC.classList.contains('ud-in')) fitPreviews(m); });
+  }) : null;
   function fitPreviews(main) {
     [].slice.call(main.querySelectorAll('.h2-tool .h2-vis')).forEach(function (vis) {
+      if (fitWatch && !vis.dataset.fitw) { vis.dataset.fitw = '1'; fitWatch.observe(vis, { childList: true, subtree: true }); }
       var bw = vis.clientWidth - 16, bh = vis.clientHeight - 20; if (bw <= 0) return;
       [].slice.call(vis.children).forEach(function (el) {
         if (el.classList.contains('ud-q') || getComputedStyle(el).display === 'none') return;
-        el.style.removeProperty('--fit');
-        // measure what is actually drawn (the children), not a wrapper that stretches to the box
-        var rs = el.children.length ? [].slice.call(el.children).map(function (k) { return k.getBoundingClientRect(); }) : [el.getBoundingClientRect()];
-        var w = Math.max.apply(null, rs.map(function (r) { return r.right; })) - Math.min.apply(null, rs.map(function (r) { return r.left; }));
-        var h = Math.max.apply(null, rs.map(function (r) { return r.bottom; })) - Math.min.apply(null, rs.map(function (r) { return r.top; }));
-        var s = Math.min(1, bw / (w || 1), bh / (h || 1));
-        el.style.setProperty('--fit', s.toFixed(3));
+        // measure what is actually drawn (the children), not a wrapper that stretches to the box.
+        // offset sizes are layout sizes, so the current scale doesn't affect them (no reset, no restarted animation)
+        var er = el.getBoundingClientRect(), now = el.offsetWidth ? er.width / el.offsetWidth : 1; // the scale on screen right now
+        var ks = el.children.length ? [].slice.call(el.children) : [el];
+        var l = Infinity, r = -Infinity, tp = Infinity, b = -Infinity;
+        ks.forEach(function (k) {
+          var x, y, kw, kh;
+          if (k === el) { x = 0; y = 0; kw = el.offsetWidth; kh = el.offsetHeight; }
+          else { var kr = k.getBoundingClientRect(); x = (kr.left - er.left) / now; y = (kr.top - er.top) / now; kw = kr.width / now; kh = kr.height / now; }
+          l = Math.min(l, x); r = Math.max(r, x + kw); tp = Math.min(tp, y); b = Math.max(b, y + kh);
+        });
+        var w = Math.max(r - l, el.scrollWidth > el.offsetWidth ? el.scrollWidth : 0), h = b - tp;
+        var s = Math.min(1, bw / (w || 1), bh / (h || 1)).toFixed(3);
+        if (el.style.getPropertyValue('--fit') !== s) el.style.setProperty('--fit', s);
       });
     });
   }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { var m = document.getElementById('lu-main'); if (m && DOC.classList.contains('ud-in')) fitPreviews(m); });
   var fq = 0;
   window.addEventListener('resize', function () { clearTimeout(fq); fq = setTimeout(function () { var m = document.getElementById('lu-main'); if (m && DOC.classList.contains('ud-in')) fitPreviews(m); }, 150); });
   function deskHeader() {

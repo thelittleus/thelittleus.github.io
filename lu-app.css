@@ -437,28 +437,27 @@ html.ud-in .ud-popsub{display:none}
 .ud-cov>*:not(.ud-page){display:none!important}
 html.ud-home .h2-scene .h2-hills{height:14%!important}
 
-/* signed-in home: the dashboard banner, with room to breathe */
+/* signed-in home: a compact dashboard banner */
 button.la-kid{font:inherit;cursor:pointer;text-align:left}
-html.ud-in .la-dash{margin-top:24px;padding:32px 34px 34px;gap:26px;border-radius:30px}
-html.ud-in .la-dash::after{content:"";position:absolute;right:-70px;top:-70px;width:200px;height:200px;border-radius:50%;background:var(--sunny);opacity:.32;pointer-events:none}
-html.ud-in .la-dash .head{align-items:center;gap:20px;position:relative;z-index:1}
-html.ud-in .la-dash h1{font-size:32px;line-height:1.15}
-html.ud-in .la-dash .head p{margin:8px 0 0;font-size:15.5px}
-html.ud-in .la-kid{padding:6px 8px;box-shadow:0 3px 0 var(--sunny)}
-html.ud-in .la-kid .av{width:44px;height:44px}
-html.ud-in .la-dgrid{gap:20px;position:relative;z-index:1;align-items:stretch}
-html.ud-in .la-panel{padding:22px 24px 24px;gap:12px;border-radius:24px}
-html.ud-in .la-panel .la-ph{margin-bottom:4px}
-html.ud-in .la-panel h2{font-size:21px}
-html.ud-in .la-used{padding:12px 16px;gap:14px;border-radius:16px}
-html.ud-in .la-used .ic{width:48px;height:48px;border-radius:12px}
-html.ud-in .la-used b{font-size:16px}
-html.ud-in .la-empty{padding:24px;gap:12px;border-radius:20px}
-html.ud-in .la-empty h3{font-size:19px;margin:0}
-html.ud-in .la-empty p{margin:0;font-size:14.5px;line-height:1.5}
-html.ud-in .la-empty .la-btn{min-height:44px;padding:0 20px;font-size:15px;border-radius:14px;margin-top:4px}
-html.ud-in .la-upbar{padding:14px 16px 14px 22px;gap:14px;position:relative;z-index:1}
-html.ud-in .la-upbar .la-btn{min-height:42px;padding:0 18px;font-size:14px;border-radius:12px}
+html.ud-in .la-dash{margin-top:18px;padding:20px 24px 22px;gap:16px;border-radius:24px}
+html.ud-in .la-dash::after{content:"";position:absolute;right:-60px;top:-60px;width:150px;height:150px;border-radius:50%;background:var(--sunny);opacity:.3;pointer-events:none}
+html.ud-in .la-dash .head{align-items:center;gap:16px;position:relative;z-index:1}
+html.ud-in .la-dash h1{font-size:25px;line-height:1.15}
+html.ud-in .la-kid{padding:4px 6px;box-shadow:0 2px 0 var(--sunny)}
+html.ud-in .la-kid .av{width:36px;height:36px}
+html.ud-in .la-kid b{font-size:14px}
+html.ud-in .la-dgrid{gap:14px;position:relative;z-index:1;align-items:stretch}
+html.ud-in .la-panel{padding:14px 16px 16px;gap:8px;border-radius:18px}
+html.ud-in .la-panel h2{font-size:18px}
+html.ud-in .la-used{padding:7px 12px;gap:12px;border-radius:13px}
+html.ud-in .la-used .ic{width:38px;height:38px;border-radius:10px}
+html.ud-in .la-used b{font-size:15px}
+html.ud-in .la-empty{padding:16px 18px;gap:8px;border-radius:16px}
+html.ud-in .la-empty h3{font-size:16.5px;margin:0}
+html.ud-in .la-empty p{margin:0;font-size:13.5px;line-height:1.45}
+html.ud-in .la-empty .la-btn{min-height:40px;padding:0 16px;font-size:14px;border-radius:12px;margin-top:2px}
+html.ud-in .la-upbar{padding:10px 12px 10px 18px;gap:12px;position:relative;z-index:1}
+html.ud-in .la-upbar .la-btn{min-height:38px;padding:0 16px;font-size:14px;border-radius:12px}
 html.ud-in .h2-tool,html.ud-in .h2-tool h3{text-align:center}
 html.ud-in .h2-tool{align-items:stretch}
 
@@ -545,3 +544,11 @@ html.ud-home #lu-main>main{padding-bottom:72px}
 .tl-seg button.on:has(small)::before{position:absolute;left:10px;top:50%;margin-top:-9px}
 .tl-seg button:focus-visible,.ua-seg button:focus-visible{outline:3px solid var(--sunny,#FFC94A);outline-offset:2px}
 @media (max-width:420px){.tl-seg button,.ua-seg button{font-size:14px;padding:8px 6px;gap:6px}.tl-seg button.on::before,.ua-seg button.on::before{width:16px;height:16px}}
+
+/* the "?" info popup on the signed-in Tools row */
+.ud-pop{position:absolute;z-index:950;width:min(280px,calc(100vw - 24px));background:#fff;border:1.5px solid #2B2A35;border-radius:18px;padding:14px 16px 16px;box-shadow:0 14px 34px rgba(43,42,53,.18);display:flex;flex-direction:column;gap:8px;animation:udPop .16s ease-out}
+.ud-pop::before{content:"";position:absolute;top:-8px;left:calc(var(--ax,50%) - 8px);width:14px;height:14px;background:#fff;border-left:1.5px solid #2B2A35;border-top:1.5px solid #2B2A35;transform:rotate(45deg)}
+.ud-pop b{font:600 18px Fredoka,sans-serif}
+.ud-pop p{margin:0;font-size:14px;line-height:1.5;color:#4A4855}
+.ud-pop .btn{align-self:flex-start;margin-top:4px}
+@keyframes udPop{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}

@@ -1056,3 +1056,8 @@ body.tl-childon{overflow:hidden}
 .tl-seg button.on:has(small)::before{position:absolute;left:10px;top:50%;margin-top:-9px}
 .tl-seg button:focus-visible,.ua-seg button:focus-visible{outline:3px solid var(--sunny,#FFC94A);outline-offset:2px}
 @media (max-width:420px){.tl-seg button,.ua-seg button{font-size:14px;padding:8px 6px;gap:6px}.tl-seg button.on::before,.ua-seg button.on::before{width:16px;height:16px}}
+
+/* card picker, several at once (schedule steps): each picked card shows its order */
+.tl-card[data-n]{position:relative}
+.tl-card[data-n]::after{content:attr(data-n);position:absolute;top:6px;left:6px;z-index:2;min-width:24px;height:24px;padding:0 6px;border-radius:999px;background:#2B2A35;color:#FFC94A;font:800 13px/24px Figtree,sans-serif;text-align:center;box-shadow:0 0 0 2px #fff}
+.tl-multinote{margin:2px 0 0}

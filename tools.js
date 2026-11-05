@@ -36,7 +36,9 @@
     ft: ['First–Then Board', 'Papan Pertama–Lalu'], ftD: ['First the task, then the fun part.', 'Tugas dulu, lalu bagian serunya.'],
     sched: ['Visual Schedule', 'Jadwal Visual'], schedD: ['The day in pictures, step by step.', 'Hari ini dalam gambar, langkah demi langkah.'],
     library: ['Card library', 'Perpustakaan kartu'], settings: ['Settings', 'Pengaturan'], allTools: ['All tools', 'Semua alat'],
-    cont: ['Continue', 'Lanjutkan'], lastUsed: ['Last used', 'Terakhir dipakai'],
+    cont: ['Continue', 'Lanjutkan'], addSteps: ['Add steps', 'Tambah langkah'], pickCards: ['Pick cards', 'Pilih kartu'],
+    pickSeveral: ['Tap all the steps you need. They are added in the order you tap them.', 'Ketuk semua langkah yang dibutuhkan. Langkah ditambahkan sesuai urutan ketukan.'],
+    addNSteps: [function (n) { return 'Add ' + n + (n === 1 ? ' step' : ' steps'); }, function (n) { return 'Tambah ' + n + ' langkah'; }], lastUsed: ['Last used', 'Terakhir dipakai'],
     how: ['How it works', 'Cara pakainya'],
     how1: ['Pick a tool', 'Pilih alat'], how1d: ['Routines, tokens, breathing, feelings and more.', 'Rutinitas, token, napas, perasaan, dan lainnya.'],
     how2: ['Make it yours', 'Sesuaikan'], how2d: ['Use Little Us pictures or your own photos.', 'Pakai gambar Little Us atau foto sendiri.'],
@@ -476,7 +478,10 @@
   /* ---------- card picker (shared by every tool) ---------- */
   function openPicker(o) {
     o = o || {};
-    var st = { tab: o.tab || 'lu', cat: 'all', q: '', sel: o.current || null };
+    // o.multi: pick several cards in one go (they come back in the order they were tapped, through o.onPickMany)
+    var st = { tab: o.tab || 'lu', cat: 'all', q: '', sel: o.current || null, sels: [] };
+    function stateOf(r) { return o.multi ? (st.sels.indexOf(r) >= 0 ? 'selected' : '') : (st.sel === r ? 'selected' : ''); }
+    function numAttr(r) { var i = st.sels.indexOf(r); return o.multi && i >= 0 ? ' data-n="' + (i + 1) + '"' : ''; }
     var sh = sheet('', { full: false });
     sh.wrap.classList.add('tall');
     function list() {
@@ -494,9 +499,9 @@
       if (!st.q) {
         h += seg('ptab', [['lu', tr('tabLu')], ['photos', tr('tabPhotos')], ['text', tr('tabText')]], st.tab);
         if (st.tab === 'lu') {
-          if (favs.length) h += '<div class="tl-mini"><b>' + esc(tr('favourites')) + '</b>' + (prof() ? '<small>' + esc(prof().name) + '</small>' : '') + '</div><div class="tl-strip">' + favs.map(function (r) { return cardHTML(r, { size: 's', state: st.sel === r ? 'selected' : '', fav: true, attrs: ' data-pick="' + r + '"' }); }).join('') + '</div>';
+          if (favs.length) h += '<div class="tl-mini"><b>' + esc(tr('favourites')) + '</b>' + (prof() ? '<small>' + esc(prof().name) + '</small>' : '') + '</div><div class="tl-strip">' + favs.map(function (r) { return cardHTML(r, { size: 's', state: stateOf(r), fav: true, attrs: ' data-pick="' + r + '"' + numAttr(r) }); }).join('') + '</div>';
           var rec = S.recent.filter(function (r) { return cardInfo(r); });
-          if (rec.length) h += '<div class="tl-mini"><b>' + esc(tr('recent')) + '</b></div><div class="tl-strip">' + rec.map(function (r) { return cardHTML(r, { size: 's', state: st.sel === r ? 'selected' : '', attrs: ' data-pick="' + r + '"' }); }).join('') + '</div>';
+          if (rec.length) h += '<div class="tl-mini"><b>' + esc(tr('recent')) + '</b></div><div class="tl-strip">' + rec.map(function (r) { return cardHTML(r, { size: 's', state: stateOf(r), attrs: ' data-pick="' + r + '"' + numAttr(r) }); }).join('') + '</div>';
           h += '<div class="tl-chips">' + [['all', tr('all')]].concat(A.CATS.map(function (c) { return [c.id, L() === 'id' ? c.idn : c.en]; })).map(function (c) {
             return '<button type="button" class="tl-chip' + (st.cat === c[0] ? ' on' : '') + '" data-cat="' + c[0] + '">' + esc(c[1]) + '</button>';
           }).join('') + '</div>';
@@ -504,13 +509,15 @@
       } else {
         h += '<p class="tl-note2">' + tr('matches', res.length, st.q) + '</p>';
       }
-      if (res.length) h += '<div class="tl-grid tl-pickgrid">' + res.map(function (r) { return cardHTML(r, { state: st.sel === r ? 'selected' : '', attrs: ' data-pick="' + r + '"' }); }).join('') + '</div>';
+      if (o.multi && !st.q) h += '<p class="tl-note2 tl-multinote">' + esc(tr('pickSeveral')) + '</p>';
+      if (res.length) h += '<div class="tl-grid tl-pickgrid">' + res.map(function (r) { return cardHTML(r, { state: stateOf(r), attrs: ' data-pick="' + r + '"' + numAttr(r) }); }).join('') + '</div>';
       else if (st.tab === 'photos' && !st.q) h += '<div class="tl-empty"><b>' + esc(tr('noPhotos')) + '</b><p>' + esc(tr('noPhotosP')) + '</p></div>';
       else if (st.tab === 'text' && !st.q) h += '<div class="tl-empty"><p>' + esc(tr('textOnlyD')) + '</p></div>';
       if (st.q) h += '<div class="tl-tip">' + A.heart(22) + '<span>' + tr('cantFind') + '</span></div>';
       var sel = st.sel && cardInfo(st.sel);
       h += '<div class="tl-sheetfoot"><button type="button" class="tl-btn outline" data-addphoto>' + esc(st.tab === 'text' ? tr('textCard') : tr('photo')) + '</button>' +
-        '<button type="button" class="tl-btn primary" data-use' + (sel ? '' : ' disabled') + '>' + esc(sel ? tr('useX', L() === 'id' ? sel.idn : sel.en) : tr('use')) + '</button></div>';
+        (o.multi ? '<button type="button" class="tl-btn primary" data-use' + (st.sels.length ? '' : ' disabled') + '>' + esc(st.sels.length ? tr('addNSteps', st.sels.length) : tr('pickCards')) + '</button></div>'
+          : '<button type="button" class="tl-btn primary" data-use' + (sel ? '' : ' disabled') + '>' + esc(sel ? tr('useX', L() === 'id' ? sel.idn : sel.en) : tr('use')) + '</button></div>');
       sh.set(h);
       var inp = sh.el.querySelector('[data-q]');
       inp.oninput = function () { st.q = inp.value; var pos = inp.selectionStart; render(); var n = sh.el.querySelector('[data-q]'); n.focus(); try { n.setSelectionRange(pos, pos); } catch (e) {} };
@@ -521,16 +528,20 @@
       if (t.dataset.seg === 'ptab') { st.tab = t.dataset.v; return render(); }
       if (t.dataset.cat) { st.cat = t.dataset.cat; return render(); }
       if (t.dataset.pick) {
+        if (o.multi) { var at = st.sels.indexOf(t.dataset.pick); if (at >= 0) st.sels.splice(at, 1); else st.sels.push(t.dataset.pick); var y = sh.el.scrollTop; render(); sh.el.scrollTop = y; return; }
         if (st.sel === t.dataset.pick && o.quick !== false) { finish(); return; }
         st.sel = t.dataset.pick; return render();
       }
       if (t.hasAttribute('data-use')) return finish();
       if (t.hasAttribute('data-addphoto')) {
-        if (st.tab === 'text') return openTextCard(function (ref) { st.sel = ref; render(); });
-        return openAddPhoto(function (ref) { st.tab = 'photos'; st.sel = ref; render(); });
+        if (st.tab === 'text') return openTextCard(function (ref) { if (o.multi) st.sels.push(ref); else st.sel = ref; render(); });
+        return openAddPhoto(function (ref) { st.tab = 'photos'; if (o.multi) st.sels.push(ref); else st.sel = ref; render(); });
       }
     });
-    function finish() { if (!st.sel) return; touchRecent(st.sel); save(); sh.close(); o.onPick && o.onPick(st.sel); }
+    function finish() {
+      if (o.multi) { if (!st.sels.length) return; st.sels.forEach(touchRecent); save(); sh.close(); if (o.onPickMany) o.onPickMany(st.sels.slice()); return; }
+      if (!st.sel) return; touchRecent(st.sel); save(); sh.close(); o.onPick && o.onPick(st.sel);
+    }
     render();
     return sh;
   }
@@ -1740,7 +1751,7 @@
     }
     if (act === 'smenu') return schedMenu(s);
     if (!s && /^s/.test(act || '')) return;
-    if (act === 'sadd') return openPicker({ onPick: function (x) { s.steps.push({ card: x, min: 0 }); keep(); } });
+    if (act === 'sadd') return openPicker({ multi: true, title: tr('addSteps'), onPickMany: function (xs) { xs.forEach(function (x) { s.steps.push({ card: x, min: 0 }); }); keep(); } });
     if (ds.sup) { var a1 = Number(ds.sup); s.steps.splice(a1 - 1, 0, s.steps.splice(a1, 1)[0]); return keep(); }
     if (ds.sdown) { var a2 = Number(ds.sdown); s.steps.splice(a2 + 1, 0, s.steps.splice(a2, 1)[0]); return keep(); }
     if (ds.sdel) { s.steps.splice(Number(ds.sdel), 1); return keep(); }

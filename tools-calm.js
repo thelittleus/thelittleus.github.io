@@ -308,7 +308,8 @@
     else if (style === 'flower') s = P('M38 108V68', 'none', ' stroke="' + C.greenD + '"' + sw(4)) + G('translate(38 56)', [0, 60, 120, 180, 240, 300].map(function (r) { return G('rotate(' + r + ')', E(0, -13, 7, 10, C.pink, sw(2.4))); }).join('') + O(0, 0, 9, C.yellow, sw(2.4))) +
       R(70, 60, 26, 48, 8, C.coralL, sw(2.6)) + P('M83 60V52', 'none', sw(2.6)) + P('M83 26C76 36 74 42 75 46 76 52 90 52 91 46 92 42 90 36 83 26Z', C.yellow, sw(2.6));
     else if (style === 'box') s = R(24, 24, 72, 72, 14, C.lilacL) + P('M24 92V40', 'none', ' stroke="' + C.yellow + '"' + sw(6)) + O(24, 40, 8, C.lilac, sw(2.6));
-    else if (style === 'belly') s = R(10, 82, 100, 16, 8, '#E9E1F7', NS) + P('M30 86C28 66 44 56 64 56 84 56 98 66 96 86Z', C.green) + E(64, 70, 24, 11, C.greenL) + P('M64 46l3 6 6 1-4.5 4 1 6-5.5-3-5.5 3 1-6-4.5-4 6-1z', C.yellow, sw(2)) + O(30, 82, 14, C.green) + P('M22 80q4 3 8 0', 'none', sw(2.2));
+    // the same dino as the full Belly Buddy (legs, tail, star toy), just smaller, so the picker matches the animation
+    else if (style === 'belly') s = G('translate(-1 6) scale(.41)', BUD.belly());
     return tile(s);
   }
 
@@ -673,8 +674,7 @@
       '<div class="tl-lab2">' + esc(w('style')) + '</div><div class="lc-stylegrid">' + styles.map(function (s) {
         return '<button type="button" class="tl-opt' + (c.style === s ? ' on' : '') + '" data-lc="bstyle" data-v="' + s + '"><span class="tl-optvis">' + buddyIcon(s) + '</span><b>' + esc(w(s)) + (s === 'box' ? ' <em>7+</em>' : '') + '</b></button>';
       }).join('') + '</div><p class="lc-hint">' + esc(wd(W.styleD[c.style])) + '</p>' +
-      '<div class="tl-lab2 between"><span>' + esc(w('pace')) + '</span><small>' + esc(w('paceNote')) + '</small></div>' +
-      X.seg('lcpace', [['little', esc(w('pLittle')) + '<small>3 · 3</small>'], ['kids', esc(w('pKids')) + '<small>4 · 4</small>'], ['calm', esc(w('pCalm')) + '<small>5 · 5</small>']], c.pace) +
+      '<div class="tl-lab2">' + esc(w('pace')) + '</div>' +
       '<div class="tl-panel">' + stepper('inS', w('inS'), c.inS) + (c.style === 'box' ? stepper('hold', w('holdS'), c.hold, w('holdNote')) : '') + stepper('outS', w('outS'), c.outS) + '</div>' +
       '<div class="tl-lab2">' + esc(w('nBreaths')) + '</div>' +
       '<div class="tl-panel stepper"><button type="button" class="tl-iconbtn" data-lc="bn" data-d="-1">−</button><div><b>' + c.n + '</b><span class="lc-ndots">' + new Array(c.n + 1).join('<i></i>') + '</span><small>' + esc(w('breathsRange')) + '</small></div><button type="button" class="tl-iconbtn" data-lc="bn" data-d="1">+</button></div>' +
@@ -684,7 +684,6 @@
       X.row(esc(w('showWords')), esc(w('showWordsD')), X.toggle('words', c.words)) + '</div>' +
       '<div class="tl-lab2 between"><span>' + esc(w('blowReal')) + '</span><small>' + esc(w('flowerOnly')) + '</small></div>' +
       '<div class="tl-panel' + (c.style === 'flower' ? '' : ' lc-dim') + '"><div class="tl-row"><span class="lc-micico">🎙</span><div><b>' + esc(w('useMic')) + '</b><small>' + esc(w('useMicD')) + '</small></div>' + X.toggle('mic', c.mic && c.style === 'flower') + '</div></div>' +
-      '<div class="tl-tip">' + heartSVG(22) + '<span>' + w('noCount') + '</span></div>' +
       '<div class="tl-foot"><button type="button" class="tl-btn primary lg block" data-lc="bstart">' + esc(X.tr('startChild')) + '</button><small>' + esc(w('stayAwake')) + '</small></div></div>';
     later(function () { startPreview(); }, 30);
     return h;
