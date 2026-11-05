@@ -138,7 +138,7 @@
   function accStatus() { var a = acc(); try { return a ? a.status() : 'none'; } catch (e) { return 'none'; } }
   function load() {
     if (!window.luLoad) return Promise.resolve();
-    return luLoad('/tools.css?v=20').then(function () { return luLoad('/tools-art.js?v=22'); }).then(function () { return luLoad('/tools.js?v=23'); })
+    return luLoad('/tools.css?v=20').then(function () { return luLoad('/tools-art.js?v=23'); }).then(function () { return luLoad('/tools.js?v=23'); })
       .then(function () { return luLoad('/tools-calm.js?v=16'); }).then(function () { var a = api(); return a && a.photosLoad ? a.photosLoad() : null; }).catch(function () { });
   }
   function photo(p) { var a = api(); return p && p.photo && a && a.PH && a.PH[p.photo] ? a.PH[p.photo] : ''; }
@@ -583,6 +583,9 @@
      Tools, Shop and Articles rows. The illustrations are the shaded ones from tools-art.js. */
   var DW = {
     threeWays: ['Three ways to use Little Us', 'Tiga cara memakai Little Us'],
+    upgradeTo: ['Upgrade to', 'Upgrade ke'], fromP: ['From', 'Mulai'], for3: ['for 3 months', 'untuk 3 bulan'],
+    pb1: ['About 60% more tool styles', 'Sekitar 60% lebih banyak gaya alat'], pb2: ['Up to 6 children', 'Hingga 6 anak'],
+    pb3: ['Your own photos on the cards', 'Foto sendiri di kartu'], pb4: ['Every resource in the shop', 'Semua materi di toko'],
     explore: ['Explore right away', 'Langsung jelajahi'], createAcc: ['Create an account', 'Buat akun'],
     whyAcc: ['Why create a free account?', 'Kenapa membuat akun gratis?'],
     why1: ['Save your settings, pick up where you left off on any device', 'Simpan pengaturanmu, lanjutkan dari mana saja di perangkat apa pun'],
@@ -631,7 +634,11 @@
     // closing: the Upgrade card in place of the list signup (not for members)
     var closing = main.querySelector('.closing'), sg = closing && closing.querySelector('.signup');
     if (sg && st !== 'plus' && st !== 'expiring') {
-      sg.insertAdjacentHTML('afterend', '<div class="ud-upcard ud-x"><span class="ud-blob"></span><h3>' + esc(dt('upgradeH')) + ' <em class="ud-plus">PLUS</em></h3><p>' + esc(dt('upgradeP')) + '</p><div class="ud-plans">' + ['3m', '6m', '12m'].map(function (p) { return '<a href="#/plus?plan=' + p + '"' + (p === '12m' ? ' class="on"' : '') + '><b>' + esc(dt('m' + parseInt(p))) + '</b><span>' + esc(window.LUAcc && LUAcc.priceLabel ? LUAcc.priceLabel(p) : '') + '</span></a>'; }).join('') + '<a class="btn btn-primary" href="#/plus">' + esc(dt('seePlans0')) + '</a></div></div>');
+      // compact, centred card: "Upgrade to Little Us PLUS", what you get, the starting price, one button
+      var from = window.LUAcc && LUAcc.priceLabel ? LUAcc.priceLabel('3m') : '';
+      sg.insertAdjacentHTML('afterend', '<div class="ud-upcard ud-x"><h3>' + esc(dt('upgradeTo')) + ' <span class="ud-pname">Little Us <em class="ud-plus">PLUS</em></span></h3><p>' + esc(dt('upgradeP')) + '</p>' +
+        '<ul class="ud-pben">' + ['pb1', 'pb2', 'pb3', 'pb4'].map(function (k) { return '<li><i aria-hidden="true">✓</i>' + esc(dt(k)) + '</li>'; }).join('') + '</ul>' +
+        '<div class="ud-pfoot">' + (from ? '<span class="ud-from">' + esc(dt('fromP')) + ' <b>' + esc(from) + '</b> ' + esc(dt('for3')) + '</span>' : '') + '<a class="btn btn-primary" href="#/plus">' + esc(dt('seePlans0')) + '</a></div></div>');
     }
   }
   // art that other scripts may redraw: put back on every pass

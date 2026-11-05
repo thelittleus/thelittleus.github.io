@@ -398,9 +398,17 @@ html.ud-out .h2-note{display:none}
 html.ud-home .closing .signup{display:none}
 html.ud-home.ud-plus .closing .signup{display:block}
 /* same look as the "Just start" and "Free account" boxes: white, thin light border, rounded */
-.ud-upcard{position:relative;overflow:hidden;background:#fff;border:1.5px solid #ECE6DC;border-radius:24px;padding:20px 20px 18px;box-shadow:0 3px 0 rgba(43,42,53,.05);display:flex;flex-direction:column;justify-content:center;gap:8px}
-.ud-upcard h3{font:600 20px Fredoka,sans-serif;margin:0;display:flex;align-items:center;justify-content:space-between;gap:8px}
-.ud-upcard p{margin:0;font-size:14px;line-height:1.45;color:#4A4855}
+.ud-upcard{position:relative;overflow:hidden;width:100%;max-width:720px;margin:0 auto;background:#fff;border:1.5px solid #ECE6DC;border-radius:24px;padding:26px 28px 24px;box-shadow:0 3px 0 rgba(43,42,53,.05);display:flex;flex-direction:column;gap:10px}
+.ud-upcard h3{font:600 24px Fredoka,sans-serif;margin:0;display:flex;align-items:center;flex-wrap:wrap;gap:6px 8px}
+.ud-pname{display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
+.ud-upcard p{margin:0;font-size:15px;line-height:1.5;color:#4A4855}
+.ud-pben{list-style:none;margin:6px 0 4px;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 20px}
+.ud-pben li{display:flex;align-items:center;gap:9px;font-size:14.5px;font-weight:600;color:#2B2A35}
+.ud-pben i{flex:none;width:22px;height:22px;border-radius:7px;background:#DDF2E4;color:#1E6B45;font:800 12px Figtree,sans-serif;font-style:normal;display:flex;align-items:center;justify-content:center}
+.ud-pfoot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px 20px;margin-top:8px;padding-top:16px;border-top:1.5px dashed #ECE6DC}
+.ud-from{font-size:15px;color:#4A4855}.ud-from b{font:800 18px Figtree,sans-serif;color:#2B2A35}
+.ud-pfoot .btn{min-width:180px;padding-left:28px;padding-right:28px}
+@media (max-width:560px){.ud-pben{grid-template-columns:1fr}}
 .ud-blob{display:none}
 .ud-plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:8px}
 .ud-plans a:not(.btn){display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:3px;min-width:0;min-height:70px;padding:10px 16px;border-radius:16px;background:#fff;border:1.5px solid #ECE6DC;text-decoration:none;color:#2B2A35}
@@ -546,8 +554,8 @@ html.ud-home #lu-main>main{padding-bottom:72px}
 @media (max-width:420px){.tl-seg button,.ua-seg button{font-size:14px;padding:8px 6px;gap:6px}.tl-seg button.on::before,.ua-seg button.on::before{width:16px;height:16px}}
 
 /* the "?" info popup on the signed-in Tools row */
-.ud-pop{position:absolute;z-index:950;width:min(280px,calc(100vw - 24px));background:#fff;border:1.5px solid #2B2A35;border-radius:18px;padding:14px 16px 16px;box-shadow:0 14px 34px rgba(43,42,53,.18);display:flex;flex-direction:column;gap:8px;animation:udPop .16s ease-out}
-.ud-pop::before{content:"";position:absolute;top:-8px;left:calc(var(--ax,50%) - 8px);width:14px;height:14px;background:#fff;border-left:1.5px solid #2B2A35;border-top:1.5px solid #2B2A35;transform:rotate(45deg)}
+.ud-pop{position:absolute;z-index:950;width:min(290px,calc(100vw - 24px));background:#fff;border:0;border-radius:20px;padding:16px 18px 18px;box-shadow:0 2px 0 rgba(43,42,53,.05),0 16px 40px rgba(43,42,53,.16);display:flex;flex-direction:column;gap:10px;animation:udPop .16s ease-out}
+.ud-pop::before{content:"";position:absolute;top:-6px;left:calc(var(--ax,50%) - 7px);width:14px;height:14px;background:#fff;border-radius:3px;transform:rotate(45deg)}
 .ud-pop b{font:600 18px Fredoka,sans-serif}
 .ud-pop p{margin:0;font-size:14px;line-height:1.5;color:#4A4855}
 .ud-pop .btn{align-self:flex-start;margin-top:4px}
@@ -582,11 +590,14 @@ html.ud-out .ud-heroimg{display:block;width:100%;max-width:420px;height:auto}
 /* banner buttons: Explore right away (yellow, like the other main buttons) and Create an account (white on the peach) with a "?" */
 .ud-hacts{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:6px}
 .ud-hacts .btn-lg{min-height:50px;padding:6px 22px;font-size:15px}
-.ud-accwrap{display:inline-flex;align-items:center;gap:8px}
-.ud-hacts .ud-accbtn{background:#fff}
-.ud-hacts .ud-accbtn:hover{background:#FFF8EC}
-.ud-hq{flex:none;width:32px;height:32px;padding:0;border-radius:50%;border:1.5px solid #2B2A35;background:#fff;color:#2B2A35;font:800 15px Figtree,sans-serif;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:background .15s,color .15s}
-.ud-hq:hover,.ud-hq[aria-expanded="true"]{background:#2B2A35;color:#fff}
+.ud-accwrap{position:relative;display:inline-flex}
+/* white, filled like the yellow button (no outline), with the same soft bottom edge */
+.ud-hacts .ud-accbtn{background:#fff;border:0;color:#2B2A35;box-shadow:0 3px 0 rgba(43,42,53,.12)}
+.ud-hacts .ud-accbtn:hover{background:#FFF8EC;color:#2B2A35}
+.ud-hacts .ud-accbtn:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(43,42,53,.12)}
+/* the "?" sits on the button's top-right corner, like a badge */
+.ud-hq{position:absolute;top:-9px;right:-9px;z-index:2;width:24px;height:24px;padding:0;border-radius:50%;border:2px solid #fff;background:#2B2A35;color:#fff;font:800 12.5px Figtree,sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(43,42,53,.2);transition:transform .15s,background .15s}
+.ud-hq:hover,.ud-hq[aria-expanded="true"]{background:#F0694F;transform:scale(1.08)}
 .ud-hq:focus-visible{outline:3px solid var(--sunny,#FFC94A);outline-offset:2px}
 .ud-why{display:flex;flex-direction:column;gap:8px}
 .ud-why p{display:flex;gap:9px;align-items:flex-start;color:#2B2A35}
