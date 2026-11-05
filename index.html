@@ -321,8 +321,8 @@ html.ud-in .h2-grph,html.ud-in .h2-tool.soon{display:none}
 .ab2-head{display:flex;flex-direction:column;gap:12px}
 .ab2-eye{font:700 13px Figtree,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#C0703A}
 .ab2-eye-m{color:#7A6A5E}
-.ab2-h1{font:600 34px/1.12 Fredoka,sans-serif;color:var(--ink);margin:0;max-width:640px}
-.ab2-h1 mark{background:linear-gradient(transparent 52%,var(--sunny) 52%);color:inherit;padding:0 4px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.ab2-h1{font:600 30px/1.15 Fredoka,sans-serif;color:var(--ink);margin:0;max-width:880px}
+.ab2-h1 mark{white-space:nowrap;background:linear-gradient(transparent 52%,var(--sunny) 52%);color:inherit;padding:0 4px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
 .ab2-cards{display:grid;gap:16px}
 .ab2-card{background:#fff;border-radius:24px;padding:26px 24px;display:flex;flex-direction:column;gap:12px}
 .ab2-card.ab2-peach{background:#FCE7DB}
@@ -341,7 +341,7 @@ html.ud-in .h2-grph,html.ud-in .h2-tool.soon{display:none}
 .ab2-ghost{background:transparent;border:1.5px solid #6B6875;color:#fff}
 .ab2-ghost:hover{border-color:#fff;color:#fff;background:rgba(255,255,255,.06)}
 @media(min-width:760px){
-  .ab2-h1{font-size:54px;line-height:1.1}
+  .ab2-h1{font-size:40px;line-height:1.15}
   .ab2-cards{grid-template-columns:1fr 1fr;gap:24px}
   .ab2-card{padding:34px 34px}
   .ab2-tl{grid-template-columns:1fr 1fr 1fr}
@@ -402,8 +402,8 @@ html,body,a,button,input,select,textarea,label,[role=button],[data-act]{touch-ac
 .ab-creds .can-list div{font-size:14px}
 @media(min-width:960px){.ab-hero{align-items:start}}
 </style>
-<link rel="stylesheet" href="/lu-app.css?v=19">
-<script>/* desktop computers (mouse or trackpad) keep the desktop layout down to 640px wide, e.g. in a half-screen window; phones and tablets are unchanged */(function(){try{var c=matchMedia("(pointer:coarse)").matches,f=localStorage.getItem("lu_force_app")==="1"||/[?&]app=(1|phone|tablet)/.test(location.search);if(c||f||Math.min(screen.width,screen.height)<600)return;window.LU_DESK=!0;document.documentElement.classList.add("lu-desk");var mm=window.matchMedia.bind(window),fx=function(q){return String(q).replace(/min-width:\s*960px/g,"min-width:640px").replace(/max-width:\s*959px/g,"max-width:639px")};window.matchMedia=function(q){return mm(fx(q))};function walk(rs){for(var i=0;i<rs.length;i++){var r=rs[i];if(r.media&&r.cssRules){var t=r.media.mediaText,n=fx(t.replace(/:\s+/g,":"));if(n!==t.replace(/:\s+/g,":"))r.media.mediaText=n;walk(r.cssRules)}else if(r.cssRules)walk(r.cssRules)}}function all(){for(var i=0;i<document.styleSheets.length;i++){try{walk(document.styleSheets[i].cssRules)}catch(e){}}}window.LU_deskCSS=all;all();document.addEventListener("load",function(e){e.target&&e.target.tagName==="LINK"&&all()},!0);document.addEventListener("DOMContentLoaded",all);window.addEventListener("load",all)}catch(e){}})();</script>
+<link rel="stylesheet" href="/lu-app.css?v=20">
+<script>/* desktop computers (mouse or trackpad) keep the desktop layout down to 560px wide, e.g. in a half-screen window; phones and tablets are unchanged */(function(){try{var c=matchMedia("(pointer:coarse)").matches,f=localStorage.getItem("lu_force_app")==="1"||/[?&]app=(1|phone|tablet)/.test(location.search);if(c||f||Math.min(screen.width,screen.height)<600)return;window.LU_DESK=!0;document.documentElement.classList.add("lu-desk");var mm=window.matchMedia.bind(window),fx=function(q){return String(q).replace(/min-width:\s*960px/g,"min-width:560px").replace(/max-width:\s*959px/g,"max-width:559px")};window.matchMedia=function(q){return mm(fx(q))};function walk(rs){for(var i=0;i<rs.length;i++){var r=rs[i];if(r.media&&r.cssRules){var t=r.media.mediaText,n=fx(t.replace(/:\s+/g,":"));if(n!==t.replace(/:\s+/g,":"))r.media.mediaText=n;walk(r.cssRules)}else if(r.cssRules)walk(r.cssRules)}}function all(){for(var i=0;i<document.styleSheets.length;i++){try{walk(document.styleSheets[i].cssRules)}catch(e){}}}window.LU_deskCSS=all;all();document.addEventListener("load",function(e){e.target&&e.target.tagName==="LINK"&&all()},!0);document.addEventListener("DOMContentLoaded",all);window.addEventListener("load",all)}catch(e){}})();</script>
 <script>(function(){try{if(window.LU_DESK)return;var w=innerWidth,c=matchMedia("(pointer:coarse)").matches,f=localStorage.getItem("lu_force_app")==="1"||/[?&]app=(1|phone|tablet)/.test(location.search);if(w<760||((c||f)&&w<=1400)){var d=document.documentElement;d.classList.add("lu-app",w<760?"lu-phone":w>innerHeight?"lu-land":"lu-port")}}catch(e){}})();</script>
 </head>
 <body>

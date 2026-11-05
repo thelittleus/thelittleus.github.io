@@ -611,3 +611,88 @@ html.ud-out .ud-way.plus{border-color:#ECE6DC;background:#fff}
 
 /* homepage closing: with Meet Kal removed, the Upgrade card has the row to itself */
 html.ud-home .closing{grid-template-columns:minmax(0,1fr)!important}
+
+/* ===== narrow desktop windows (mouse or trackpad, 640-1099px wide, e.g. half screen) =====
+   html.lu-desk is only set on computers (see the first script in index.html); phones and tablets never get these rules. */
+@media (max-width:1099px){
+  html.lu-desk{--pad:24px}
+  html.lu-desk .hdr2{gap:18px;padding-left:24px;padding-right:24px}
+  html.lu-desk .nav2{gap:18px}
+  html.lu-desk .nav2>a,html.lu-desk .navdd>button{font-size:14.5px}
+  html.lu-desk .search2{min-width:150px}
+  html.lu-desk .h2-hero-wrap{padding-left:24px;padding-right:24px}
+  html.lu-desk.ud-out .h2-hero{grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);row-gap:0;column-gap:24px;padding:28px 28px 26px!important}
+  html.lu-desk.ud-out .ud-heroimg{max-width:100%}
+  html.lu-desk.ud-in .h2-groups,html.lu-desk.ud-in .h2-tools{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+  /* log in / sign up: smaller welcome panel next to the form */
+  html.lu-desk .la-auth{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px;padding:28px 24px 56px}
+  html.lu-desk .la-side{padding:36px;min-height:0}
+  html.lu-desk .la-side h2{font-size:32px}
+  /* shop: slimmer filter column, fewer cards per row */
+  html.lu-desk .cat-layout{grid-template-columns:220px minmax(0,1fr)!important;column-gap:28px!important}
+  html.lu-desk .cat-layout .grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+}
+@media (max-width:899px){
+  html.lu-desk .cat-layout{grid-template-columns:190px minmax(0,1fr)!important;column-gap:22px!important}
+  html.lu-desk .cat-layout .grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:16px!important}
+  /* product page: pictures on top, details underneath */
+  html.lu-desk .pdp{grid-template-columns:minmax(0,1fr)!important;row-gap:28px}
+  html.lu-desk .pdp .gallery{max-width:500px}
+  html.lu-desk .pdp-info{position:static!important}
+  /* Little Us Plus: the comparison table, then the plan picker underneath */
+  html.lu-desk .la-plans{grid-template-columns:minmax(0,1fr)!important;row-gap:24px}
+  html.lu-desk .la-plans>*{position:static!important;max-width:620px;width:100%}
+  /* Request a resource: the story, then the form */
+  html.lu-desk .rq-grid{grid-template-columns:minmax(0,1fr)}
+  html.lu-desk .rq-right{position:static}
+  html.lu-desk .rq-hero{min-height:0}
+  html.lu-desk .rq-hero h1{font-size:34px}
+}
+@media (max-width:1023px){
+  /* the search box gets its own full-width row under the menu */
+  html.lu-desk .hdr2{flex-wrap:wrap;row-gap:12px;padding-top:14px;padding-bottom:12px}
+  html.lu-desk .hdr2>span:empty{flex:1}
+  html.lu-desk .hdr2 .search2{order:9;flex:1 1 100%;max-width:none;height:42px}
+}
+@media (max-width:899px){
+  html.lu-desk .h2-tools{grid-template-columns:repeat(3,minmax(0,1fr))}
+  html.lu-desk .tl-page{padding-left:24px;padding-right:24px}
+  /* "Popular resources": the title on its own line, the note and the link underneath */
+  html.lu-desk .h2-head{flex-wrap:wrap;row-gap:6px}
+  html.lu-desk .h2-head>h2{flex:1 1 100%;white-space:nowrap}
+  html.lu-desk .h2-head>.ud-popsub{flex:1 1 260px;margin:0}
+}
+@media (max-width:759px){
+  html.lu-desk{--pad:20px}
+  html.lu-desk .hdr2{column-gap:12px;padding-left:20px;padding-right:20px}
+  html.lu-desk .hdr2 .logo-d{width:96px;height:auto}
+  html.lu-desk .hdr2>span:empty{flex:1 1 0;min-width:0;width:0}
+  html.lu-desk .nav2{gap:2px}
+  html.lu-desk .nav2>a,html.lu-desk .navdd>button{font-size:14px;padding-left:8px;padding-right:8px}
+  html.lu-desk .la-hdr-login{padding:0 10px!important}
+  html.lu-desk .la-hdr-login span{display:none}
+  /* tool pop-ups stay centred windows, not phone-style bottom sheets */
+  html.lu-desk .tl-sheetwrap:not(.full) .tl-sheet{left:16px;right:16px;width:auto;margin:0}
+  html.lu-desk .tl-sheetwrap.setupmodal .tl-sheet{top:4vh;bottom:4vh;height:auto;max-height:none;border-radius:26px;transform:translateY(24px) scale(.98);opacity:0;transition:transform .22s ease,opacity .22s ease;box-shadow:0 24px 60px rgba(0,0,0,.25)}
+  html.lu-desk .tl-sheetwrap.setupmodal.open .tl-sheet{transform:none;opacity:1}
+  html.lu-desk .tl-sheetwrap.setupmodal .tl-handle{display:none}
+  html.lu-desk .la-auth{grid-template-columns:minmax(0,460px);justify-content:center}
+  html.lu-desk .la-side{display:none}
+  html.lu-desk .h2-hero-wrap{padding-left:20px;padding-right:20px}
+  html.lu-desk.ud-in .h2-groups,html.lu-desk.ud-in .h2-tools{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  html.lu-desk .tl-tlist{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:639px){
+  html.lu-desk .hdr2{column-gap:10px;padding-left:16px;padding-right:16px}
+  html.lu-desk .hdr2 .logo-d{width:84px}
+  html.lu-desk .nav2>a,html.lu-desk .navdd>button{font-size:13.5px;padding-left:6px;padding-right:6px}
+  html.lu-desk .hdr2>span:empty{display:none}
+  html.lu-desk .hdr2 .lang-tog{margin-left:auto}
+  html.lu-desk .nav2>a,html.lu-desk .navdd>button{padding-left:5px;padding-right:5px}
+  html.lu-desk .h2-tools{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:699px){
+  html.lu-desk .pdp-cards,html.lu-desk .xlinks,html.lu-desk .rq-steps{grid-template-columns:minmax(0,1fr)!important}
+  html.lu-desk.ud-out .h2-hero{grid-template-columns:1fr;row-gap:16px;padding:24px 24px 22px!important}
+  html.lu-desk.ud-out .ud-heroimg{max-width:340px;margin:0 auto}
+}
