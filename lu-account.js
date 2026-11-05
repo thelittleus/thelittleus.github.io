@@ -133,7 +133,9 @@
     cmp: [
       [['Visual tools', 'Alat visual'], ['All tools', 'Semua alat'], ['All tools', 'Semua alat']],
       [['Tool styles', 'Gaya alat'], ['Starter set', 'Set dasar'], ['~60% more', '~60% lebih banyak']],
-      [['Child profiles', 'Profil anak'], ['1 child', '1 anak'], ['More than 1 child', 'Lebih dari 1 anak']],
+      [['Child profiles', 'Profil anak'], ['1 child', '1 anak'], ['Up to 6 children', 'Hingga 6 anak']],
+      [['Your own photos', 'Foto sendiri'], ['Not included', 'Tidak termasuk'], ['Add your own photos', 'Tambah foto sendiri']],
+      [['Your own game questions', 'Pertanyaan permainan sendiri'], ['Not included', 'Tidak termasuk'], ['Write your own', 'Tulis sendiri']],
       [['Resources', 'Materi'], ['Free resources only', 'Hanya materi gratis'], ['All resources', 'Semua materi']],
       [['Every device', 'Semua perangkat'], ['Included', 'Termasuk'], ['Included', 'Termasuk']]
     ],
@@ -181,7 +183,14 @@
     accLockH: [function (n) { return n + ' comes with a free account'; }, function (n) { return n + ' tersedia dengan akun gratis'; }],
     accLockP: ['Create a free account (it takes a minute) and this style is yours on every device.', 'Buat akun gratis (cukup semenit) dan gaya ini bisa kamu pakai di semua perangkat.'],
     childLockH: ['More than one child comes with Little Us Plus', 'Lebih dari satu anak termasuk Little Us Plus'],
-    childLockP: ['A free account has one child profile. Plus gives every child their own profile, cards and rewards.', 'Akun gratis punya satu profil anak. Dengan Plus, setiap anak punya profil, kartu, dan hadiahnya sendiri.'],
+    childMaxH: [function (n) { return 'Plus covers up to ' + n + ' children'; }, function (n) { return 'Plus mencakup hingga ' + n + ' anak'; }],
+    childMaxP: [function (n) { return 'One Little Us Plus pass is for one family or one practitioner, with up to ' + n + ' child profiles. Running a centre or school? Get in touch and we will set you up.'; }, function (n) { return 'Satu pass Little Us Plus untuk satu keluarga atau satu praktisi, dengan hingga ' + n + ' profil anak. Mengelola pusat terapi atau sekolah? Hubungi kami dan kami bantu siapkan.'; }],
+    childMaxC: ['Contact us about a centre', 'Hubungi kami untuk pusat terapi'], okGotIt: ['OK, got it', 'Oke, mengerti'],
+    photoLockH: ['Your own photos come with Little Us Plus', 'Foto sendiri termasuk Little Us Plus'],
+    qLockH: ['Your own questions come with Little Us Plus', 'Pertanyaan sendiri termasuk Little Us Plus'],
+    qLockP: ['Write questions about your child’s own friends, school and family, and play them in every game. Free accounts can play all the ready-made questions.', 'Tulis pertanyaan tentang teman, sekolah, dan keluarga anakmu sendiri, lalu mainkan di setiap permainan. Akun gratis bisa memainkan semua pertanyaan yang sudah tersedia.'],
+    photoLockP: ['Turn photos of your child’s own things, people and places into picture cards. Free accounts can use every Little Us picture and make text cards.', 'Ubah foto barang, orang, dan tempat milik anakmu menjadi kartu bergambar. Akun gratis tetap bisa memakai semua gambar Little Us dan membuat kartu teks.'],
+    childLockP: ['A free account has one child profile. Plus gives up to 6 children their own profile, cards and rewards.', 'Akun gratis punya satu profil anak. Dengan Plus, hingga 6 anak punya profil, kartu, dan hadiahnya sendiri.'],
     twoWays: ['Two ways to get this', 'Dua cara mendapatkannya'], inclPlus: ['Included with Little Us Plus', 'Termasuk Little Us Plus'],
     inclPlusP: [function (p) { return 'This and every other worksheet, plus more tool styles. From ' + p + '.'; }, function (p) { return 'Ini dan semua lembar kerja lainnya, plus lebih banyak gaya alat. Mulai ' + p + '.'; }],
     justThis: ['Buy just this one', 'Beli yang ini saja'], yoursKeep: ['yours to keep', 'jadi milikmu'], buyNow: ['Buy now', 'Beli sekarang'],
@@ -361,7 +370,7 @@
     function price(m, usd) { return idr ? rupiah(idr[m]) : money(usd); }
     function perMo(m, usd) { return idr ? rupiah(Math.round(idr[m] / m / 100) * 100) + per : money(usd / m).replace(/^≈ /, '') + per; }
     return {
-      childLimit: s.free_child_limit || 1,
+      childLimit: s.free_child_limit || 1, plusChildLimit: Number(s.plus_child_limit) || 6,
       url3: s.gumroad_3m_url || '', url12: s.gumroad_12m_url || '', midtrans: !!s.midtrans_enabled,
       usd3: u3, usd6: u6, usd12: u12, url6: s.gumroad_6m_url || '',
       p3: price(3, u3), p6: price(6, u6), p12: price(12, u12),
@@ -450,7 +459,9 @@
     }).catch(function () {});
   }
   function childCount() { var s = store.json(TKEY, null); return (s && s.profiles && s.profiles.length) || 0; }
-  function canAddChild() { return isPlus() || childCount() < settings().childLimit; }
+  // Free: 1 child (free_child_limit). Plus: up to 6 (plus_child_limit), so one pass is for one family or practitioner, not a whole centre.
+  function canAddChild() { var st = settings(); return childCount() < (isPlus() ? st.plusChildLimit : st.childLimit); }
+  function canUsePhotos() { return !ON || isPlus(); }
 
   // Styles that a parent can no longer use go back to a free one (e.g. Dino → Bunny).
   var FALLBACK = { timer: ['bunny', 'circle', 'sand', 'bar'], tokens: ['star', 'flower'], breathe: ['balloon', 'star'] };
@@ -765,7 +776,18 @@
   }
   function childLockSheet() {
     var st = settings();
+    if (isPlus()) return sheet('<div>' + pill('plus') + '</div><h2>' + esc(t('childMaxH', st.plusChildLimit)) + '</h2><p class="la-p">' + esc(t('childMaxP', st.plusChildLimit)) + '</p>' +
+      '<a class="la-btn soft block" href="#/contact?topic=centre" data-close>' + esc(t('childMaxC')) + '</a><button type="button" class="la-btn primary block" data-close>' + esc(t('okGotIt')) + '</button>');
     return sheet('<div>' + pill('plus') + '</div><h2>' + esc(t('childLockH')) + '</h2><p class="la-p">' + esc(t('childLockP')) + '</p>' +
+      '<a class="la-btn primary block" href="#/plus" data-close>' + esc(t('getPlus')) + '</a><button type="button" class="la-btn soft block" data-close>' + esc(t('notNow')) + '</button>' +
+      '<p class="la-small" style="text-align:center;margin:0">' + esc(t('fromNote', st.p3)) + '</p>');
+  }
+
+  // adding your own photos (camera or gallery) and your own Conversation Starters questions are part of Plus;
+  // Little Us pictures, text cards and the ready-made questions stay free
+  function photoLockSheet(kind) {
+    var st = settings(), q = kind === 'questions';
+    return sheet('<div>' + pill('plus') + '</div><h2>' + esc(t(q ? 'qLockH' : 'photoLockH')) + '</h2><p class="la-p">' + esc(t(q ? 'qLockP' : 'photoLockP')) + '</p>' +
       '<a class="la-btn primary block" href="#/plus" data-close>' + esc(t('getPlus')) + '</a><button type="button" class="la-btn soft block" data-close>' + esc(t('notNow')) + '</button>' +
       '<p class="la-small" style="text-align:center;margin:0">' + esc(t('fromNote', st.p3)) + '</p>');
   }
@@ -852,9 +874,9 @@
     })();
   }
   function afterLogin() {
-    var pend = store.json('lu_pending_plan', null);
+    var pend = ss.json('lu_pending_plan', null); ss.del('lu_pending_plan'); store.del('lu_pending_plan');
     return Promise.all([loadAccount(), pullState('login'), loadFeatures(true)]).then(function () {
-      if (pend && Date.now() - pend.at < 24 * 3600 * 1000) { store.del('lu_pending_plan'); go('#/plus?plan=' + pend.plan + '&go=1', true); return; }
+      if (pend && Date.now() - pend.at < 30 * 60 * 1000) { go('#/plus?plan=' + pend.plan, true); return; }
       var next = ss.json('lu_after_login', null); ss.del('lu_after_login');
       go(next || '#/', true);
     });
@@ -1093,7 +1115,8 @@
   }
   function startCheckout(plan, auto) {
     if (!signedIn()) {
-      store.setJson('lu_pending_plan', { plan: plan, at: Date.now() });
+      // remembered only in this tab, so a later sign-in does not jump to the plan (and never opens payment by itself)
+      ss.setJson('lu_pending_plan', { plan: plan, at: Date.now() });
       var st = settings(), price = st['p' + planMonths(plan)];
       var sh = sheet('<div><span class="la-own2" style="display:inline-flex;padding:6px 12px;border-radius:999px">' + pill('plus') + ' <b style="font-size:14px">' + esc(planName(plan)) + ' · ' + esc(price) + '</b></span></div>' +
         '<h2>' + esc(t('quickStep')) + '</h2><p class="la-p">' + esc(t('quickStepP')) + '</p>' +
@@ -1424,7 +1447,7 @@
     }
     if (window.LUTools && LUTools.api && LUTools.api.openProfiles) return show();
     if (!window.luLoad) return show();
-    luLoad('/tools.css?v=18').then(function () { return luLoad('/tools-art.js?v=21'); }).then(function () { return luLoad('/tools.js?v=21'); })
+    luLoad('/tools.css?v=19').then(function () { return luLoad('/tools-art.js?v=22'); }).then(function () { return luLoad('/tools.js?v=22'); })
       .then(function () { var a = window.LUTools && LUTools.api; return a && a.photosLoad ? a.photosLoad() : null; }).then(show, show);
   }
   function homeRender() {
@@ -1520,8 +1543,8 @@
         return http('/rest/v1/user_state?select=updated_at&user_id=eq.' + u.id).then(function (rows) { return rows && rows.length ? pullState('login') : (hadLocal ? pushState() : null); });
       }).then(function () {
         toast(t('confirmedToast'), 'success');
-        var pend = store.json('lu_pending_plan', null);
-        if (pend && Date.now() - pend.at < 24 * 3600 * 1000) { store.del('lu_pending_plan'); go('#/plus?plan=' + pend.plan + '&go=1', true); return; }
+        var pend = ss.json('lu_pending_plan', null); ss.del('lu_pending_plan'); store.del('lu_pending_plan');
+        if (pend && Date.now() - pend.at < 30 * 60 * 1000) { go('#/plus?plan=' + pend.plan, true); return; }
         if (window.LU && LU.route === 'welcome') go('#/', true);
         emit();
       });
@@ -1557,7 +1580,7 @@
   window.LUAcc = {
     get ready() { return !!FEAT.list.length; },
     signedIn: signedIn, me: me, status: status, isPlus: isPlus, plusUntil: plusUntil, allowed: allowed, access: access,
-    canAddChild: canAddChild, childLimit: function () { return settings().childLimit; }, childLockSheet: childLockSheet, lockSheet: lockSheet,
+    canAddChild: canAddChild, canUsePhotos: canUsePhotos, canUsePlus: canUsePhotos, photoLockSheet: photoLockSheet, plusLockSheet: photoLockSheet, childLimit: function () { return settings().childLimit; }, childLockSheet: childLockSheet, lockSheet: lockSheet,
     stateChanged: stateChanged, pullState: pullState, fixState: fixState,
     headerHTML: headerHTML, logoBadge: logoBadge, tabPlus: tabPlus, settingsCard: settingsCard, homeRender: homeRender,
     face: face,

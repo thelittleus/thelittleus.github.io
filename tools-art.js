@@ -903,7 +903,7 @@
     } },
     { id: 'petak-umpet', cat: 'play', en: 'Hide and seek', idn: 'Petak umpet', kid: true, tags: 'hide seek game petak umpet sembunyi', draw: function (g) {
       return G('translate(62 40) scale(1.1)', head(g, { mouth: 'smile' })) + O(40, 58, 5.5, C.skin) + O(84, 58, 5.5, C.skin) +
-        P('M8 104C4 86 14 72 28 74 30 60 46 54 56 62 62 52 80 52 86 64 100 60 114 72 110 88 116 96 112 104Z', C.green) +
+        P('M8 104C4 86 14 72 28 74C30 60 46 54 56 62C62 52 80 52 86 64C100 60 114 72 110 88L112 104Z', C.green) +
         P('M28 90q6-6 12 0M66 84q6-6 12 0M92 92q6-6 10 0', 'none', ' stroke="' + C.greenD + '"' + SW(2.4)) + E(60, 108, 52, 4, K, NS + ' opacity=".12"');
     } },
     { id: 'menari', cat: 'play', en: 'Dance', idn: 'Menari', kid: true, tags: 'dance move music menari joget', draw: function (g) {
@@ -1420,6 +1420,25 @@
       var c = BY[id];
       if (!c) return '';
       return wrap(c.draw(opts.gender === 'girl' ? 'girl' : 'boy'), TINT[c.cat], c.n, opts);
+    },
+    // the Token Board in miniature, for previews: the chosen reward on the left, a row of tokens (some earned) on the right
+    tokenBoard: function (opts) {
+      opts = opts || {};
+      var reward = opts.reward || 'ayunan', count = opts.count || 5, earned = opts.earned == null ? 3 : opts.earned, lang = opts.lang === 'id' ? 'id' : 'en';
+      function nest(svg, x, y, s) { return svg.replace('<svg ', '<svg x="' + x + '" y="' + y + '" width="' + s + '" height="' + s + '" '); }
+      var stars = ''; for (var i = 0; i < count; i++) stars += nest(window.LUArt.token(opts.shape || 'star', i < earned), 91 + i * 19, 38, 20);
+      var label = lang === 'id' ? earned + ' dari ' + count : earned + ' of ' + count;
+      return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 116" aria-hidden="true">' +
+        '<rect x="6" y="10" width="188" height="100" rx="18" fill="#2B2A35" opacity=".12"/>' +
+        '<rect x="3" y="5" width="188" height="100" rx="18" fill="#fff" stroke="' + K + '" stroke-width="3"/>' +
+        '<rect x="12" y="14" width="72" height="82" rx="14" fill="' + C.yellowL + '" stroke="' + K + '" stroke-width="2.5"/>' +
+        nest(window.LUArt.svg(reward, { gender: opts.gender }), 12, 18, 72) +
+        '<rect x="92" y="16" width="64" height="14" rx="7" fill="' + C.yellow + '" stroke="' + K + '" stroke-width="2.2"/>' +
+        stars +
+        '<rect x="92" y="70" width="96" height="10" rx="5" fill="#F1ECE3" stroke="' + K + '" stroke-width="2"/>' +
+        '<rect x="92" y="70" width="' + Math.round(96 * earned / count) + '" height="10" rx="5" fill="' + C.green + '" stroke="' + K + '" stroke-width="2"/>' +
+        '<text x="92" y="98" font-family="Figtree, sans-serif" font-weight="800" font-size="13" fill="' + K + '">' + label + '</text>' +
+        '<circle cx="174" cy="22" r="8" fill="' + C.coral + '" stroke="' + K + '" stroke-width="2.4"/></svg>';
     },
     token: function (shape, on, opts) {
       opts = opts || {};

@@ -136,7 +136,7 @@
   function accStatus() { var a = acc(); try { return a ? a.status() : 'none'; } catch (e) { return 'none'; } }
   function load() {
     if (!window.luLoad) return Promise.resolve();
-    return luLoad('/tools.css?v=18').then(function () { return luLoad('/tools-art.js?v=21'); }).then(function () { return luLoad('/tools.js?v=21'); })
+    return luLoad('/tools.css?v=19').then(function () { return luLoad('/tools-art.js?v=22'); }).then(function () { return luLoad('/tools.js?v=22'); })
       .then(function () { return luLoad('/tools-calm.js?v=15'); }).then(function () { var a = api(); return a && a.photosLoad ? a.photosLoad() : null; }).catch(function () { });
   }
   function photo(p) { var a = api(); return p && p.photo && a && a.PH && a.PH[p.photo] ? a.PH[p.photo] : ''; }
@@ -152,7 +152,7 @@
     var a = api(), Ar = A(), C = window.LUCalm && LUCalm.art;
     try {
       if (k === 'timer') return '<div class="ua-art timer">' + fit(a.timerSVG('circle', 0.72)) + '</div>';
-      if (k === 'tokens') return '<div class="ua-art tok">' + [1, 1, 1, 0, 0, 0].map(function (o) { return '<i>' + fit(Ar.token('star', !!o)) + '</i>'; }).join('') + '</div>';
+      if (k === 'tokens') return '<div class="ua-art one">' + fit(Ar.tokenBoard ? Ar.tokenBoard({ lang: lang(), gender: kid() }) : Ar.toolArt('tokens')) + '</div>';
       if (k === 'ft') return '<div class="ua-art ft"><i>' + fit(Ar.svg('mandi', { gender: kid() })) + '</i><b>→</b><i class="on">' + fit(Ar.svg('main', { gender: kid() })) + '</i></div>';
       if (k === 'sched') return '<div class="ua-art sch">' + ['sarapan', 'pakai-baju', 'sekolah'].map(function (id, i) { return '<span class="' + (i === 1 ? 'on' : '') + '"><i>' + fit(Ar.svg(id, { gender: kid(), noBg: true })) + '</i><u></u></span>'; }).join('') + '</div>';
       if (k === 'breathe' && C) return '<div class="ua-art one">' + fit(C.buddySVG('balloon')) + '</div>';
@@ -767,4 +767,19 @@
   setInterval(function () { if (document.visibilityState === 'visible') scan(); }, 3000);
   window.addEventListener('hashchange', function () { setTimeout(scan, 600); });
   setTimeout(scan, 1200);
+})();
+
+/* Scroll safety net: a full-screen game (cs-lock), the child view (tl-childon) or the phone menu (locked) stop the page
+   from scrolling while they are open. If one of them is left by a link (e.g. "Back to tools") without cleaning up,
+   remove the lock once its screen is gone, so the homepage can always scroll. */
+(function () {
+  function unlock() {
+    var html = document.documentElement, body = document.body; if (!body) return;
+    if (html.classList.contains('cs-lock') && !document.querySelector('.cs-app.cs-full')) html.classList.remove('cs-lock');
+    if (body.classList.contains('tl-childon') && !document.getElementById('tl-child')) body.classList.remove('tl-childon');
+    if (body.classList.contains('locked')) { var dr = document.getElementById('drawer'); if (!dr || dr.getAttribute('aria-hidden') === 'true') body.classList.remove('locked'); }
+  }
+  ['popstate', 'hashchange', 'pageshow', 'focus'].forEach(function (ev) { window.addEventListener(ev, function () { setTimeout(unlock, 50); setTimeout(unlock, 600); }); });
+  document.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('a[href], [data-back], [data-exit]')) { setTimeout(unlock, 300); setTimeout(unlock, 1200); } }, true);
+  setInterval(unlock, 1500);
 })();

@@ -536,7 +536,9 @@
   }
 
   /* ---------- add your own photo: source → crop → name ---------- */
+  // every photo the grown-up adds (camera or gallery) comes through here: it is a Little Us Plus feature
   function pickFile(capture, cb) {
+    if (PLUS_ON && window.LUAcc && LUAcc.canUsePhotos && !LUAcc.canUsePhotos()) { LUAcc.photoLockSheet(); return; }
     var f = document.createElement('input');
     f.type = 'file'; f.accept = 'image/*';
     if (capture) f.setAttribute('capture', 'environment');

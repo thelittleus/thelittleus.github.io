@@ -1045,3 +1045,14 @@ body.tl-childon{overflow:hidden}
   .tl-tlist .tl-soon{grid-area:open;justify-self:end;padding:8px 14px;font-size:13px}
   .tl-tlist .tl-trow.soon:hover{background:#fff}
 }
+
+/* option switches (e.g. Calm stars / Soft chime / Quiet): a soft beige track, the chosen option a white tab with a check */
+.tl-seg,.ua-seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:4px;padding:6px;border-radius:18px;background:#EAE2D6}
+.tl-seg button,.ua-seg button,.tl-kidrow.top .tl-seg button,.ua-seg.wide button{display:flex;align-items:center;justify-content:center;gap:8px;min-height:48px;height:auto;padding:8px 12px;border:0;border-radius:13px;background:transparent;box-shadow:none;font:700 15px Figtree,sans-serif;color:#6B6875;cursor:pointer;transition:background-color .15s,color .15s}
+.tl-seg button:hover,.ua-seg button:hover{color:#2B2A35}
+.tl-seg button.on,.ua-seg button.on,.tl-kidrow.top .tl-seg button.on,.ua-seg.wide button.on{background:#FFFDF8;color:#2B2A35;border:0;box-shadow:0 2px 6px rgba(43,42,53,.12)}
+.tl-seg button.on::before,.ua-seg button.on::before{content:"";flex:none;width:18px;height:18px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Ccircle cx='10' cy='10' r='10' fill='%232B2A35'/%3E%3Cpath d='M5.6 10.4l2.9 2.9 5.9-6.2' fill='none' stroke='%23fff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat}
+.tl-seg button:has(small){flex-direction:column;gap:1px;position:relative}
+.tl-seg button.on:has(small)::before{position:absolute;left:10px;top:50%;margin-top:-9px}
+.tl-seg button:focus-visible,.ua-seg button:focus-visible{outline:3px solid var(--sunny,#FFC94A);outline-offset:2px}
+@media (max-width:420px){.tl-seg button,.ua-seg button{font-size:14px;padding:8px 6px;gap:6px}.tl-seg button.on::before,.ua-seg button.on::before{width:16px;height:16px}}
