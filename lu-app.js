@@ -611,7 +611,7 @@
       '<div class="ud-way"><div class="ud-wh"><b>' + esc(dt('justStart')) + '</b><em class="ud-tag">' + esc(dt('noAccount')) + '</em></div><p>' + esc(dt('justStartP')) + '</p><a class="btn btn-primary" href="#/tools">' + esc(dt('tryTools')) + '</a></div>' +
       '<div class="ud-way"><div class="ud-wh"><b>' + esc(dt('freeAcc')) + '</b><em class="ud-tag green">' + esc(isId() ? 'GRATIS' : 'FREE') + '</em></div><p>' + esc(dt('freeAccP')) + '</p><a class="btn btn-primary" href="#/signup">' + esc(dt('makeAcc')) + '</a></div>' +
       '<div class="ud-way plus"><div class="ud-wh"><b>' + esc(dt('upgradeH')) + '</b><em class="ud-plus">PLUS</em></div><p>' + esc(dt('upgradeP')) + '</p><a class="btn btn-primary" href="#/plus">' + esc(dt('seePlans')) + '</a></div></div>';
-    hero.appendChild(ways);
+    hero.insertAdjacentElement('afterend', ways); // the three ways sit in their own row under the banner
     // Popular resources: the Plus line under the heading
     var ph = main.querySelector('#hPop');
     if (ph && st !== 'plus' && st !== 'expiring') ph.insertAdjacentHTML('afterend', '<p class="ud-popsub ud-x">' + dt('popSub') + ' <a href="#/plus">' + esc(dt('seePlans0')) + '</a></p>');
@@ -681,6 +681,9 @@
     }).join('') + '<span class="ud-bfly">' + bfly + '</span></div>';
   }
   function deskArt(main, Ar) {
+    // banner picture: a grown-up and child with a tablet (hero-family.webp, transparent background)
+    var hart = main.querySelector('.h2-hero .h2-art');
+    if (hart && !hart.querySelector('.ud-heroimg')) hart.insertAdjacentHTML('beforeend', '<img class="ud-heroimg ud-x" src="/hero-family.webp" width="933" height="560" alt="" fetchpriority="high" decoding="async">');
     if (!Ar) return;
     flatHills(main);
     var cov = main.querySelector('#heroCover');

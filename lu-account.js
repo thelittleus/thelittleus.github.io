@@ -366,7 +366,7 @@
     var s = FEAT.settings || {};
     var u3 = Number(s.usd_3m) || 7, u6 = Number(s.usd_6m) || 11, u12 = Number(s.usd_12m) || 21, per = L() === 'id' ? '/bln' : '/mo';
     // visitors in Indonesia see (and pay through Midtrans) Indonesia's own rupiah prices
-    var idr = LOCALCUR === 'IDR' ? { 3: Number(s.idr_3m) || 79000, 6: Number(s.idr_6m) || 149000, 12: Number(s.idr_12m) || 279000 } : null;
+    var idr = LOCALCUR === 'IDR' ? { 3: Number(s.idr_3m) || 79000, 6: Number(s.idr_6m) || 139000, 12: Number(s.idr_12m) || 259000 } : null;
     function price(m, usd) { return idr ? rupiah(idr[m]) : money(usd); }
     function perMo(m, usd) { return idr ? rupiah(Math.round(idr[m] / m / 100) * 100) + per : money(usd / m).replace(/^≈ /, '') + per; }
     return {
