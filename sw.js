@@ -1,8 +1,10 @@
 /* Little Us · service worker
-   Lets the free tools open without internet once they have been opened before.
+   Lets the free tools open without internet once they have been opened before, and makes repeat visits fast.
    It never caches the admin page, the shop database or payments. */
-const CACHE = 'littleus-v26';
-const ASSETS = ['/', '/tools.js?v=19', '/lu-account.js?v=8', '/tools-calm.js?v=15', '/tools-talk.js?v=5', '/lu-app.js?v=11', '/lu-app.css?v=10', '/tools-art.js?v=19', '/tools-print.js?v=13', '/tools.css?v=17', '/articles.js?v=14', '/logo.png'];
+const CACHE = 'littleus-v30';
+const IMAGES = 'littleus-img-v1';
+// the files every visit needs; tool scripts (calm, Conversation Starters, printing, articles, legal) are cached the first time they are used
+const ASSETS = ['/', '/tools.js?v=21', '/lu-account.js?v=11', '/lu-app.js?v=14', '/lu-app.css?v=13', '/tools-art.js?v=21', '/tools.css?v=18', '/logo.png'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(ASSETS)).catch(() => {}).then(() => self.skipWaiting()));
@@ -10,10 +12,23 @@ self.addEventListener('install', (e) => {
 
 self.addEventListener('activate', (e) => {
   e.waitUntil(
-    caches.keys().then((keys) => Promise.all(keys.filter((k) => k.startsWith('littleus-') && k !== CACHE).map((k) => caches.delete(k))))
+    caches.keys().then((keys) => Promise.all(keys.filter((k) => k.startsWith('littleus-') && k !== CACHE && k !== IMAGES).map((k) => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });
+
+// answer from the cache straight away, and refresh the cached copy in the background
+function fromCache(cacheName, req, max) {
+  return caches.open(cacheName).then((c) => c.match(req).then((hit) => {
+    const net = fetch(req).then((res) => {
+      if (res.ok || res.type === 'opaque') {
+        c.put(req, res.clone()).then(() => max && c.keys().then((keys) => { if (keys.length > max) c.delete(keys[0]); }));
+      }
+      return res;
+    }).catch(() => hit);
+    return hit || net;
+  }));
+}
 
 self.addEventListener('fetch', (e) => {
   const req = e.request;
@@ -22,25 +37,27 @@ self.addEventListener('fetch', (e) => {
 
   if (url.origin === self.location.origin) {
     if (url.pathname.startsWith('/admin')) return;
-    // pages: always try the network first so the shop stays up to date
+    // pages: the network first so the site stays up to date, but if it is slow (over 2.5 s) show the saved copy
     if (req.mode === 'navigate') {
-      e.respondWith(
+      e.respondWith(new Promise((resolve) => {
+        let done = false;
+        const fallback = () => caches.match('/').then((hit) => { if (!done && hit) { done = true; resolve(hit); } });
+        const timer = setTimeout(fallback, 2500);
         fetch(req).then((res) => {
+          clearTimeout(timer);
           if (res.ok) { const copy = res.clone(); caches.open(CACHE).then((c) => c.put('/', copy)); }
-          return res;
-        }).catch(() => caches.match('/'))
-      );
+          if (!done) { done = true; resolve(res); }
+        }).catch(() => { clearTimeout(timer); caches.match('/').then((hit) => { if (!done) { done = true; resolve(hit || Response.error()); } }); });
+      }));
       return;
     }
-    // static files: answer from the cache, refresh in the background
-    if (/\.(js|css|png|webp|jpg|svg|woff2?)$/.test(url.pathname)) {
-      e.respondWith(
-        caches.open(CACHE).then((c) => c.match(req).then((hit) => {
-          const net = fetch(req).then((res) => { if (res.ok) c.put(req, res.clone()); return res; }).catch(() => hit);
-          return hit || net;
-        }))
-      );
-    }
+    if (/\.(js|css|png|webp|jpg|svg|woff2?)$/.test(url.pathname)) e.respondWith(fromCache(CACHE, req));
+    return;
+  }
+
+  // product covers and resource pictures from the shop's storage
+  if (/\.supabase\.co$/.test(url.hostname) && url.pathname.indexOf('/storage/v1/object/public/') === 0) {
+    e.respondWith(fromCache(IMAGES, req, 150));
     return;
   }
 

@@ -203,18 +203,35 @@
     return s;
   }
 
+  /* ---------- helpers for the cards added in Nov 2026 ---------- */
+  // a whole child (body + head) centred on x, head at y
+  function kidAt(g, x, y, sc, top, o) { return G('translate(' + x + ' ' + y + ') scale(' + sc + ')', torso(top) + G('translate(0 -2) scale(1.15)', head(g, o || { mouth: 'smile' }))); }
+  function shirt(g) { return g === 'girl' ? C.coralL : C.yellow; }
+  function drop(x, y) { return P('M' + x + ' ' + y + 'C' + (x - 2.5) + ' ' + (y + 4.5) + ' ' + (x - 2.5) + ' ' + (y + 8) + ' ' + x + ' ' + (y + 8) + ' ' + (x + 2.5) + ' ' + (y + 8) + ' ' + (x + 2.5) + ' ' + (y + 4.5) + ' ' + x + ' ' + y + 'Z', C.water, SW(1.8)); }
+  function star(x, y, r, col) { var s = ''; for (var i = 0; i < 10; i++) { var a = -Math.PI / 2 + i * Math.PI / 5, rr = i % 2 ? r * 0.45 : r; s += (i ? 'L' : 'M') + (x + Math.cos(a) * rr).toFixed(1) + ' ' + (y + Math.sin(a) * rr).toFixed(1); } return P(s + 'Z', col, SW(2)); }
+  function steam(x, y) { return P('M' + x + ' ' + y + 'c-4-4 4-6 0-10s4-6 0-10', 'none', ' stroke="' + C.grey + '"' + SW(2.4)); }
+  function bowl(col) { return E(60, 104, 34, 4, K, NS + ' opacity=".12"') + P('M22 62H98C98 86 82 100 60 100 38 100 22 86 22 62Z', col) + R(46, 98, 28, 6, 3, col); }
+  function plate() { return E(60, 74, 52, 26, '#fff') + E(60, 74, 38, 18, 'none', ' stroke="' + C.greyL + '"' + SW(3)); }
+  function leaf(col) { return P('M0 10C-10 4-10-8 0-14 10-8 10 4 0 10ZM0 10V-10', col, SW(2.2)); }
+  function paw() { return O(0, 6, 7, C.brownL, SW(2)) + O(-8, -4, 3.4, C.brownL, SW(1.8)) + O(0, -8, 3.4, C.brownL, SW(1.8)) + O(8, -4, 3.4, C.brownL, SW(1.8)); }
+  function crayon(x, y, col, rot) { return G('rotate(' + rot + ' ' + x + ' ' + y + ')', R(x - 5, y - 22, 10, 36, 3, col) + P('M' + (x - 5) + ' ' + (y + 14) + 'H' + (x + 5) + 'L' + x + ' ' + (y + 24) + 'Z', col) + P('M' + (x - 5) + ' ' + (y - 12) + 'H' + (x + 5), 'none', ' stroke="#fff"' + SW(2))); }
+  function block(x, y, col, letter) { return R(x, y, 30, 30, 5, col) + (letter ? '<text x="' + (x + 15) + '" y="' + (y + 22) + '" text-anchor="middle" font-family="Fredoka, sans-serif" font-weight="600" font-size="20" fill="#fff" stroke="none">' + letter + '</text>' : R(x + 8, y + 8, 14, 14, 3, '#fff', SW(2))); }
+  function note(x, y) { return P('M' + x + ' ' + y + 'V' + (y - 16) + 'L' + (x + 10) + ' ' + (y - 19) + 'V' + (y - 4), 'none', SW(2.6)) + E(x - 3.5, y + 1, 4.5, 3.5, K, NS) + E(x + 6.5, y - 2, 4.5, 3.5, K, NS); }
+  function win(x, y) { return R(x, y, 12, 12, 2, C.blueL, SW(2.2)); }
   /* ---------- the cards ---------- */
   // kid: true means the draw function receives 'boy' or 'girl'
   var CARDS = [
     // Self-care
     { id: 'mandi', cat: 'self', en: 'Bath', idn: 'Mandi', kid: true, tags: 'bath shower wash gayung ember mandi sore', draw: function (g) {
-      return G('translate(56 62)', P('M-22 44C-22 30-13 23 0 23 13 23 22 30 22 44Z', C.skin)) +
-        G('translate(56 60) scale(1.05)', head(g, { eyes: 'closed', mouth: 'smile' })) +
-        P('M14 104C10 92 18 84 28 86 30 78 42 76 46 82 52 74 66 74 70 82 76 76 88 78 90 86 100 84 108 92 104 104Z', '#fff') +
-        O(24, 72, 4, '#fff', SW(2)) + O(98, 70, 5, '#fff', SW(2)) + O(90, 58, 3, '#fff', SW(2)) +
-        G('rotate(28 84 30)', P('M70 22H96L93 40C92 43 90 44 87 44H79C76 44 74 43 73 40Z', C.yellow) + R(95, 26, 16, 6, 3, C.yellow)) +
-        P('M70 44C68 48 68 51 70 51 72 51 72 48 70 44Z', C.water, SW(1.8)) + P('M62 38C60 42 60 45 62 45 64 45 64 42 62 38Z', C.water, SW(1.8)) +
-        P('M76 52C74 56 74 59 76 59 78 59 78 56 76 52Z', C.water, SW(1.8));
+      // a shower (pipe, shower head, falling water) over a child washing up
+      return TUBE('M112 4V14C112 20 108 22 102 22H76', 6, C.grey) +
+        G('translate(56 70)', P('M-22 44C-22 30-13 23 0 23 13 23 22 30 22 44Z', C.skin)) +
+        G('translate(56 68) scale(1.05)', head(g, { eyes: 'closed', mouth: 'smile' })) +
+        P('M42 30C42 21 48 16 56 16 64 16 70 21 70 30Z', C.grey) + R(38, 28, 36, 6, 3, C.greyL, SW(2.6)) +
+        O(48, 31, 1, K, NS) + O(56, 31, 1, K, NS) + O(64, 31, 1, K, NS) +
+        P('M44 38 42 46M52 38V48M60 38V48M68 38 70 46', 'none', ' stroke="' + C.water + '"' + SW(3)) +
+        P('M36 52C34 56 34 59 36 59 38 59 38 56 36 52Z', C.water, SW(1.8)) + P('M78 54C76 58 76 61 78 61 80 61 80 58 78 54Z', C.water, SW(1.8)) +
+        O(38, 100, 5, '#fff', SW(2)) + O(76, 102, 4, '#fff', SW(2)) + O(30, 92, 3, '#fff', SW(1.8)) + O(84, 94, 3, '#fff', SW(1.8));
     } },
     { id: 'sikat-gigi', cat: 'self', en: 'Brush teeth', idn: 'Sikat gigi', kid: true, tags: 'teeth toothbrush brush gigi', draw: function (g) {
       return G('translate(58 60)', torso(g === 'girl' ? C.pink : C.blue)) +
@@ -424,8 +441,13 @@
         E(36, 84, 10, 8, C.coral) + E(80, 74, 10, 8, C.blue) + P('M24 30 28 34M20 44H25', 'none', SW(2.4));
     } },
     { id: 'pelukan', cat: 'play', en: 'Hug', idn: 'Pelukan', tags: 'hug cuddle peluk sayang', draw: function () {
-      return P('M60 98C42 86 22 74 22 52 22 38 32 30 44 30 52 30 57 35 60 42 63 35 68 30 76 30 88 30 98 38 98 52 98 74 78 86 60 98Z', C.pink) +
-        P('M26 62C36 74 48 78 60 78 72 78 84 74 94 62', 'none', ' stroke="' + C.skin + '"' + SW(9)) + P('M26 62C36 74 48 78 60 78 72 78 84 74 94 62', 'none', SW(1.6)) + HL('M32 46C32 42 35 39 39 38');
+      // two children hugging: heads leaning in, each with an arm around the other
+      return G('translate(43 62)', torso(C.coralL)) + G('translate(77 62)', torso(C.blue)) +
+        G('translate(45 58) rotate(10) scale(1.12)', head('girl', { eyes: 'closed', mouth: 'smile' })) +
+        G('translate(75 58) rotate(-10) scale(1.12)', head('boy', { eyes: 'closed', mouth: 'smile' })) +
+        TUBE('M48 92C58 97 70 96 84 88', 6, C.skin) + O(86, 87, 5, C.skin) +
+        TUBE('M72 96C62 100 50 99 36 91', 6, C.skin) + O(34, 90, 5, C.skin) +
+        P('M60 30C55 25 50 22 50 17 50 13.5 53 11 56 11 58 11 59.4 12.2 60 14 60.6 12.2 62 11 64 11 67 11 70 13.5 70 17 70 22 65 25 60 30Z', C.pink, SW(2.4));
     } },
     // Places
     { id: 'rumah', cat: 'places', en: 'Home', idn: 'Rumah', tags: 'home house rumah', draw: function () { return house(C.coral, '#fff'); } },
@@ -706,6 +728,247 @@
         TUBE('M44 68 28 40M76 68 92 40', 5, C.skin) + O(27, 38, 5, C.skin) + O(93, 38, 5, C.skin) +
         G('translate(60 46)', torso(top)) +
         G('translate(60 40) scale(.98)', head(g, { mouth: 'open' })) + P('M16 70h-6M18 82h-8M104 70h6M102 82h8', 'none', SW(2.6)) + E(60, 114, 20, 3, K, NS + ' opacity=".12"');
+    } },
+    // ===== 50 more nouns and activities (Nov 2026). People use the same head() and torso() as the cards above.
+    // Self-care
+    { id: 'cuci-muka', cat: 'self', en: 'Wash face', idn: 'Cuci muka', kid: true, tags: 'wash face water cuci muka', draw: function (g) {
+      return kidAt(g, 60, 58, 1, shirt(g), { eyes: 'closed', mouth: 'smile' }) + O(37, 66, 6, C.skin) + O(83, 66, 6, C.skin) +
+        drop(30, 44) + drop(92, 40) + drop(98, 56) + drop(24, 58) + O(46, 86, 3, '#fff', SW(1.8)) + O(76, 88, 2.6, '#fff', SW(1.6));
+    } },
+    { id: 'keramas', cat: 'self', en: 'Wash hair', idn: 'Keramas', kid: true, tags: 'wash hair shampoo keramas sampo', draw: function (g) {
+      return kidAt(g, 60, 62, 1, shirt(g), { eyes: 'closed', mouth: 'smile' }) +
+        P('M34 46C28 40 32 30 40 30 40 20 52 16 58 22 64 14 78 18 78 28 88 28 92 40 84 46Z', '#fff') +
+        O(30, 26, 4, '#fff', SW(2)) + O(94, 24, 5, '#fff', SW(2)) + O(100, 38, 3, '#fff', SW(1.8)) + O(22, 40, 3, '#fff', SW(1.8));
+    } },
+    { id: 'buang-ingus', cat: 'self', en: 'Blow nose', idn: 'Buang ingus', kid: true, tags: 'blow nose tissue pilek ingus', draw: function (g) {
+      return kidAt(g, 60, 56, 1, shirt(g), { eyes: 'closed', mouth: 'none' }) +
+        G('rotate(-6 60 66)', P('M46 58H74L76 78H44Z', '#fff') + P('M50 64H70', 'none', ' stroke="' + C.blueL + '"' + SW(2))) +
+        O(42, 74, 6, C.skin) + O(78, 74, 6, C.skin) + P('M84 44q6-4 10 0M88 36q6-4 10 0', 'none', ' stroke="' + C.grey + '"' + SW(2.4));
+    } },
+    { id: 'batuk-siku', cat: 'self', en: 'Cough into elbow', idn: 'Batuk ke siku', kid: true, tags: 'cough sneeze elbow batuk bersin siku', draw: function (g) {
+      return kidAt(g, 54, 56, 1, shirt(g), { eyes: 'closed', mouth: 'o' }) +
+        TUBE('M76 88C84 80 82 70 70 64', 7, shirt(g)) + O(68, 63, 5.5, C.skin) +
+        P('M86 52q6-2 8 4M90 42q8-2 10 6M84 62q6 0 8 6', 'none', ' stroke="' + C.grey + '"' + SW(2.4));
+    } },
+    { id: 'piyama', cat: 'self', en: 'Pajamas', idn: 'Piyama', kid: true, tags: 'pajamas pyjamas bedtime piyama tidur', draw: function (g) {
+      return kidAt(g, 60, 58, 1, C.lilacL, { eyes: 'closed', mouth: 'smile' }) +
+        P('M44 88H76M42 96H78', 'none', ' stroke="' + C.lilac + '"' + SW(3)) +
+        P('M96 18C88 18 84 26 86 32 88 38 96 40 102 36 94 34 92 22 96 18Z', C.yellow, SW(2.4)) +
+        star(24, 24, 5, C.yellowL) + star(102, 54, 4, C.yellowL);
+    } },
+    { id: 'masker', cat: 'self', en: 'Face mask', idn: 'Masker', kid: true, tags: 'mask face masker sick', draw: function (g) {
+      return kidAt(g, 60, 58, 1, shirt(g), { mouth: 'none' }) +
+        P('M45 63C45 60 47 59 50 59H70C73 59 75 60 75 63V70C75 75 70 78 60 78 50 78 45 75 45 70Z', C.blueL) +
+        P('M49 65H71M49 70H71', 'none', ' stroke="#fff"' + SW(2)) + P('M45 64 38 60M75 64 82 60', 'none', SW(2));
+    } },
+    { id: 'tabir-surya', cat: 'self', en: 'Sunscreen', idn: 'Tabir surya', tags: 'sunscreen sun cream tabir surya matahari', draw: function () {
+      var rays = ''; for (var i = 0; i < 8; i++) { var a = i * Math.PI / 4; rays += 'M' + (34 + Math.cos(a) * 20).toFixed(1) + ' ' + (34 + Math.sin(a) * 20).toFixed(1) + 'L' + (34 + Math.cos(a) * 27).toFixed(1) + ' ' + (34 + Math.sin(a) * 27).toFixed(1); }
+      return P(rays, 'none', ' stroke="' + C.yellow + '"' + SW(4)) + O(34, 34, 14, C.yellow) +
+        G('rotate(-20 74 74)', R(58, 40, 32, 54, 10, C.coralL) + R(64, 30, 20, 12, 4, '#fff') + R(62, 56, 24, 18, 4, '#fff') + P('M74 60v10M69 65h10', 'none', ' stroke="' + C.coral + '"' + SW(2.4))) +
+        P('M30 96C30 90 36 88 42 92 48 88 54 92 52 98 50 102 32 102 30 96Z', '#fff');
+    } },
+    { id: 'kacamata', cat: 'self', en: 'Glasses', idn: 'Kacamata', kid: true, tags: 'glasses spectacles kacamata', draw: function (g) {
+      return kidAt(g, 60, 58, 1, shirt(g), { mouth: 'smile' }) +
+        O(51.5, 59, 7.5, 'rgba(255,255,255,.35)', SW(2.6)) + O(68.5, 59, 7.5, 'rgba(255,255,255,.35)', SW(2.6)) + P('M59 59H61M44 58 37 55M76 58 83 55', 'none', SW(2.4));
+    } },
+    // Food & drink
+    { id: 'nasi', cat: 'food', en: 'Rice', idn: 'Nasi', tags: 'rice nasi makan', draw: function () {
+      return bowl(C.blueL) + P('M28 62C30 46 44 38 60 38 76 38 90 46 92 62Z', '#fff') +
+        P('M46 50l3-2M58 46l3 1M70 50l3-2M52 56l3 1M66 56l3-1', 'none', ' stroke="' + C.grey + '"' + SW(2)) + steam(50, 30) + steam(68, 26);
+    } },
+    { id: 'sup', cat: 'food', en: 'Soup', idn: 'Sup', tags: 'soup sup sayur', draw: function () {
+      return bowl(C.coralL) + E(60, 62, 34, 9, C.yellowL) + O(46, 62, 4, C.green, SW(2)) + R(60, 58, 7, 6, 2, C.coral, SW(2)) + O(76, 63, 3.5, C.green, SW(2)) +
+        G('rotate(30 92 44)', R(88, 18, 7, 40, 3.5, C.grey) + E(91.5, 58, 7, 9, C.grey)) + steam(50, 36) + steam(64, 32);
+    } },
+    { id: 'ikan', cat: 'food', en: 'Fish', idn: 'Ikan', tags: 'fish ikan goreng lauk', draw: function () {
+      return plate() + P('M30 72C40 58 60 56 78 66L94 56V86L78 78C60 88 40 86 30 72Z', C.brownL) +
+        O(40, 70, 2.6, K, NS) + P('M52 64q4 8 0 16M62 63q4 9 0 18', 'none', ' stroke="' + C.brownD + '"' + SW(2.4)) + G('translate(84 46)', leaf(C.green));
+    } },
+    { id: 'tahu-tempe', cat: 'food', en: 'Tofu & tempeh', idn: 'Tahu tempe', tags: 'tofu tempeh tahu tempe lauk', draw: function () {
+      return plate() + G('rotate(-8 42 70)', R(28, 58, 28, 24, 5, C.yellowL) + R(28, 58, 28, 8, 4, C.sand, NS)) +
+        G('rotate(6 78 72)', R(62, 60, 32, 22, 5, C.brownL) + O(70, 67, 2, C.sand, NS) + O(80, 72, 2, C.sand, NS) + O(86, 66, 2, C.sand, NS) + O(72, 76, 2, C.sand, NS));
+    } },
+    { id: 'pisang', cat: 'food', en: 'Banana', idn: 'Pisang', tags: 'banana pisang buah fruit', draw: function () {
+      return E(60, 104, 32, 4, K, NS + ' opacity=".12"') +
+        P('M30 40C26 64 40 90 70 94 84 96 96 90 98 84 74 86 52 76 42 44Z', C.yellow) +
+        P('M40 34C36 58 50 82 78 86 90 88 98 82 100 78 78 78 58 66 52 38Z', C.yellow) + R(36, 26, 12, 12, 4, C.brownL) +
+        HL('M46 48C48 62 56 72 66 78');
+    } },
+    { id: 'botol-minum', cat: 'food', en: 'Water bottle', idn: 'Botol minum', tags: 'water bottle drink minum botol', draw: function () {
+      return E(60, 108, 22, 4, K, NS + ' opacity=".12"') + R(46, 12, 28, 14, 5, C.coral) + P('M44 30C44 26 47 24 50 24H70C73 24 76 26 76 30L80 40V100C80 104 77 106 74 106H46C43 106 40 104 40 100V40Z', '#EEF6FD') +
+        P('M41 60H79V100C79 104 76 106 73 106H47C44 106 41 104 41 100Z', C.water, NS) + P('M44 30C44 26 47 24 50 24H70C73 24 76 26 76 30L80 40V100C80 104 77 106 74 106H46C43 106 40 104 40 100Z', 'none', SW(3)) +
+        P('M41 60H79', 'none', SW(2.4)) + HL('M48 44V92') + R(52, 70, 16, 16, 4, '#fff', SW(2)) + drop(60, 74);
+    } },
+    { id: 'bubur', cat: 'food', en: 'Porridge', idn: 'Bubur', tags: 'porridge congee rice bubur ayam', draw: function () {
+      return bowl('#fff') + E(60, 62, 34, 9, C.sand) + O(48, 60, 6, '#fff', SW(2)) + O(48, 60, 3, C.yellow, NS) +
+        O(66, 62, 2.4, C.green, NS) + O(72, 59, 2.4, C.green, NS) + O(62, 58, 2.4, C.green, NS) + P('M70 64h10M74 60h8', 'none', ' stroke="' + C.brownL + '"' + SW(3)) + steam(54, 34) + steam(68, 30);
+    } },
+    { id: 'camilan', cat: 'food', en: 'Snack', idn: 'Camilan', tags: 'snack chips crackers camilan keripik jajan', draw: function () {
+      return E(60, 106, 34, 4, K, NS + ' opacity=".12"') +
+        P('M30 22L36 18 42 22 48 18 54 22 60 18 66 22 72 18 78 22 84 18 90 22 86 100H34Z', C.coral) + R(40, 44, 40, 30, 8, C.yellowL) +
+        O(52, 59, 7, C.yellow) + O(66, 56, 6, C.yellow) + P('M36 34H84', 'none', ' stroke="#fff"' + SW(3)) +
+        O(96, 92, 7, C.yellow) + O(22, 96, 6, C.yellow);
+    } },
+    // Home & chores
+    { id: 'rapikan-kasur', cat: 'routine', en: 'Make the bed', idn: 'Rapikan kasur', tags: 'make bed tidy kasur rapikan tempat tidur', draw: function () {
+      return E(60, 106, 46, 4, K, NS + ' opacity=".12"') + R(14, 44, 10, 60, 4, C.brownL) + R(96, 60, 10, 44, 4, C.brownL) +
+        R(20, 66, 82, 20, 6, '#fff') + R(30, 52, 26, 16, 7, '#fff') + P('M48 62H100V88H48Z', C.lilacL) + P('M48 72H100', 'none', ' stroke="' + C.lilac + '"' + SW(2.4)) +
+        star(80, 34, 6, C.yellow) + star(98, 22, 4, C.yellowL);
+    } },
+    { id: 'bantu-masak', cat: 'routine', en: 'Help cook', idn: 'Bantu masak', kid: true, tags: 'help cook kitchen masak dapur', draw: function (g) {
+      return kidAt(g, 46, 52, 0.95, shirt(g), { mouth: 'open' }) + P('M30 30C26 22 32 14 40 18 42 10 54 10 56 18 64 14 70 22 64 30Z', '#fff') + R(32, 28, 30, 8, 3, '#fff') +
+        P('M60 78H108V96C108 104 102 108 94 108H74C66 108 60 104 60 96Z', C.grey) + P('M56 78H112', 'none', SW(3)) +
+        G('rotate(25 84 64)', R(81, 46, 6, 34, 3, C.brownL)) + steam(76, 66) + steam(92, 62) + O(62, 80, 5, C.skin);
+    } },
+    { id: 'siapkan-meja', cat: 'routine', en: 'Set the table', idn: 'Siapkan meja', tags: 'set table plate fork spoon meja makan', draw: function () {
+      return R(6, 80, 108, 10, 4, C.brownL) + R(16, 90, 8, 18, 3, C.brownL) + R(96, 90, 8, 18, 3, C.brownL) +
+        E(60, 72, 22, 7, '#fff') + E(60, 71, 13, 4, C.greyL, SW(2)) +
+        P('M28 44V74M24 44V54C24 58 32 58 32 54V44', 'none', SW(2.6)) + P('M92 44C88 44 86 50 88 56 89 58 92 58 92 58V74', 'none', SW(2.6)) +
+        R(98, 52, 14, 22, 4, C.blueL) + P('M98 60H112', 'none', ' stroke="' + C.water + '"' + SW(2));
+    } },
+    { id: 'siram-tanaman', cat: 'routine', en: 'Water the plants', idn: 'Siram tanaman', tags: 'water plants garden siram tanaman kebun', draw: function () {
+      return R(64, 76, 36, 28, 6, C.coral) + R(60, 70, 44, 10, 4, C.coralL) + P('M82 70V48', 'none', ' stroke="' + C.greenD + '"' + SW(3)) +
+        G('translate(74 52) rotate(-30)', leaf(C.green)) + G('translate(90 46) rotate(30)', leaf(C.green)) +
+        G('rotate(-18 36 42)', P('M14 36H50V62C50 66 48 68 44 68H20C16 68 14 66 14 62Z', C.green) + P('M50 42 72 30', 'none', ' stroke="' + C.greenD + '"' + SW(5)) + P('M22 36C22 24 42 24 42 36', 'none', SW(3))) +
+        drop(74, 40) + drop(80, 30) + drop(68, 32);
+    } },
+    { id: 'beri-makan-hewan', cat: 'routine', en: 'Feed the pet', idn: 'Beri makan hewan', tags: 'feed pet cat dog hewan makan kucing', draw: function () {
+      return E(60, 102, 40, 5, K, NS + ' opacity=".12"') + P('M24 76H96L90 98C89 101 86 102 83 102H37C34 102 31 101 30 98Z', C.blue) + E(60, 76, 36, 8, C.brownL) +
+        O(48, 74, 4, C.brownD, NS) + O(60, 72, 4, C.brownD, NS) + O(72, 75, 4, C.brownD, NS) + O(54, 78, 3.6, C.brownD, NS) + O(66, 78, 3.6, C.brownD, NS) +
+        G('translate(40 26)', paw()) + G('translate(80 40) scale(.8)', paw()) + P('M54 92h12', 'none', ' stroke="#fff"' + SW(3));
+    } },
+    { id: 'baju-kotor', cat: 'routine', en: 'Clothes in the basket', idn: 'Baju ke keranjang', tags: 'laundry dirty clothes basket baju kotor cucian keranjang', draw: function () {
+      return P('M30 34 46 26C50 30 54 32 60 32 66 32 70 30 74 26L90 34 86 46 78 44V64H42V44L34 46Z', C.yellow) +
+        P('M22 54H98L90 104H30Z', C.brownL) + P('M28 68H92M30 82H90M32 96H88M44 54 46 104M60 54V104M76 54 74 104', 'none', ' stroke="' + C.brownD + '" opacity=".5"' + SW(2)) + R(18, 50, 84, 10, 5, C.brownL);
+    } },
+    { id: 'menyapu', cat: 'routine', en: 'Sweep', idn: 'Menyapu', tags: 'sweep broom clean menyapu sapu bersih', draw: function () {
+      return G('rotate(28 60 60)', R(56, 6, 8, 70, 4, C.brownL) + P('M44 76H76L84 106H36Z', C.yellow) + P('M46 86 42 104M54 86 52 104M62 86V104M70 86 72 104M78 86 80 104', 'none', ' stroke="' + C.brownD + '" opacity=".6"' + SW(2)) + R(44, 72, 32, 8, 3, C.coral)) +
+        O(26, 100, 3, C.grey, NS) + O(18, 94, 2.4, C.grey, NS) + O(32, 106, 2, C.grey, NS) + star(100, 30, 5, C.yellowL);
+    } },
+    { id: 'cuci-piring', cat: 'routine', en: 'Wash the dishes', idn: 'Cuci piring', tags: 'wash dishes plates sink cuci piring', draw: function () {
+      return P('M14 62H106L98 100C97 104 94 106 90 106H30C26 106 23 104 22 100Z', C.greyL) + R(10, 56, 100, 10, 5, C.grey) +
+        G('rotate(-14 52 54)', E(52, 54, 22, 22, '#fff') + E(52, 54, 12, 12, C.blueL, SW(2))) +
+        R(74, 36, 24, 16, 5, C.yellow) + R(74, 36, 24, 6, 3, C.green, SW(2)) +
+        O(30, 46, 5, '#fff', SW(2)) + O(88, 26, 4, '#fff', SW(2)) + O(98, 46, 3, '#fff', SW(1.8)) + O(22, 34, 3, '#fff', SW(1.8));
+    } },
+    // School
+    { id: 'tas', cat: 'feel', en: 'Backpack', idn: 'Tas', tags: 'backpack school bag tas sekolah ransel', draw: function () {
+      return E(60, 108, 30, 4, K, NS + ' opacity=".12"') + P('M48 26C48 14 72 14 72 26', 'none', SW(4)) +
+        P('M32 46C32 32 42 24 60 24 78 24 88 32 88 46V98C88 102 85 106 80 106H40C35 106 32 102 32 98Z', C.coral) +
+        R(42, 66, 36, 30, 8, C.coralL) + P('M42 76H78', 'none', SW(2.4)) + R(56, 72, 8, 8, 2, C.yellow, SW(2)) + HL('M40 40C42 34 46 31 52 30');
+    } },
+    { id: 'pensil', cat: 'feel', en: 'Pencil', idn: 'Pensil', tags: 'pencil write pensil menulis', draw: function () {
+      return G('rotate(-40 60 60)', R(52, 18, 16, 64, 2, C.yellow) + R(52, 10, 16, 10, 4, C.pink) + R(52, 18, 16, 5, 0, C.grey) +
+        P('M52 82H68L60 104Z', C.sand) + P('M57 96H63L60 104Z', K) + P('M57 18V82', 'none', ' stroke="' + C.coralD + '" opacity=".4"' + SW(2))) +
+        P('M18 104C30 98 42 102 54 96', 'none', ' stroke="' + C.blue + '"' + SW(3));
+    } },
+    { id: 'mewarnai', cat: 'feel', en: 'Colouring', idn: 'Mewarnai', tags: 'colouring coloring crayons draw mewarnai krayon', draw: function () {
+      return G('rotate(-6 50 56)', R(16, 18, 66, 76, 6, '#fff') + P('M48 34 54 46 68 48 58 57 60 71 48 64 36 71 38 57 28 48 42 46Z', C.yellow, SW(2.6)) + P('M26 82C36 76 46 86 58 80', 'none', ' stroke="' + C.green + '"' + SW(4))) +
+        crayon(92, 52, C.coral, 20) + crayon(102, 60, C.blue, 12) + crayon(84, 64, C.green, 28);
+    } },
+    { id: 'menggunting', cat: 'feel', en: 'Cutting with scissors', idn: 'Menggunting', tags: 'scissors cut paper gunting menggunting', draw: function () {
+      return R(12, 60, 74, 46, 6, C.yellowL) + P('M16 84H82', 'none', ' stroke-dasharray="6 5"' + SW(2.4)) +
+        G('rotate(-20 82 46)', P('M78 42 114 30 116 34 82 48Z', C.greyL) + P('M78 50 114 62 116 58 82 44Z', C.grey) + O(66, 38, 9, C.coral) + O(66, 56, 9, C.coral) + O(66, 38, 4, '#fff', SW(2)) + O(66, 56, 4, '#fff', SW(2)) + O(80, 46, 2.4, K, NS));
+    } },
+    { id: 'berbaris', cat: 'feel', en: 'Line up', idn: 'Berbaris', tags: 'line up queue wait berbaris antre', draw: function () {
+      return E(60, 108, 50, 4, K, NS + ' opacity=".12"') + kidAt('boy', 26, 62, 0.72, C.blue, { mouth: 'smile' }) + kidAt('girl', 60, 62, 0.72, C.coralL, { mouth: 'smile' }) + kidAt('boy', 94, 62, 0.72, C.yellow, { mouth: 'smile' }) +
+        P('M10 104H110', 'none', ' stroke-dasharray="6 6"' + SW(2.4));
+    } },
+    { id: 'angkat-tangan', cat: 'feel', en: 'Raise your hand', idn: 'Angkat tangan', kid: true, tags: 'raise hand ask question angkat tangan bertanya', draw: function (g) {
+      return TUBE('M74 84C82 70 86 50 86 30', 6, C.skin) + O(86, 26, 6.5, C.skin) + kidAt(g, 54, 62, 1, shirt(g), { mouth: 'open' }) +
+        P('M98 18l6-4M100 30h8M96 8l2-6', 'none', ' stroke="' + C.coralD + '"' + SW(2.6));
+    } },
+    { id: 'duduk-melingkar', cat: 'feel', en: 'Circle time', idn: 'Duduk melingkar', tags: 'circle time group carpet duduk melingkar', draw: function () {
+      return E(60, 78, 52, 24, C.lilacL) + E(60, 78, 36, 14, 'none', ' stroke="' + C.lilac + '"' + SW(2.4)) +
+        G('translate(30 58) scale(.62)', head('girl', { mouth: 'smile' })) + G('translate(60 50) scale(.62)', head('boy', { mouth: 'smile' })) + G('translate(90 58) scale(.62)', head('girl', { mouth: 'open' })) +
+        G('translate(44 92) scale(.62)', head('boy', { mouth: 'smile' })) + G('translate(76 92) scale(.62)', head('boy', { mouth: 'smile' })) + star(60, 78, 6, C.yellow);
+    } },
+    { id: 'guru', cat: 'feel', en: 'Teacher', idn: 'Guru', tags: 'teacher class school guru kelas', draw: function () {
+      return R(54, 12, 60, 46, 5, '#fff') + R(54, 12, 60, 46, 5, 'none', ' stroke="' + C.brownL + '"' + SW(5)) +
+        P('M62 44l5-16 5 16M64 38h6', 'none', ' stroke="' + C.coralD + '"' + SW(2.6)) + P('M80 28V44M80 36c0-4 3-6 5-6s5 2 5 6-3 6-5 6-5-2-5-6', 'none', ' stroke="' + C.blue + '"' + SW(2.6)) + P('M96 30c4-6 12-2 8 4l-8 10h10', 'none', ' stroke="' + C.greenD + '"' + SW(2.6)) +
+        kidAt('girl', 30, 62, 1.0, C.lilac, { mouth: 'open' }) + TUBE('M42 84C48 76 52 68 56 60', 5, C.skin) + O(57, 58, 4.5, C.skin);
+    } },
+    { id: 'pr', cat: 'feel', en: 'Homework', idn: 'PR', tags: 'homework study book pr belajar tugas', draw: function () {
+      return E(60, 106, 44, 4, K, NS + ' opacity=".12"') + G('rotate(-4 56 64)', R(18, 26, 76, 76, 6, '#fff') + P('M30 46H80M30 60H80M30 74H64', 'none', ' stroke="' + C.blueL + '"' + SW(2.4)) + R(18, 26, 10, 76, 4, C.coral) +
+        P('M66 78l6 6 12-14', 'none', ' stroke="' + C.greenD + '"' + SW(4))) + crayon(98, 40, C.yellow, -30);
+    } },
+    // Play
+    { id: 'balok', cat: 'play', en: 'Blocks', idn: 'Balok', tags: 'blocks build balok susun mainan', draw: function () {
+      return E(60, 108, 46, 4, K, NS + ' opacity=".12"') + block(18, 72, C.coral, 'A') + block(54, 72, C.blue, 'B') + block(36, 38, C.yellow, 'C') + block(84, 80, C.green, '');
+    } },
+    { id: 'plastisin', cat: 'play', en: 'Playdough', idn: 'Plastisin', tags: 'playdough clay plastisin lilin mainan', draw: function () {
+      return E(60, 106, 44, 4, K, NS + ' opacity=".12"') + P('M14 100C12 84 24 76 38 80 50 72 66 80 62 96 60 104 18 106 14 100Z', C.pink) +
+        P('M60 102C58 90 70 84 82 88 94 84 106 92 104 102Z', C.blueL) + P('M44 66C40 54 52 46 62 52 74 50 78 62 72 70 66 74 48 74 44 66Z', C.yellow) +
+        G('translate(86 40)', P('M0-16 5-5 16-4 8 4 10 15 0 9-10 15-8 4-16-4-5-5Z', 'none', ' stroke="' + C.grey + '"' + SW(4)) + P('M0-16 5-5 16-4 8 4 10 15 0 9-10 15-8 4-16-4-5-5Z', 'none', SW(1.6)));
+    } },
+    { id: 'petak-umpet', cat: 'play', en: 'Hide and seek', idn: 'Petak umpet', kid: true, tags: 'hide seek game petak umpet sembunyi', draw: function (g) {
+      return G('translate(62 40) scale(1.1)', head(g, { mouth: 'smile' })) + O(40, 58, 5.5, C.skin) + O(84, 58, 5.5, C.skin) +
+        P('M8 104C4 86 14 72 28 74 30 60 46 54 56 62 62 52 80 52 86 64 100 60 114 72 110 88 116 96 112 104Z', C.green) +
+        P('M28 90q6-6 12 0M66 84q6-6 12 0M92 92q6-6 10 0', 'none', ' stroke="' + C.greenD + '"' + SW(2.4)) + E(60, 108, 52, 4, K, NS + ' opacity=".12"');
+    } },
+    { id: 'menari', cat: 'play', en: 'Dance', idn: 'Menari', kid: true, tags: 'dance move music menari joget', draw: function (g) {
+      return TUBE('M44 70C36 60 30 52 26 40', 6, C.skin) + O(25, 37, 5.5, C.skin) + TUBE('M76 72C86 70 94 66 100 58', 6, C.skin) + O(102, 56, 5.5, C.skin) +
+        G('rotate(-8 60 60)', kidAt(g, 60, 56, 1, shirt(g), { eyes: 'closed', mouth: 'open' })) + note(96, 26) + note(20, 72);
+    } },
+    { id: 'menyanyi', cat: 'play', en: 'Sing', idn: 'Menyanyi', kid: true, tags: 'sing song music menyanyi lagu', draw: function (g) {
+      return kidAt(g, 54, 56, 1, shirt(g), { mouth: 'o' }) + G('rotate(-30 80 74)', R(76, 70, 8, 30, 4, C.grey) + O(80, 66, 8, K)) + O(76, 86, 5.5, C.skin) + note(94, 30) + note(104, 54) + note(22, 34);
+    } },
+    { id: 'melukis', cat: 'play', en: 'Painting', idn: 'Melukis', tags: 'painting paint brush art melukis cat kuas', draw: function () {
+      return P('M30 106 44 20M90 106 76 20M60 24V106', 'none', ' stroke="' + C.brownL + '"' + SW(5)) + R(26, 16, 68, 56, 4, '#fff') +
+        O(48, 40, 9, C.yellow) + P('M30 66C42 50 56 52 66 60 76 52 86 56 90 62V68H30Z', C.green, NS) + P('M66 30C70 36 78 36 82 30', 'none', ' stroke="' + C.blue + '"' + SW(3)) +
+        G('rotate(35 96 86)', R(93, 70, 6, 28, 3, C.brownL) + P('M92 66C92 60 100 60 100 66V72H92Z', C.coral)) + O(20, 92, 5, C.coral) + O(14, 80, 4, C.blue);
+    } },
+    { id: 'permainan-papan', cat: 'play', en: 'Board game', idn: 'Permainan papan', tags: 'board game dice ular tangga ludo permainan papan', draw: function () {
+      var sq = ''; for (var r = 0; r < 4; r++) for (var c2 = 0; c2 < 4; c2++) sq += R(16 + c2 * 18, 30 + r * 18, 18, 18, 0, (r + c2) % 2 ? '#fff' : [C.yellowL, C.pinkL, C.blueL, C.greenL][(r + c2 * 2) % 4], SW(2));
+      return E(60, 106, 46, 4, K, NS + ' opacity=".12"') + R(12, 26, 80, 80, 8, C.brownL) + sq +
+        G('rotate(12 96 46)', R(84, 34, 24, 24, 6, '#fff') + O(90, 40, 2.4, K, NS) + O(96, 46, 2.4, K, NS) + O(102, 52, 2.4, K, NS)) +
+        P('M40 64C40 58 46 58 46 64L48 74H38Z', C.coral) + P('M66 46C66 40 72 40 72 46L74 56H64Z', C.blue);
+    } },
+    { id: 'lari', cat: 'play', en: 'Run', idn: 'Lari', kid: true, tags: 'run running race lari berlari', draw: function (g) {
+      return TUBE('M52 96 40 112M68 96 82 106', 6, C.skin) + O(38, 114, 5, C.coral) + O(85, 107, 5, C.coral) +
+        TUBE('M46 72 32 84M74 70 88 60', 6, C.skin) + G('rotate(10 60 60)', kidAt(g, 60, 52, 1, shirt(g), { mouth: 'open' })) +
+        P('M8 50H22M4 62H18M10 74H22', 'none', ' stroke="' + C.grey + '"' + SW(3));
+    } },
+    { id: 'memanjat', cat: 'play', en: 'Climbing', idn: 'Memanjat', kid: true, tags: 'climb climbing frame playground memanjat', draw: function (g) {
+      return P('M16 108C16 60 34 34 60 34 86 34 104 60 104 108', 'none', ' stroke="' + C.coral + '"' + SW(5)) + P('M38 108C38 72 46 52 60 52 74 52 82 72 82 108M60 34V108M22 76H98M18 96H102', 'none', ' stroke="' + C.coral + '"' + SW(4)) +
+        G('translate(66 20) scale(.95)', torso(shirt(g)) + G('translate(0 -2) scale(1.15)', head(g, { mouth: 'open' }))) + O(48, 36, 5, C.skin) + O(84, 36, 5, C.skin);
+    } },
+    // Places & people
+    { id: 'rumah-sakit', cat: 'places', en: 'Hospital', idn: 'Rumah sakit', tags: 'hospital doctor rumah sakit dokter', draw: function () {
+      return E(60, 108, 50, 4, K, NS + ' opacity=".12"') + R(14, 34, 92, 72, 6, '#fff') + R(40, 18, 40, 22, 5, '#fff') +
+        P('M56 22h8v6h6v8h-6v6h-8v-6h-6v-8h6Z', C.coral, SW(2)) + win(22, 50) + win(42, 50) + win(70, 50) + win(90, 50) + win(22, 72) + win(90, 72) + R(48, 78, 24, 28, 4, C.blueL);
+    } },
+    { id: 'gereja', cat: 'places', en: 'Church', idn: 'Gereja', tags: 'church gereja pray ibadah', draw: function () {
+      return E(60, 108, 46, 4, K, NS + ' opacity=".12"') + P('M60 4V20M54 10H66', 'none', SW(3.4)) + P('M44 44 60 20 76 44Z', C.coral) + R(46, 44, 28, 62, 3, '#fff') +
+        P('M22 66 46 50V106H22Z', C.yellowL) + P('M98 66 74 50V106H98Z', C.yellowL) + P('M54 106V86C54 80 66 80 66 86V106Z', C.brownL) + O(60, 62, 6, C.blueL);
+    } },
+    { id: 'berbagi', cat: 'feel', en: 'Share', idn: 'Berbagi', tags: 'share sharing give toy berbagi meminjamkan', draw: function () {
+      return E(60, 110, 50, 4, K, NS + ' opacity=".12"') + kidAt('girl', 28, 60, 0.86, C.coralL, { mouth: 'smile' }) + kidAt('boy', 92, 60, 0.86, C.blue, { mouth: 'open' }) +
+        TUBE('M38 86C46 84 52 80 56 76', 5, C.skin) + TUBE('M82 86C74 84 68 80 64 76', 5, C.skin) + O(60, 70, 10, C.yellow) + P('M50 70H70M60 60C56 66 56 74 60 80', 'none', SW(2)) +
+        G('translate(60 24)', P('M0 10C-5 5-10 2-10-3-10-6.5-7-9-4-9-2-9-.6-7.8 0-6 .6-7.8 2-9 4-9 7-9 10-6.5 10-3 10 2 5 5 0 10Z', C.pink, SW(2.4)));
+    } },    { id: 'mal', cat: 'places', en: 'Shopping mall', idn: 'Mal', tags: 'mall shopping shop belanja mal', draw: function () {
+      return E(60, 108, 50, 4, K, NS + ' opacity=".12"') + R(10, 30, 100, 76, 6, C.lilacL) + R(10, 30, 100, 14, 6, C.lilac) +
+        R(18, 52, 22, 18, 3, C.blueL) + R(49, 52, 22, 18, 3, C.blueL) + R(80, 52, 22, 18, 3, C.blueL) + R(42, 78, 36, 28, 3, C.blueL) + P('M60 78V106', 'none', SW(2.4)) +
+        G('translate(18 84)', R(0, 0, 16, 18, 3, C.coral) + P('M4 0C4-6 12-6 12 0', 'none', SW(2.2))) + G('translate(88 86)', R(0, 0, 14, 16, 3, C.yellow) + P('M3 0C3-5 11-5 11 0', 'none', SW(2.2)));
+    } },
+    { id: 'kebun-binatang', cat: 'places', en: 'Zoo', idn: 'Kebun binatang', tags: 'zoo animals giraffe kebun binatang hewan', draw: function () {
+      return P('M58 106C58 80 60 56 64 30', 'none', ' stroke="' + K + '"' + SW(16)) + P('M58 106C58 80 60 56 64 30', 'none', ' stroke="' + C.yellow + '"' + SW(10)) +
+        E(70, 26, 16, 11, C.yellow) + P('M62 16 60 8M72 14 74 6', 'none', SW(2.6)) + O(60, 7, 2.6, C.brownL) + O(74, 5, 2.6, C.brownL) + O(74, 24, 2.4, K, NS) +
+        O(60, 60, 3, C.brownL, NS) + O(62, 78, 3, C.brownL, NS) + O(57, 92, 3, C.brownL, NS) +
+        P('M6 70V106M24 70V106M96 70V106M114 70V106M6 80H24M96 80H114M6 96H24M96 96H114', 'none', ' stroke="' + C.brownL + '"' + SW(4)) + G('translate(30 98)', leaf(C.green)) + G('translate(90 98)', leaf(C.green));
+    } },
+    { id: 'stasiun', cat: 'places', en: 'Train station', idn: 'Stasiun', tags: 'train station kereta stasiun KRL', draw: function () {
+      return P('M8 108H112M14 102H106', 'none', SW(3)) + R(26, 26, 68, 70, 14, C.blue) + R(34, 34, 52, 26, 6, '#EEF6FD') +
+        O(40, 78, 6, C.yellow) + O(80, 78, 6, C.yellow) + R(50, 72, 20, 10, 3, '#fff', SW(2)) + P('M36 96 30 104M84 96 90 104', 'none', SW(3)) + R(48, 14, 24, 12, 4, C.coral);
+    } },
+    { id: 'ruang-terapi', cat: 'places', en: 'Therapy room', idn: 'Ruang terapi', tags: 'therapy room therapist terapi ruang', draw: function () {
+      return R(10, 100, 100, 8, 4, C.brownL) + P('M14 100C10 78 22 66 40 68 58 66 68 80 62 100Z', C.lilac) + P('M26 84C32 80 40 80 46 84', 'none', ' stroke="#fff"' + SW(2.4)) +
+        R(70, 30, 40, 70, 4, '#fff') + P('M70 52H110M70 76H110', 'none', SW(2.6)) + O(80, 44, 6, C.coral) + R(92, 38, 12, 12, 2, C.yellow) + block(76, 60, C.blue, '') + O(98, 66, 7, C.green) +
+        G('translate(38 30)', P('M0 12C-6 6-12 3-12-3-12-7-9-10-5-10-2.5-10-.8-8.6 0-6.4.8-8.6 2.5-10 5-10 9-10 12-7 12-3 12 3 6 6 0 12Z', C.pink, SW(2.4)));
+    } },
+    { id: 'rumah-teman', cat: 'places', en: "Friend's house", idn: 'Rumah teman', tags: 'friend house visit play date rumah teman main', draw: function () {
+      return house(C.blue, '#fff') + G('translate(20 96) scale(.62)', head('girl', { mouth: 'open' })) + G('translate(100 96) scale(.62)', head('boy', { mouth: 'open' })) +
+        P('M8 78l-4-6M112 78l4-6', 'none', ' stroke="' + C.coralD + '"' + SW(2.4));
     } }
   ];
 
@@ -1047,49 +1310,58 @@
           G('rotate(-12 26 92)', R(12, 78, 28, 28, 7, '#fff') + O(20, 86, 2.6, K, NS) + O(32, 98, 2.6, K, NS) + O(26, 92, 2.6, K, NS));
       },
       // coming soon: Safe People Map, Social Scenarios Talk, Personal Space, Discrete Trial Teaching, Early Reading
+      // these use the same heads and bodies as the picture cards, so the people match the rest of Little Us
       safe: function () {
-        return E(60, 108, 44, 4.5, K, NS + ' opacity=".14"') +
-          P('M12 30L42 22L78 32L108 24V92L78 100L42 90L12 98Z', C.greenL) + P('M42 22V90M78 32V100', 'none', s(2.4)) +
-          P('M28 80C38 70 50 78 58 66S78 56 88 50', 'none', ' stroke-dasharray="5 6"' + s(2.6)) +
-          O(26, 76, 7, C.yellow) + P('M17 92C17 86 21 83 26 83S35 86 35 92Z', C.blue, s(2.4)) +
-          P('M90 56C84 50 76 45 76 37 76 31 80 27 85 27 87.5 27 89.4 28.6 90 31 90.6 28.6 92.5 27 95 27 100 27 104 31 104 37 104 45 96 50 90 56Z', C.coral) +
-          HL('M81 34c0-2 1.5-3.5 3.5-3.5');
+        return E(60, 110, 46, 4.5, K, NS + ' opacity=".14"') +
+          P('M8 34L38 26L76 36L112 28V90L76 98L38 88L8 96Z', C.greenL) + P('M38 26V88M76 36V98', 'none', ' stroke="' + C.greenD + '" opacity=".45"' + s(2.2)) +
+          P('M20 30C30 40 44 34 52 26', 'none', ' stroke="' + C.greenD + '" stroke-dasharray="4 5" opacity=".7"' + s(2.4)) +
+          person(40, 54, 1.08, 'girl', C.coral, { mouth: 'smile' }) +
+          person(80, 66, 0.86, 'boy', C.yellow, { mouth: 'open' }) +
+          TUBE('M50 92C56 96 62 96 68 92', 5, C.skin) +
+          P('M98 30C92 24 86 20 86 13 86 8 90 5 94 5 96.4 5 98 6.5 98.5 8.5 99 6.5 100.6 5 103 5 107 5 111 8 111 13 111 20 104 24 98 30Z', C.coral, s(2.4)) +
+          HL('M90 11c0-2 1.4-3.2 3.2-3.2');
       },
       scenarios: function () {
-        var face = function (x, y, r, col, hair) { return O(x, y, r, col) + hair + O(x - 7, y, 2.6, K, NS) + O(x + 7, y, 2.6, K, NS) + P('M' + (x - 6) + ' ' + (y + 8) + 'q6 5 12 0', 'none', s(2.6)) + E(x - 12, y + 6, 4, 2.6, C.cheek, NS + ' opacity=".85"') + E(x + 12, y + 6, 4, 2.6, C.cheek, NS + ' opacity=".85"'); };
-        return E(60, 108, 44, 4.5, K, NS + ' opacity=".14"') +
-          P('M62 12H104C110 12 114 16 114 22V40C114 46 110 50 104 50H88L78 59V50H62C56 50 52 46 52 40V22C52 16 56 12 62 12Z', C.lilacL) +
-          P('M78 24c0-7 11-7 11 0 0 5-5.5 5-5.5 10', 'none', s(3)) + O(83.5, 42, 2, K, NS) +
-          face(34, 78, 20, C.skin, P('M14 74C14 60 23 54 34 54 45 54 54 60 54 74 47 67 40 66 34 68 28 66 20 68 14 74Z', C.hair)) +
-          face(86, 84, 18, C.brownL, P('M68 80C68 68 76 64 86 64 96 64 104 68 104 80 98 74 92 72 86 74 80 72 74 74 68 80Z', C.brownD));
+        return E(60, 110, 46, 4.5, K, NS + ' opacity=".14"') +
+          P('M66 6H106C112 6 116 10 116 16V32C116 38 112 42 106 42H94L86 50V42H66C60 42 56 38 56 32V16C56 10 60 6 66 6Z', C.lilacL) +
+          P('M81 17c0-6 10-6 10 0 0 4.5-5 4.5-5 9', 'none', s(2.8)) + O(86, 34, 1.9, K, NS) +
+          person(36, 62, 1.0, 'girl', C.pink, { mouth: 'open' }) +
+          person(84, 66, 0.92, 'boy', C.blue, { mouth: 'smile' }) +
+          P('M18 30q-6 4 0 8M12 26q-10 8 0 16', 'none', ' stroke="' + C.lilac + '"' + s(2.6));
       },
       space: function () {
-        return E(60, 110, 34, 4, K, NS + ' opacity=".14"') +
-          O(60, 62, 44, '#EEF6FD', ' stroke="' + C.blue + '" stroke-dasharray="7 7"' + s(3)) +
-          P('M42 98C42 80 50 72 60 72 70 72 78 80 78 98Z', C.coral) +
-          O(60, 50, 16, C.skin) + P('M44 48C44 36 52 32 60 32 68 32 76 36 76 48 70 42 64 41 60 43 56 41 50 42 44 48Z', C.hair) +
-          O(54, 52, 2.4, K, NS) + O(66, 52, 2.4, K, NS) + P('M55 59q5 4 10 0', 'none', s(2.6)) +
-          P('M42 80L28 70M78 80L92 70', 'none', s(3.4)) +
-          P('M8 62h8M12 58l-4 4 4 4M112 62h-8M108 58l4 4-4 4', 'none', ' stroke="' + C.coralD + '"' + s(2.8));
+        return E(60, 112, 34, 4, K, NS + ' opacity=".14"') +
+          O(60, 64, 46, '#EEF6FD', ' stroke="' + C.blue + '" stroke-dasharray="7 7"' + s(3)) +
+          TUBE('M44 84C36 80 30 74 26 66', 6, C.skin) + O(25, 64, 5, C.skin) +
+          TUBE('M76 84C84 80 90 74 94 66', 6, C.skin) + O(95, 64, 5, C.skin) +
+          person(60, 66, 1.12, 'boy', C.yellow, { mouth: 'smile' }) +
+          P('M6 64h8M10 60l-4 4 4 4M114 64h-8M110 60l4 4-4 4', 'none', ' stroke="' + C.coralD + '"' + s(2.8));
       },
       dtt: function () {
-        return E(60, 108, 46, 4.5, K, NS + ' opacity=".14"') +
-          P('M6 96H114', 'none', s(3)) +
-          G('rotate(-6 25 70)', R(10, 50, 30, 40, 7, '#fff') + O(25, 70, 8, C.blue)) +
-          R(45, 42, 30, 48, 7, C.yellowL, s(3.4)) + P('M51 66l6 6 12-13', 'none', ' stroke="' + C.greenD + '"' + s(4)) +
-          G('rotate(6 95 70)', R(80, 50, 30, 40, 7, '#fff') + R(87, 62, 16, 16, 3, C.coral)) +
-          P('M60 8l3.9 8.3 9 1.1-6.6 6.2 1.7 8.9-8-4.5-8 4.5 1.7-8.9-6.6-6.2 9-1.1z', C.yellow, s(2.6));
+        return E(60, 110, 48, 4.5, K, NS + ' opacity=".14"') +
+          person(30, 52, 0.94, 'girl', C.lilac, { mouth: 'smile' }) +
+          person(94, 62, 0.8, 'boy', C.green, { mouth: 'open' }) +
+          R(4, 92, 112, 10, 4, C.brownL) +
+          G('rotate(-6 44 82)', R(34, 68, 20, 26, 5, '#fff') + O(44, 80, 6, C.blue)) +
+          G('rotate(5 70 82)', R(60, 68, 20, 26, 5, C.yellowL, s(3.2)) + P('M64 81l4 4 8-9', 'none', ' stroke="' + C.greenD + '"' + s(3.2))) +
+          P('M60 18l3.4 7.2 7.8 1-5.7 5.4 1.5 7.7-7-3.9-7 3.9 1.5-7.7-5.7-5.4 7.8-1z', C.yellow, s(2.4));
       },
       read: function () {
-        return E(60, 108, 46, 4.5, K, NS + ' opacity=".14"') +
-          P('M60 40C48 32 30 30 12 34V94C30 90 48 92 60 100Z', '#fff') +
-          P('M60 40C72 32 90 30 108 34V94C90 90 72 92 60 100Z', C.yellowL) + P('M60 40V100', 'none', s(3)) +
-          P('M26 80l8-24 8 24M29.5 71h9', 'none', ' stroke="' + C.coralD + '"' + s(3.4)) +
-          P('M76 54V82M76 74c0-6 4-9 8-9s8 3 8 9-4 9-8 9-8-3-8-9', 'none', ' stroke="' + C.blue + '"' + s(3.4)) +
-          P('M98 10l2.4 5.6 5.6 2.4-5.6 2.4-2.4 5.6-2.4-5.6-5.6-2.4 5.6-2.4z', C.yellow, s(2.2)) +
-          P('M20 18l1.6 3.8 3.8 1.6-3.8 1.6-1.6 3.8-1.6-3.8-3.8-1.6 3.8-1.6z', C.pink, s(2));
+        return E(60, 110, 44, 4.5, K, NS + ' opacity=".14"') +
+          person(60, 46, 1.12, 'girl', C.coralL, { mouth: 'open' }) +
+          O(32, 84, 5.5, C.skin) + O(88, 84, 5.5, C.skin) +
+          P('M60 74C50 68 38 68 28 71V100C38 97 50 97 60 103Z', '#fff') +
+          P('M60 74C70 68 82 68 92 71V100C82 97 70 97 60 103Z', C.yellowL) + P('M60 74V103', 'none', s(2.8)) +
+          P('M37 94l5.5-16 5.5 16M39.4 88.5h6.2', 'none', ' stroke="' + C.coralD + '"' + s(3)) +
+          P('M71 77V95M71 89c0-4 2.7-6 5.4-6s5.4 2 5.4 6-2.7 6-5.4 6-5.4-2-5.4-6', 'none', ' stroke="' + C.blue + '"' + s(3)) +
+          P('M102 10l2.4 5.6 5.6 2.4-5.6 2.4-2.4 5.6-2.4-5.6-5.6-2.4 5.6-2.4z', C.yellow, s(2.2)) +
+          P('M16 22l1.6 3.8 3.8 1.6-3.8 1.6-1.6 3.8-1.6-3.8-3.8-1.6 3.8-1.6z', C.pink, s(2));
       }
     };
+    // a whole person (body + head), as on the picture cards: centred on x, head at y
+    function person(x, y, sc, g, shirt, o) {
+      return G('translate(' + x + ' ' + y + ') scale(' + sc + ')', torso(shirt) + G('translate(0 -2) scale(1.15)', head(g, o)));
+    }
     function draw(kind, opts) {
       opts = opts || {};
       var inner = (D[kind] || D.timer)();

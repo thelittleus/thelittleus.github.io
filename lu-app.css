@@ -401,9 +401,9 @@ html.ud-home.ud-plus .closing .signup{display:block}
 .ud-upcard h3{font:600 30px Fredoka,sans-serif;margin:0;display:flex;align-items:center;gap:10px}
 .ud-upcard p{margin:0;color:#4A4855}
 .ud-blob{position:absolute;right:-22px;top:-22px;width:92px;height:92px;border-radius:28px;background:#2B2A35;transform:rotate(18deg)}
-.ud-plans{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;margin-top:12px}
+.ud-plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:10px;margin-top:12px}
 .ud-plans a:not(.btn){display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:56px;padding:0 16px;border-radius:16px;background:#fff;border:1.5px solid #ECE6DC;text-decoration:none;color:#2B2A35}
-.ud-plans a.on{border:2px solid #2B2A35}.ud-plans a span{font:600 22px Fredoka,sans-serif}
+.ud-plans a.on{border:2px solid #2B2A35}.ud-plans a b{font:700 14px Figtree,sans-serif}.ud-plans a span{font:800 16px Figtree,sans-serif;white-space:nowrap}
 .ud-plans .btn{min-height:56px}
 /* signed in: dashboard banner first, then compact Tools, Shop and Articles */
 html.ud-in .h2-hero-wrap{display:none!important}
@@ -412,11 +412,17 @@ html.ud-in .la-dash{margin-top:28px}
 html.ud-in .closing,html.ud-in .h2-note{display:none}
 html.ud-in section[aria-labelledby="hTools"] .h2-headtx .eyebrow,html.ud-in section[aria-labelledby="hTools"] .h2-headtx p{display:none}
 html.ud-in .h2-tools{grid-template-columns:repeat(8,minmax(0,1fr))!important;gap:12px}
-html.ud-in .h2-tool{padding:10px 10px 14px;gap:10px}
-html.ud-in .h2-tool p,html.ud-in .h2-tool .btn{display:none}
-html.ud-in .h2-tool h3{font-size:16.5px}
-html.ud-in .h2-tool .h2-vis{height:96px;overflow:hidden}
-html.ud-in .h2-tool .h2-vis>*{transform:scale(.72)}
+/* signed-in Tools row: coloured card, light preview box with a "?" badge, the name on a white bar */
+html.ud-in .h2-tool{position:relative;padding:12px;gap:12px;border-radius:28px}
+html.ud-in .h2-tool .btn{display:none}
+html.ud-in .h2-tool p{display:none}
+html.ud-in .h2-tool .h2-vis{position:relative;height:132px;overflow:hidden;border-radius:20px;background:rgba(255,255,255,.62);padding:0}
+html.ud-in .h2-tool .h2-vis>*{transform-origin:center;flex:none;transform:scale(var(--fit,1))}
+html.ud-in .h2-tool h3{margin:0;min-height:66px;display:flex;align-items:center;justify-content:center;text-align:center;padding:10px 8px;background:#fff;border-radius:18px;font:600 16.5px/1.2 Fredoka,sans-serif;box-shadow:0 3px 0 rgba(43,42,53,.07)}
+.h2-vis>.ud-q{display:flex!important}
+.ud-q{position:absolute;top:9px;right:9px;z-index:2;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font:800 13px Figtree,sans-serif;cursor:pointer;box-shadow:0 2px 0 rgba(43,42,53,.15)}
+.ud-q:focus-visible{outline:3px solid var(--sunny);outline-offset:2px}
+html.ud-in .h2-tool.ud-info p{display:block;position:absolute;left:12px;right:12px;top:12px;height:132px;z-index:1;margin:0;padding:14px 38px 12px 14px;overflow:auto;background:#fff;border-radius:20px;font-size:13px;line-height:1.45;color:var(--body)}
 html.ud-in #secBlog:not(:empty){display:block}
 .la-kid .avs{display:flex}.la-kid .av.sm{margin-left:-12px;border:2px solid #fff;width:34px;height:34px;align-self:center;font-size:15px}
 .la-dash .la-used .ic{overflow:hidden;padding:4px}
@@ -430,25 +436,28 @@ html.ud-in .ud-popsub{display:none}
 .ud-cov>*:not(.ud-page){display:none!important}
 html.ud-home .h2-scene .h2-hills{height:14%!important}
 
-/* signed-in home: a smaller banner, and centred tool names */
+/* signed-in home: the dashboard banner, with room to breathe */
 button.la-kid{font:inherit;cursor:pointer;text-align:left}
-html.ud-in .la-dash{margin-top:20px;padding:16px 22px 18px;gap:12px;border-radius:24px}
-html.ud-in .la-dash h1{font-size:28px}
-html.ud-in .la-dash .head{align-items:center;gap:14px}
-html.ud-in .la-dash .head p{margin:2px 0 0;font-size:14px}
-html.ud-in .la-kid{padding:4px 6px}
-html.ud-in .la-kid .av{width:34px;height:34px;font-size:16px}
-html.ud-in .la-dgrid{gap:12px}
-html.ud-in .la-panel{padding:10px 14px 12px;gap:6px;border-radius:18px}
-html.ud-in .la-panel h2{font-size:18px}
-html.ud-in .la-used{padding:5px 10px;gap:10px}
-html.ud-in .la-used .ic{width:34px;height:34px}
-html.ud-in .la-empty{padding:12px 16px;gap:6px}
-html.ud-in .la-empty h3{font-size:16px;margin:0}
-html.ud-in .la-empty p{margin:0;font-size:13.5px}
-html.ud-in .la-empty .la-btn{min-height:38px;padding:0 16px;font-size:14px;border-radius:12px}
-html.ud-in .la-upbar{padding:6px 10px 6px 16px;gap:10px}
-html.ud-in .la-upbar .la-btn{min-height:38px;padding:0 16px;font-size:14px;border-radius:12px}
+html.ud-in .la-dash{margin-top:24px;padding:32px 34px 34px;gap:26px;border-radius:30px}
+html.ud-in .la-dash::after{content:"";position:absolute;right:-70px;top:-70px;width:200px;height:200px;border-radius:50%;background:var(--sunny);opacity:.32;pointer-events:none}
+html.ud-in .la-dash .head{align-items:center;gap:20px;position:relative;z-index:1}
+html.ud-in .la-dash h1{font-size:32px;line-height:1.15}
+html.ud-in .la-dash .head p{margin:8px 0 0;font-size:15.5px}
+html.ud-in .la-kid{padding:6px 8px;box-shadow:0 3px 0 var(--sunny)}
+html.ud-in .la-kid .av{width:44px;height:44px}
+html.ud-in .la-dgrid{gap:20px;position:relative;z-index:1;align-items:stretch}
+html.ud-in .la-panel{padding:22px 24px 24px;gap:12px;border-radius:24px}
+html.ud-in .la-panel .la-ph{margin-bottom:4px}
+html.ud-in .la-panel h2{font-size:21px}
+html.ud-in .la-used{padding:12px 16px;gap:14px;border-radius:16px}
+html.ud-in .la-used .ic{width:48px;height:48px;border-radius:12px}
+html.ud-in .la-used b{font-size:16px}
+html.ud-in .la-empty{padding:24px;gap:12px;border-radius:20px}
+html.ud-in .la-empty h3{font-size:19px;margin:0}
+html.ud-in .la-empty p{margin:0;font-size:14.5px;line-height:1.5}
+html.ud-in .la-empty .la-btn{min-height:44px;padding:0 20px;font-size:15px;border-radius:14px;margin-top:4px}
+html.ud-in .la-upbar{padding:14px 16px 14px 22px;gap:14px;position:relative;z-index:1}
+html.ud-in .la-upbar .la-btn{min-height:42px;padding:0 18px;font-size:14px;border-radius:12px}
 html.ud-in .h2-tool,html.ud-in .h2-tool h3{text-align:center}
 html.ud-in .h2-tool{align-items:stretch}
 
@@ -487,7 +496,7 @@ html.ud-in .ud-ways{display:none}
   html.ud-home .h2-tool:active{transform:translateY(-2px) scale(1.005)}
   html.ud-home .h2-tool .h2-vis>*{transition:transform .32s cubic-bezier(.2,.8,.3,1.3)}
   html.ud-home:not(.ud-in) .h2-tool:hover .h2-vis>*{transform:scale(1.08) rotate(-3deg)}
-  html.ud-home.ud-in .h2-tool:hover .h2-vis>*{transform:scale(.8) rotate(-3deg)}
+  html.ud-home.ud-in .h2-tool:hover .h2-vis>*{transform:scale(calc(var(--fit,1) * 1.07)) rotate(-3deg)}
   html.ud-home .h2-tool .btn{transition:transform .2s ease,box-shadow .2s ease}
   html.ud-home .h2-tool:hover .btn{transform:translateY(-1px)}
   html.ud-home .card .cover{transition:transform .3s cubic-bezier(.2,.8,.3,1.25),box-shadow .3s ease}
@@ -516,3 +525,11 @@ html.lu-app .la-setcard .la-accbox small,html.lu-app .la-setcard .la-accbox>.la-
 
 /* Articles on phones and tablets: the 'coming soon' heading is the title, so drop the extra 'Articles' heading above it */
 html.lu-app .ar-h1:has(+ .ar-empty){display:none}
+
+/* homepage: room between the last row (products or articles) and the dark footer */
+html.ud-home #lu-main>main{padding-bottom:72px}
+@media (max-width:759px){html.ud-home #lu-main>main{padding-bottom:40px}}
+
+/* lighter pages: paused when scrolled out of view (see lu-app.js), and lower homepage sections drawn only when reached */
+.lu-off,.lu-off *{animation-play-state:paused!important}
+#secPop,#secBlog,.closing,footer.site{content-visibility:auto;contain-intrinsic-size:auto 520px}

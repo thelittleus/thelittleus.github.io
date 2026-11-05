@@ -41,14 +41,9 @@
   function addMonths(d, m) { d = new Date(d); var day = d.getDate(); d.setMonth(d.getMonth() + m); if (d.getDate() < day) d.setDate(0); return d; }
   function initials(n) { return String(n || '?').trim().split(/\s+/).map(function (w) { return w[0] || ''; }).join('').slice(0, 1).toUpperCase() || '?'; }
   // profile pictures: a drawn character (boy, girl, or the grown-up in a suit) replaces the initial once the art has loaded
-  function face(kind, fallback) { return '<span class="lu-face" data-face="' + (kind === 'girl' || kind === 'adult' ? kind : 'boy') + '">' + esc(fallback || '') + '</span>'; }
-  var faceQ = 0;
-  function fillFaces() {
-    faceQ = 0; var Ar = window.LUArt; if (!Ar || !Ar.face) return;
-    document.querySelectorAll('[data-face]:not([data-done])').forEach(function (el) { el.innerHTML = el.getAttribute('data-face') === 'adult' ? Ar.adult() : Ar.face(el.getAttribute('data-face')); el.setAttribute('data-done', '1'); });
-  }
-  new MutationObserver(function () { if (!faceQ && document.querySelector('[data-face]:not([data-done])')) faceQ = requestAnimationFrame(fillFaces); }).observe(document.documentElement, { childList: true, subtree: true });
-  if (window.luLoad) window.luLoad('/tools-art.js?v=19').then(fillFaces).catch(function () {});
+  // the drawings are copies of LUArt.face('boy'|'girl') and LUArt.adult(), kept here so no page has to load every card for them
+  var FACES = {"boy":"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><g fill=\"none\" stroke=\"#2B2A35\" stroke-width=\"3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><g stroke=\"#2B2A35\" stroke-width=\"5\" stroke-linejoin=\"round\" stroke-linecap=\"round\" aria-hidden=\"true\"><path d=\"M14 106C14 84 28 74 50 74 72 74 86 84 86 106Z\" fill=\"#2B2A35\"/><g transform=\"translate(50 44) scale(1.55)\"><circle cx=\"-18\" cy=\"3\" r=\"4.2\" fill=\"#2B2A35\"/><circle cx=\"18\" cy=\"3\" r=\"4.2\" fill=\"#2B2A35\"/><circle cx=\"0\" cy=\"0\" r=\"18\" fill=\"#2B2A35\"/><path d=\"M-18-1C-20-15-11-23 1-23 12-22 20-15 18-1 15-7 11-9 7-8 4-12-1-12-4-8-8-11-13-9-14-5-16-5-17-3-18-1Z\" fill=\"#2B2A35\"/></g></g><path d=\"M14 106C14 84 28 74 50 74 72 74 86 84 86 106Z\" fill=\"#fdc300\" stroke=\"none\"/><clipPath id=\"lux1\"><path d=\"M14 106C14 84 28 74 50 74 72 74 86 84 86 106Z\"/></clipPath><g clip-path=\"url(#lux1)\"><g transform=\"translate(-2.5 -2.88)\"><path d=\"M14 106C14 84 28 74 50 74 72 74 86 84 86 106Z\" fill=\"#FFC94A\" stroke=\"none\"/></g><g transform=\"translate(2.25 2.5)\"><path d=\"M14 106C14 84 28 74 50 74 72 74 86 84 86 106Z\" fill=\"none\" stroke=\"#ffe4a4\" stroke-width=\"2.63\" opacity=\".7\"/></g></g><path d=\"M14 106C14 84 28 74 50 74 72 74 86 84 86 106Z\" fill=\"none\"/><path d=\"M41 75Q50 83 59 75\" fill=\"none\" stroke-width=\"2.6\"/><g transform=\"translate(50 44) scale(1.55)\"><circle cx=\"-18\" cy=\"3\" r=\"4.2\" fill=\"#f7a16a\" stroke=\"none\"/><clipPath id=\"lux2\"><circle cx=\"-18\" cy=\"3\" r=\"4.2\"/></clipPath><g clip-path=\"url(#lux2)\"><g transform=\"translate(-0.67 -0.77)\"><circle cx=\"-18\" cy=\"3\" r=\"4.2\" fill=\"#F7D3B7\" stroke=\"none\"/></g></g><circle cx=\"-18\" cy=\"3\" r=\"4.2\" fill=\"none\"/><circle cx=\"18\" cy=\"3\" r=\"4.2\" fill=\"#f7a16a\" stroke=\"none\"/><clipPath id=\"lux3\"><circle cx=\"18\" cy=\"3\" r=\"4.2\"/></clipPath><g clip-path=\"url(#lux3)\"><g transform=\"translate(-0.67 -0.77)\"><circle cx=\"18\" cy=\"3\" r=\"4.2\" fill=\"#F7D3B7\" stroke=\"none\"/></g></g><circle cx=\"18\" cy=\"3\" r=\"4.2\" fill=\"none\"/><circle cx=\"0\" cy=\"0\" r=\"18\" fill=\"#f7a16a\" stroke=\"none\"/><clipPath id=\"lux4\"><circle cx=\"0\" cy=\"0\" r=\"18\"/></clipPath><g clip-path=\"url(#lux4)\"><g transform=\"translate(-2.5 -2.88)\"><circle cx=\"0\" cy=\"0\" r=\"18\" fill=\"#F7D3B7\" stroke=\"none\"/></g><ellipse cx=\"-6.5\" cy=\"-7.6\" rx=\"4.7\" ry=\"2.7\" fill=\"#fbebdf\" stroke=\"none\" opacity=\".8\" transform=\"rotate(-32 -6.5 -7.6)\"/></g><circle cx=\"0\" cy=\"0\" r=\"18\" fill=\"none\"/><path d=\"M-18-1C-20-15-11-23 1-23 12-22 20-15 18-1 15-7 11-9 7-8 4-12-1-12-4-8-8-11-13-9-14-5-16-5-17-3-18-1Z\" fill=\"#3A3036\"/><ellipse cx=\"-6.5\" cy=\"2.5\" rx=\"1.9\" ry=\"2.5\" fill=\"#2B2A35\" stroke=\"none\"/><ellipse cx=\"6.5\" cy=\"2.5\" rx=\"1.9\" ry=\"2.5\" fill=\"#2B2A35\" stroke=\"none\"/><ellipse cx=\"-11\" cy=\"8.5\" rx=\"3.4\" ry=\"2.2\" fill=\"#F4A3A0\" stroke=\"none\" opacity=\".85\"/><ellipse cx=\"11\" cy=\"8.5\" rx=\"3.4\" ry=\"2.2\" fill=\"#F4A3A0\" stroke=\"none\" opacity=\".85\"/><path d=\"M-4 9.5Q0 13 4 9.5\" fill=\"none\" stroke-width=\"2.4\"/></g></g></svg>","girl":"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><g fill=\"none\" stroke=\"#2B2A35\" stroke-width=\"3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><g stroke=\"#2B2A35\" stroke-width=\"5\" stroke-linejoin=\"round\" stroke-linecap=\"round\" aria-hidden=\"true\"><path d=\"M14 106C14 84 28 74 50 74 72 74 86 84 86 106Z\" fill=\"#2B2A35\"/><g transform=\"translate(50 44) scale(1.55)\"><path d=\"M-21-1C-23-20-10-27 0-27 10-27 23-20 21-1L23 15C17 20 11 19 8 14H-8C-11 19-17 20-23 15Z\" fill=\"#2B2A35\"/><circle cx=\"-18\" cy=\"3\" r=\"4.2\" fill=\"#2B2A35\"/><circle cx=\"18\" cy=\"3\" r=\"4.2\" fill=\"#2B2A35\"/><circle cx=\"0\" cy=\"0\" r=\"18\" fill=\"#2B2A35\"/><path d=\"M-18 2C-21-15-10-24 1-23 13-22 21-14 18 2 16-6 12-10 6-10 2-14-6-13-9-9-13-9-17-5-18 2Z\" fill=\"#2B2A35\"/><g transform=\"rotate(24 11 -13)\"><rect x=\"6\" y=\"-16\" width=\"11\" height=\"6\" rx=\"3\" fill=\"#2B2A35\" stroke-width=\"4.0\"/></g></g></g><path d=\"M14 106C14 84 28 74 50 74 72 74 86 84 86 106Z\" fill=\"#fd553a\" stroke=\"none\"/><clipPath id=\"lux5\"><path d=\"M14 106C14 84 28 74 50 74 72 74 86 84 86 106Z\"/></clipPath><g clip-path=\"url(#lux5)\"><g transform=\"translate(-2.5 -2.88)\"><path d=\"M14 106C14 84 28 74 50 74 72 74 86 84 86 106Z\" fill=\"#F7A08C\" stroke=\"none\"/></g><g transform=\"translate(2.25 2.5)\"><path d=\"M14 106C14 84 28 74 50 74 72 74 86 84 86 106Z\" fill=\"none\" stroke=\"#fbcfc5\" stroke-width=\"2.63\" opacity=\".7\"/></g></g><path d=\"M14 106C14 84 28 74 50 74 72 74 86 84 86 106Z\" fill=\"none\"/><path d=\"M41 75Q50 83 59 75\" fill=\"none\" stroke-width=\"2.6\"/><g transform=\"translate(50 44) scale(1.55)\"><path d=\"M-21-1C-23-20-10-27 0-27 10-27 23-20 21-1L23 15C17 20 11 19 8 14H-8C-11 19-17 20-23 15Z\" fill=\"#3A3036\"/><circle cx=\"-18\" cy=\"3\" r=\"4.2\" fill=\"#f7a16a\" stroke=\"none\"/><clipPath id=\"lux6\"><circle cx=\"-18\" cy=\"3\" r=\"4.2\"/></clipPath><g clip-path=\"url(#lux6)\"><g transform=\"translate(-0.67 -0.77)\"><circle cx=\"-18\" cy=\"3\" r=\"4.2\" fill=\"#F7D3B7\" stroke=\"none\"/></g></g><circle cx=\"-18\" cy=\"3\" r=\"4.2\" fill=\"none\"/><circle cx=\"18\" cy=\"3\" r=\"4.2\" fill=\"#f7a16a\" stroke=\"none\"/><clipPath id=\"lux7\"><circle cx=\"18\" cy=\"3\" r=\"4.2\"/></clipPath><g clip-path=\"url(#lux7)\"><g transform=\"translate(-0.67 -0.77)\"><circle cx=\"18\" cy=\"3\" r=\"4.2\" fill=\"#F7D3B7\" stroke=\"none\"/></g></g><circle cx=\"18\" cy=\"3\" r=\"4.2\" fill=\"none\"/><circle cx=\"0\" cy=\"0\" r=\"18\" fill=\"#f7a16a\" stroke=\"none\"/><clipPath id=\"lux8\"><circle cx=\"0\" cy=\"0\" r=\"18\"/></clipPath><g clip-path=\"url(#lux8)\"><g transform=\"translate(-2.5 -2.88)\"><circle cx=\"0\" cy=\"0\" r=\"18\" fill=\"#F7D3B7\" stroke=\"none\"/></g><ellipse cx=\"-6.5\" cy=\"-7.6\" rx=\"4.7\" ry=\"2.7\" fill=\"#fbebdf\" stroke=\"none\" opacity=\".8\" transform=\"rotate(-32 -6.5 -7.6)\"/></g><circle cx=\"0\" cy=\"0\" r=\"18\" fill=\"none\"/><path d=\"M-18 2C-21-15-10-24 1-23 13-22 21-14 18 2 16-6 12-10 6-10 2-14-6-13-9-9-13-9-17-5-18 2Z\" fill=\"#3A3036\"/><g transform=\"rotate(24 11 -13)\"><rect x=\"6\" y=\"-16\" width=\"11\" height=\"6\" rx=\"3\" fill=\"#fdc300\" stroke=\"none\"/><clipPath id=\"lux9\"><rect x=\"6\" y=\"-16\" width=\"11\" height=\"6\" rx=\"3\"/></clipPath><g clip-path=\"url(#lux9)\"><g transform=\"translate(-0.72 -0.83)\"><rect x=\"6\" y=\"-16\" width=\"11\" height=\"6\" rx=\"3\" fill=\"#FFC94A\" stroke=\"none\"/></g><g transform=\"translate(0.65 0.72)\"><rect x=\"6\" y=\"-16\" width=\"11\" height=\"6\" rx=\"3\" fill=\"none\" stroke=\"#ffe4a4\" stroke-width=\"0.76\" opacity=\".7\"/></g></g><rect x=\"6\" y=\"-16\" width=\"11\" height=\"6\" rx=\"3\" fill=\"none\" stroke-width=\"2\"/></g><ellipse cx=\"-6.5\" cy=\"2.5\" rx=\"1.9\" ry=\"2.5\" fill=\"#2B2A35\" stroke=\"none\"/><ellipse cx=\"6.5\" cy=\"2.5\" rx=\"1.9\" ry=\"2.5\" fill=\"#2B2A35\" stroke=\"none\"/><ellipse cx=\"-11\" cy=\"8.5\" rx=\"3.4\" ry=\"2.2\" fill=\"#F4A3A0\" stroke=\"none\" opacity=\".85\"/><ellipse cx=\"11\" cy=\"8.5\" rx=\"3.4\" ry=\"2.2\" fill=\"#F4A3A0\" stroke=\"none\" opacity=\".85\"/><path d=\"M-4 9.5Q0 13 4 9.5\" fill=\"none\" stroke-width=\"2.4\"/></g></g></svg>","adult":"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><g fill=\"none\" stroke=\"#2B2A35\" stroke-width=\"3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><g stroke=\"#2B2A35\" stroke-width=\"5\" stroke-linejoin=\"round\" stroke-linecap=\"round\" aria-hidden=\"true\"><rect x=\"43\" y=\"62\" width=\"14\" height=\"12\" rx=\"5\" fill=\"#2B2A35\"/><path d=\"M10 106C10 84 26 72 50 72 74 72 90 84 90 106Z\" fill=\"#2B2A35\"/><path d=\"M40 72L50 92 60 72Z\" fill=\"#2B2A35\"/><path d=\"M47 75H53L55 80 52 96 50 98 48 96 45 80Z\" fill=\"#2B2A35\"/><path d=\"M40 72 50 92 43 99 33 77Z\" fill=\"#2B2A35\"/><path d=\"M60 72 50 92 57 99 67 77Z\" fill=\"#2B2A35\"/><circle cx=\"28\" cy=\"47\" r=\"5.5\" fill=\"#2B2A35\"/><circle cx=\"72\" cy=\"47\" r=\"5.5\" fill=\"#2B2A35\"/><circle cx=\"50\" cy=\"44\" r=\"22\" fill=\"#2B2A35\"/></g><rect x=\"43\" y=\"62\" width=\"14\" height=\"12\" rx=\"5\" fill=\"#ec8349\" stroke=\"none\"/><clipPath id=\"luxa\"><rect x=\"43\" y=\"62\" width=\"14\" height=\"12\" rx=\"5\"/></clipPath><g clip-path=\"url(#luxa)\"><g transform=\"translate(-1.44 -1.66)\"><rect x=\"43\" y=\"62\" width=\"14\" height=\"12\" rx=\"5\" fill=\"#EDB894\" stroke=\"none\"/></g><g transform=\"translate(1.30 1.44)\"><rect x=\"43\" y=\"62\" width=\"14\" height=\"12\" rx=\"5\" fill=\"none\" stroke=\"#f6dcca\" stroke-width=\"1.51\" opacity=\".7\"/></g></g><rect x=\"43\" y=\"62\" width=\"14\" height=\"12\" rx=\"5\" fill=\"none\"/><path d=\"M10 106C10 84 26 72 50 72 74 72 90 84 90 106Z\" fill=\"#29334c\" stroke=\"none\"/><clipPath id=\"luxb\"><path d=\"M10 106C10 84 26 72 50 72 74 72 90 84 90 106Z\"/></clipPath><g clip-path=\"url(#luxb)\"><g transform=\"translate(-2.5 -2.88)\"><path d=\"M10 106C10 84 26 72 50 72 74 72 90 84 90 106Z\" fill=\"#4A5578\" stroke=\"none\"/></g><g transform=\"translate(2.25 2.5)\"><path d=\"M10 106C10 84 26 72 50 72 74 72 90 84 90 106Z\" fill=\"none\" stroke=\"#9da6c3\" stroke-width=\"2.63\" opacity=\".7\"/></g></g><path d=\"M10 106C10 84 26 72 50 72 74 72 90 84 90 106Z\" fill=\"none\"/><path d=\"M40 72L50 92 60 72Z\" fill=\"#e9e4dc\" stroke=\"none\"/><clipPath id=\"luxc\"><path d=\"M40 72L50 92 60 72Z\"/></clipPath><g clip-path=\"url(#luxc)\"><g transform=\"translate(-2.5 -2.88)\"><path d=\"M40 72L50 92 60 72Z\" fill=\"#fff\" stroke=\"none\"/></g><g transform=\"translate(2.25 2.5)\"><path d=\"M40 72L50 92 60 72Z\" fill=\"none\" stroke=\"#ffffff\" stroke-width=\"2.63\" opacity=\".7\"/></g></g><path d=\"M40 72L50 92 60 72Z\" fill=\"none\"/><path d=\"M47 75H53L55 80 52 96 50 98 48 96 45 80Z\" fill=\"#ec2006\" stroke=\"none\"/><clipPath id=\"luxd\"><path d=\"M47 75H53L55 80 52 96 50 98 48 96 45 80Z\"/></clipPath><g clip-path=\"url(#luxd)\"><g transform=\"translate(-2.5 -2.88)\"><path d=\"M47 75H53L55 80 52 96 50 98 48 96 45 80Z\" fill=\"#F0694F\" stroke=\"none\"/></g><g transform=\"translate(2.25 2.5)\"><path d=\"M47 75H53L55 80 52 96 50 98 48 96 45 80Z\" fill=\"none\" stroke=\"#f8b4a7\" stroke-width=\"2.63\" opacity=\".7\"/></g></g><path d=\"M47 75H53L55 80 52 96 50 98 48 96 45 80Z\" fill=\"none\"/><path d=\"M40 72 50 92 43 99 33 77Z\" fill=\"#1c2438\" stroke=\"none\"/><clipPath id=\"luxe\"><path d=\"M40 72 50 92 43 99 33 77Z\"/></clipPath><g clip-path=\"url(#luxe)\"><g transform=\"translate(-2.5 -2.88)\"><path d=\"M40 72 50 92 43 99 33 77Z\" fill=\"#3B4566\" stroke=\"none\"/></g><g transform=\"translate(2.25 2.5)\"><path d=\"M40 72 50 92 43 99 33 77Z\" fill=\"none\" stroke=\"#909bbf\" stroke-width=\"2.63\" opacity=\".7\"/></g></g><path d=\"M40 72 50 92 43 99 33 77Z\" fill=\"none\"/><path d=\"M60 72 50 92 57 99 67 77Z\" fill=\"#1c2438\" stroke=\"none\"/><clipPath id=\"luxf\"><path d=\"M60 72 50 92 57 99 67 77Z\"/></clipPath><g clip-path=\"url(#luxf)\"><g transform=\"translate(-2.5 -2.88)\"><path d=\"M60 72 50 92 57 99 67 77Z\" fill=\"#3B4566\" stroke=\"none\"/></g><g transform=\"translate(2.25 2.5)\"><path d=\"M60 72 50 92 57 99 67 77Z\" fill=\"none\" stroke=\"#909bbf\" stroke-width=\"2.63\" opacity=\".7\"/></g></g><path d=\"M60 72 50 92 57 99 67 77Z\" fill=\"none\"/><circle cx=\"28\" cy=\"47\" r=\"5.5\" fill=\"#f7a16a\" stroke=\"none\"/><clipPath id=\"luxg\"><circle cx=\"28\" cy=\"47\" r=\"5.5\"/></clipPath><g clip-path=\"url(#luxg)\"><g transform=\"translate(-0.88 -1.01)\"><circle cx=\"28\" cy=\"47\" r=\"5.5\" fill=\"#F7D3B7\" stroke=\"none\"/></g></g><circle cx=\"28\" cy=\"47\" r=\"5.5\" fill=\"none\"/><circle cx=\"72\" cy=\"47\" r=\"5.5\" fill=\"#f7a16a\" stroke=\"none\"/><clipPath id=\"luxh\"><circle cx=\"72\" cy=\"47\" r=\"5.5\"/></clipPath><g clip-path=\"url(#luxh)\"><g transform=\"translate(-0.88 -1.01)\"><circle cx=\"72\" cy=\"47\" r=\"5.5\" fill=\"#F7D3B7\" stroke=\"none\"/></g></g><circle cx=\"72\" cy=\"47\" r=\"5.5\" fill=\"none\"/><circle cx=\"50\" cy=\"44\" r=\"22\" fill=\"#f7a16a\" stroke=\"none\"/><clipPath id=\"luxi\"><circle cx=\"50\" cy=\"44\" r=\"22\"/></clipPath><g clip-path=\"url(#luxi)\"><g transform=\"translate(-2.5 -2.88)\"><circle cx=\"50\" cy=\"44\" r=\"22\" fill=\"#F7D3B7\" stroke=\"none\"/></g><ellipse cx=\"42.1\" cy=\"34.8\" rx=\"5.7\" ry=\"3.3\" fill=\"#fbebdf\" stroke=\"none\" opacity=\".8\" transform=\"rotate(-32 42.1 34.8)\"/></g><circle cx=\"50\" cy=\"44\" r=\"22\" fill=\"none\"/><path d=\"M37 30c4-4 10-5 15-4\" fill=\"none\" stroke=\"#fff\" stroke-width=\"2.6\" opacity=\".9\"/><circle cx=\"42\" cy=\"46\" r=\"2.6\" fill=\"#2B2A35\" stroke=\"none\"/><circle cx=\"58\" cy=\"46\" r=\"2.6\" fill=\"#2B2A35\" stroke=\"none\"/><path d=\"M44 54q6 5 12 0\" fill=\"none\" stroke-width=\"2.8\"/><ellipse cx=\"35\" cy=\"53\" rx=\"4\" ry=\"2.6\" fill=\"#F4A3A0\" stroke=\"none\" opacity=\".8\"/><ellipse cx=\"65\" cy=\"53\" rx=\"4\" ry=\"2.6\" fill=\"#F4A3A0\" stroke=\"none\" opacity=\".8\"/></g></svg>"};
+  function face(kind, fallback) { var k = kind === 'girl' || kind === 'adult' ? kind : 'boy'; return '<span class="lu-face" data-face="' + k + '" data-done="1">' + (FACES[k] || esc(fallback || '')) + '</span>'; }
   function firstName(n) { return String(n || '').trim().split(/\s+/)[0] || ''; }
   function toast(msg, kind) { if (window.LU && LU.toast) LU.toast(msg, { kind: kind || 'info' }); }
 
@@ -113,7 +108,7 @@
     upgradeH: ['Upgrade to Little Us Plus', 'Upgrade ke Little Us Plus'], upgradeTo: ['Upgrade to Little Us', 'Upgrade ke Little Us'],
     moreForH: [function (c) { return 'More for ' + c + ', every download for you'; }, function (c) { return 'Lebih banyak untuk ' + c + ', semua unduhan untukmu'; }],
     choosePass: ['Choose a pass. You pay once and it simply ends; nothing renews.', 'Pilih pass. Bayar sekali lalu selesai; tidak ada perpanjangan otomatis.'],
-    choosePlan: ['Choose a plan', 'Pilih paket'], m3: ['3 Months', '3 Bulan'], m12: ['12 Months', '12 Bulan'], bestValue: ['BEST VALUE', 'PALING HEMAT'],
+    choosePlan: ['Choose a plan', 'Pilih paket'], m3: ['3 Months', '3 Bulan'], m6: ['6 Months', '6 Bulan'], m12: ['12 Months', '12 Bulan'], bestValue: ['BEST VALUE', 'PALING HEMAT'],
     plusUntil: [function (d) { return 'Plus until ' + d; }, function (d) { return 'Plus sampai ' + d; }],
     untilD: [function (d) { return 'Until ' + d; }, function (d) { return 'Sampai ' + d; }], fxNote: [function (a, b) { return 'Shown in your currency at today’s rate. Card or PayPal is charged ' + a + ' or ' + b + ' by Gumroad; your bank does the conversion.'; }, function (a, b) { return 'Ditampilkan dalam mata uangmu dengan kurs hari ini. Kartu atau PayPal ditagih ' + a + ' atau ' + b + ' oleh Gumroad; bankmu yang mengonversinya.'; }],
     plusFromToday: ['Plus from today until', 'Plus mulai hari ini sampai'], plusAddedUntil: ['Plus now runs until', 'Plus sekarang berlaku sampai'],
@@ -195,7 +190,7 @@
     preparing: ['Preparing your download…', 'Menyiapkan unduhan…'], dlFail: ['The download couldn’t start. Please try again.', 'Unduhan gagal dimulai. Coba lagi ya.'],
     // account
     account: ['Account', 'Akun'], signedInEmail: ['Signed in with email', 'Masuk dengan email'],
-    pass12: ['12 Months pass', 'Pass 12 Bulan'], pass3: ['3 Months pass', 'Pass 3 Bulan'], passPlus: ['Little Us Plus', 'Little Us Plus'],
+    pass12: ['12 Months pass', 'Pass 12 Bulan'], pass6: ['6 Months pass', 'Pass 6 Bulan'], pass3: ['3 Months pass', 'Pass 3 Bulan'], passPlus: ['Little Us Plus', 'Little Us Plus'],
     activeUntil: ['Active until', 'Aktif sampai'], buyAgainAdd: ['Buy again to add time', 'Beli lagi untuk menambah waktu'],
     until: [function (d) { return 'Until ' + d; }, function (d) { return 'Sampai ' + d; }],
     endsIn: [function (n, d) { return 'Ends in ' + n + (n === 1 ? ' day' : ' days') + ', on ' + d; }, function (n, d) { return 'Berakhir dalam ' + n + ' hari, pada ' + d; }],
@@ -228,7 +223,7 @@
     syncedEvery: ['Their tools and downloads are synced on every device.', 'Alat dan unduhan tersimpan di semua perangkat.'],
     pickUp: ['Pick up where you left off', 'Lanjutkan dari terakhir kali'], usedLast: [function (n) { return n + ' used last'; }, function (n) { return 'Terakhir dipakai ' + n; }],
     daysLeftN: [function (n) { return n + (n === 1 ? ' day left' : ' days left'); }, function (n) { return 'Sisa ' + n + ' hari'; }], planEnds: [function (p, d) { return p + ' plan · ends ' + d; }, function (p, d) { return 'Paket ' + p + ' · berakhir ' + d; }],
-    m12: ['12 Months', '12 Bulan'], m3: ['3 Months', '3 Bulan'], managePlan: ['Manage plan', 'Kelola paket'], activeP: ['Active', 'Aktif'], allTools: ['All tools', 'Semua alat'], open: ['Open', 'Buka'],
+    m12: ['12 Months', '12 Bulan'], m6: ['6 Months', '6 Bulan'], m3: ['3 Months', '3 Bulan'], managePlan: ['Manage plan', 'Kelola paket'], activeP: ['Active', 'Aktif'], allTools: ['All tools', 'Semua alat'], open: ['Open', 'Buka'],
     emptyLibH: ['Nothing here yet', 'Belum ada apa-apa'], emptyLibP: ['Anything you buy is kept here, on every device.', 'Semua yang kamu beli tersimpan di sini, di semua perangkat.'],
     browseFree: ['Browse free printables', 'Lihat materi gratis'], plusLibH: ['Every worksheet is yours to download', 'Semua lembar kerja bisa kamu unduh'],
     plusLibP: ['Little Us Plus includes every worksheet, social story and bundle in the Shop.', 'Little Us Plus mencakup semua lembar kerja, cerita sosial, dan paket di Toko.'], browseShop: ['Browse the shop', 'Lihat toko'],
@@ -330,10 +325,11 @@
     'Europe/Copenhagen': 'DKK', 'Europe/Warsaw': 'PLN', 'Europe/Prague': 'CZK', 'Europe/Budapest': 'HUF', 'Europe/Istanbul': 'TRY', 'Europe/Bucharest': 'RON',
     'America/Sao_Paulo': 'BRL', 'America/Mexico_City': 'MXN', 'Africa/Johannesburg': 'ZAR', 'Asia/Jerusalem': 'ILS',
     'America/Toronto': 'CAD', 'America/Vancouver': 'CAD', 'America/Edmonton': 'CAD', 'America/Winnipeg': 'CAD', 'America/Halifax': 'CAD' };
-  var FX = { cur: 'USD', rate: 1 };
+  var FX = { cur: 'USD', rate: 1 }, LOCALCUR = 'USD';
   (function initFx() {
     var tz = ''; try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) {}
     var cur = TZCUR[tz] || (/^Australia\//.test(tz) ? 'AUD' : /^Europe\/(Berlin|Paris|Madrid|Rome|Amsterdam|Brussels|Vienna|Dublin|Lisbon|Helsinki|Athens|Luxembourg|Bratislava|Ljubljana|Vilnius|Riga|Tallinn|Zagreb|Valletta|Nicosia|Monaco)$/.test(tz) ? 'EUR' : 'USD');
+    LOCALCUR = cur;
     if (cur === 'USD') return;
     var cached = store.json('lu_fx', null);
     function use(rates) { var r = Number(rates && rates[cur]); if (r > 0) { FX = { cur: cur, rate: r }; return true; } return false; }
@@ -353,15 +349,23 @@
     catch (e) { return '$' + usd; }
   }
   function usdText(usd) { return 'US$' + (Math.abs(usd - Math.round(usd)) < 0.005 ? Math.round(usd) : usd.toFixed(2)); }
+  // the three Plus passes: '3m', '6m', '12m'
+  function planMonths(plan) { return plan === '12m' ? 12 : plan === '6m' ? 6 : 3; }
+  function planName(plan) { return t('m' + planMonths(plan)); }
+  function rupiah(n) { return 'Rp ' + Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
   function settings() {
     var s = FEAT.settings || {};
-    var u3 = Number(s.usd_3m) || 7, u12 = Number(s.usd_12m) || 21, mo = L() === 'id' ? '/bln' : '/mo';
+    var u3 = Number(s.usd_3m) || 7, u6 = Number(s.usd_6m) || 11, u12 = Number(s.usd_12m) || 21, per = L() === 'id' ? '/bln' : '/mo';
+    // visitors in Indonesia see (and pay through Midtrans) Indonesia's own rupiah prices
+    var idr = LOCALCUR === 'IDR' ? { 3: Number(s.idr_3m) || 79000, 6: Number(s.idr_6m) || 149000, 12: Number(s.idr_12m) || 279000 } : null;
+    function price(m, usd) { return idr ? rupiah(idr[m]) : money(usd); }
+    function perMo(m, usd) { return idr ? rupiah(Math.round(idr[m] / m / 100) * 100) + per : money(usd / m).replace(/^≈ /, '') + per; }
     return {
       childLimit: s.free_child_limit || 1,
       url3: s.gumroad_3m_url || '', url12: s.gumroad_12m_url || '', midtrans: !!s.midtrans_enabled,
-      usd3: u3, usd12: u12, local: FX.cur !== 'USD', fromLocal: money(u3).replace(/^≈ /, ''),
-      p3: money(u3), p12: money(u12),
-      pm3: money(u3 / 3).replace(/^≈ /, '') + mo, pm12: money(u12 / 12).replace(/^≈ /, '') + mo,
+      usd3: u3, usd6: u6, usd12: u12, url6: s.gumroad_6m_url || '',
+      p3: price(3, u3), p6: price(6, u6), p12: price(12, u12),
+      pm3: perMo(3, u3), pm6: perMo(6, u6), pm12: perMo(12, u12),
       support: s.support_email || (CFG.CONTACT && CFG.CONTACT.email) || 'littleus.business@gmail.com',
       popTitle: L() === 'id' ? s.popup_title_id : s.popup_title_en,
       popBody: L() === 'id' ? s.popup_body_id : s.popup_body_en,
@@ -564,7 +568,11 @@
     '.la-table.cmp .r:first-child span:last-child{display:flex;align-items:center;gap:6px}',
     '.la-pluspage .la-choose{gap:12px;padding:22px}.la-pluspage .la-plan{padding:14px 18px}.la-pluspage .la-plan .pr b{font-size:26px}',
     '.la-pluspage .la-safe{display:block;font-size:13.5px;line-height:1.5}.la-pluspage .la-safe b{display:inline;font-size:13.5px}',
-    '.la-plan .pr{white-space:nowrap}.la-plan .pr.long b{font-size:19px!important;letter-spacing:-.01em}.la-plan .pr.long small{font-size:11.5px}',
+    /* plan names and prices use the plain body font (more formal than Fredoka) and shrink for long local prices */
+    '.la-plan .nm b{font:800 17px Figtree,sans-serif!important}.la-plan .pr{white-space:nowrap}.la-plan .pr b{font:800 21px/1.1 Figtree,sans-serif!important;letter-spacing:-.01em}.la-plan .pr.long b{font-size:16px!important}.la-plan .pr small{font:600 12px Figtree,sans-serif}',
+    '.la-tile .t1,.la-tile .t1 span{font-family:Figtree,sans-serif!important}',
+    /* Free / Plus table: a dark title row so it stands apart */
+    '.la-table.cmp .r:first-child{background:var(--ink);color:#fff}.la-table.cmp .r:first-child .la-pill{background:var(--sunny);color:var(--ink)}',
     '.la-chfoot{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:13px;color:var(--body)}.la-chfoot a{font-weight:700;color:var(--ink)}',
     '.la-fx{margin:0;font-size:12.5px;color:var(--muted);line-height:1.45}',
     '@media(min-width:960px){.la-pluspage .la-plans{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:44px}.la-pluspage .la-plansl h1{font-size:40px}.la-pluspage .la-h2{margin-top:36px}}',
@@ -599,7 +607,7 @@
     '.la-passcard{background:var(--ink);color:#fff;border-radius:22px;padding:18px;display:flex;flex-direction:column;gap:12px}',
     '.la-passcard h3{font:600 20px Fredoka,sans-serif;margin:0;display:flex;gap:10px;align-items:center}',
     '.la-passcard .lab{font:800 12px Figtree,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#E9E6EF}',
-    '.la-tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}',
+    '.la-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}',
     '.la-tile{background:#fff;color:var(--ink);border-radius:14px;padding:10px 12px;border:0;text-align:left;cursor:pointer;font:inherit;display:flex;flex-direction:column;gap:2px}',
     '.la-tile .t1{display:flex;justify-content:space-between;font-weight:800;font-size:14.5px}.la-tile small{color:var(--body);font-size:12px;font-weight:600}',
     '.la-warn{background:var(--sunny);color:var(--ink);border-radius:14px;padding:12px 14px}.la-warn b{display:block}.la-warn small{font-size:13px}',
@@ -1050,24 +1058,22 @@
 
   // ----- C01 / C02 / C03: plans
   var PL = { plan: '12m' };
-  function newEnd(plan) { var base = isPlus() ? plusUntil() : new Date(); return addMonths(base, plan === '12m' ? 12 : 3); }
+  function newEnd(plan) { var base = isPlus() ? plusUntil() : new Date(); return addMonths(base, planMonths(plan)); }
   function planCard(plan, st, compact) {
     var on = PL.plan === plan, end = newEnd(plan);
-    return '<button type="button" class="la-plan' + (on ? ' on' : '') + '" data-plan="' + plan + '" aria-pressed="' + on + '"><span class="la-radio"></span><span class="nm"><b>' + esc(t(plan === '12m' ? 'm12' : 'm3')) + (plan === '12m' ? ' <span class="la-pill best">' + esc(t('bestValue')) + '</span>' : '') + '</b>' +
-      (compact ? '<small>' + esc(t('untilD', fmtDate(end))) + '</small>' : '') + '</span><span class="pr' + (String(plan === '12m' ? st.p12 : st.p3).length > 6 ? ' long' : '') + '"><b>' + esc(plan === '12m' ? st.p12 : st.p3) + '</b><small>' + esc(plan === '12m' ? st.pm12 : st.pm3) + '</small></span></button>';
+    return '<button type="button" class="la-plan' + (on ? ' on' : '') + '" data-plan="' + plan + '" aria-pressed="' + on + '"><span class="la-radio"></span><span class="nm"><b>' + esc(planName(plan)) + (plan === '12m' ? ' <span class="la-pill best">' + esc(t('bestValue')) + '</span>' : '') + '</b>' +
+      (compact ? '<small>' + esc(t('untilD', fmtDate(end))) + '</small>' : '') + '</span><span class="pr' + (String(st['p' + planMonths(plan)]).length > 6 ? ' long' : '') + '"><b>' + esc(st['p' + planMonths(plan)]) + '</b><small>' + esc(st['pm' + planMonths(plan)]) + '</small></span></button>';
   }
   function renderPlans() {
-    var st = settings(), u = me(), price = PL.plan === '12m' ? st.p12 : st.p3;
+    var st = settings(), u = me(), price = st['p' + planMonths(PL.plan)];
     // left: title and the Free / Plus comparison; right: the plan picker
     var cmp = '<div class="la-table cmp"><div class="r"><span></span><span>' + (L() === 'id' ? 'Gratis' : 'Free') + '</span><span>' + pill('plus') + '</span></div>' +
       W.cmp.map(function (r) { var i = L() === 'id' ? 1 : 0; return '<div class="r"><span>' + esc(r[0][i]) + '</span><span style="font-weight:500;color:var(--body)">' + esc(r[1][i]) + '</span><span>' + esc(r[2][i]) + '</span></div>'; }).join('') + '</div>';
     var left = '<div class="la-plansl"><h1>' + esc(t('upgradeTo')) + ' ' + pill('plus') + '</h1>' + cmp + '</div>';
-    var ready = !!(PL.plan === '12m' ? st.url12 : st.url3) || st.midtrans;
-    var right = '<div class="la-choose"><h2>' + esc(t('choosePlan')) + '</h2>' + planCard('3m', st, true) + planCard('12m', st, true) +
-      '<div class="la-safe"><span><b>' + esc(t('oneTime')) + '</b> ' + esc(t('oneTimeP')) + '</span></div>' +
+    var ready = !!(st['url' + planMonths(PL.plan)]) || st.midtrans;
+    var right = '<div class="la-choose"><h2>' + esc(t('choosePlan')) + '</h2>' + planCard('3m', st, true) + planCard('6m', st, true) + planCard('12m', st, true) +
       (ready ? '<button type="button" class="la-btn primary block" data-act="continue">' + esc(t('contPay', price)) + '</button>' : '<div class="la-note">' + esc(t('notSet')) + '</div>') +
       '<div class="la-chfoot"><a href="#/refund">' + esc(t('refundLink')) + '</a><span>' + esc(t('opensTab')) + '</span></div>' +
-      (st.local ? '<p class="la-small la-fx">' + esc(t('fxNote', usdText(st.usd3), usdText(st.usd12))) + '</p>' : '') +
       (u ? '<p class="la-small" style="margin:0">' + t('addedTo', esc(u.email || '')) + '</p>' : '') + '</div>';
     var faq = '<h2 class="la-h2">' + esc(t('questions')) + '</h2><div class="la-faqs">' + W.faq.map(function (q) { var i = L() === 'id' ? 1 : 0; return '<div class="la-faq"><h3>' + esc(q[0][i]) + '</h3><p>' + esc(q[1][i]) + '</p></div>'; }).join('') + '</div>';
     return '<div class="la-page la-pluspage"><a href="#/" class="la-xlink" style="font-size:14.5px">← ' + esc(t('backHome')) + '</a><div class="la-plans" style="margin-top:12px">' + left + right + '</div>' + faq + '</div>';
@@ -1081,15 +1087,15 @@
     }
   }
   function checkoutUrl(plan) {
-    var st = settings(), base = plan === '12m' ? st.url12 : st.url3; if (!base) return '';
+    var st = settings(), base = st['url' + planMonths(plan)]; if (!base) return '';
     var u = me() || {};
     return base + (base.indexOf('?') < 0 ? '?' : '&') + 'wanted=true&uid=' + encodeURIComponent(session.user.id) + (u.email ? '&email=' + encodeURIComponent(u.email) : '');
   }
   function startCheckout(plan, auto) {
     if (!signedIn()) {
       store.setJson('lu_pending_plan', { plan: plan, at: Date.now() });
-      var st = settings(), price = plan === '12m' ? st.p12 : st.p3;
-      var sh = sheet('<div><span class="la-own2" style="display:inline-flex;padding:6px 12px;border-radius:999px">' + pill('plus') + ' <b style="font-size:14px">' + esc(t(plan === '12m' ? 'm12' : 'm3')) + ' · ' + esc(price) + '</b></span></div>' +
+      var st = settings(), price = st['p' + planMonths(plan)];
+      var sh = sheet('<div><span class="la-own2" style="display:inline-flex;padding:6px 12px;border-radius:999px">' + pill('plus') + ' <b style="font-size:14px">' + esc(planName(plan)) + ' · ' + esc(price) + '</b></span></div>' +
         '<h2>' + esc(t('quickStep')) + '</h2><p class="la-p">' + esc(t('quickStepP')) + '</p>' +
         '<a class="la-btn outline block" href="#/signup" data-close>' + IC.mail + esc(t('contEmail')) + '</a>' +
         '<p class="la-p" style="text-align:center">' + esc(t('haveAcc')) + ' <a href="#/login" data-close>' + esc(t('logIn')) + '</a></p><p class="la-small" style="text-align:center;margin:0">' + esc(t('thenCheckout')) + '</p>');
@@ -1109,8 +1115,8 @@
   }
   // The popup that lets the parent pick Gumroad (card, PayPal) or Midtrans (GoPay, QRIS, bank transfer).
   function payChooser(plan) {
-    var st = settings(), price = plan === '12m' ? st.p12 : st.p3;
-    var sh = sheet('<div><span class="la-own2" style="display:inline-flex;padding:6px 12px;border-radius:999px">' + pill('plus') + ' <b style="font-size:14px">' + esc(t(plan === '12m' ? 'm12' : 'm3')) + ' · ' + esc(price) + '</b></span></div>' +
+    var st = settings(), price = st['p' + planMonths(plan)];
+    var sh = sheet('<div><span class="la-own2" style="display:inline-flex;padding:6px 12px;border-radius:999px">' + pill('plus') + ' <b style="font-size:14px">' + esc(planName(plan)) + ' · ' + esc(price) + '</b></span></div>' +
       '<h2>' + esc(t('payH')) + '</h2><p class="la-p">' + esc(t('payHP')) + '</p>' +
       '<button type="button" class="la-btn outline block" data-pay="gumroad" style="flex-direction:column;align-items:flex-start;gap:2px;text-align:left;padding:14px 16px;height:auto"><b>' + esc(t('payGum')) + '</b><small style="font-weight:500;font-size:13.5px;line-height:1.4;color:var(--body)">' + esc(t('payGumP')) + '</small></button>' +
       '<button type="button" class="la-btn outline block" data-pay="midtrans" style="flex-direction:column;align-items:flex-start;gap:2px;text-align:left;padding:14px 16px;height:auto"><b>' + esc(t('payMid')) + '</b><small style="font-weight:500;font-size:13.5px;line-height:1.4;color:var(--body)">' + esc(t('payMidP')) + ' <span data-mt-amt></span></small></button>' +
@@ -1157,13 +1163,13 @@
   var CO = { state: 'opening', timer: null, startedActivating: 0, result: null };
   function renderCheckout() {
     var c = ss.json('lu_checkout', null) || {}, st = settings(), plan = c.plan || (LU.qs && LU.qs.get('plan')) || '12m';
-    var price = plan === '12m' ? st.p12 : st.p3, u = me() || {};
+    var price = st['p' + planMonths(plan)], u = me() || {};
     if (CO.state === 'opening') {
       return topBar({ back: '#/plus' }) + '<div class="la-flow"><div class="grow"></div><div class="la-center">' + heartFace(64) + '<div class="la-prog"><i></i></div><h1 class="la-h1" style="font-size:28px">' + esc(t('openingH')) + '</h1><p class="la-p">' + esc(t('openingP')) + '</p></div><div class="grow"></div><p class="la-p" style="text-align:center">' + esc(t('nothingOpened')) + ' <button type="button" class="la-link" data-act="reopen">' + esc(t('openCheckout')) + '</button></p></div>';
     }
     if (CO.state === 'waiting') {
       return topBar({ back: '#/plus' }) + '<div class="la-flow"><div class="la-small" style="font-weight:800;letter-spacing:.06em;text-transform:uppercase">' + esc(t('checkoutOpen')) + '</div><h1 class="la-h1">' + esc(t('finishH')) + '</h1>' +
-        '<div class="la-card" style="display:flex;flex-direction:column;gap:4px"><div style="display:flex;align-items:center;gap:8px">' + pill('plus') + '<b style="font:600 20px Fredoka,sans-serif;flex:1">' + esc(t(plan === '12m' ? 'm12' : 'm3')) + '</b><b style="font:600 22px Fredoka,sans-serif">' + esc(price) + '</b></div><small class="la-small">' + esc(t('oneTimeUntil', fmtDate(newEndFrom(c.base, plan)))) + '</small></div>' +
+        '<div class="la-card" style="display:flex;flex-direction:column;gap:4px"><div style="display:flex;align-items:center;gap:8px">' + pill('plus') + '<b style="font:800 18px Figtree,sans-serif;flex:1">' + esc(planName(plan)) + '</b><b style="font:800 19px Figtree,sans-serif;white-space:nowrap">' + esc(price) + '</b></div><small class="la-small">' + esc(t('oneTimeUntil', fmtDate(newEndFrom(c.base, plan)))) + '</small></div>' +
         '<div class="la-steps"><div class="on"><span>1</span>' + esc(t('st1')) + '</div><div><span>2</span>' + esc(t('st2')) + '</div><div><span>3</span>' + esc(t('st3')) + '</div></div><div class="grow"></div>' +
         '<button type="button" class="la-btn primary block" data-act="paid">' + esc(t('ivePaid')) + '</button><button type="button" class="la-btn line block" data-act="reopen">' + IC.ext + ' ' + esc(t('reopen')) + '</button><a class="la-link" style="align-self:center" href="#/plus">' + esc(t('diffPlan')) + '</a></div>';
     }
@@ -1176,19 +1182,19 @@
     if (CO.state === 'thanks') {
       var r = CO.result || {}, added = !!c.base && new Date(c.base) > new Date(c.at || 0);
       return topBar() + '<div class="la-flow"><div class="la-thanks">' + heartFace(84) + '<h1>' + esc(t('thanksH')) + '</h1>' +
-        '<div class="la-sum"><div><span>' + esc(t('plan')) + '</span><b>' + esc(t(plan === '12m' ? 'm12' : 'm3')) + '</b></div><div><span>' + esc(t('paid')) + '</span><b>' + esc((r.price_label || price) + t('oneTimeSfx')) + '</b></div><div><span>' + esc(t('plusUntil', '').replace(/\s+$/, '')) + '</span><b>' + esc(fmtDate(plusUntil())) + '</b></div></div>' +
-        (added ? '<p class="la-p" style="font-weight:700">' + esc(t('addedTime', t(plan === '12m' ? 'm12' : 'm3'), fmtDate(plusUntil()))) + '</p>' : '') +
+        '<div class="la-sum"><div><span>' + esc(t('plan')) + '</span><b>' + esc(planName(plan)) + '</b></div><div><span>' + esc(t('paid')) + '</span><b>' + esc((r.price_label || price) + t('oneTimeSfx')) + '</b></div><div><span>' + esc(t('plusUntil', '').replace(/\s+$/, '')) + '</span><b>' + esc(fmtDate(plusUntil())) + '</b></div></div>' +
+        (added ? '<p class="la-p" style="font-weight:700">' + esc(t('addedTime', planName(plan), fmtDate(plusUntil()))) + '</p>' : '') +
         '<p class="la-small" style="color:var(--ink);margin:0">' + esc(t('receipt', u.email || '')) + '</p>' +
         '<a class="la-btn dark block" href="#/tools">' + esc(t('goTools')) + '</a><a class="la-btn block" href="#/catalogue">' + esc(t('goDownloads')) + '</a></div></div>';
     }
     // delayed (C08)
     var ref = 'LU-' + String((session && session.user && session.user.id) || '').replace(/-/g, '').slice(0, 5).toUpperCase();
-    var mail = 'mailto:' + st.support + '?subject=' + encodeURIComponent('Little Us Plus not active · ' + ref) + '&body=' + encodeURIComponent('Hi Kal,\n\nI paid for Little Us Plus (' + t(plan === '12m' ? 'm12' : 'm3') + ') but it is not active yet.\n\nAccount email: ' + (u.email || '') + '\nOrder ref: ' + ref + '\n');
+    var mail = 'mailto:' + st.support + '?subject=' + encodeURIComponent('Little Us Plus not active · ' + ref) + '&body=' + encodeURIComponent('Hi Kal,\n\nI paid for Little Us Plus (' + planName(plan) + ') but it is not active yet.\n\nAccount email: ' + (u.email || '') + '\nOrder ref: ' + ref + '\n');
     return topBar() + '<div class="la-flow"><span class="la-circle" style="width:88px;height:88px">' + IC.clock + '</span><h1 class="la-h1">' + esc(t('delayedH')) + '</h1><p class="la-p">' + esc(t('delayedP', u.email || '')) + '</p>' +
       '<div class="la-card"><b>' + esc(t('still30')) + '</b><p class="la-p" style="font-size:14px;margin-top:4px">' + t('still30P', esc(st.support)) + '</p><p class="la-small" style="margin:6px 0 0">' + esc(t('orderRef')) + ' ' + esc(ref) + '</p></div><div class="grow"></div>' +
       '<button type="button" class="la-btn primary block" data-act="again">' + esc(t('checkAgain')) + '</button><a class="la-btn line block" href="' + esc(mail) + '">' + esc(t('emailSupport')) + '</a><a class="la-link" style="align-self:center" href="#/">' + esc(t('backHome')) + '</a></div>';
   }
-  function newEndFrom(base, plan) { var b = base && new Date(base) > new Date() ? new Date(base) : new Date(); return addMonths(b, plan === '12m' ? 12 : 3); }
+  function newEndFrom(base, plan) { var b = base && new Date(base) > new Date() ? new Date(base) : new Date(); return addMonths(b, planMonths(plan)); }
   function paidYet() {
     var c = ss.json('lu_checkout', null) || {};
     return loadAccount().then(function () {
@@ -1227,13 +1233,13 @@
   // ----- D01 / D02 / D03: account
   function passTiles() {
     var st = settings();
-    return '<div class="la-tiles">' + ['3m', '12m'].map(function (p) {
-      return '<button type="button" class="la-tile" data-buy="' + p + '"><span class="t1"><span>+' + esc(t(p === '12m' ? 'm12' : 'm3')) + '</span><span>' + esc(p === '12m' ? st.p12 : st.p3) + '</span></span><small>' + esc(t('until', fmtDate(newEnd(p)))) + '</small></button>';
+    return '<div class="la-tiles">' + ['3m', '6m', '12m'].map(function (p) {
+      return '<button type="button" class="la-tile" data-buy="' + p + '"><span class="t1"><span>+' + esc(planName(p)) + '</span><span>' + esc(st['p' + planMonths(p)]) + '</span></span><small>' + esc(t('until', fmtDate(newEnd(p)))) + '</small></button>';
     }).join('') + '</div>';
   }
   function renderAccount() {
     if (!signedIn()) return '<div class="la-page"><div class="la-acc"><h1 class="la-h1">' + esc(t('account')) + '</h1><div class="la-accbox"><b>' + esc(t('account')) + '</b><span class="la-small">' + esc(t('notSigned')) + '</span><div class="two"><a class="la-btn dark sm" href="#/signup">' + esc(t('createFreeAcc')) + '</a><a class="la-btn soft sm" href="#/login">' + esc(t('logIn')) + '</a></div></div></div></div>';
-    var u = me() || {}, s = status(), st = settings(), plan = (A.profile && A.profile.plus_plan) === '3m' ? 'pass3' : (A.profile && A.profile.plus_plan) === '12m' ? 'pass12' : 'passPlus';
+    var u = me() || {}, s = status(), st = settings(), plan = (A.profile && A.profile.plus_plan) === '3m' ? 'pass3' : (A.profile && A.profile.plus_plan) === '12m' ? 'pass12' : (A.profile && A.profile.plus_plan) === '6m' ? 'pass6' : 'passPlus';
     var card;
     if (s === 'plus' || s === 'expiring') {
       card = '<div class="la-passcard"><h3>' + pill('plus') + esc(t(plan)) + '</h3>' +
@@ -1245,7 +1251,7 @@
     }
     var buys = (A.purchases || []).filter(function (p) { return p.status === 'paid'; });
     var list = buys.length ? '<div class="la-lab" style="font-weight:800;margin-top:6px">' + esc(t('purchases')) + '</div><div class="la-rows">' + buys.slice(0, 10).map(function (p) {
-      return '<div class="la-row" style="cursor:default"><span>' + (p.kind === 'plus' ? pill('plus') + ' ' + esc(t(p.plan === '12m' ? 'm12' : 'm3')) : esc(p.product_id || '')) + '</span><span class="sp"></span><small class="la-small">' + esc(fmtDate(p.created_at)) + ' · ' + esc(p.price_label || '') + '</small></div>';
+      return '<div class="la-row" style="cursor:default"><span>' + (p.kind === 'plus' ? pill('plus') + ' ' + esc(planName(p.plan)) : esc(p.product_id || '')) + '</span><span class="sp"></span><small class="la-small">' + esc(fmtDate(p.created_at)) + ' · ' + esc(p.price_label || '') + '</small></div>';
     }).join('') + '</div>' : '';
     return '<div class="la-page"><div class="la-acc"><div style="display:flex;align-items:center;gap:12px"><a class="la-iconbtn" href="#/tools/settings" aria-label="' + esc(t('back')) + '">' + IC.back + '</a><h1 class="la-h1" style="font-size:26px">' + esc(t('account')) + '</h1></div>' +
       '<div class="la-card la-me"><span class="la-ava">' + face('adult', initials(u.name || u.email)) + '</span><div style="flex:1;min-width:0"><b>' + esc(u.name || '') + '</b><small>' + esc(u.email || '') + '</small><small style="display:flex;gap:6px;align-items:center">' + IC.mail.replace('20', '13').replace('20', '13') + esc(t('signedInEmail')) + '</small></div><button type="button" class="la-link" style="font-size:13.5px" data-act="editname">' + esc(t('editName')) + '</button></div>' +
@@ -1293,7 +1299,7 @@
     'forgot-password': { title: 'resetH', header: 'none', footer: 'none', render: renderForgot, wire: wireForgot, init: function () { FP.sent = false; } },
     'reset-password': { title: 'newPwH', header: 'none', footer: 'none', render: renderReset, wire: wireReset, init: function () { RP.done = false; } },
     welcome: { title: 'confirmedToast', header: 'none', footer: 'none', render: renderWelcome, init: function () { if (!signedIn()) { go('#/login', true); } } },
-    plus: { title: 'upgradeH', focus: true, render: renderPlans, wire: wirePlans, init: function () { var q = LU.qs && LU.qs.get('plan'); if (q === '3m' || q === '12m') PL.plan = q; return loadFeatures(true); } },
+    plus: { title: 'upgradeH', focus: true, render: renderPlans, wire: wirePlans, init: function () { var q = LU.qs && LU.qs.get('plan'); if (q === '3m' || q === '6m' || q === '12m') PL.plan = q; return loadFeatures(true); } },
     'plus/checkout': {
       title: 'finishH', header: 'none', footer: 'none', render: renderCheckout, wire: wireCheckout,
       init: function () {
@@ -1395,7 +1401,7 @@
     else if (owned.length) lib = '<div class="la-stack" data-la-lib>' + owned.slice(0, 4).map(function (p) { return '<a class="la-libitem" href="#/product/' + encodeURIComponent(p.product_id) + '"><span class="la-pill plain">PDF</span><b data-pid="' + esc(p.product_id) + '">' + esc(p.product_id) + '</b></a>'; }).join('') + '</div>';
     else lib = '<div class="la-empty"><h3>' + esc(t('emptyLibH')) + '</h3><p>' + esc(t('emptyLibP')) + '</p><a class="la-btn primary sm" href="#/catalogue?free=1">' + esc(t('browseFree')) + '</a></div>';
     var up = s === 'free' || s === 'expired' ? '<div class="la-upbar">' + pill('plus') + '<b>' + esc(t('upBarH')) + '</b><span class="d">' + esc(t('upBarP')) + '</span><a class="la-btn primary sm" href="#/plus">' + esc(t('seePlans', st.p3)) + '</a></div>'
-      : '<div class="la-upbar">' + pill('plus') + '<span class="la-pill free">' + esc(t('activeP')) + '</span><b>' + esc(t('daysLeftN', daysLeft())) + '</b><span class="d">' + esc(t('planEnds', (A.profile && A.profile.plus_plan === '3m') ? t('m3') : t('m12'), fmtDate(plusUntil()))) + '</span><a class="la-btn outline sm" href="#/account">' + esc(t('managePlan')) + '</a></div>';
+      : ''; // paying members don't need a Plus row on the banner
     var kids = []; try { kids = (store.json(TKEY, {}).profiles || []).filter(function (p) { return p.id !== kid.id; }).slice(0, 2); } catch (e) {}
     var kidChip = kid ? '<button type="button" class="la-kid" data-la-prof aria-haspopup="dialog"><span class="avs"><span class="av" style="background:' + esc(kid.color || '#DDF2E4') + '">' + face(kid.kid, initials(kid.name)) + '</span>' + kids.map(function (o) { return '<span class="av sm" style="background:' + esc(o.color || '#F3EEE6') + '">' + face(o.kid, initials(o.name)) + '</span>'; }).join('') + '</span><span><small>' + esc(t('childProfile')) + '</small><b>' + esc(kid.name) + '</b></span><span class="sw">' + esc(t('switchC')) + ' ▾</span></button>' : '';
     return '<div class="la-dash" aria-label="' + esc(t('account')) + '"><div class="head"><div><h1>' + esc(kid ? t('hiReady', firstName(u.name), kid.name) : t('hiReady0', firstName(u.name))) + '</h1><p>' + esc(t('syncedEvery')) + '</p></div>' + kidChip + '</div>' +
@@ -1418,7 +1424,7 @@
     }
     if (window.LUTools && LUTools.api && LUTools.api.openProfiles) return show();
     if (!window.luLoad) return show();
-    luLoad('/tools.css?v=17').then(function () { return luLoad('/tools-art.js?v=19'); }).then(function () { return luLoad('/tools.js?v=19'); })
+    luLoad('/tools.css?v=18').then(function () { return luLoad('/tools-art.js?v=21'); }).then(function () { return luLoad('/tools.js?v=21'); })
       .then(function () { var a = window.LUTools && LUTools.api; return a && a.photosLoad ? a.photosLoad() : null; }).then(show, show);
   }
   function homeRender() {
@@ -1555,7 +1561,7 @@
     stateChanged: stateChanged, pullState: pullState, fixState: fixState,
     headerHTML: headerHTML, logoBadge: logoBadge, tabPlus: tabPlus, settingsCard: settingsCard, homeRender: homeRender,
     face: face,
-    priceLabel: function (plan) { var s = settings(); return String(plan === '12m' ? s.p12 : s.p3).replace(/^≈ /, ''); },
+    priceLabel: function (plan) { var s = settings(); return String(s['p' + planMonths(plan)]).replace(/^≈ /, ''); },
     productBuy: productBuy, cardTag: cardTag, onChange: function (f) { listeners.push(f); },
     t: t, _auth: auth, _http: http, _session: function () { return session; }
   };

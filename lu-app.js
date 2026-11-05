@@ -136,8 +136,8 @@
   function accStatus() { var a = acc(); try { return a ? a.status() : 'none'; } catch (e) { return 'none'; } }
   function load() {
     if (!window.luLoad) return Promise.resolve();
-    return luLoad('/tools.css?v=17').then(function () { return luLoad('/tools-art.js?v=19'); }).then(function () { return luLoad('/tools.js?v=19'); })
-      .then(function () { return Promise.all([luLoad('/tools-calm.js?v=15'), luLoad('/tools-talk.js?v=5')]); }).then(function () { var a = api(); return a && a.photosLoad ? a.photosLoad() : null; }).catch(function () { });
+    return luLoad('/tools.css?v=18').then(function () { return luLoad('/tools-art.js?v=21'); }).then(function () { return luLoad('/tools.js?v=21'); })
+      .then(function () { return luLoad('/tools-calm.js?v=15'); }).then(function () { var a = api(); return a && a.photosLoad ? a.photosLoad() : null; }).catch(function () { });
   }
   function photo(p) { var a = api(); return p && p.photo && a && a.PH && a.PH[p.photo] ? a.PH[p.photo] : ''; }
   function ava(p, size, cls) {
@@ -586,7 +586,7 @@
     upgradeH: ['Upgrade to Little Us', 'Upgrade ke Little Us'], upgradeP: ['Get more tool styles and all our resources', 'Dapatkan lebih banyak gaya alat dan semua materi kami'], seePlans: ['See plans · from $9', 'Lihat paket · mulai $9'], seePlans0: ['See plans', 'Lihat paket'],
     moreDev: ['Use them on more than one device?', 'Mau memakainya di lebih dari satu perangkat?'], moreDevP: ['Without an account, your setup stays on this device. A free account keeps it on your phone and tablet too.', 'Tanpa akun, pengaturanmu hanya tersimpan di perangkat ini. Akun gratis menyimpannya juga di HP dan tablet.'],
     popSub: ['Every download is included with <b>Little Us Plus</b>, from $9.', 'Semua unduhan termasuk dalam <b>Little Us Plus</b>, mulai $9.'],
-    m3: ['3 Months', '3 Bulan'], m12: ['12 Months', '12 Bulan'],
+    m3: ['3 Months', '3 Bulan'], m6: ['6 Months', '6 Bulan'], m12: ['12 Months', '12 Bulan'],
     tools: ['Tools', 'Alat'], shop: ['Shop', 'Toko'], articles: ['Articles', 'Artikel'], allTools: ['All tools →', 'Semua alat →'], browseShop: ['Browse the shop →', 'Lihat toko →'], allArticles: ['All articles →', 'Semua artikel →'],
     account: ['Account', 'Akun'],
     cWork: ['Worksheet', 'Lembar kerja'], cStory: ['Social story', 'Cerita sosial'], cPrint: ['Printable', 'Materi cetak'],
@@ -627,7 +627,7 @@
     // closing: the Upgrade card in place of the list signup (not for members)
     var closing = main.querySelector('.closing'), sg = closing && closing.querySelector('.signup');
     if (sg && st !== 'plus' && st !== 'expiring') {
-      sg.insertAdjacentHTML('afterend', '<div class="ud-upcard ud-x"><span class="ud-blob"></span><h3>' + esc(dt('upgradeH')) + ' <em class="ud-plus">PLUS</em></h3><p>' + esc(dt('upgradeP')) + '</p><div class="ud-plans"><a href="#/plus?plan=3m"><b>' + esc(dt('m3')) + '</b><span>' + esc(px('$9')) + '</span></a><a href="#/plus?plan=12m" class="on"><b>' + esc(dt('m12')) + '</b><span>' + esc(px('$29')) + '</span></a><a class="btn btn-primary" href="#/plus">' + esc(dt('seePlans0')) + '</a></div></div>');
+      sg.insertAdjacentHTML('afterend', '<div class="ud-upcard ud-x"><span class="ud-blob"></span><h3>' + esc(dt('upgradeH')) + ' <em class="ud-plus">PLUS</em></h3><p>' + esc(dt('upgradeP')) + '</p><div class="ud-plans">' + ['3m', '6m', '12m'].map(function (p) { return '<a href="#/plus?plan=' + p + '"' + (p === '12m' ? ' class="on"' : '') + '><b>' + esc(dt('m' + parseInt(p))) + '</b><span>' + esc(window.LUAcc && LUAcc.priceLabel ? LUAcc.priceLabel(p) : '') + '</span></a>'; }).join('') + '<a class="btn btn-primary" href="#/plus">' + esc(dt('seePlans0')) + '</a></div></div>');
     }
   }
   // art that other scripts may redraw: put back on every pass
@@ -687,6 +687,7 @@
     if (cov && !cov.querySelector('.ud-page')) { cov.classList.add('ud-cov'); cov.insertAdjacentHTML('beforeend', '<span class="ud-page ud-x"><u></u><u class="s"></u><i>' + fit(Ar.svg('sekolah-gedung', { gender: 'boy' })) + '</i><u></u><u class="s"></u></span>'); }
     var tv = main.querySelector('.h2-tool[href$="tools/timer"] .h2-vis');
     if (tv && Ar.toolArt && !tv.querySelector('.ud-timer')) tv.insertAdjacentHTML('afterbegin', '<span class="ud-timer ud-x">' + fit(Ar.toolArt('timer')) + '</span>');
+    if (DOC.classList.contains('ud-in')) { toolBadges(main); fitPreviews(main); }
     [].slice.call(main.querySelectorAll('.la-used')).forEach(function (a) {
       var ic = a.querySelector('.ic'); if (!ic || ic.querySelector('.ud-ic')) return;
       var h = a.getAttribute('href') || '', k = /timer/.test(h) ? 'timer' : /tokens/.test(h) ? 'tokens' : /first-then/.test(h) ? 'ft' : /schedule/.test(h) ? 'sched' : /conversation/.test(h) ? 'talk' : '';
@@ -695,6 +696,43 @@
       ic.innerHTML = '<span class="ud-ic ud-x">' + fit(art) + '</span>';
     });
   }
+  // signed-in Tools row: a "?" on each preview that shows what the tool is for
+  var QCOL = { timer: '#3F6FA8', tokens: '#9A6A00', 'first-then': '#2F7A4D', schedule: '#6B55C8', breathe: '#3F6FA8', feelings: '#6B55C8', worry: '#C2456A', 'conversation-starters': '#9A6A00' };
+  function toolBadges(main) {
+    [].slice.call(main.querySelectorAll('.h2-tool:not(.soon)')).forEach(function (a) {
+      var vis = a.querySelector('.h2-vis'); if (!vis || vis.querySelector('.ud-q')) return;
+      var k = (a.getAttribute('href') || '').replace(/^.*tools\//, ''), name = (a.querySelector('h3') || {}).textContent || '';
+      vis.insertAdjacentHTML('beforeend', '<span class="ud-q ud-x" role="button" tabindex="0" aria-label="' + esc((isId() ? 'Tentang ' : 'About ') + name) + '" style="background:' + (QCOL[k] || '#2B2A35') + '">?</span>');
+    });
+  }
+  function toggleInfo(e) {
+    var q = e.target.closest && e.target.closest('.ud-q'); if (!q) return;
+    if (e.type === 'keydown' && e.key !== 'Enter' && e.key !== ' ') return;
+    e.preventDefault(); e.stopPropagation();
+    var card = q.closest('.h2-tool'), open = card.classList.toggle('ud-info');
+    [].slice.call(document.querySelectorAll('.h2-tool.ud-info')).forEach(function (c) { if (c !== card) c.classList.remove('ud-info'); });
+    q.setAttribute('aria-expanded', String(open));
+  }
+  document.addEventListener('click', toggleInfo, true);
+  document.addEventListener('keydown', toggleInfo, true);
+  // shrink each preview drawing so it fits inside its box (stars, schedule cards and faces used to spill over)
+  function fitPreviews(main) {
+    [].slice.call(main.querySelectorAll('.h2-tool .h2-vis')).forEach(function (vis) {
+      var bw = vis.clientWidth - 16, bh = vis.clientHeight - 20; if (bw <= 0) return;
+      [].slice.call(vis.children).forEach(function (el) {
+        if (el.classList.contains('ud-q') || getComputedStyle(el).display === 'none') return;
+        el.style.removeProperty('--fit');
+        // measure what is actually drawn (the children), not a wrapper that stretches to the box
+        var rs = el.children.length ? [].slice.call(el.children).map(function (k) { return k.getBoundingClientRect(); }) : [el.getBoundingClientRect()];
+        var w = Math.max.apply(null, rs.map(function (r) { return r.right; })) - Math.min.apply(null, rs.map(function (r) { return r.left; }));
+        var h = Math.max.apply(null, rs.map(function (r) { return r.bottom; })) - Math.min.apply(null, rs.map(function (r) { return r.top; }));
+        var s = Math.min(1, bw / (w || 1), bh / (h || 1));
+        el.style.setProperty('--fit', s.toFixed(3));
+      });
+    });
+  }
+  var fq = 0;
+  window.addEventListener('resize', function () { clearTimeout(fq); fq = setTimeout(function () { var m = document.getElementById('lu-main'); if (m && DOC.classList.contains('ud-in')) fitPreviews(m); }, 150); });
   function deskHeader() {
     if (isApp()) return;
     var btn = document.querySelector('.la-hdr-login');
@@ -707,4 +745,26 @@
   function start() { splash(); nav(); watch(); var tries = 0, iv = setInterval(function () { if (api() || ++tries > 60) { clearInterval(iv); nav(); } }, 250); if (isApp() && routeName() === '' && document.getElementById('lu-main')) { } }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
   if (window.LUAcc && LUAcc.onChange) LUAcc.onChange(function () { refresh(); var m = document.getElementById('lu-main'); if (m) delete m.dataset.ud; deskTick(); });
+})();
+
+/* Lighter pages: looping animations (clouds, sun, butterflies, timer previews) pause while their part of the page
+   is scrolled out of view, so phones are not busy drawing what nobody can see. The child's full-screen view is never paused. */
+(function () {
+  if (!('IntersectionObserver' in window) || !document.getAnimations) return;
+  var seen = new WeakSet();
+  var io = new IntersectionObserver(function (list) {
+    list.forEach(function (en) { en.target.classList.toggle('lu-off', !en.isIntersecting); });
+  }, { rootMargin: '120px 0px' });
+  function scan() {
+    try {
+      document.getAnimations().forEach(function (a) {
+        var t = a.effect && a.effect.target; if (!t || !t.closest || t.closest('#tl-child')) return;
+        var box = t.closest('section, header, .tl-previewbox, .tl-grid, .tl-panel, .la-dash, .ud-way, .ua-hero, .h2-tool') || null;
+        if (box && !seen.has(box)) { seen.add(box); io.observe(box); }
+      });
+    } catch (e) {}
+  }
+  setInterval(function () { if (document.visibilityState === 'visible') scan(); }, 3000);
+  window.addEventListener('hashchange', function () { setTimeout(scan, 600); });
+  setTimeout(scan, 1200);
 })();

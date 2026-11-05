@@ -282,8 +282,9 @@ label.f small{font-weight:500;color:var(--muted)}
 
   // ---------------------------------------------------------------- settings
   var FIELDS = [
-    ['Gumroad', [['gumroad_3m_url', '3 Months pass · Gumroad link', 'url'], ['gumroad_12m_url', '12 Months pass · Gumroad link', 'url']]],
-    ['Plus prices (US dollars) · the website shows them in each visitor\'s currency and Midtrans converts them to rupiah. Set the same prices on the Gumroad products.', [['usd_3m', '3 Months price in US dollars', 'dec'], ['usd_12m', '12 Months price in US dollars', 'dec']]],
+    ['Gumroad', [['gumroad_3m_url', '3 Months pass · Gumroad link', 'url'], ['gumroad_6m_url', '6 Months pass · Gumroad link', 'url'], ['gumroad_12m_url', '12 Months pass · Gumroad link', 'url']]],
+    ['Plus prices (US dollars) · the website shows them in each visitor\'s currency and Midtrans converts them to rupiah. Set the same prices on the Gumroad products.', [['usd_3m', '3 Months price in US dollars', 'dec'], ['usd_6m', '6 Months price in US dollars', 'dec'], ['usd_12m', '12 Months price in US dollars', 'dec']]],
+    ['Indonesia prices (rupiah) · shown to visitors in Indonesia and charged through Midtrans. Leave 0 to convert the dollar price instead.', [['idr_3m', '3 Months price in rupiah', 'rp'], ['idr_6m', '6 Months price in rupiah', 'rp'], ['idr_12m', '12 Months price in rupiah', 'rp']]],
     ['Midtrans (rupiah payments)', [['midtrans_enabled', 'Offer Midtrans (GoPay, QRIS, bank transfer) next to Gumroad', 'bool'], ['midtrans_round', 'Round the rupiah amount to the nearest (e.g. 10000)', 'int']]],
     ['Free accounts', [['free_child_limit', 'Child profiles on a free account', 'number']]],
     ['Upgrade popup', [['popup_title_en', 'Title (English) · {name} becomes the style name', 'text'], ['popup_title_id', 'Title (Indonesian)', 'text'], ['popup_body_en', 'Text (English)', 'area'], ['popup_body_id', 'Text (Indonesian)', 'area']]],
@@ -295,13 +296,13 @@ label.f small{font-weight:500;color:var(--muted)}
       var s = rows[0] || {};
       $('#sl').innerHTML = '<form id="sf" style="display:flex;flex-direction:column;gap:16px">' + FIELDS.map(function (g) {
         return '<div class="card" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px"><h3 style="grid-column:1/-1;font-size:18px">' + g[0] + '</h3>' + g[1].map(function (f) {
-          return '<label class="f">' + esc(f[1]) + (f[2] === 'area' ? '<textarea name="' + f[0] + '">' + esc(s[f[0]]) + '</textarea>' : f[2] === 'bool' ? '<select name="' + f[0] + '" data-k="bool"><option value="false"' + (s[f[0]] ? '' : ' selected') + '>No, Gumroad only</option><option value="true"' + (s[f[0]] ? ' selected' : '') + '>Yes, offer both</option></select>' : f[2] === 'dec' || f[2] === 'int' ? '<input type="number" data-k="' + f[2] + '" name="' + f[0] + '" value="' + esc(s[f[0]]) + '" min="' + (f[2] === 'dec' ? '0.5' : '1') + '"' + (f[2] === 'dec' ? ' step="0.01"' : ' step="1"') + '>' : '<input type="' + f[2] + '" name="' + f[0] + '" value="' + esc(s[f[0]]) + '"' + (f[2] === 'number' ? ' min="1" max="20"' : '') + '>') + '</label>';
+          return '<label class="f">' + esc(f[1]) + (f[2] === 'area' ? '<textarea name="' + f[0] + '">' + esc(s[f[0]]) + '</textarea>' : f[2] === 'bool' ? '<select name="' + f[0] + '" data-k="bool"><option value="false"' + (s[f[0]] ? '' : ' selected') + '>No, Gumroad only</option><option value="true"' + (s[f[0]] ? ' selected' : '') + '>Yes, offer both</option></select>' : f[2] === 'dec' || f[2] === 'int' || f[2] === 'rp' ? '<input type="number" data-k="' + f[2] + '" name="' + f[0] + '" value="' + esc(s[f[0]]) + '" min="' + (f[2] === 'dec' ? '0.5' : f[2] === 'rp' ? '0' : '1') + '"' + (f[2] === 'dec' ? ' step="0.01"' : f[2] === 'rp' ? ' step="1000"' : ' step="1"') + '>' : '<input type="' + f[2] + '" name="' + f[0] + '" value="' + esc(s[f[0]]) + '"' + (f[2] === 'number' ? ' min="1" max="20"' : '') + '>') + '</label>';
         }).join('') + '</div>';
       }).join('') + '<div><button class="btn primary" type="submit">Save settings</button></div></form>';
       $('#sf').onsubmit = function (e) {
         e.preventDefault();
         var body = { updated_at: new Date().toISOString() };
-        $$('[name]', $('#sf')).forEach(function (i) { var k = i.getAttribute('data-k'); body[i.name] = k === 'bool' ? i.value === 'true' : k === 'dec' ? Math.max(0.5, Number(i.value) || (i.name === 'usd_12m' ? 21 : 7)) : k === 'int' ? Math.max(1, Math.round(Number(i.value)) || 10000) : i.type === 'number' ? Math.max(1, Number(i.value) || 1) : i.value.trim(); });
+        $$('[name]', $('#sf')).forEach(function (i) { var k = i.getAttribute('data-k'); body[i.name] = k === 'bool' ? i.value === 'true' : k === 'rp' ? Math.max(0, Math.round(Number(i.value) || 0)) : k === 'dec' ? Math.max(0.5, Number(i.value) || ({ usd_6m: 11, usd_12m: 21 }[i.name] || 7)) : k === 'int' ? Math.max(1, Math.round(Number(i.value)) || 10000) : i.type === 'number' ? Math.max(1, Number(i.value) || 1) : i.value.trim(); });
         api('/rest/v1/plus_settings?id=eq.1', { method: 'PATCH', body: body }).then(function () { toast('Settings saved'); }).catch(function (er) { toast(er.message); });
       };
     }).catch(function (e) { $('#sl').innerHTML = errBox(e); });

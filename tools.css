@@ -1017,3 +1017,31 @@ body.tl-childon{overflow:hidden}
 .tl-delp.sure span{display:inline}
 .tl-delp:focus-visible{outline:3px solid var(--sunny,#FFC94A);outline-offset:2px}
 .tl-row .tl-delp{min-width:38px;height:38px;margin-left:6px}
+
+/* Continue: a proper card with the tool's picture, details and an Open button */
+.tl-contsec{margin-top:8px}
+.tl-contcard{display:flex;align-items:center;gap:16px;background:#fff;border:1px solid var(--line,#ECE6DC);border-radius:20px;padding:14px 16px;text-decoration:none;color:var(--ink);box-shadow:0 2px 0 rgba(43,42,53,.04);transition:transform .18s ease,box-shadow .18s ease}
+.tl-contcard:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(43,42,53,.1);color:var(--ink)}
+.tl-contart{flex:none;width:64px;height:64px;border-radius:16px;display:flex;align-items:center;justify-content:center;padding:6px}
+.tl-contart svg{width:100%;height:100%}
+.tl-conttx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.tl-conttx small{font:700 12px Figtree,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--muted,#6B6875)}
+.tl-conttx b{font:600 19px/1.2 Fredoka,sans-serif}
+.tl-conttx>span{font-size:14px;color:var(--body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tl-contref{flex:none}
+.tl-contbtn{flex:none;display:inline-flex;align-items:center;gap:6px;background:var(--sunny,#FFC94A);box-shadow:0 3px 0 var(--sunny-shadow,#E0A92A);border-radius:14px;padding:11px 20px;font-weight:800;font-size:15px}
+@media (max-width:520px){.tl-contref{display:none}.tl-contbtn{padding:10px 14px}}
+
+/* desktop: the tool list in two columns of cards */
+@media (min-width:960px){
+  .tl-tlist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;background:none;border:0;padding:0}
+  .tl-tlist .tl-trow{grid-template-columns:72px minmax(0,1fr) auto;grid-template-areas:"art tx tx" "art meta open";column-gap:16px;row-gap:10px;padding:16px;background:#fff;border:1px solid var(--line,#ECE6DC);border-radius:20px;align-items:center}
+  .tl-tlist .tl-trow+.tl-trow::before{display:none}
+  .tl-tlist .tl-tart{width:72px;height:72px;align-self:start}
+  .tl-tlist .tl-ttx b{font-size:19px}
+  .tl-tlist .tl-ttx small{font-size:13.5px}
+  .tl-tlist .tl-tcat{justify-self:start}
+  .tl-tlist .tl-topen{padding:9px 16px;font-size:14px;border-radius:12px}
+  .tl-tlist .tl-soon{grid-area:open;justify-self:end;padding:8px 14px;font-size:13px}
+  .tl-tlist .tl-trow.soon:hover{background:#fff}
+}

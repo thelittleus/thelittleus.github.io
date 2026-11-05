@@ -36,7 +36,7 @@
     ft: ['First–Then Board', 'Papan Pertama–Lalu'], ftD: ['First the task, then the fun part.', 'Tugas dulu, lalu bagian serunya.'],
     sched: ['Visual Schedule', 'Jadwal Visual'], schedD: ['The day in pictures, step by step.', 'Hari ini dalam gambar, langkah demi langkah.'],
     library: ['Card library', 'Perpustakaan kartu'], settings: ['Settings', 'Pengaturan'], allTools: ['All tools', 'Semua alat'],
-    cont: ['Continue', 'Lanjutkan'],
+    cont: ['Continue', 'Lanjutkan'], lastUsed: ['Last used', 'Terakhir dipakai'],
     how: ['How it works', 'Cara pakainya'],
     how1: ['Pick a tool', 'Pilih alat'], how1d: ['Routines, tokens, breathing, feelings and more.', 'Rutinitas, token, napas, perasaan, dan lainnya.'],
     how2: ['Make it yours', 'Sesuaikan'], how2d: ['Use Little Us pictures or your own photos.', 'Pakai gambar Little Us atau foto sendiri.'],
@@ -1145,7 +1145,13 @@
       if (m && ((S.last.tool === 'sched' && activeSched()) || (S.last.tool === 'ft' && D().ft.first) || S.last.tool === 'tokens' || S.last.tool === 'timer')) {
         var sub = S.last.tool === 'sched' ? schedName(activeSched()) : S.last.tool === 'tokens' ? cardLabel(D().tokens.reward) : S.last.tool === 'ft' ? cardLabel(D().ft.first) + ' → ' + cardLabel(D().ft.then[0]) : fmt(timerSecs(D().timer) * 1000);
         var ref = S.last.tool === 'sched' ? (activeSched().steps[0] || {}).card : S.last.tool === 'tokens' ? D().tokens.reward : S.last.tool === 'ft' ? D().ft.first : (D().timer.showNext ? D().timer.next : null);
-        h += '<h2 class="tl-h3">' + esc(tr('cont')) + '</h2><a class="tl-contcard" href="#/' + m[0] + '">' + (ref ? cardHTML(ref, { size: 'xs', labels: 'none' }) : '') + '<span><b>' + esc(sub) + '</b><small>' + esc(tr(m[1])) + '</small></span><span class="tl-openlink">' + esc(tr('open')) + ' ›</span></a>';
+        // Continue: the tool's picture, its name, what was set up, when, then a clear Open button
+        var tint = { timer: '#DCEBFA', tokens: '#FFF1C7', ft: '#DDF2E4', sched: '#E9E1F7' }[S.last.tool];
+        h += '<div class="tl-contsec"><h2 class="tl-h3">' + esc(tr('cont')) + '</h2><a class="tl-contcard" href="#/' + m[0] + '">' +
+          '<span class="tl-contart" style="background:' + tint + '" aria-hidden="true">' + (A.toolArt ? A.toolArt(S.last.tool) : '') + '</span>' +
+          '<span class="tl-conttx"><small>' + esc(tr('lastUsed')) + (S.last.at ? ' · ' + esc(relDate(S.last.at)) : '') + '</small><b>' + esc(tr(m[1])) + '</b><span>' + esc(sub) + '</span></span>' +
+          (ref ? '<span class="tl-contref">' + cardHTML(ref, { size: 'xs', labels: 'none' }) + '</span>' : '') +
+          '<span class="tl-contbtn">' + esc(tr('open')) + ' <span aria-hidden="true">→</span></span></a></div>';
       }
     }
     h += '</div>';
@@ -1828,4 +1834,9 @@
     unmount: function () { childClose(true); },
     register: function (route, def) { if (!EXT[route]) EXT_ORDER.push(route); EXT[route] = def; }
   };
+  // Conversation Starters is a large script that loads only when it is opened; until then the tools list shows this card
+  window.LUTools.register('tools/conversation-starters', { card: { grp: 'talk', tint: '#FFF1C7',
+    vis: function () { return '<div class="tl-mini-art">' + (A.toolArt ? A.toolArt('talk') : '') + '</div>'; },
+    title: function () { return L() === 'id' ? 'Pembuka Obrolan' : 'Conversation Starters'; },
+    desc: function () { return L() === 'id' ? 'Permainan papan dan permainan seru untuk dimainkan anak bersama orang dewasa. Setiap giliran membuka obrolan hangat tentang perasaan, teman, dan pilihan.' : 'Board and party games for a grown-up and child to play together. Each turn opens up a gentle chat about feelings, friends and choices.'; } } });
 })();
