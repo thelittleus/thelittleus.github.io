@@ -683,7 +683,7 @@
   function deskArt(main, Ar) {
     // banner picture: a grown-up and child with a tablet (hero-family.webp, transparent background)
     var hart = main.querySelector('.h2-hero .h2-art');
-    if (hart && !hart.querySelector('.ud-heroimg')) hart.insertAdjacentHTML('beforeend', '<img class="ud-heroimg ud-x" src="/hero-family.webp?v=3" width="1000" height="598" alt="" fetchpriority="high" decoding="async">');
+    if (hart && !hart.querySelector('.ud-heroimg')) hart.insertAdjacentHTML('beforeend', '<img class="ud-heroimg ud-x" src="/hero-family.webp?v=4" width="1000" height="598" alt="" fetchpriority="high" decoding="async">');
     if (!Ar) return;
     flatHills(main);
     var cov = main.querySelector('#heroCover');
