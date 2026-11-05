@@ -564,6 +564,33 @@ html.ud-out .h2-hero .h2-copy p{font-size:15px!important;line-height:1.55;color:
 html.ud-out .h2-hero .h2-art{display:flex!important;position:relative;z-index:1;align-items:center;justify-content:center;min-height:0;height:auto;background:none}
 html.ud-out .h2-hero .h2-art>*:not(.ud-heroimg){display:none!important}
 html.ud-out .ud-heroimg{display:block;width:100%;max-width:420px;height:auto}
+/* desktop computers in a narrow window (e.g. half the screen): a tighter header so everything fits */
+@media (max-width:1000px){
+  html.lu-desk .hdr2{gap:12px;padding-left:20px;padding-right:20px}
+  html.lu-desk .hdr2>a:first-child{flex:none}
+  html.lu-desk .nav2>a,html.lu-desk .nav2 .navdd>button{padding-left:11px;padding-right:11px}
+  html.lu-desk .hdr2 .search2{flex:1 1 44px;min-width:44px}
+  html.lu-desk .hdr2 .search2 input{min-width:0;width:100%}
+  html.lu-desk .hdr2 .la-hdr-login span{display:none}
+}
+/* About: the "Our approach" card beside the intro (the creator photo and bio were removed) */
+.ab-pillars{max-width:400px!important;gap:14px!important;padding:22px 22px 20px!important}
+#pillars{display:flex;flex-direction:column;gap:14px}
+.ab-pil{display:flex;gap:11px;align-items:flex-start;font-size:14px;line-height:1.5;color:#4A4855}
+.ab-pil b{display:block;font:600 16px Fredoka,sans-serif;color:#2B2A35;margin-bottom:2px}
+.ab-pil .c{flex:none;width:22px;height:22px;margin-top:2px;border-radius:7px;background:#DDF2E4;color:#1E6B45;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center}
+/* banner buttons: Explore right away (yellow, like the other main buttons) and Create an account (white on the peach) with a "?" */
+.ud-hacts{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:6px}
+.ud-hacts .btn-lg{min-height:50px;padding:6px 22px;font-size:15px}
+.ud-accwrap{display:inline-flex;align-items:center;gap:8px}
+.ud-hacts .ud-accbtn{background:#fff}
+.ud-hacts .ud-accbtn:hover{background:#FFF8EC}
+.ud-hq{flex:none;width:32px;height:32px;padding:0;border-radius:50%;border:1.5px solid #2B2A35;background:#fff;color:#2B2A35;font:800 15px Figtree,sans-serif;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:background .15s,color .15s}
+.ud-hq:hover,.ud-hq[aria-expanded="true"]{background:#2B2A35;color:#fff}
+.ud-hq:focus-visible{outline:3px solid var(--sunny,#FFC94A);outline-offset:2px}
+.ud-why{display:flex;flex-direction:column;gap:8px}
+.ud-why p{display:flex;gap:9px;align-items:flex-start;color:#2B2A35}
+.ud-why i{flex:none;width:20px;height:20px;margin-top:1px;border-radius:6px;background:#DDF2E4;color:#1E6B45;font:800 11px Figtree,sans-serif;font-style:normal;display:flex;align-items:center;justify-content:center}
 html.ud-out .ud-ways{margin:22px 0 0;gap:12px}
 html.ud-out .ud-ways .ud-wgrid{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 html.ud-out .ud-way{border:1.5px solid #ECE6DC;border-radius:24px;padding:20px 20px 18px;box-shadow:0 3px 0 rgba(43,42,53,.05)}

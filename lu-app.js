@@ -105,6 +105,8 @@
     if (/[?&]app=(1|phone|tablet)/.test(location.search)) store('lu_force_app', '1');
     if (/[?&]app=0/.test(location.search)) store('lu_force_app', null);
     var forced = store('lu_force_app') === '1';
+    // desktop computers keep the website even in a narrow window (see the first script in index.html)
+    if (window.LU_DESK && !forced) return null;
     if (w < 760) return 'phone';
     if ((coarse || forced) && w <= 1400) return w > h ? 'land' : 'port';
     return null;
@@ -581,6 +583,10 @@
      Tools, Shop and Articles rows. The illustrations are the shaded ones from tools-art.js. */
   var DW = {
     threeWays: ['Three ways to use Little Us', 'Tiga cara memakai Little Us'],
+    explore: ['Explore right away', 'Langsung jelajahi'], createAcc: ['Create an account', 'Buat akun'],
+    whyAcc: ['Why create a free account?', 'Kenapa membuat akun gratis?'],
+    why1: ['Save your settings, pick up where you left off on any device', 'Simpan pengaturanmu, lanjutkan dari mana saja di perangkat apa pun'],
+    why2: ['Can upgrade to unlock all tool styles and resources', 'Bisa upgrade untuk membuka semua gaya alat dan materi'],
     justStart: ['Just start', 'Langsung mulai'], noAccount: ['NO ACCOUNT', 'TANPA AKUN'], justStartP: ['Every tool and free printable. Setup stays on this device.', 'Semua alat dan materi gratis. Pengaturan tersimpan di perangkat ini.'], tryTools: ['Try the free tools', 'Coba alat gratis'],
     freeAcc: ['Free account', 'Akun gratis'], freeAccP: ['Your child’s setup on every phone, tablet and computer.', 'Pengaturan anakmu di setiap HP, tablet, dan komputer.'], makeAcc: ['Make an account', 'Buat akun'],
     upgradeH: ['Upgrade to Little Us', 'Upgrade ke Little Us'], upgradeP: ['Get more tool styles and all our resources', 'Dapatkan lebih banyak gaya alat dan semua materi kami'], seePlans: ['See plans · from $9', 'Lihat paket · mulai $9'], seePlans0: ['See plans', 'Lihat paket'],
@@ -601,17 +607,15 @@
     DOC.classList.add('ud-home'); DOC.classList.toggle('ud-in', inn); DOC.classList.toggle('ud-out', !inn);
     deskArt(main, Ar);
     var key = lang() + '|' + st;
-    if (main.dataset.ud === key && main.querySelector('.ud-ways')) return;
+    if (main.dataset.ud === key && main.querySelector('.ud-hacts')) return;
     main.dataset.ud = key;
     [].slice.call(main.querySelectorAll('.ud-x')).forEach(function (n) { n.remove(); });
-    // visitor banner: the three ways to use Little Us
-    var ways = document.createElement('div');
-    ways.className = 'ud-ways ud-x';
-    ways.innerHTML = '<span class="ud-eyebrow">' + esc(dt('threeWays')) + '</span><div class="ud-wgrid">' +
-      '<div class="ud-way"><div class="ud-wh"><b>' + esc(dt('justStart')) + '</b><em class="ud-tag">' + esc(dt('noAccount')) + '</em></div><p>' + esc(dt('justStartP')) + '</p><a class="btn btn-primary" href="#/tools">' + esc(dt('tryTools')) + '</a></div>' +
-      '<div class="ud-way"><div class="ud-wh"><b>' + esc(dt('freeAcc')) + '</b><em class="ud-tag green">' + esc(isId() ? 'GRATIS' : 'FREE') + '</em></div><p>' + esc(dt('freeAccP')) + '</p><a class="btn btn-primary" href="#/signup">' + esc(dt('makeAcc')) + '</a></div>' +
-      '<div class="ud-way plus"><div class="ud-wh"><b>' + esc(dt('upgradeH')) + '</b><em class="ud-plus">PLUS</em></div><p>' + esc(dt('upgradeP')) + '</p><a class="btn btn-primary" href="#/plus">' + esc(dt('seePlans')) + '</a></div></div>';
-    hero.insertAdjacentElement('afterend', ways); // the three ways sit in their own row under the banner
+    // visitor banner: "Explore right away" (glides down to the tools) and "Create an account" with a "?" for why
+    var copy = hero.querySelector('.h2-copy');
+    if (copy) copy.insertAdjacentHTML('beforeend', '<div class="ud-hacts ud-x">' +
+      '<a class="btn btn-primary btn-lg" href="#/tools" data-explore="1">' + esc(dt('explore')) + ' <span aria-hidden="true">↓</span></a>' +
+      '<span class="ud-accwrap"><a class="btn btn-outline btn-lg ud-accbtn" href="#/signup">' + esc(dt('createAcc')) + '</a>' +
+      '<button type="button" class="ud-hq" aria-expanded="false" aria-label="' + esc(dt('whyAcc')) + '">?</button></span></div>');
     // Popular resources: the Plus line under the heading
     var ph = main.querySelector('#hPop');
     if (ph && st !== 'plus' && st !== 'expiring') ph.insertAdjacentHTML('afterend', '<p class="ud-popsub ud-x">' + dt('popSub') + ' <a href="#/plus">' + esc(dt('seePlans0')) + '</a></p>');
@@ -712,15 +716,22 @@
   var POP = null;
   function closeInfo() { if (POP) { var q = POP.q; POP.el.remove(); POP = null; if (q) q.setAttribute('aria-expanded', 'false'); } }
   function toggleInfo(e) {
-    var q = e.target.closest && e.target.closest('.ud-q');
+    var q = e.target.closest && e.target.closest('.ud-q, .ud-hq');
     if (!q) { if (POP && e.type === 'click' && !POP.el.contains(e.target)) closeInfo(); if (POP && e.type === 'keydown' && e.key === 'Escape') closeInfo(); return; }
     if (e.type === 'keydown' && e.key !== 'Enter' && e.key !== ' ') return;
     e.preventDefault(); e.stopPropagation();
     var same = POP && POP.q === q; closeInfo(); if (same) return;
-    var card = q.closest('.h2-tool'), name = ((card.querySelector('h3') || {}).textContent || '').trim(), desc = ((card.querySelector('p') || {}).textContent || '').trim();
     var el = document.createElement('div');
-    el.className = 'ud-pop'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-label', name);
-    el.innerHTML = '<b>' + esc(name) + '</b><p>' + esc(desc) + '</p><a class="btn btn-primary btn-sm" href="' + esc(card.getAttribute('href') || '#/tools') + '">' + esc(isId() ? 'Buka alat' : 'Open tool') + ' →</a>';
+    el.className = 'ud-pop'; el.setAttribute('role', 'dialog');
+    if (q.classList.contains('ud-hq')) {
+      // the banner's "?": why a free account helps
+      el.setAttribute('aria-label', dt('whyAcc'));
+      el.innerHTML = '<b>' + esc(dt('whyAcc')) + '</b><div class="ud-why"><p><i aria-hidden="true">✓</i>' + esc(dt('why1')) + '</p><p><i aria-hidden="true">✓</i>' + esc(dt('why2')) + '</p></div>';
+    } else {
+      var card = q.closest('.h2-tool'), name = ((card.querySelector('h3') || {}).textContent || '').trim(), desc = ((card.querySelector('p') || {}).textContent || '').trim();
+      el.setAttribute('aria-label', name);
+      el.innerHTML = '<b>' + esc(name) + '</b><p>' + esc(desc) + '</p><a class="btn btn-primary btn-sm" href="' + esc(card.getAttribute('href') || '#/tools') + '">' + esc(isId() ? 'Buka alat' : 'Open tool') + ' →</a>';
+    }
     document.body.appendChild(el);
     var r = q.getBoundingClientRect(), w = el.offsetWidth, x = Math.min(Math.max(12, r.left + r.width / 2 - w / 2), window.innerWidth - w - 12);
     el.style.left = x + window.scrollX + 'px'; el.style.top = r.bottom + window.scrollY + 10 + 'px';
@@ -729,6 +740,15 @@
     el.addEventListener('click', function (ev) { if (ev.target.closest('a')) closeInfo(); });
   }
   document.addEventListener('click', toggleInfo, true);
+  // banner "Explore right away": glide down to the Free Tools section instead of leaving the page
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('[data-explore]'); if (!a) return;
+    var main = document.getElementById('lu-main'), h = main && main.querySelector('#hTools'), sec = h && (h.closest('section') || h);
+    if (!sec) return;
+    e.preventDefault(); e.stopPropagation();
+    var reduce = false; try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (er) { }
+    window.scrollTo({ top: sec.getBoundingClientRect().top + window.scrollY - 20, behavior: reduce ? 'auto' : 'smooth' });
+  }, true);
   document.addEventListener('keydown', toggleInfo, true);
   window.addEventListener('resize', closeInfo);
   // shrink each preview drawing so it fits inside its box (stars, schedule cards and faces used to spill over)
