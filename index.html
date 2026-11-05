@@ -368,7 +368,7 @@ html,body,a,button,input,select,textarea,label,[role=button],[data-act]{touch-ac
 .ab-creds .can-list div{font-size:14px}
 @media(min-width:960px){.ab-hero{align-items:start}}
 </style>
-<link rel="stylesheet" href="/lu-app.css?v=16">
+<link rel="stylesheet" href="/lu-app.css?v=17">
 <script>(function(){try{var w=innerWidth,c=matchMedia("(pointer:coarse)").matches,f=localStorage.getItem("lu_force_app")==="1"||/[?&]app=(1|phone|tablet)/.test(location.search);if(w<760||((c||f)&&w<=1400)){var d=document.documentElement;d.classList.add("lu-app",w<760?"lu-phone":w>innerHeight?"lu-land":"lu-port")}}catch(e){}})();</script>
 </head>
 <body>
@@ -647,7 +647,7 @@ function done(){o("#rqBox").innerHTML='<div class="rq-done"><span class="rq-hear
     "serviceWorker"in navigator&&location.protocol==="https:"&&window.addEventListener("load",()=>{navigator.serviceWorker.register("/sw.js").catch(()=>{})});})(),(function(){"use strict";const J={en:[["#/terms","Terms & Conditions"],["#/license","License"],["#/refund","Refund Policy"],["#/privacy","Privacy Policy"]],id:[["#/terms","Syarat & Ketentuan"],["#/license","Lisensi"],["#/refund","Kebijakan Pengembalian Dana"],["#/privacy","Kebijakan Privasi"]]};function o(f){const e=LU.cfg.CONTACT||{};return f.replace(/\{wa\}/g,LU.esc(e.whatsapp||"")).replace(/\{waLink\}/g,"https://wa.me/"+LU.esc(e.whatsappLink||"")).replace(/\{email\}/g,LU.esc(e.email||"")).replace(/\{city\}/g,LU.esc(e.city||"Indonesia"))}window.LULegal=function(f){const e="#/"+LU.route;let F=typeof f=="string"?null:f;LU.page({strings:{en:{policies:"Policies"},id:{policies:"Kebijakan"}},title:()=>F?F.title[LU.lang]:(LU.lang==="id"?"Kebijakan":"Policies"),async init(){if(!F){try{await luLoad("/legal.js?v=3")}catch(x){}F=(window.LU_LEGAL||{})[f]||null}},render(){const i=LU.lang;LU.$("#legalNav").innerHTML='<span class="eyebrow" style="padding:0 14px 6px">'+LU.esc(LU.t("policies"))+"</span>"+J[i].map(r=>'<a href="'+r[0]+'"'+(r[0]===e?' class="on" aria-current="page"':"")+">"+LU.esc(r[1])+"</a>").join("");if(!F){LU.$("#doc").innerHTML='<div class="load-error"><b>'+(i==="id"?"Halaman ini belum termuat.":"This page didn&rsquo;t load.")+'</b><button type="button" class="btn btn-dark btn-sm" onclick="location.reload()">'+(i==="id"?"Coba lagi":"Try again")+"</button></div>";return}document.title=F.title[i]+" · Little Us";LU.$("#doc").innerHTML='<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px"><h1>'+LU.esc(F.title[i])+'</h1><span class="updated">'+LU.esc(F.updated[i])+'</span></div><div class="legal-body">'+o(F.body[i])+"</div>"}})}})();
 </script>
 <script src="/lu-account.js?v=14"></script>
-<script src="/lu-app.js?v=17"></script>
+<script src="/lu-app.js?v=18"></script>
 <script>
 /* tools dropdown in the header */
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-tsdd]');document.querySelectorAll('.ts-dd.open').forEach(function(d){if(!b||!d.contains(b)){d.classList.remove('open');var x=d.querySelector('[data-tsdd]');x&&x.setAttribute('aria-expanded','false')}});if(b){var d=b.parentNode,o=d.classList.toggle('open');b.setAttribute('aria-expanded',String(o))}});

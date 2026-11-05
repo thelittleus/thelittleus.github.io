@@ -371,7 +371,7 @@ html.ud-out #laHome .la-hcard.acc{display:none}
 .ud-eyebrow{font-size:12.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#7A4E35;margin-left:26px}
 .ud-wgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .ud-way{background:#fff;border-radius:22px;padding:18px 18px 16px;display:flex;flex-direction:column;gap:8px;box-shadow:0 2px 0 rgba(43,42,53,.04)}
-.ud-way.plus{background:#FFF1C7;border:1.5px solid #2B2A35}
+.ud-way.plus{background:#fff}
 .ud-wh{display:flex;align-items:center;justify-content:space-between;gap:8px}.ud-wh b{font:600 20px Fredoka,sans-serif}
 .ud-way p{margin:0;font-size:14px;line-height:1.45;color:#4A4855;flex:1}
 .ud-way .btn{width:100%;justify-content:center;margin-top:4px}
@@ -397,15 +397,15 @@ html.ud-out .h2-note{display:none}
 /* closing: Upgrade card */
 html.ud-home .closing .signup{display:none}
 html.ud-home.ud-plus .closing .signup{display:block}
-.ud-upcard{position:relative;overflow:hidden;background:#FFF1C7;border-radius:28px;padding:36px 30px;display:flex;flex-direction:column;justify-content:center;gap:10px}
-.ud-upcard h3{font:600 30px Fredoka,sans-serif;margin:0;display:flex;align-items:center;gap:10px}
-.ud-upcard p{margin:0;color:#4A4855}
-.ud-blob{position:absolute;right:-22px;top:-22px;width:92px;height:92px;border-radius:28px;background:#2B2A35;transform:rotate(18deg)}
-.ud-plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px}
+/* same look as the "Just start" and "Free account" boxes: white, thin light border, rounded */
+.ud-upcard{position:relative;overflow:hidden;background:#fff;border:1.5px solid #ECE6DC;border-radius:24px;padding:20px 20px 18px;box-shadow:0 3px 0 rgba(43,42,53,.05);display:flex;flex-direction:column;justify-content:center;gap:8px}
+.ud-upcard h3{font:600 20px Fredoka,sans-serif;margin:0;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ud-upcard p{margin:0;font-size:14px;line-height:1.45;color:#4A4855}
+.ud-blob{display:none}
+.ud-plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:8px}
 .ud-plans a:not(.btn){display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:3px;min-width:0;min-height:70px;padding:10px 16px;border-radius:16px;background:#fff;border:1.5px solid #ECE6DC;text-decoration:none;color:#2B2A35}
 .ud-plans a.on{border:2px solid #2B2A35}.ud-plans a b{font:700 13px Figtree,sans-serif;color:#6B6875}.ud-plans a span{font:800 17px/1.15 Figtree,sans-serif;overflow-wrap:anywhere}
-.ud-plans .btn{grid-column:1/-1;justify-content:center}
-.ud-plans .btn{min-height:56px}
+.ud-plans .btn{grid-column:1/-1;justify-self:start;justify-content:center;width:auto;min-width:200px;padding-left:32px;padding-right:32px;margin-top:4px}
 /* signed in: dashboard banner first, then compact Tools, Shop and Articles */
 html.ud-in .h2-hero-wrap{display:none!important}
 html.ud-in #laHome{padding:0 var(--pad,40px)}
@@ -553,22 +553,22 @@ html.ud-home #lu-main>main{padding-bottom:72px}
 .ud-pop .btn{align-self:flex-start;margin-top:4px}
 @keyframes udPop{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
 /* ===== visitor homepage banner: words on the left, the family picture on the right; the three ways in a row underneath ===== */
-html.ud-out .h2-hero{display:grid!important;grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr);grid-template-rows:auto;align-items:center;column-gap:40px;padding:44px 52px 40px!important;min-height:400px;border-radius:32px;overflow:hidden;
+html.ud-out .h2-hero{display:grid!important;grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr);grid-template-rows:auto;align-items:center;column-gap:36px;padding:30px 44px 28px!important;min-height:0;border-radius:28px;overflow:hidden;
   background-color:#FCE7D8;background-image:radial-gradient(rgba(240,105,79,.12) 1.4px,transparent 1.6px),linear-gradient(115deg,#FDEBDD 0%,#FCE3D1 55%,#FBDCC6 100%);background-size:18px 18px,100% 100%}
-html.ud-out .h2-hero::before{content:"";position:absolute;right:-60px;top:50%;width:520px;height:520px;margin-top:-260px;border-radius:50%;background:radial-gradient(circle at 40% 40%,#FFE7A8 0%,#FFD98A 55%,rgba(255,217,138,0) 70%);opacity:.7;pointer-events:none}
+html.ud-out .h2-hero::before{content:none!important;display:none!important}
 html.ud-out .h2-hero::after{content:"";position:absolute;left:-80px;bottom:-96px;width:170px;height:170px;border-radius:50%;border:18px solid #DCEBFA;opacity:.8;pointer-events:none}
 html.ud-out .h2-hero>.deco,html.ud-out .h2-hero .h2-scene,html.ud-out .ud-flowers{display:none!important}
-html.ud-out .h2-hero .h2-copy{grid-column:auto!important;position:relative;z-index:1;max-width:560px;display:flex;flex-direction:column;gap:16px}
-html.ud-out .h2-hero h1{font-size:clamp(32px,3vw,46px)!important;line-height:1.08;margin:0}
-html.ud-out .h2-hero .h2-copy p{font-size:16.5px!important;line-height:1.6;color:#4A4855;margin:0}
+html.ud-out .h2-hero .h2-copy{grid-column:auto!important;position:relative;z-index:1;max-width:500px;display:flex;flex-direction:column;gap:12px}
+html.ud-out .h2-hero h1{font-size:clamp(26px,2.3vw,34px)!important;line-height:1.12;margin:0}
+html.ud-out .h2-hero .h2-copy p{font-size:15px!important;line-height:1.55;color:#4A4855;margin:0}
 html.ud-out .h2-hero .h2-art{display:flex!important;position:relative;z-index:1;align-items:center;justify-content:center;min-height:0;height:auto;background:none}
 html.ud-out .h2-hero .h2-art>*:not(.ud-heroimg){display:none!important}
-html.ud-out .ud-heroimg{display:block;width:100%;max-width:560px;height:auto;filter:drop-shadow(0 14px 22px rgba(120,70,40,.14))}
+html.ud-out .ud-heroimg{display:block;width:100%;max-width:420px;height:auto}
 html.ud-out .ud-ways{margin:22px 0 0;gap:12px}
 html.ud-out .ud-ways .ud-wgrid{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 html.ud-out .ud-way{border:1.5px solid #ECE6DC;border-radius:24px;padding:20px 20px 18px;box-shadow:0 3px 0 rgba(43,42,53,.05)}
-html.ud-out .ud-way.plus{border-color:#2B2A35;background:#FFF1C7}
-@media (max-width:1060px){html.ud-out .h2-hero{grid-template-columns:1fr;row-gap:22px;padding:36px 32px 32px!important}html.ud-out .ud-heroimg{max-width:460px}html.ud-out .h2-hero::before{right:-160px;top:auto;bottom:-200px;margin-top:0}}
+html.ud-out .ud-way.plus{border-color:#ECE6DC;background:#fff}
+@media (max-width:1060px){html.ud-out .h2-hero{grid-template-columns:1fr;row-gap:18px;padding:28px 28px 26px!important}html.ud-out .ud-heroimg{max-width:380px}}
 @media (max-width:860px){html.ud-out .ud-ways .ud-wgrid{grid-template-columns:1fr}}
 
 /* homepage closing: with Meet Kal removed, the Upgrade card has the row to itself */
