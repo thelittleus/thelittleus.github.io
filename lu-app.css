@@ -637,7 +637,6 @@ html.ud-home .closing{grid-template-columns:minmax(0,1fr)!important}
   html.lu-desk .h2-hero-wrap{padding-left:24px;padding-right:24px}
   html.lu-desk.ud-out .h2-hero{grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);row-gap:0;column-gap:24px;padding:28px 28px 26px!important}
   html.lu-desk.ud-out .ud-heroimg{max-width:100%}
-  html.lu-desk.ud-in .h2-groups,html.lu-desk.ud-in .h2-tools{grid-template-columns:repeat(4,minmax(0,1fr))!important}
   /* log in / sign up: smaller welcome panel next to the form */
   html.lu-desk .la-auth{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px;padding:28px 24px 56px}
   html.lu-desk .la-side{padding:36px;min-height:0}
@@ -692,7 +691,6 @@ html.ud-home .closing{grid-template-columns:minmax(0,1fr)!important}
   html.lu-desk .la-auth{grid-template-columns:minmax(0,460px);justify-content:center}
   html.lu-desk .la-side{display:none}
   html.lu-desk .h2-hero-wrap{padding-left:20px;padding-right:20px}
-  html.lu-desk.ud-in .h2-groups,html.lu-desk.ud-in .h2-tools{grid-template-columns:repeat(3,minmax(0,1fr))!important}
   html.lu-desk .tl-tlist{grid-template-columns:minmax(0,1fr)}
 }
 @media (max-width:639px){
@@ -709,3 +707,20 @@ html.ud-home .closing{grid-template-columns:minmax(0,1fr)!important}
   html.lu-desk.ud-out .h2-hero{grid-template-columns:1fr;row-gap:16px;padding:24px 24px 22px!important}
   html.lu-desk.ud-out .ud-heroimg{max-width:340px;margin:0 auto}
 }
+
+/* signed-in Tools: one sliding row, with a round button on each side. --ud-cols is how many cards fit in view */
+html.ud-in{--ud-cols:8}
+@media (max-width:1099px){html.ud-in{--ud-cols:4}}
+@media (max-width:759px){html.ud-in{--ud-cols:3}}
+@media (max-width:479px){html.ud-in{--ud-cols:2}}
+html.ud-in section[aria-labelledby="hTools"] .h2-head>a{display:none}
+.ud-rail{position:relative}
+html.ud-in .ud-rail .h2-groups{display:grid;grid-template-columns:none!important;grid-auto-flow:column;grid-auto-columns:calc((100% - (var(--ud-cols) - 1)*12px)/var(--ud-cols));overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:8px;scrollbar-width:none;padding:10px 8px 24px;margin:-10px -8px -24px}
+html.ud-in .ud-rail .h2-groups::-webkit-scrollbar{display:none}
+html.ud-in .ud-rail .h2-tool{scroll-snap-align:start}
+.ud-railbtn{display:none}
+html.ud-in .ud-rail-on .ud-railbtn{display:flex;position:absolute;top:50%;z-index:3;width:44px;height:44px;margin-top:-22px;padding:0;align-items:center;justify-content:center;border:0;border-radius:50%;background:#fff;box-shadow:0 2px 10px rgba(43,42,53,.2);cursor:pointer}
+html.ud-in .ud-railbtn.prev{left:-22px}
+html.ud-in .ud-railbtn.next{right:-22px}
+html.ud-in .ud-railbtn:focus-visible{outline:3px solid var(--sunny);outline-offset:2px}
+html.ud-in .ud-railbtn:disabled{opacity:.4;box-shadow:none;cursor:default}

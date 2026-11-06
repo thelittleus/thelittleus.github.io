@@ -5,16 +5,16 @@
 
   function viewSets() {
     var sets = D.store.sets();
-    return '<div class="dtt-head"><div><h2 class="tl-h2">' + esc(T('Stimulus sets', 'Stimulus set')) + '</h2><p class="tl-p">' + esc(T('A set is a group of pictures and labels you can reuse with any of your students and programs.', 'Set adalah kumpulan gambar dan label yang bisa dipakai ulang untuk semua anak dan program.')) + '</p></div>' +
+    return '<div class="dtt-head"><div><h2 class="tl-h2">' + esc(T('Stimulus sets', 'Stimulus set')) + '</h2></div>' +
       '<button type="button" class="tl-btn primary" data-a="newSet">' + esc(T('New set', 'Set baru')) + '</button></div>' +
       (sets.length ? '<div class="tl-panel">' + sets.map(function (s) {
         var used = D.store.programsUsingSet(s.id).length, first = (s.items[0] && s.items[0].images[0]) || null;
         return '<button type="button" class="tl-row act" data-a="openSet" data-id="' + s.id + '"><span class="dtt-thumb">' + ui.img(first) + '</span><div class="dtt-grow"><b>' + esc(s.name || T('Unnamed set', 'Set tanpa nama')) + '</b><small>' + esc(T(s.items.length + ' items, used by ' + used + (used === 1 ? ' program' : ' programs'), s.items.length + ' item, dipakai ' + used + ' program')) + '</small></div><span aria-hidden="true">›</span></button>';
-      }).join('') + '</div>' : '<div class="dtt-empty tl-panel pad"><p class="tl-p">' + esc(T('No sets yet. Make one with your own photos, or copy pictures from the starter library.', 'Belum ada set. Buat dengan fotomu sendiri, atau salin gambar dari pustaka awal.')) + '</p></div>') +
+      }).join('') + '</div>' : '<div class="dtt-empty tl-panel pad"><p class="tl-p">' + esc(T('No sets yet.', 'Belum ada set.')) + '</p></div>') +
       photoMeter();
   }
   function photoMeter() {
-    return '<p class="tl-note2">' + esc(T('Photos uploaded: ' + D.store.photoCount() + ' of ' + D.store.photoLimit() + '. You can pick large files. We make them small before saving, and library pictures do not count.', 'Foto terunggah: ' + D.store.photoCount() + ' dari ' + D.store.photoLimit() + '. File besar boleh dipilih. Foto diperkecil sebelum disimpan, dan gambar pustaka tidak dihitung.')) + '</p>';
+    return '<p class="tl-note2">' + esc(T('Photos uploaded: ' + D.store.photoCount() + ' of ' + D.store.photoLimit() + '.', 'Foto terunggah: ' + D.store.photoCount() + ' dari ' + D.store.photoLimit() + '.')) + '</p>';
   }
   ACT.newSet = function () {
     D.store.addSet('').then(function (s) { U.setId = s.id; U.view = 'set'; ui.render(); }, function () { X.toast(T('The set was not created. Check your connection.', 'Set belum dibuat. Periksa koneksi.')); });

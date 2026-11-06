@@ -139,7 +139,7 @@
   function load() {
     if (!window.luLoad) return Promise.resolve();
     return luLoad('/tools.css?v=20').then(function () { return luLoad('/tools-art.js?v=25'); }).then(function () { return luLoad('/tools.js?v=25'); })
-      .then(function () { return luLoad('/tools-calm.js?v=16'); }).then(function () { var a = api(); return a && a.photosLoad ? a.photosLoad() : null; }).catch(function () { });
+      .then(function () { return luLoad('/tools-calm.js?v=17'); }).then(function () { var a = api(); return a && a.photosLoad ? a.photosLoad() : null; }).catch(function () { });
   }
   function photo(p) { var a = api(); return p && p.photo && a && a.PH && a.PH[p.photo] ? a.PH[p.photo] : ''; }
   function ava(p, size, cls) {
@@ -631,6 +631,7 @@
     var st = accStatus(), inn = st !== 'none', Ar = A();
     DOC.classList.add('ud-home'); DOC.classList.toggle('ud-in', inn); DOC.classList.toggle('ud-out', !inn);
     deskArt(main, Ar);
+    toolRail(main);
     var key = lang() + '|' + st;
     if (main.dataset.ud === key && main.querySelector('.ud-hacts')) return;
     main.dataset.ud = key;
@@ -729,6 +730,36 @@
       if (!art) return;
       ic.innerHTML = '<span class="ud-ic ud-x">' + fit(art) + '</span>';
     });
+  }
+  // signed-in Tools: one row, with a button on each side to slide to the tools that don't fit
+  function toolRail(main) {
+    var row = main.querySelector('.h2-groups'); if (!row) return;
+    var rail = row.parentNode;
+    if (!rail.classList.contains('ud-rail')) {
+      rail = document.createElement('div'); rail.className = 'ud-rail';
+      row.parentNode.insertBefore(rail, row); rail.appendChild(row);
+      rail.insertAdjacentHTML('beforeend', [[-1, 'M15 5l-7 7 7 7'], [1, 'M9 5l7 7-7 7']].map(function (b) {
+        return '<button type="button" class="ud-railbtn ' + (b[0] < 0 ? 'prev' : 'next') + '" data-dir="' + b[0] + '">' + svgI('<path d="' + b[1] + '"/>', 22, '#2B2A35', 2.6) + '</button>';
+      }).join(''));
+      var sync = function () { railState(rail, row); };
+      rail.addEventListener('click', function (e) {
+        var b = e.target.closest('.ud-railbtn'); if (!b) return;
+        var reduce = false; try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (er) { }
+        row.scrollBy({ left: Number(b.dataset.dir) * row.clientWidth, behavior: reduce ? 'auto' : 'smooth' });
+      });
+      row.addEventListener('scroll', function () { closeInfo(); sync(); }, { passive: true });
+      window.addEventListener('resize', sync);
+    }
+    var btns = rail.querySelectorAll('.ud-railbtn');
+    btns[0].setAttribute('aria-label', isId() ? 'Alat sebelumnya' : 'Previous tools');
+    btns[1].setAttribute('aria-label', isId() ? 'Alat berikutnya' : 'More tools');
+    railState(rail, row);
+  }
+  function railState(rail, row) {
+    var room = row.scrollWidth - row.clientWidth, btns = rail.querySelectorAll('.ud-railbtn');
+    rail.classList.toggle('ud-rail-on', room > 1);
+    btns[0].disabled = row.scrollLeft <= 1;
+    btns[1].disabled = row.scrollLeft >= room - 1;
   }
   // signed-in Tools row: a "?" on each preview that shows what the tool is for
   var QCOL = { timer: '#3F6FA8', tokens: '#9A6A00', 'first-then': '#2F7A4D', schedule: '#6B55C8', breathe: '#3F6FA8', feelings: '#6B55C8', worry: '#C2456A', 'conversation-starters': '#9A6A00', 'safe-people': '#2F7A4D', dtt: '#9A6A00' };

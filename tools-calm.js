@@ -417,7 +417,6 @@
     howAdd: [function (n) { return 'How ' + n + ' adds a worry'; }, function (n) { return 'Cara ' + n + ' menambah kekhawatiran'; }],
     draw: ['Draw', 'Gambar'], type: ['Type', 'Tulis'], voice: ['Voice', 'Suara'],
     worryLater: ['Worry time later', 'Waktu cerita nanti'], openLater: ['Open the jar together later', 'Buka toples bersama nanti'], openLaterD: ['A timer starts when a worry goes in. When it ends, the jar opens.', 'Timer mulai saat kekhawatiran masuk. Saat selesai, toples terbuka.'],
-    keptHere: [function (n) { return '<b>Kept on this device only.</b> ' + n + ' can add worries but not remove them. Only an adult can let one float away, after talking it through.'; }, function (n) { return '<b>Hanya tersimpan di perangkat ini.</b> ' + n + ' bisa menambah tapi tidak bisa menghapus. Hanya orang dewasa yang bisa melepaskannya, setelah dibicarakan bersama.'; }],
     openWorryNow: ['Open worry time now', 'Buka waktu cerita sekarang'], startWorry: ['Start in child mode', 'Mulai mode anak'],
     somethingWorry: ['Is something worrying you?', 'Ada yang bikin kamu khawatir?'], drawIt: ['Draw it', 'Gambar'], writeIt: ['Write it', 'Tulis'], sayIt: ['Say it · coming later', 'Ucapkan · segera hadir'],
     drawWorry: ['Draw your worry', 'Gambar kekhawatiranmu'], worriedThat: ['I’m worried that…', 'Aku khawatir kalau…'], putIn: ['Put it in the jar', 'Masukkan ke toples'],
@@ -1082,7 +1081,6 @@
       '<button type="button" class="tl-opt lc-off" disabled><span class="lc-wico">🎙</span><b>' + esc(w('voice')) + '</b><em class="lc-soon">' + esc(w('soon')) + '</em></button></div>' +
       '<div class="tl-lab2">' + esc(w('worryLater')) + '</div><div class="tl-panel">' + X.row(esc(w('openLater')), esc(w('openLaterD')), X.toggle('later', c.later)) +
       (c.later ? '<div class="tl-row"><div class="tl-chips wrap">' + [10, 20, 30, 60].map(function (m) { return '<button type="button" class="tl-chip' + (c.laterMin === m ? ' on' : '') + '" data-lc="wmin" data-v="' + m + '">' + m + ' ' + esc(w('min')) + '</button>'; }).join('') + '</div></div>' : '') + '</div>' +
-      '<div class="tl-tip mint">' + heartSVG(22) + '<span>' + w('keptHere', esc(name)) + '</span></div>' +
       '<div class="tl-foot"><button type="button" class="tl-btn primary lg block" data-lc="wstart">' + esc(X.tr('startChild')) + '</button>' + (n ? '<button type="button" class="tl-btn outline lg block" data-lc="wnow">' + esc(w('openWorryNow')) + '</button>' : '') + '<small>' + esc(w('stayAwake')) + '</small></div></div>';
     if (c.at && c.at > now) later(function () { if (X.route() === 'tools/worry') X.rerender(); }, Math.min(60000, c.at - now + 500));
     return h;

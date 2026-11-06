@@ -1,4 +1,5 @@
-/* Little Us · DTT · the program creation wizard. It edits a draft; nothing is saved as a program until the last step. */
+/* Little Us · DTT · the program creation wizard. It edits a draft; nothing is saved as a program until the last step.
+   Every step is open at any time. Review lists whatever is still missing. */
 (function () {
   'use strict';
   var D = window.LUDtt, X = LUTools.api, P = D.programs, T = D.i18n.T, esc = X.esc, ui = D.ui, U = ui.U, ACT = ui.ACT, INP = ui.INP;
@@ -8,24 +9,32 @@
     return [['goal', T('Goal and name', 'Tujuan dan nama')], ['type', T('Type', 'Jenis')], ['targets', T('Targets', '%targets%')], ['teach', T('Teaching', 'Pengajaran')], ['reinf', 'Reinforcement'], ['mastery', T('Mastery', '%mastery%')], ['review', T('Review', 'Tinjau')]];
   }
   ACT.newProgram = function () {
+    if (U.wizard) { U.wizard.away = false; U.navShut = false; ui.render(); window.scrollTo(0, 0); return; }
     if (D.store.programs().length && !D.store.allowed('dtt.programs')) { if (window.LUAcc) LUAcc.lockSheet('dtt.programs'); return; }
     var p = P.create({ studentId: ui.student().id, lang: D.i18n.lang() });
-    U.wizard = { p: p, step: 0, max: 0, family: 'listener', newSet: false };
+    U.wizard = { p: p, step: 0, seen: { 0: true }, family: 'listener', newSet: false };
     ui.render(); window.scrollTo(0, 0);
   };
   ui.wizardSteps = steps;
-  ACT.wizGo = function (b) { var i = Number(b.dataset.v); if (U.wizard && i <= U.wizard.max) { U.wizard.step = i; ui.render(); window.scrollTo(0, 0); } };
-  ACT.wizCancel = function () { U.wizard = null; U.view = 'programs'; ui.render(); };
-  ACT.wizBack = function () { U.wizard.step--; ui.render(); window.scrollTo(0, 0); };
-  ACT.wizNext = function () {
-    var w = U.wizard, id = steps()[w.step][0];
-    if (id === 'goal' && !w.p.name.trim()) {
-      if (w.p.goal.trim()) w.p.name = w.p.goal.trim();
-      else { X.toast(T('Add a goal or a name to continue.', 'Isi tujuan atau nama untuk melanjutkan.')); return; }
-    }
-    if (id === 'targets' && !w.p.setId) { X.toast(T('Choose a stimulus set to continue.', 'Pilih stimulus set untuk melanjutkan.')); return; }
-    w.step++; w.max = Math.max(w.max, w.step); ui.render(); window.scrollTo(0, 0);
+  // the program name falls back to the goal, once the teacher moves on from that step
+  function go(i) {
+    var w = U.wizard;
+    if (steps()[w.step][0] === 'goal' && !w.p.name.trim() && w.p.goal.trim()) w.p.name = w.p.goal.trim();
+    w.step = i; w.seen[i] = true; w.away = false; U.navShut = false; ui.render(); window.scrollTo(0, 0);
+  }
+  // which step fixes each problem Review reports
+  function stepOf(code) { var id = code === 'name' ? 'goal' : 'targets'; return steps().map(function (s) { return s[0]; }).indexOf(id); }
+  // how the sidebar draws a step: now, next (not visited yet), warn (visited, something missing) or done
+  ui.wizardStepState = function (i) {
+    var w = U.wizard;
+    if (ui.wiz() && w.step === i) return 'now';
+    if (!w.seen[i]) return 'next';
+    return P.issues(w.p, D.store.set(w.p.setId)).some(function (x) { return stepOf(x.code) === i; }) ? 'warn' : 'done';
   };
+  ACT.wizGo = function (b) { if (U.wizard) go(Number(b.dataset.v)); };
+  ACT.wizCancel = function () { U.wizard = null; U.view = 'programs'; ui.render(); };
+  ACT.wizBack = function () { go(U.wizard.step - 1); };
+  ACT.wizNext = function () { go(U.wizard.step + 1); };
   INP.wizText = function (el) { U.wizard.p[el.dataset.k] = el.value; };
 
   /* step 2 */
@@ -74,7 +83,7 @@
   /* step 4 */
   function stepTeach(w) {
     var p = w.p, set = D.store.set(p.setId);
-    return '<h2 class="tl-h2">' + esc(T('How will you teach?', 'Bagaimana cara mengajarnya?')) + '</h2><p class="tl-p">' + esc(T('Pick a starting point. It only fills in the settings, and you can change anything.', 'Pilih titik awal. Ini hanya mengisi pengaturan, dan semuanya bisa diubah.')) + '</p>' +
+    return '<h2 class="tl-h2">' + esc(T('How will you teach?', 'Bagaimana cara mengajarnya?')) + '</h2>' +
       '<div class="dtt-cards" role="group">' + [
         ['errorless', T('Errorless start', 'Mulai tanpa salah'), T('One card, the strongest prompt first, and every correct response reinforced.', 'Satu kartu, Prompt terkuat dulu, dan setiap respons benar diberi Reinforcement.')],
         ['acquisition', T('Acquisition', 'Akuisisi'), T('Three cards with prompts that fade. A good start for new targets.', 'Tiga kartu dengan Prompt yang memudar. Awal yang baik untuk %targets% baru.')],
@@ -102,15 +111,23 @@
   ui.issueText = issueText;
   function stepReview(w) {
     var p = w.p, s = p.settings, set = D.store.set(p.setId), probs = P.issues(p, set);
-    function row(a, b) { return '<div class="tl-row"><div class="dtt-grow"><small>' + esc(a) + '</small><b>' + esc(b) + '</b></div></div>'; }
+    function row(a, b, missing) { return '<div class="tl-row"><div class="dtt-grow"><small>' + esc(a) + '</small><b' + (b ? '' : ' class="dtt-missing"') + '>' + esc(b || missing) + '</b></div></div>'; }
+    var none = T('Not filled in', 'Belum diisi'), must = probs.filter(function (x) { return x.code === 'name' || x.code === 'set'; }), later = probs.filter(function (x) { return must.indexOf(x) < 0; });
+    function warn(title, list) {
+      return list.length ? '<div class="tl-tip dtt-tiplist"><b>' + esc(title) + '</b><ul>' + list.map(function (x) {
+        var i = stepOf(x.code);
+        return '<li>' + esc(issueText(x)) + ' <button type="button" class="tl-link" data-a="wizGo" data-v="' + i + '">' + esc(T('Go to ', 'Ke ') + D.i18n.fill(steps()[i][1])) + '</button></li>';
+      }).join('') + '</ul></div>' : '';
+    }
     return '<h2 class="tl-h2">' + esc(T('Check everything looks right', 'Periksa apakah semuanya sudah benar')) + '</h2><div class="tl-panel">' +
-      row(T('Program', 'Program'), p.name) + (p.goal ? row(T('Goal', 'Tujuan'), p.goal) : '') + row(T('Student', 'Anak'), ui.student().name) + row(T('Type', 'Jenis'), ui.typeName(p.type)) +
-      row(T('Stimulus set', 'Stimulus set'), (set && set.name) || T('Unnamed set', 'Set tanpa nama')) +
+      row(T('Program', 'Program'), p.name.trim(), none) + (p.goal ? row(T('Goal', 'Tujuan'), p.goal) : '') + row(T('Student', 'Anak'), ui.student().name) + row(T('Type', 'Jenis'), ui.typeName(p.type)) +
+      row(T('Stimulus set', 'Stimulus set'), set ? set.name || T('Unnamed set', 'Set tanpa nama') : '', T('Not chosen', 'Belum dipilih')) +
       row(T('Targets', '%targets%'), T(p.queue.length + ' in the queue, ' + p.activeCount + ' active at a time', p.queue.length + ' dalam antrean, ' + p.activeCount + ' aktif sekaligus')) +
       row('Prompt', { manual: 'Manual', mtl: 'Most-to-least', ltm: 'Least-to-most', td: 'Time delay' }[s.prompt]) +
       row('Reinforcement', ui.schedName(s.sched)) +
       row(T('Mastery', '%mastery%'), s.mRule === 'rolling' ? T(s.mNeed + ' of the last ' + s.mWin + ' independent', s.mNeed + ' dari ' + s.mWin + ' terakhir Independent') : T(s.mPct + '% in ' + s.mSess + ' sessions', s.mPct + '% dalam ' + s.mSess + ' %sessions%')) + '</div>' +
-      (probs.length ? '<div class="tl-tip dtt-tiplist"><b>' + esc(T('You can save now, and finish these before the first session:', 'Kamu bisa menyimpan sekarang, lalu lengkapi ini sebelum %session% pertama:')) + '</b><ul>' + probs.map(function (x) { return '<li>' + esc(issueText(x)) + '</li>'; }).join('') + '</ul></div>' : '');
+      warn(T('Fill these in to create the program:', 'Isi dulu untuk membuat program:'), must) +
+      warn(T('You can save now, and finish these before the first session:', 'Kamu bisa menyimpan sekarang, lalu lengkapi ini sebelum %session% pertama:'), later);
   }
   ACT.wizSave = function (b) {
     var w = U.wizard, p = w.p; b.disabled = true;
@@ -127,8 +144,7 @@
     var w = U.wizard, p = w.p, list = steps(), id = list[w.step][0], set = D.store.set(p.setId), body;
     if (id === 'goal') body = '<h2 class="tl-h2">' + esc(T('What do you want to teach?', 'Apa yang ingin diajarkan?')) + '</h2>' +
       ui.field(T('Goal', 'Tujuan'), p.goal, 'data-in="wizText" data-k="goal"', T('Learn animals', 'Belajar hewan')) +
-      ui.field(T('Program name', 'Nama program'), p.name, 'data-in="wizText" data-k="name"', T('Animals', 'Hewan')) +
-      '<p class="tl-note2">' + esc(T('This program is for ' + ui.student().name + '. To choose someone else, use the picture at the top of this page.', 'Program ini untuk ' + ui.student().name + '. Untuk memilih anak lain, pakai gambar profil di bagian atas halaman ini.')) + '</p>';
+      ui.field(T('Program name', 'Nama program'), p.name, 'data-in="wizText" data-k="name"', T('Animals', 'Hewan'));
     else if (id === 'type') body = stepType(w);
     else if (id === 'targets') body = stepTargets(w);
     else if (id === 'teach') body = stepTeach(w);
@@ -136,10 +152,10 @@
     else if (id === 'mastery') body = ui.SEC.mastery.draw(p, set, p.settings);
     else body = stepReview(w);
     var last = w.step === list.length - 1;
-    return '<div class="dtt-progh"><h2 class="tl-h2">' + esc(T('New program', 'Program baru')) + '</h2><p class="tl-note2">' + esc(T('Step ' + (w.step + 1) + ' of ' + list.length + ': ', 'Langkah ' + (w.step + 1) + ' dari ' + list.length + ': ') + D.i18n.fill(list[w.step][1])) + '</p></div>' +
+    return '<div class="dtt-progh"><h2 class="tl-h2">' + esc(T('New program', 'Program baru')) + '</h2><p class="tl-note2 dtt-phoneonly">' + esc(T('Step ' + (w.step + 1) + ' of ' + list.length + ': ', 'Langkah ' + (w.step + 1) + ' dari ' + list.length + ': ') + D.i18n.fill(list[w.step][1])) + '</p></div>' +
       '<div class="dtt-wizbody tl-panel pad">' + body + '</div>' +
       '<div class="dtt-secfoot">' + (w.step ? '<button type="button" class="tl-btn quiet" data-a="wizBack">' + esc(T('Back', 'Kembali')) + '</button>' : '<button type="button" class="tl-btn quiet" data-a="wizCancel">' + esc(T('Cancel', 'Batal')) + '</button>') +
-      (last ? '<button type="button" class="tl-btn primary" data-a="wizSave"' + (p.name.trim() && p.setId ? '' : ' disabled') + '>' + esc(T('Create program', 'Buat program')) + '</button>' : '<button type="button" class="tl-btn primary" data-a="wizNext">' + esc(T('Next', 'Lanjut')) + '</button>') + '</div>';
+      (last ? '<button type="button" class="tl-btn primary" data-a="wizSave"' + (p.name.trim() && set ? '' : ' disabled') + '>' + esc(T('Create program', 'Buat program')) + '</button>' : '<button type="button" class="tl-btn primary" data-a="wizNext">' + esc(T('Next', 'Lanjut')) + '</button>') + '</div>';
   };
   // keep "fine-tune" open across re-renders
   document.addEventListener('toggle', function (e) { var t = e.target; if (U.wizard && t && t.dataset && t.dataset.keep === 'fine') U.wizard.fine = t.open; }, true);

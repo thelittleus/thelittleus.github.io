@@ -12,7 +12,10 @@
   ui.student = student;
 
   /* ---------- the program or draft a form is editing ---------- */
-  function ctx() { return U.wizard ? U.wizard.p : D.store.program(U.programId); }
+  // a draft stays in memory while the teacher looks elsewhere (away); wiz() is the draft only while it is on screen
+  function wiz() { return U.wizard && !U.wizard.away ? U.wizard : null; }
+  ui.wiz = wiz;
+  function ctx() { return wiz() ? U.wizard.p : D.store.program(U.programId); }
   ui.ctx = ctx;
   ui.ctxSet = function () { var p = ctx(); return p ? D.store.set(p.setId) : null; };
 
@@ -30,7 +33,7 @@
     timers[key] = setTimeout(function () { fn().then(function () { flash(true); }, function () { flash(false); }); }, ms == null ? 500 : ms);
   }
   ui.touchProgram = function () {
-    var p = ctx(); if (!p || U.wizard) return;
+    var p = ctx(); if (!p || wiz()) return;
     later('p' + p.id, function () { return D.store.saveProgram(p); });
   };
   ui.touchSet = function (s) { later('s' + s.id, function () { return D.store.saveSet(s); }); };
@@ -77,7 +80,7 @@
       '<button type="button" class="tl-btn primary" data-a="retry">' + esc(T('Try again', 'Coba lagi')) + '</button>');
     if (!D.store.isLoaded()) { start(); return '<div class="dtt-loading" role="status">' + esc(T('Opening your programs...', 'Membuka program...')) + '</div>'; }
     return X.topbar(T('Discrete Trial Teaching', 'Discrete Trial Teaching'), T('For ' + student().name, 'Untuk ' + student().name)) + ui.menuButton() +
-      '<div class="dtt-shell"><div class="dtt-sidewrap' + (U.menuOpen ? ' open' : '') + '">' + ui.sidebar() + '</div><div class="dtt-mainc">' + ui.savedSlot() + (VIEWS[U.wizard ? 'wizard' : U.view] || VIEWS.programs)() + '</div></div>';
+      '<div class="dtt-shell"><div class="dtt-sidewrap' + (U.menuOpen ? ' open' : '') + '">' + ui.sidebar() + '</div><div class="dtt-mainc">' + ui.savedSlot() + (VIEWS[wiz() ? 'wizard' : U.view] || VIEWS.programs)() + '</div></div>';
   }
   function gate(h, p, btns) {
     return X.topbar(T('Discrete Trial Teaching', 'Discrete Trial Teaching'), '', { noProf: true }) +
@@ -107,8 +110,8 @@
   function onClick(e) {
     var b = e.target.closest('[data-a]'); if (!b || !app().contains(b) || b.disabled) return;
     if (b.hasAttribute('data-confirm') && !confirmed(b)) return;
-    // a sidebar choice leaves the wizard, unless it is one of the wizard's own steps
-    if (b.hasAttribute('data-nav')) { U.menuOpen = false; if (!b.hasAttribute('data-keepwiz')) U.wizard = null; }
+    // a sidebar choice sets the draft aside, unless it is one of the wizard's own steps
+    if (b.hasAttribute('data-nav')) { U.menuOpen = false; if (U.wizard && !b.hasAttribute('data-keepwiz')) U.wizard.away = true; }
     var fn = ACT[b.dataset.a]; if (fn) { e.preventDefault(); fn(b, e); }
   }
   // destructive buttons ask once on the button itself (design guidelines, section 5)
@@ -195,7 +198,6 @@
   ui.cropper = function (file, done) {
     D.photo.open(file).then(function (img) {
       var st = { x: 0.5, y: 0.5, zoom: 1 }, sh = X.sheet('<div class="tl-sheethead"><h2>' + esc(T('Choose the square', 'Pilih bagian foto')) + '</h2></div>' +
-        '<p class="tl-note2">' + esc(T('Drag the photo so the important part fills the square. We make it small before it is saved.', 'Geser foto agar bagian pentingnya memenuhi kotak. Foto diperkecil sebelum disimpan.')) + '</p>' +
         '<canvas class="dtt-crop" width="320" height="320" tabindex="0" aria-label="' + esc(T('Photo preview. Use the arrow keys to move it.', 'Pratinjau foto. Gunakan tombol panah untuk menggeser.')) + '"></canvas>' +
         '<label class="tl-field"><span>' + esc(T('Zoom', 'Perbesar')) + '</span><input class="tl-range" type="range" min="1" max="3" step="0.05" value="1" data-zoom></label>' +
         '<div class="tl-sheetfoot"><button type="button" class="tl-btn outline" data-no>' + esc(T('Cancel', 'Batal')) + '</button><button type="button" class="tl-btn primary" data-yes>' + esc(T('Use this photo', 'Pakai foto ini')) + '</button></div>');

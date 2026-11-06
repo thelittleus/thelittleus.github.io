@@ -46,9 +46,9 @@
         '<button type="button" class="tl-iconbtn" data-a="qRemove" ' + a + ' aria-label="' + esc(T('Remove from this program', 'Hapus dari program ini')) + '">✕</button></span></li>';
     }).join('');
     var out = (p.excluded || []).length ? '<p class="dtt-optd">' + esc(T('Removed from this program. Tap to add back:', 'Dihapus dari program ini. Ketuk untuk menambahkan lagi:')) + '</p><div class="tl-chips">' + p.excluded.map(function (id) { return '<button type="button" class="tl-chip" data-a="qAdd" data-v="' + id + '">' + esc(targetName(p, set, id) || '?') + ' +</button>'; }).join('') + '</div>' : '';
-    return opt(T('Target queue', 'Antrean %targets%'), T('Reorder, pin or remove targets here. To change a label, edit the item in its stimulus set.', 'Atur urutan, sematkan, atau hapus %targets% di sini. Untuk mengubah label, ubah item di stimulus set.'),
+    return opt(T('Target queue', 'Antrean %targets%'), T('To change a label, edit the item in its stimulus set.', 'Untuk mengubah label, ubah item di stimulus set.'),
       (rows ? '<ol class="dtt-queue">' + rows + '</ol>' : ui.tip(T('The queue is empty.', 'Antrean masih kosong.'))) + out +
-      (U.wizard ? '' : '<div class="dtt-rowbtns"><button type="button" class="tl-btn outline sm" data-a="editSet" data-id="' + set.id + '">' + esc(T('Add or edit items in the set', 'Tambah atau ubah item di set')) + '</button></div>'));
+      (ui.wiz() ? '' : '<div class="dtt-rowbtns"><button type="button" class="tl-btn outline sm" data-a="editSet" data-id="' + set.id + '">' + esc(T('Add or edit items in the set', 'Tambah atau ubah item di set')) + '</button></div>'));
   }
   ACT.qPin = function (b) { P.togglePin(ui.ctx(), b.dataset.v); ui.touchProgram(); ui.render(); };
   ACT.qUp = function (b) { P.moveTarget(ui.ctx(), b.dataset.v, -1); ui.touchProgram(); ui.render(); };
@@ -89,7 +89,7 @@
   /* 2 trial type ---------------------------------------------------------------------------------------------- */
   function hintField(key, s, label) { return ui.field(label, s[key], 'data-in="txt" data-k="' + key + '"'); }
   function secType(p, set, s) {
-    var h = '<header><h2 class="tl-h2">' + esc(T('Trial type', 'Jenis trial')) + '</h2><p class="tl-p">' + esc(T('Choose how the student responds. You give the instruction yourself as the cards appear. The app never speaks.', 'Pilih cara anak merespons. Kamu sendiri yang memberi instruksi saat kartu muncul. Aplikasi tidak pernah berbicara.')) + '</p></header>';
+    var h = '<header><h2 class="tl-h2">' + esc(T('Trial type', 'Jenis trial')) + '</h2><p class="tl-p">' + esc(T('You give the instruction yourself as the cards appear. The app never speaks.', 'Kamu sendiri yang memberi instruksi saat kartu muncul. Aplikasi tidak pernah berbicara.')) + '</p></header>';
     if (isLT(p)) h += opt(T('Response type', 'Jenis respons'), '', seg('type', p.type, [
       ['listener', 'Listener Responding', T('You say "Touch cat" and the student taps the card. Scored automatically.', 'Kamu berkata "Sentuh kucing" dan anak mengetuk kartunya. Dinilai otomatis.')],
       ['tact', 'Tact', T('The student sees one picture and names it. You score it.', 'Anak melihat satu gambar dan menyebutkan namanya. Kamu yang menilai.')],
@@ -114,25 +114,25 @@
   }
   var sizes = [[1, '1'], [2, '2'], [3, '3'], [4, '4'], [6, '6']];
   function secArray(p, set, s) {
-    var h = '<header><h2 class="tl-h2">' + esc(T('Array and layout', 'Susunan kartu')) + '</h2><p class="tl-p">' + esc(T('How the cards are laid out for the student. Cards resize to fit the screen.', 'Bagaimana kartu disusun untuk anak. Ukuran kartu menyesuaikan layar.')) + '</p></header>';
+    var h = '<header><h2 class="tl-h2">' + esc(T('Array and layout', 'Susunan kartu')) + '</h2></header>';
     if (p.type === 'sorting') h += opt(T('Number of bins', 'Jumlah wadah'), T('Start with one bin and add more as the student improves.', 'Mulai dengan satu wadah dan tambah saat anak makin mahir.'), seg('bins', s.bins, [[1, '1'], [2, '2'], [3, '3']]));
     else h += opt(p.type === 'matching' ? T('Field size', 'Jumlah kartu pilihan') : T('Number of cards', 'Jumlah kartu'), T('A field of 1 is errorless teaching. Larger arrays make the discrimination harder.', 'Satu kartu berarti pengajaran tanpa salah. Makin banyak kartu makin sulit.'), seg('array', s.array, sizes));
     if (p.type === 'matching') {
       h += opt(T('Match kind', 'Jenis pencocokan'), '', seg('matchKind', s.matchKind, [['identical', T('Identical', 'Sama persis'), T('The same image', 'Gambar yang sama')], ['nonidentical', T('Non-identical', 'Tidak sama persis'), T('A different image of the same item. Needs two images per item.', 'Gambar lain dari item yang sama. Perlu dua gambar per item.')], ['both', T('Both mixed', 'Campuran'), '']], true));
       h += opt(T('Sample position', 'Posisi contoh'), '', seg('samplePos', s.samplePos, [['centre', T('Centre', 'Tengah')], ['top', T('Top', 'Atas')], ['side', T('Side', 'Samping')]]));
     }
-    if (p.type !== 'sorting') h += opt(T('Distractors', 'Distraktor'), T('The other cards shown with the target. They come from this set.', 'Kartu lain yang ditampilkan bersama %target%. Diambil dari set ini.'), seg('dis', s.dis, disOptions(), true));
+    if (p.type !== 'sorting') h += opt(T('Distractors', 'Distraktor'), '', seg('dis', s.dis, disOptions(), true));
     h += opt(T('Card positions', 'Posisi kartu'), '', sw('rpos', s.rpos, T('Shuffle card positions every trial', 'Acak posisi kartu di setiap trial'), T('Recommended, so the correct card is not always in the same place.', 'Disarankan, agar kartu yang benar tidak selalu di tempat yang sama.')));
-    return h + '<p class="tl-note2">' + esc(T('All cards in a trial share the same border colour, so colour never gives away the answer. The colour changes between trials.', 'Semua kartu dalam satu trial memiliki warna bingkai yang sama, sehingga warna tidak membocorkan jawaban. Warnanya berganti antar trial.')) + '</p>';
+    return h;
   }
 
   /* 4 order and timing ---------------------------------------------------------------------------------------- */
   function secOrder(p, set, s) {
-    return '<header><h2 class="tl-h2">' + esc(T('Order and timing', 'Urutan dan waktu')) + '</h2><p class="tl-p">' + esc(T('How many trials to run, how they are spaced, and how often maintenance targets come back.', 'Berapa trial yang dijalankan, jaraknya, dan seberapa sering %targets% %maintenance% muncul kembali.')) + '</p></header>' +
+    return '<header><h2 class="tl-h2">' + esc(T('Order and timing', 'Urutan dan waktu')) + '</h2></header>' +
       opt(T('Trials per session', 'Trial per %session%'), T('Includes maintenance trials. Error correction trials are added on top and not counted in the data.', 'Termasuk trial %maintenance%. Trial Error correction ditambahkan di luar itu dan tidak dihitung dalam data.'), stepper('trials', s.trials)) +
       opt(T('Trial order', 'Urutan trial'), '', seg('order', s.order, [['random', T('Random rotation', 'Rotasi acak'), T('Targets rotate without repeating back to back', '%targets% bergiliran tanpa berulang berturut-turut')], ['block', T('Massed', 'Mass trial'), T('Each target 3 times in a row before the next', 'Setiap %target% 3 kali berturut-turut sebelum berikutnya')]], true)) +
       opt(T('Maintenance trials', 'Trial %maintenance%'), T('Mastered targets from this program, mixed in between targets.', '%targets% %mastered% dari program ini, diselipkan di antara %targets%.'), seg('maint', s.maint, [[0, T('Off', 'Mati')], [4, T('Every 4', 'Tiap 4')], [3, T('Every 3', 'Tiap 3')], [2, T('Every 2', 'Tiap 2')]])) +
-      opt('Inter-trial interval', T('A short blank screen before the next cards appear.', 'Layar kosong sebentar sebelum kartu berikutnya muncul.'), stepper('iti', s.iti, secondsWord())) +
+      opt('Inter-trial interval', '', stepper('iti', s.iti, secondsWord())) +
       (isTouch(p) ? opt(T('Response window', 'Batas waktu respons'), T('Counted from when the cards appear. If the student does not respond in this time, the trial counts as no response, or the next prompt is given when using least-to-most.', 'Dihitung sejak kartu muncul. Jika anak tidak merespons dalam waktu ini, trial dihitung tidak ada respons, atau Prompt berikutnya diberikan saat memakai Least-to-most.'), stepper('resp', s.resp, secondsWord())) : '');
   }
 
@@ -167,17 +167,17 @@
       if (part) st += styles(T('Pattern: Partial prompt', 'Pola: Prompt Partial'), 'patPart', s.patPart, [['flash', T('Unit flashes in order', 'Unit menyala berurutan')], ['pulse', T('Correct card pulses', 'Kartu yang benar berdenyut')]]);
       if (full) st += styles(T('Pattern: Full prompt', 'Pola: Prompt Full'), 'patFull', s.patFull, [['glow', T('Pattern animates, correct card glows', 'Pola bergerak, kartu benar menyala')], ['only', T('Show correct card only', 'Hanya kartu yang benar')]]);
     }
-    return '<header><h2 class="tl-h2">Prompt</h2><p class="tl-p">' + esc(T('Choose which prompts the app shows, what they look like, and how they fade. Spoken prompts and models come from you. A correct response after any prompt is recorded as prompted.', 'Pilih Prompt yang ditampilkan aplikasi, bentuknya, dan cara memudarkannya. Prompt lisan dan model berasal darimu. Respons benar setelah Prompt apa pun dicatat sebagai Prompted.')) + '</p></header>' +
+    return '<header><h2 class="tl-h2">Prompt</h2><p class="tl-p">' + esc(T('Spoken prompts and models come from you. A correct response after any prompt is recorded as prompted.', 'Prompt lisan dan model berasal darimu. Respons benar setelah Prompt apa pun dicatat sebagai Prompted.')) + '</p></header>' +
       opt(T('Prompt levels', 'Tingkat Prompt'), T('Controls which prompt buttons appear during the session and which levels the automatic methods step through.', 'Menentukan tombol Prompt yang muncul saat %session% dan tingkat yang dilalui metode otomatis.'), seg('levels', s.levels, [['both', T('Partial and full', 'Partial dan Full'), T('Two-step hierarchy', 'Dua tingkat')], ['full', T('Full only', 'Full saja'), T('Full prompt or nothing', 'Prompt Full atau tidak sama sekali')], ['partial', T('Partial only', 'Partial saja'), T('Lighter help only', 'Bantuan ringan saja')]], true)) +
       opt(T('Prompt method', 'Metode Prompt'), desc, seg('prompt', s.prompt, [['manual', 'Manual'], ['mtl', 'Most-to-least'], ['ltm', 'Least-to-most'], ['td', 'Time delay']])) +
       (s.prompt === 'mtl' || s.prompt === 'td' ? opt(T('Fade after', 'Pudar setelah'), T('Correct responses in a row before the prompt fades.', 'Jumlah benar berturut-turut sebelum Prompt memudar.'), stepper('fade', s.fade, T('correct', 'benar'))) : '') +
-      (s.prompt === 'td' ? opt(T('Delay length', 'Lama jeda'), T('How long the app waits before prompting once the target is on delay.', 'Berapa lama aplikasi menunggu sebelum memberi Prompt saat %target% sudah memakai jeda.'), stepper('tdDelay', s.tdDelay, secondsWord())) : '') +
+      (s.prompt === 'td' ? opt(T('Delay length', 'Lama jeda'), '', stepper('tdDelay', s.tdDelay, secondsWord())) : '') +
       opt(T('Prompt styles', 'Bentuk Prompt'), '', st);
   }
 
   /* 6 error correction ---------------------------------------------------------------------------------------- */
   function secEC(p, set, s) {
-    return '<header><h2 class="tl-h2">Error correction</h2><p class="tl-p">' + esc(T('What happens after an incorrect response or no response. The error is followed by a short neutral pause with no sound.', 'Apa yang terjadi setelah respons salah atau tidak ada respons. Setelah itu ada jeda netral singkat tanpa suara.')) + '</p></header>' +
+    return '<header><h2 class="tl-h2">Error correction</h2><p class="tl-p">' + esc(T('An error is followed by a short neutral pause with no sound.', 'Setelah kesalahan ada jeda netral singkat tanpa suara.')) + '</p></header>' +
       opt('', '', sw('ec', s.ec, T('Use error correction', 'Pakai Error correction'), T('Recommended. Correction trials are kept out of the session percentage.', 'Disarankan. Trial koreksi tidak masuk persentase %session%.'))) +
       (s.ec ? opt(T('Sequence after an error', 'Urutan setelah kesalahan'), '', sw('ecD', s.ecD, T('Include a distractor trial', 'Sertakan trial distraktor'), T('A different, easier or mastered target between the correction and the retry.', '%target% lain yang lebih mudah atau sudah %mastered% di antara koreksi dan percobaan ulang.')) +
         '<ol class="dtt-steps"><li>' + esc(T('Correction trial: same target with a ' + (s.levels === 'partial' ? 'partial' : 'full') + ' prompt', 'Trial koreksi: %target% yang sama dengan Prompt ' + (s.levels === 'partial' ? 'Partial' : 'Full'))) + '</li>' + (s.ecD ? '<li>' + esc(T('Distractor trial: a different, easier target', 'Trial distraktor: %target% lain yang lebih mudah')) + '</li>' : '') + '<li>' + esc(T('Transfer trial: same target again with no prompt', 'Trial transfer: %target% yang sama tanpa Prompt')) + '</li></ol>') : '');
@@ -200,7 +200,7 @@
   function pair(a) { return T(a[0], a[1]); }
   function secReinf(p, set, s) {
     var kid = ui.student(), name = kid ? kid.name : T('the student', 'anak');
-    return '<header><h2 class="tl-h2">Reinforcement</h2><p class="tl-p">' + esc(T('The celebration shows the student\'s photo with happy characters from their favorite themes and confetti, plays a cheer, and shows your praise phrase.', 'Perayaan menampilkan foto anak bersama karakter dari tema favoritnya dan konfeti, memutar sorakan, dan menampilkan kalimat pujianmu.')) + '</p></header>' +
+    return '<header><h2 class="tl-h2">Reinforcement</h2></header>' +
       opt(T('Schedule', 'Jadwal'), T('How often a correct response earns the full celebration. Other correct responses get a short "Yes!" bubble and a soft ding.', 'Seberapa sering respons benar mendapat perayaan penuh. Respons benar lainnya mendapat gelembung "Ya!" singkat dan bunyi lembut.'), seg('sched', s.sched, [['crf', 'CRF', T('Every correct', 'Setiap benar')], ['fr2', 'FR 2', T('Every 2nd', 'Setiap ke-2')], ['fr3', 'FR 3', T('Every 3rd', 'Setiap ke-3')], ['vr2', 'VR 2', T('About every 2nd', 'Sekitar setiap ke-2')], ['vr3', 'VR 3', T('About every 3rd', 'Sekitar setiap ke-3')]], true)) +
       opt('Differential reinforcement', '', sw('diff', s.diff, T('Full celebration only for independent responses', 'Perayaan penuh hanya untuk respons Independent'), T('Prompted correct responses get brief praise and do not count toward the schedule.', 'Respons Prompted yang benar mendapat pujian singkat dan tidak dihitung dalam jadwal.'))) +
       opt(T('Celebration length', 'Lama perayaan'), T('Allow at least 3 seconds so the sounds have time to play.', 'Beri setidaknya 3 detik agar suaranya sempat terputar.'), stepper('dur', s.dur, secondsWord())) +
@@ -208,7 +208,7 @@
         return '<div class="dtt-gamecard">' + ui.sw(k, s.scenes.indexOf(k) >= 0, pair(SCENE_NAMES[k]), '', 'sceneTog') + '<button type="button" class="tl-btn quiet sm" data-a="previewScene" data-v="' + k + '">' + esc(T('Preview', 'Coba')) + '</button></div>';
       }).join('') + '</div>') +
       opt(T('Photos', 'Foto'), '', sw('photos', s.photos, T('Show ' + name + '\'s photo', 'Tampilkan foto ' + name), T('The photo comes from the child\'s Little Us profile on this device.', 'Foto berasal dari profil Little Us anak di perangkat ini.')) +
-        sw('ownPhotos', s.ownPhotos, T('Use own reinforcer photos', 'Pakai foto reinforcer sendiri'), T('Photos of what the student loves. Add them under Student setup.', 'Foto hal yang disukai anak. Tambahkan di Atur anak.'))) +
+        sw('ownPhotos', s.ownPhotos, T('Use own reinforcer photos', 'Pakai foto reinforcer sendiri'), T('Add them under Student setup.', 'Tambahkan di Atur anak.'))) +
       opt('Token board', '', sw('tokenOn', s.tokenOn, T('Use a token board', 'Pakai Token board'), T('Tokens are earned by the reinforcement schedule. A full board shows the reward and offers a break.', 'Token didapat sesuai jadwal Reinforcement. Papan penuh menampilkan hadiah dan menawarkan istirahat.')) +
         (s.tokenOn ? seg('tokens', s.tokens, [[3, '3'], [5, '5'], [10, '10']]) + tokenReward(s) : '')) +
       opt(T('Praise phrases on screen', 'Kalimat pujian di layar'), T('One phrase per line. {name} is replaced with the student\'s name. A phrase is picked at random and shown in big letters.', 'Satu kalimat per baris. {name} diganti dengan nama anak. Kalimat dipilih acak dan ditampilkan dengan huruf besar.'), ui.area(T('Phrases', 'Kalimat'), s.praise, 'data-in="txt" data-k="praise"', 6) + sw('cheer', s.cheer, T('Start with a cheer word', 'Mulai dengan kata sorakan'), T('Adds "Yay!", "Woohoo!" or "Hooray!" before the praise.', 'Menambahkan "Yay!", "Asyik!", atau "Hore!" sebelum pujian.'))) +
