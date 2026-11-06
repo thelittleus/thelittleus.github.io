@@ -1537,7 +1537,7 @@
           P('M66 70q4-5 8 0q4 5 8 0q4-5 8 0', 'none', s(2.6)) +
           G('rotate(-12 26 92)', R(12, 78, 28, 28, 7, '#fff') + O(20, 86, 2.6, K, NS) + O(32, 98, 2.6, K, NS) + O(26, 92, 2.6, K, NS));
       },
-      // coming soon: Safe People Map, Social Scenarios Talk, Personal Space, Discrete Trial Teaching, Early Reading
+      // Safe People Map, and coming soon: Social Scenarios Talk, Personal Space, Discrete Trial Teaching, Early Reading
       // these use the same heads and bodies as the picture cards, so the people match the rest of Little Us
       safe: function () {
         return E(60, 110, 46, 4.5, K, NS + ' opacity=".14"') +
@@ -1617,8 +1617,6 @@
 
   // tools still in the works: shown with a "Coming soon" badge on the home page, the tools list and the menus
   var SOON = [
-    { k: 'safe', grp: 'talk', tint: '#DDF2E4', en: 'Safe People Map', idn: 'Peta Orang Aman',
-      d: ["Map out the trusted grown-ups in your child's world, and when to go to each of them.", 'Petakan orang dewasa tepercaya di sekitar anak, dan kapan harus menghampiri mereka.'] },
     { k: 'scenarios', grp: 'talk', tint: '#E9E1F7', en: 'Social Scenarios Talk', idn: 'Ngobrol Situasi Sosial',
       d: ['Everyday social situations in pictures, with prompts to talk through what to say and do.', 'Situasi sosial sehari-hari dalam gambar, dengan pertanyaan untuk membahas apa yang dikatakan dan dilakukan.'] },
     { k: 'space', grp: 'talk', tint: '#DCEBFA', en: 'Personal Space', idn: 'Ruang Pribadi',

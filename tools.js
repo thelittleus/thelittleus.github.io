@@ -1852,4 +1852,8 @@
     vis: function () { return '<div class="tl-mini-art">' + (A.toolArt ? A.toolArt('talk') : '') + '</div>'; },
     title: function () { return L() === 'id' ? 'Pembuka Obrolan' : 'Conversation Starters'; },
     desc: function () { return L() === 'id' ? 'Permainan papan dan permainan seru untuk dimainkan anak bersama orang dewasa. Setiap giliran membuka obrolan hangat tentang perasaan, teman, dan pilihan.' : 'Board and party games for a grown-up and child to play together. Each turn opens up a gentle chat about feelings, friends and choices.'; } } });
+  window.LUTools.register('tools/safe-people', { card: { grp: 'talk', tint: '#DDF2E4',
+    vis: function () { return '<div class="tl-mini-art">' + (A.toolArt ? A.toolArt('safe') : '') + '</div>'; },
+    title: function () { return L() === 'id' ? 'Peta Orang Aman' : 'Safe People Map'; },
+    desc: function () { return L() === 'id' ? 'Anak dan orang dewasa memetakan bersama orang-orang yang dipercaya anak, dan kapan harus menghampiri mereka.' : 'A child and a grown-up map out, together, the people the child trusts and when to go to each of them.'; } } });
 })();

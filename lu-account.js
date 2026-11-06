@@ -410,7 +410,10 @@
       return A;
     }).catch(function (e) { if (e && e.status === 401) { setSession(null); clearAccount(); } });
   }
-  function featureById(id) { for (var i = 0; i < FEAT.list.length; i++) if (FEAT.list[i].id === id) return FEAT.list[i]; return null; }
+  // a tool can name its Plus options here, so they stay locked correctly until the matching plus_features rows exist
+  var FEAT_DEFAULT = {};
+  function addFeatures(list) { list.forEach(function (f) { FEAT_DEFAULT[f.id] = f; }); }
+  function featureById(id) { for (var i = 0; i < FEAT.list.length; i++) if (FEAT.list[i].id === id) return FEAT.list[i]; return FEAT_DEFAULT[id] || null; }
   function access(id) { var f = featureById(id); return f ? f.access : 'everyone'; }
   function allowed(id) {
     var a = access(id);
@@ -1447,7 +1450,7 @@
     }
     if (window.LUTools && LUTools.api && LUTools.api.openProfiles) return show();
     if (!window.luLoad) return show();
-    luLoad('/tools.css?v=20').then(function () { return luLoad('/tools-art.js?v=23'); }).then(function () { return luLoad('/tools.js?v=23'); })
+    luLoad('/tools.css?v=20').then(function () { return luLoad('/tools-art.js?v=24'); }).then(function () { return luLoad('/tools.js?v=24'); })
       .then(function () { var a = window.LUTools && LUTools.api; return a && a.photosLoad ? a.photosLoad() : null; }).then(show, show);
   }
   function homeRender() {
@@ -1586,6 +1589,6 @@
     face: face,
     priceLabel: function (plan) { var s = settings(); return String(s['p' + planMonths(plan)]).replace(/^≈ /, ''); },
     productBuy: productBuy, cardTag: cardTag, onChange: function (f) { listeners.push(f); },
-    t: t, _auth: auth, _http: http, _session: function () { return session; }
+    t: t, _auth: auth, _http: http, _session: function () { return session; }, _token: token, _sb: SB, _key: KEY, addFeatures: addFeatures
   };
 })();
