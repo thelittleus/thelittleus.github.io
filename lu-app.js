@@ -15,13 +15,11 @@
     home: ['Home', 'Beranda'], tools: ['Tools', 'Alat'], shop: ['Shop', 'Toko'], articles: ['Articles', 'Artikel'], settings: ['Settings', 'Pengaturan'],
     ready: ['Getting your tools ready…', 'Menyiapkan alatmu…'],
     hiWelcome: ['Hi, welcome!', 'Halo, selamat datang!'], hiAgain: ['Hi again!', 'Halo lagi!'],
-    welcomeP: ['Picture tools, printables and tips for little learners.', 'Alat bergambar, materi cetak, dan tips untuk si kecil.'],
+    welcomeP: ['All-in-one hub for learning tools, visual supports, and printables', 'Satu tempat untuk alat belajar, bantuan visual, dan materi cetak'],
+    login: ['Login', 'Masuk'], whoWith: ['Who are we learning with?', 'Kita belajar bersama siapa?'], setChild: ['Set up your child', 'Atur untuk anakmu'],
+    langNote: ['You can change this anytime in Settings.', 'Kamu bisa menggantinya kapan saja di Pengaturan.'],
     againP: [function (n) { return 'What would you like to do with ' + n + ' today?'; }, function (n) { return 'Mau melakukan apa bersama ' + n + ' hari ini?'; }],
     againP0: ['What would you like to do today?', 'Mau melakukan apa hari ini?'],
-    three: ['Three quick things', 'Tiga hal singkat'], threeP: ['Language and child first. A free account keeps it all on every device.', 'Bahasa dan anak dulu. Akun gratis menyimpan semuanya di setiap perangkat.'],
-    q1: ['1 · Language', '1 · Bahasa'], q2: ['2 · Your child', '2 · Anakmu'], setUp: ['Set up', 'Atur'],
-    q3: ['3 · Free account', '3 · Akun gratis'], recommended: ['RECOMMENDED', 'DISARANKAN'], q3P: ['Save your setup on every phone, tablet and computer', 'Simpan pengaturanmu di setiap HP, tablet, dan komputer'], create: ['Create', 'Buat'],
-    whereTo: ['Where to?', 'Mau ke mana?'],
     toolsP: ['Customizable tools for learning and everyday routines', 'Alat yang bisa disesuaikan untuk belajar dan rutinitas sehari-hari'], toolsPL: ['Customizable tools for learning and everyday routines', 'Alat yang bisa disesuaikan untuk belajar dan rutinitas sehari-hari'],
     shopP: ['Printable files and activities', 'File dan aktivitas untuk dicetak'], articlesP: ['A short read on what’s new', 'Bacaan singkat tentang hal terbaru'], free: ['FREE', 'GRATIS'],
     change: ['Change', 'Ganti'], cont: ['Continue', 'Lanjutkan'],
@@ -242,6 +240,30 @@
     w.querySelector('[data-defaults]').onclick = function () { store('lu_defaults_ok', '1'); closeSheet(); go('#/' + route); };
   }
 
+  /* first visit: choose the language. A choice is required, so tapping outside does nothing. */
+  function langAsk() {
+    if (!isApp() || store('lu_lang') || /^\/(admin|pilot)/.test(location.pathname) || document.querySelector('.ua-langsheet')) return;
+    DOC.classList.add('ua-asklang'); // the cookie note waits until a language is chosen
+    if (document.querySelector('.ua-splash')) { setTimeout(langAsk, 200); return; } // wait for the opening screen
+    var words = { en: [W.cont[0], W.langNote[0]], id: [W.cont[1], W.langNote[1]] }, pick = lang();
+    var opt = function (v, tag, name) { return '<button type="button" class="ua-lopt" role="radio" data-pick-lang="' + v + '" lang="' + v + '"><span class="ua-lbadge">' + tag + '</span><b>' + name + '</b><span class="ua-lradio">' + ic('check', 15, '#2B2A35', 3) + '</span></button>'; };
+    var w = sheet('<h2 class="ua-lang-h" id="uaLangH">Choose your language</h2><p class="ua-lang-sub" lang="id">Pilih bahasa kamu</p>' +
+      '<div class="ua-lopts" role="radiogroup" aria-labelledby="uaLangH">' + opt('en', 'EN', 'English') + opt('id', 'ID', 'Bahasa Indonesia') + '</div>' +
+      '<button type="button" class="ua-btn primary lg ua-lgo" data-lgo></button><p class="ua-lnote"></p>', 'ua-langsheet');
+    w.querySelector('.ua-scrim').removeAttribute('data-ua-close');
+    var show = function () {
+      [].forEach.call(w.querySelectorAll('[data-pick-lang]'), function (b) { var on = b.dataset.pickLang === pick; b.classList.toggle('on', on); b.setAttribute('aria-checked', String(on)); });
+      w.querySelector('[data-lgo]').textContent = words[pick][0];
+      w.querySelector('.ua-lnote').textContent = words[pick][1];
+    };
+    show();
+    w.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-pick-lang]');
+      if (b) { pick = b.dataset.pickLang; show(); return; }
+      if (e.target.closest('[data-lgo]')) { closeSheet(); DOC.classList.remove('ua-asklang'); if (window.LU && LU.setLang) LU.setLang(pick); else store('lu_lang', pick); }
+    });
+  }
+
   /* ===================== add to home screen ===================== */
   var DEFER = null;
   window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); DEFER = e; });
@@ -333,7 +355,7 @@
       ['#/articles', t('articles'), t('articlesP'), '#DCEBFA', sheetArt('art'), false]
     ];
     return '<div class="ua-where' + (land ? ' big' : '') + '">' + rows.map(function (r) {
-      return '<a class="ua-wrow" href="' + r[0] + '"><span class="ua-wart" style="background:' + r[3] + '">' + r[4] + '</span><span class="ua-wtx"><b>' + esc(r[1]) + '' + '</b><small>' + esc(r[2]) + '</small></span><span class="ua-chev">›</span></a>';
+      return '<a class="ua-wrow" href="' + r[0] + '"><span class="ua-wart" style="background:' + r[3] + '">' + r[4] + '</span><span class="ua-wtx"><b>' + esc(r[1]) + '' + '</b><small>' + esc(r[2]) + '</small></span></a>';
     }).join('') + '</div>';
   }
   function toolsCluster() {
@@ -371,15 +393,12 @@
   function homeHTML() {
     var p = prof(), first = !profiles().length, st = accStatus(), land = MODE === 'land';
     var logo = '<span class="ua-logo"><img src="/logo.png" alt="Little Us">' + (st === 'plus' || st === 'expiring' ? '<em class="ua-plus">PLUS</em>' : '') + '</span>';
-    var hero = '<div class="ua-hero"><div class="ua-herotx">' + logo + '<h1>' + esc(first ? t('hiWelcome') : t('hiAgain')) + '</h1><p>' + esc(first ? t('welcomeP') : p ? t('againP', p.name) : t('againP0')) + '</p></div>' + kidsArt() + '</div>';
+    var login = st === 'none' ? '<a class="ua-login" href="#/login">' + esc(t('login')) + '</a>' : '';
+    var hero = '<div class="ua-hero"><div class="ua-htop">' + logo + login + '</div><div class="ua-hbody"><div class="ua-herotx"><h1>' + esc(first ? t('hiWelcome') : t('hiAgain')) + '</h1><p>' + esc(first ? t('welcomeP') : p ? t('againP', p.name) : t('againP0')) + '</p></div>' + kidsArt() + '</div></div>';
     var quick = '';
-    if (first) {
-      quick = '<div class="ua-eyebrow"><span>' + esc(t('three')) + '</span><small>' + esc(t('threeP')) + '</small></div>' +
-        '<div class="ua-q2"><div class="ua-qbox"><b>' + esc(t('q1')) + '</b><div class="ua-seg">' + [['en', 'EN'], ['id', 'ID']].map(function (l) { return '<button type="button" class="' + (lang() === l[0] ? 'on' : '') + '" data-lang="' + l[0] + '" aria-pressed="' + (lang() === l[0]) + '">' + l[1] + '</button>'; }).join('') + '</div></div>' +
-        '<div class="ua-qbox"><b>' + esc(t('q2')) + '</b><a class="ua-btn primary" href="#/tools/setup">' + esc(t('setUp')) + '</a></div></div>' +
-        (st === 'none' && !store('lu_acc_card_hide') ? '<div class="ua-acccard"><span><span class="ua-plusrow"><b>' + esc(t('q3')) + '</b><em class="ua-rec">' + esc(t('recommended')) + '</em></span><small>' + esc(t('q3P')) + '</small></span><a class="ua-btn dark sm" href="#/signup">' + esc(t('create')) + '</a><button type="button" class="ua-x sm" data-hide="lu_acc_card_hide" aria-label="' + esc(t('close')) + '">' + ic('close', 14) + '</button></div>' : '');
-    } else if (p) quick = childRow(p);
-    var where = '<div class="ua-eyebrow"><span>' + esc(t('whereTo')) + '</span></div>' + whereRows(land);
+    if (first) quick = '<div class="ua-who"><h2>' + esc(t('whoWith')) + '</h2><a class="ua-btn primary lg" href="#/tools/setup">' + esc(t('setChild')) + '</a></div>';
+    else if (p) quick = '<div class="ua-who"><h2>' + esc(t('whoWith')) + '</h2>' + childRow(p) + '</div>';
+    var where = whereRows(land);
     var bottom = (first ? '' : contCard()) + (first ? '' : plusStateCard());
     if (land) {
       return '<div class="ua-page ua-home land"><div class="ua-homeL">' + hero.replace('ua-hero', 'ua-hero tall') + '<div class="ua-homeLb">' + quick + (first ? '' : plusStateCard()) + '</div></div><div class="ua-homeR">' + where + (first ? '' : contCard()) + '</div></div>';
@@ -388,8 +407,7 @@
   }
   function wireHome(el) {
     el.addEventListener('click', function (e) {
-      var l = e.target.closest('[data-lang]'); if (l) { if (window.LU && LU.setLang) LU.setLang(l.dataset.lang); return; }
-      var h = e.target.closest('[data-hide]'); if (h) { e.preventDefault(); store(h.dataset.hide, h.dataset.hide === 'lu_acc_card_hide' ? '1' : String(Date.now() + 30 * 86400000)); refresh(); return; }
+      var h = e.target.closest('[data-hide]'); if (h) { e.preventDefault(); store(h.dataset.hide, String(Date.now() + 30 * 86400000)); refresh(); return; }
       if (e.target.closest('[data-switch]')) { switcher(); }
     });
   }
@@ -584,8 +602,8 @@
   var DW = {
     threeWays: ['Three ways to use Little Us', 'Tiga cara memakai Little Us'],
     upgradeTo: ['Upgrade to', 'Upgrade ke'], fromP: ['From', 'Mulai'], for3: ['for 3 months', 'untuk 3 bulan'],
-    pb1: ['About 60% more tool styles', 'Sekitar 60% lebih banyak gaya alat'], pb2: ['Up to 6 children', 'Hingga 6 anak'],
-    pb3: ['Your own photos on the cards', 'Foto sendiri di kartu'], pb4: ['Every resource in the shop', 'Semua materi di toko'],
+    pb1: ['About 60% more tool styles', 'Sekitar 60% lebih banyak gaya alat'], pb2: ['Save settings up to 6 children', 'Simpan pengaturan hingga 6 anak'],
+    pb3: ['Add your own photos and texts', 'Tambah foto dan teks sendiri'], pb4: ['Every resource in the shop', 'Semua materi di toko'],
     explore: ['Explore right away', 'Langsung jelajahi'], createAcc: ['Create an account', 'Buat akun'],
     whyAcc: ['Why create a free account?', 'Kenapa membuat akun gratis?'],
     why1: ['Save your settings, pick up where you left off on any device', 'Simpan pengaturanmu, lanjutkan dari mana saja di perangkat apa pun'],
@@ -594,7 +612,6 @@
     freeAcc: ['Free account', 'Akun gratis'], freeAccP: ['Your child’s setup on every phone, tablet and computer.', 'Pengaturan anakmu di setiap HP, tablet, dan komputer.'], makeAcc: ['Make an account', 'Buat akun'],
     upgradeH: ['Upgrade to Little Us', 'Upgrade ke Little Us'], upgradeP: ['Get more tool styles and all our resources', 'Dapatkan lebih banyak gaya alat dan semua materi kami'], seePlans: ['See plans · from $9', 'Lihat paket · mulai $9'], seePlans0: ['See plans', 'Lihat paket'],
     moreDev: ['Use them on more than one device?', 'Mau memakainya di lebih dari satu perangkat?'], moreDevP: ['Without an account, your setup stays on this device. A free account keeps it on your phone and tablet too.', 'Tanpa akun, pengaturanmu hanya tersimpan di perangkat ini. Akun gratis menyimpannya juga di HP dan tablet.'],
-    popSub: ['Every download is included with <b>Little Us Plus</b>, from $9.', 'Semua unduhan termasuk dalam <b>Little Us Plus</b>, mulai $9.'],
     m3: ['3 Months', '3 Bulan'], m6: ['6 Months', '6 Bulan'], m12: ['12 Months', '12 Bulan'],
     tools: ['Tools', 'Alat'], shop: ['Shop', 'Toko'], articles: ['Articles', 'Artikel'], allTools: ['All tools →', 'Semua alat →'], browseShop: ['Browse the shop →', 'Lihat toko →'], allArticles: ['All articles →', 'Semua artikel →'],
     account: ['Account', 'Akun'],
@@ -619,9 +636,7 @@
       '<a class="btn btn-primary btn-lg" href="#/tools" data-explore="1">' + esc(dt('explore')) + ' <span aria-hidden="true">↓</span></a>' +
       '<span class="ud-accwrap"><a class="btn btn-outline btn-lg ud-accbtn" href="#/signup">' + esc(dt('createAcc')) + '</a>' +
       '<button type="button" class="ud-hq" aria-expanded="false" aria-label="' + esc(dt('whyAcc')) + '">?</button></span></div>');
-    // Popular resources: the Plus line under the heading
     var ph = main.querySelector('#hPop');
-    if (ph && st !== 'plus' && st !== 'expiring') ph.insertAdjacentHTML('afterend', '<p class="ud-popsub ud-x">' + dt('popSub') + ' <a href="#/plus">' + esc(dt('seePlans0')) + '</a></p>');
     // signed in: short section titles, as in the reference
     var tH = main.querySelector('#hTools'), aT = main.querySelector('.h2-head a[href$="tools"]'), aS = main.querySelector('#secPop .h2-head > a');
     if (inn) {
@@ -637,7 +652,7 @@
       // compact, centred card: "Upgrade to Little Us PLUS", what you get, the starting price, one button
       var from = window.LUAcc && LUAcc.priceLabel ? LUAcc.priceLabel('3m') : '';
       sg.insertAdjacentHTML('afterend', '<div class="ud-upcard ud-x"><h3>' + esc(dt('upgradeTo')) + ' <span class="ud-pname">Little Us <em class="ud-plus">PLUS</em></span></h3><p>' + esc(dt('upgradeP')) + '</p>' +
-        '<ul class="ud-pben">' + ['pb1', 'pb2', 'pb3', 'pb4'].map(function (k) { return '<li><i aria-hidden="true">✓</i>' + esc(dt(k)) + '</li>'; }).join('') + '</ul>' +
+        '<ul class="ud-pben">' + ['pb1', 'pb2', 'pb3', 'pb4'].map(function (k) { return '<li>' + esc(dt(k)) + '</li>'; }).join('') + '</ul>' +
         '<div class="ud-pfoot">' + (from ? '<span class="ud-from">' + esc(dt('fromP')) + ' <b>' + esc(from) + '</b> ' + esc(dt('for3')) + '</span>' : '') + '<a class="btn btn-primary" href="#/plus">' + esc(dt('seePlans0')) + '</a></div></div>');
     }
   }
@@ -694,7 +709,7 @@
   function deskArt(main, Ar) {
     // banner picture: a grown-up and child with a tablet (hero-family.webp, transparent background)
     var hart = main.querySelector('.h2-hero .h2-art');
-    if (hart && !hart.querySelector('.ud-heroimg')) hart.insertAdjacentHTML('beforeend', '<img class="ud-heroimg ud-x" src="/hero-family.webp?v=4" width="1000" height="598" alt="" fetchpriority="high" decoding="async">');
+    if (hart && !hart.querySelector('.ud-heroimg')) hart.insertAdjacentHTML('beforeend', '<img class="ud-heroimg ud-x" src="/hero-family.webp?v=5" width="1000" height="598" alt="" fetchpriority="high" decoding="async">');
     if (!Ar) return;
     flatHills(main);
     var cov = main.querySelector('#heroCover');
@@ -797,7 +812,7 @@
   }
   var dq = 0;
   function deskTick() { clearTimeout(dq); dq = setTimeout(function () { if (!isApp()) { if (routeName() !== '') DOC.classList.remove('ud-home', 'ud-in', 'ud-out'); deskHome(); deskHeader(); } }, 60); }
-  window.LUApp = { isApp: isApp, mode: function () { return MODE; }, refresh: refresh, nav: nav, switcher: switcher };
+  window.LUApp = { isApp: isApp, mode: function () { return MODE; }, refresh: refresh, nav: nav, switcher: switcher, langAsk: langAsk };
   install();
   function start() { splash(); nav(); watch(); var tries = 0, iv = setInterval(function () { if (api() || ++tries > 60) { clearInterval(iv); nav(); } }, 250); if (isApp() && routeName() === '' && document.getElementById('lu-main')) { } }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
