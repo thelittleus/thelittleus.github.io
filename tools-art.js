@@ -1621,8 +1621,6 @@
       d: ['Everyday social situations in pictures, with prompts to talk through what to say and do.', 'Situasi sosial sehari-hari dalam gambar, dengan pertanyaan untuk membahas apa yang dikatakan dan dilakukan.'] },
     { k: 'space', grp: 'talk', tint: '#DCEBFA', en: 'Personal Space', idn: 'Ruang Pribadi',
       d: ['Learn about personal space and body boundaries through simple, playful activities.', 'Belajar tentang ruang pribadi dan batasan tubuh lewat aktivitas sederhana dan seru.'] },
-    { k: 'dtt', grp: 'teach', tint: '#FFF1C7', en: 'Discrete Trial Teaching', idn: 'Discrete Trial Teaching',
-      d: ['Run short teaching trials with picture cards, prompts and simple data tracking.', 'Jalankan sesi latihan singkat dengan kartu gambar, bantuan (prompt), dan pencatatan data sederhana.'] },
     { k: 'read', grp: 'teach', tint: '#FFE9DA', en: 'Early Reading', idn: 'Membaca Awal',
       d: ['Letters, sounds and first words, one small step at a time.', 'Huruf, bunyi, dan kata pertama, satu langkah kecil setiap kali.'] }
   ];

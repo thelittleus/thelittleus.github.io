@@ -1852,6 +1852,10 @@
     vis: function () { return '<div class="tl-mini-art">' + (A.toolArt ? A.toolArt('talk') : '') + '</div>'; },
     title: function () { return L() === 'id' ? 'Pembuka Obrolan' : 'Conversation Starters'; },
     desc: function () { return L() === 'id' ? 'Permainan papan dan permainan seru untuk dimainkan anak bersama orang dewasa. Setiap giliran membuka obrolan hangat tentang perasaan, teman, dan pilihan.' : 'Board and party games for a grown-up and child to play together. Each turn opens up a gentle chat about feelings, friends and choices.'; } } });
+  window.LUTools.register('tools/dtt', { card: { grp: 'teach', tint: '#FFF1C7',
+    vis: function () { return '<div class="tl-mini-art">' + (A.toolArt ? A.toolArt('dtt') : '') + '</div>'; },
+    title: function () { return 'Discrete Trial Teaching'; },
+    desc: function () { return L() === 'id' ? 'Buat program mengajar untuk anak, jalankan session yang dipimpin guru dengan kartu gambar, dan pantau kemajuannya.' : 'Create teaching programs for a child, run teacher-led sessions with picture cards, and follow the progress.'; } } });
   window.LUTools.register('tools/safe-people', { card: { grp: 'talk', tint: '#DDF2E4',
     vis: function () { return '<div class="tl-mini-art">' + (A.toolArt ? A.toolArt('safe') : '') + '</div>'; },
     title: function () { return L() === 'id' ? 'Peta Orang Aman' : 'Safe People Map'; },

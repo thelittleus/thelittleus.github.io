@@ -65,7 +65,8 @@
       feelings: [['Feelings Check-In', 'Your child picks how they feel and how big the feeling is, then chooses something that helps.'], ['Cek Perasaan', 'Anak memilih perasaannya dan seberapa besar perasaan itu, lalu memilih hal yang membantu.']],
       worry: [['Worry Jar', 'Your child draws or writes a worry and puts it in a jar. Later, you open the jar together and talk it through.'], ['Toples Khawatir', 'Anak menggambar atau menulis kekhawatiran lalu memasukkannya ke toples. Nanti, kalian membukanya bersama dan membicarakannya.']],
       talk: [['Conversation Starters', 'Board and party games for a grown-up and child. Each turn opens up a gentle chat about feelings, friends and choices.'], ['Pembuka Obrolan', 'Permainan papan dan permainan seru untuk anak dan orang dewasa. Setiap giliran membuka obrolan hangat tentang perasaan, teman, dan pilihan.']],
-      safe: [['Safe People Map', 'A child and a grown-up map out, together, the people the child trusts and when to go to each of them.'], ['Peta Orang Aman', 'Anak dan orang dewasa memetakan bersama orang-orang yang dipercaya anak, dan kapan harus menghampiri mereka.']]
+      safe: [['Safe People Map', 'A child and a grown-up map out, together, the people the child trusts and when to go to each of them.'], ['Peta Orang Aman', 'Anak dan orang dewasa memetakan bersama orang-orang yang dipercaya anak, dan kapan harus menghampiri mereka.']],
+      dtt: [['Discrete Trial Teaching', 'Create teaching programs for a child, run teacher-led sessions with picture cards, and follow the progress.'], ['Discrete Trial Teaching', 'Buat program mengajar untuk anak, jalankan session yang dipimpin guru dengan kartu gambar, dan pantau kemajuannya.']]
     }
   };
   function lang() { return (window.LU && LU.lang) || 'en'; }
@@ -137,7 +138,7 @@
   function accStatus() { var a = acc(); try { return a ? a.status() : 'none'; } catch (e) { return 'none'; } }
   function load() {
     if (!window.luLoad) return Promise.resolve();
-    return luLoad('/tools.css?v=20').then(function () { return luLoad('/tools-art.js?v=24'); }).then(function () { return luLoad('/tools.js?v=24'); })
+    return luLoad('/tools.css?v=20').then(function () { return luLoad('/tools-art.js?v=25'); }).then(function () { return luLoad('/tools.js?v=25'); })
       .then(function () { return luLoad('/tools-calm.js?v=16'); }).then(function () { var a = api(); return a && a.photosLoad ? a.photosLoad() : null; }).catch(function () { });
   }
   function photo(p) { var a = api(); return p && p.photo && a && a.PH && a.PH[p.photo] ? a.PH[p.photo] : ''; }
@@ -161,6 +162,7 @@
       if (k === 'worry' && C) return '<div class="ua-art one">' + fit(C.jarSVG({ n: 2 })) + '</div>';
       if (k === 'talk') return '<div class="ua-art one">' + fit(Ar.toolArt('talk')) + '</div>';
       if (k === 'safe') return '<div class="ua-art one">' + fit(Ar.toolArt('safe')) + '</div>';
+      if (k === 'dtt') return '<div class="ua-art one">' + fit(Ar.toolArt('dtt')) + '</div>';
     } catch (e) { }
     return '';
   }
@@ -169,7 +171,8 @@
     { k: 'timer', r: 'tools/timer', tint: '#DCEBFA', g: 'routine' }, { k: 'tokens', r: 'tools/tokens', tint: '#FFF1C7', g: 'routine' },
     { k: 'ft', r: 'tools/first-then', tint: '#DDF2E4', g: 'routine' }, { k: 'sched', r: 'tools/schedule', tint: '#E9E1F7', g: 'routine' },
     { k: 'breathe', r: 'tools/breathe', tint: '#DCEBFA', g: 'calm' }, { k: 'feelings', r: 'tools/feelings', tint: '#E9E1F7', g: 'calm' }, { k: 'worry', r: 'tools/worry', tint: '#FBE0E6', g: 'calm' },
-    { k: 'talk', r: 'tools/conversation-starters', tint: '#FFF1C7', g: 'talk' }, { k: 'safe', r: 'tools/safe-people', tint: '#DDF2E4', g: 'talk' }
+    { k: 'talk', r: 'tools/conversation-starters', tint: '#FFF1C7', g: 'talk' }, { k: 'safe', r: 'tools/safe-people', tint: '#DDF2E4', g: 'talk' },
+    { k: 'dtt', r: 'tools/dtt', tint: '#FFF1C7', g: 'teach' }
   ];
   function toolName(k) { return W.tl[k][isId() ? 1 : 0][0]; }
   function toolDesc(k) { return W.tl[k][isId() ? 1 : 0][1]; }
@@ -728,7 +731,7 @@
     });
   }
   // signed-in Tools row: a "?" on each preview that shows what the tool is for
-  var QCOL = { timer: '#3F6FA8', tokens: '#9A6A00', 'first-then': '#2F7A4D', schedule: '#6B55C8', breathe: '#3F6FA8', feelings: '#6B55C8', worry: '#C2456A', 'conversation-starters': '#9A6A00', 'safe-people': '#2F7A4D' };
+  var QCOL = { timer: '#3F6FA8', tokens: '#9A6A00', 'first-then': '#2F7A4D', schedule: '#6B55C8', breathe: '#3F6FA8', feelings: '#6B55C8', worry: '#C2456A', 'conversation-starters': '#9A6A00', 'safe-people': '#2F7A4D', dtt: '#9A6A00' };
   function toolBadges(main) {
     [].slice.call(main.querySelectorAll('.h2-tool:not(.soon)')).forEach(function (a) {
       var vis = a.querySelector('.h2-vis'); if (!vis || vis.querySelector('.ud-q')) return;

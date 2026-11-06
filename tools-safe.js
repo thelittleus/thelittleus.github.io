@@ -204,6 +204,9 @@
     { id: 'hero', name: ['Superhero team', 'Tim pahlawan'], sub: ['Everyone has a power', 'Semua punya kekuatan'], group: ['Powers', 'Kekuatan'], zones: [['Hero 1', 'Pahlawan 1'], ['Hero 2', 'Pahlawan 2'], ['Hero 3', 'Pahlawan 3'], ['Hero 4', 'Pahlawan 4'], ['Hero 5', 'Pahlawan 5'], ['Hero 6', 'Pahlawan 6']], caps: [1, 1, 1, 1, 1, 1], labels: [['Helps me when I’m sad', 'Menolong saat aku sedih'], ['Keeps me safe', 'Menjagaku aman'], ['Listens to me', 'Mendengarkanku'], ['Makes me laugh', 'Membuatku tertawa'], ['Helps me at school', 'Menolong di sekolah'], ['Comes when I call', 'Datang saat kupanggil']] }
   ];
   var LBY = {}; LAYOUTS.forEach(function (l) { LBY[l.id] = l; });
+  // these layouts only come in the Plain theme
+  var PLAIN_ONLY = { hand: 1, house: 1, tree: 1 };
+  function themeFor(layout, theme) { return PLAIN_ONLY[layout] ? 'plain' : theme; }
   var PROMPTS = [
     ['Who could you tell if something felt wrong?', 'Kepada siapa kamu bisa cerita kalau ada sesuatu yang terasa tidak benar?'],
     ['Who helps you when you’re sad?', 'Siapa yang membantumu waktu kamu sedih?'],
@@ -322,28 +325,67 @@
       return { svg: s, labels: lab, pos: function (z) { return at(F[z], F[z].l - 26); } };
     },
     house: function (c) {
-      var s = '<rect x="290" y="62" width="30" height="70" fill="' + shade(c.T.roof, -.12) + '"' + st(3) + '/><path d="M10 394H390" fill="none"' + st(3) + '/>';
-      s += SP('M4 168L200 36 396 168Z', c.T.roof, 200, 118, .97);
-      s += SE(200, 118, 32, 32, '#FFF8EC', 0, 1) + kid(c, 200, 116, 56);
-      var XX = [14, 200], Y = [158, 276], lab = '';
-      for (var i = 0; i < 4; i++) {
-        var x = XX[i % 2], y = Y[Math.floor(i / 2)];
-        s += c.Z(i, '<rect x="' + x + '" y="' + y + '" width="186" height="118"', c.pal[i], [x + 93, y + 59]);
+      var NP = ' pointer-events="none"', WOOD = '#B98157', roof = c.T.roof, s = '';
+      // sky and garden behind the house
+      s += '<g' + NP + '><path d="M28 72c-11 0-13-12-3-14 1-11 16-13 20-5 6-8 21-6 21 4 9-1 13 15 2 15z" fill="#fff"' + st(2.4) + '/><path d="M346 92c-8 0-10-9-2-11 1-8 12-10 15-4 5-6 16-4 16 3 7-1 9 12 1 12z" fill="#fff"' + st(2.2) + '/></g>';
+      s += '<rect x="0" y="384" width="400" height="16" fill="#BFE3C8"' + NP + '/>';
+      // chimney with a little smoke
+      s += '<g' + NP + '>' + SE(310, 40, 7, 6, '#fff', 0, 1) + SE(322, 25, 9, 8, '#fff', 0, 1) + SE(339, 11, 11, 9, '#fff', 0, 1) + '</g>';
+      s += SP('M286 62H322V136H286Z', '#E9A58C', 304, 99, .95) + '<path d="M286 80H322M286 98H322M286 116H322M298 62V80M310 80V98M298 98V116M310 116V134" fill="none" stroke="' + shade('#E9A58C', -.28) + '" stroke-width="2"' + NP + '/><rect x="280" y="54" width="48" height="13" rx="5" fill="#F7D3B7"' + st(3) + '/>';
+      // tiled roof
+      s += SP('M4 168L200 36 396 168Z', roof, 200, 118, .97);
+      for (var ry = 84, rw = 0; ry < 160; ry += 19, rw++) {
+        var half = (ry - 36) * 196 / 132 - 14, n = Math.max(2, Math.round(half * 2 / 25)), step = half * 2 / n, tile = 'M' + (200 - half).toFixed(1) + ' ' + ry;
+        for (var ti = 0; ti < n; ti++) tile += 'q' + (step / 2).toFixed(1) + ' 11 ' + step.toFixed(1) + ' 0';
+        s += '<path d="' + tile + '" fill="none" stroke="' + shade(roof, -.2) + '" stroke-width="2.2" stroke-linecap="round"' + NP + '/>';
+      }
+      // round attic window, where the child looks out
+      s += SE(200, 118, 36, 36, WOOD, 0, 1) + SE(200, 118, 28, 28, '#DCEBFA', 0, 1) + '<path d="M180 100q8-8 16-9" fill="none" stroke="#fff" stroke-width="3.500" stroke-linecap="round"' + NP + '/>' + kid(c, 200, 118, 54);
+      var XX = [14, 200], Y = [158, 276], lab = '', i, x, y;
+      for (i = 0; i < 4; i++) {
+        x = XX[i % 2]; y = Y[Math.floor(i / 2)];
+        var wall = c.pal[i], line = shade(wall, -.24), d = '';
+        s += c.Z(i, '<rect x="' + x + '" y="' + y + '" width="186" height="118"', wall, [x + 93, y + 59]);
+        // wooden floor along the bottom of each room
+        d += '<rect x="' + (x + 2) + '" y="' + (y + 98) + '" width="182" height="18" fill="#E5BE93"/><path d="M' + (x + 2) + ' ' + (y + 98) + 'H' + (x + 184) + '" fill="none"' + st(2.4) + '/><path d="M' + (x + 34) + ' ' + (y + 98) + 'V' + (y + 116) + 'M' + (x + 82) + ' ' + (y + 98) + 'V' + (y + 116) + 'M' + (x + 130) + ' ' + (y + 98) + 'V' + (y + 116) + '" fill="none" stroke="#C99A6B" stroke-width="2"/>';
+        var fx = x + 142, fy = y + 9;
+        if (i === 0) d += '<rect x="' + fx + '" y="' + fy + '" width="34" height="27" rx="3" fill="#fff"' + st(2.6) + '/><path d="M' + (fx + 17) + ' ' + (fy + 21) + 'c-5-4-9-7-9-11a4.500 4.500 0 0 1 9-1.500 4.500 4.500 0 0 1 9 1.500c0 4-4 7-9 11z" fill="#F0694F"' + st(1.8) + '/>';
+        if (i === 1) d += '<path d="M' + (fx - 4) + ' ' + (fy + 26) + 'H' + (fx + 38) + '" fill="none" stroke="' + K + '" stroke-width="6" stroke-linecap="round"/><path d="M' + (fx - 4) + ' ' + (fy + 26) + 'H' + (fx + 38) + '" fill="none" stroke="' + WOOD + '" stroke-width="2.600" stroke-linecap="round"/><rect x="' + (fx + 1) + '" y="' + (fy + 9) + '" width="12" height="14" rx="3" fill="#7DB3E8"' + st(2.2) + '/><path d="M' + (fx + 13) + ' ' + (fy + 12) + 'q6 3 0 7" fill="none"' + st(2.2) + '/><rect x="' + (fx + 22) + '" y="' + (fy + 4) + '" width="11" height="19" rx="3" fill="#FFC94A"' + st(2.2) + '/>';
+        if (i === 2) d += '<rect x="' + fx + '" y="' + fy + '" width="34" height="30" rx="4" fill="#DCEBFA"' + st(2.6) + '/><path d="M' + (fx + 17) + ' ' + fy + 'V' + (fy + 30) + 'M' + fx + ' ' + (fy + 15) + 'H' + (fx + 34) + '" fill="none"' + st(2.2) + '/><path d="M' + (x + 8) + ' ' + (y + 98) + 'l2-13h16l2 13z" fill="#F7A08C"' + st(2.4) + '/><path d="M' + (x + 18) + ' ' + (y + 85) + 'c-1-10-8-13-11-14 0 8 4 13 11 14zM' + (x + 18) + ' ' + (y + 85) + 'c1-12 8-16 12-17 0 9-4 15-12 17z" fill="#7FCB98"' + st(2.2) + '/>';
+        if (i === 3) d += '<path d="M' + (x + 136) + ' ' + (y + 116) + 'V' + (y + 54) + 'a21 21 0 0 1 42 0V' + (y + 116) + 'z" fill="' + WOOD + '"' + st(2.8) + '/><circle cx="' + (x + 157) + '" cy="' + (y + 52) + '" r="9" fill="#DCEBFA"' + st(2.2) + '/><circle cx="' + (x + 170) + '" cy="' + (y + 86) + '" r="3" fill="#FFC94A"' + st(1.8) + '/>';
+        s += '<g' + NP + '>' + d + '</g>';
         lab += pill(x + 8, y + 17, c.labels[i], { anchor: 'start', max: 18, fs: 12 });
       }
+      // outer walls, the white trim under the roof, and bushes at the corners
+      s += '<g' + NP + '><rect x="14" y="158" width="372" height="236" fill="none"' + st(4.5) + '/><rect x="2" y="150" width="396" height="13" rx="6.500" fill="#FFF8EC"' + st(3) + '/>' +
+        SE(9, 386, 20, 16, '#7FCB98') + SE(391, 386, 20, 16, '#7FCB98') + '<circle cx="6" cy="381" r="3" fill="#F6B3C2"' + st(1.6) + '/><circle cx="16" cy="389" r="3" fill="#FFC94A"' + st(1.6) + '/><circle cx="386" cy="382" r="3" fill="#FFC94A"' + st(1.6) + '/><circle cx="395" cy="391" r="3" fill="#F6B3C2"' + st(1.6) + '/></g>';
       return { svg: s, labels: lab, pos: function (z, k, n) { var x = XX[z % 2], y = Y[Math.floor(z / 2)] + 66, xs = n === 1 ? [93] : n === 2 ? [56, 130] : [32, 93, 154]; return [x + xs[k], y]; } };
     },
     tree: function (c) {
-      var s = '<ellipse cx="200" cy="388" rx="196" ry="18" fill="' + c.T.ground + '"/>';
-      s += c.Z(0, '<path d="M166 394C172 340 174 280 176 214H224C226 280 228 340 234 394Z"', '#E5BE93', [200, 300]);
-      var C = [[200, 128, 100], [108, 172, 66], [292, 172, 66], [140, 84, 60], [260, 84, 60]], ou = '', fi = '';
-      C.forEach(function (q) { ou += '<circle cx="' + q[0] + '" cy="' + q[1] + '" r="' + q[2] + '" fill="' + shade(c.pal[2], -.14) + '"' + st(6) + '/>'; });
-      C.forEach(function (q) { ou += '<circle data-zone="2" cx="' + q[0] + '" cy="' + q[1] + '" r="' + q[2] + '" fill="' + shade(c.pal[2], -.14) + '"/>'; });
-      C.forEach(function (q) { fi += '<circle data-zone="2" cx="' + (q[0] - 1.5) + '" cy="' + (q[1] - 2.5) + '" r="' + (q[2] - 3) + '" fill="' + c.pal[2] + '"/>'; });
-      c.shapes[2] = C.map(function (q) { return '<circle cx="' + q[0] + '" cy="' + q[1] + '" r="' + q[2] + '"'; }).join(' HL/>') + ' HL/>';
-      s += ou + fi;
-      s += c.Z(1, '<ellipse cx="200" cy="192" rx="152" ry="44"', c.pal[1], [200, 192]);
-      s += '<path d="M200 232L124 196M200 232L276 196M200 232V206" fill="none" stroke="#B98157" stroke-width="7" stroke-linecap="round" pointer-events="none"/>';
+      var NP = ' pointer-events="none"', WOOD = '#C99A6B', BARK = '#A5774C', leaf = c.pal[2];
+      // a scalloped outline, like a leafy cloud
+      var cloud = function (cx, cy, rx, ry, n) {
+        var pts = [], i; for (i = 0; i < n; i++) { var a = i * 2 * Math.PI / n; pts.push([cx + rx * Math.sin(a), cy - ry * Math.cos(a)]); }
+        var d = 'M' + pts[0][0].toFixed(1) + ' ' + pts[0][1].toFixed(1);
+        for (i = 0; i < n; i++) { var p = pts[i], q = pts[(i + 1) % n], r = (Math.hypot(q[0] - p[0], q[1] - p[1]) * .6).toFixed(1); d += 'A' + r + ' ' + r + ' 0 0 1 ' + q[0].toFixed(1) + ' ' + q[1].toFixed(1); }
+        return d + 'Z';
+      };
+      // grassy hill
+      var s = '<path d="M-10 410V374C60 352 130 362 200 370C270 362 340 352 410 374V410Z" fill="#BFE3C8"' + st(3) + NP + '/>';
+      s += '<g' + NP + '><path d="M28 386l-3-8M34 386l1-9M40 386l4-7M300 390l-3-8M306 390l1-9M312 390l4-7" fill="none" stroke="#4FA772" stroke-width="2.400" stroke-linecap="round"/>' + [[352, 378, '#F6B3C2'], [376, 388, '#FFC94A'], [58, 380, '#F0694F']].map(function (f) { return '<path d="M' + f[0] + ' ' + (f[1] + 2) + 'v10" fill="none" stroke="#4FA772" stroke-width="2.400"/><circle cx="' + f[0] + '" cy="' + f[1] + '" r="4.500" fill="' + f[2] + '"' + st(2) + '/><circle cx="' + f[0] + '" cy="' + f[1] + '" r="1.500" fill="#fff"/>'; }).join('') + '</g>';
+      // trunk with flared roots and bark
+      s += c.Z(0, '<path d="M146 392C166 382 174 352 176 312C177 280 176 252 178 224H222C224 252 223 280 224 312C226 352 234 382 254 392C236 388 222 394 200 390C178 394 164 388 146 392Z"', WOOD, [200, 310]);
+      s += '<path d="M188 244q-4 16 0 32M214 240q4 14 1 28M186 304q-4 20-2 36M216 300q5 22 4 40M200 352q-2 16 0 28" fill="none" stroke="' + BARK + '" stroke-width="2.600" stroke-linecap="round"' + NP + '/>';
+      // leafy crown, with lighter clumps and leaf marks for depth
+      s += c.Z(2, '<path d="' + cloud(200, 120, 182, 96, 16) + '"', leaf, [200, 120]);
+      s += '<g' + NP + '>' + [[122, 68, 50, 30], [256, 62, 56, 32], [70, 140, 38, 24], [330, 138, 38, 24], [196, 138, 60, 30]].map(function (b) { return '<path d="' + cloud(b[0], b[1], b[2], b[3], 8) + '" fill="' + shade(leaf, .38) + '" opacity=".75"/>'; }).join('');
+      s += [[84, 90], [160, 36], [232, 30], [318, 88], [44, 166], [356, 170], [116, 148], [288, 150], [176, 92], [236, 104]].map(function (m) { return '<path d="M' + m[0] + ' ' + m[1] + 'q7 7 14 0" fill="none" stroke="' + shade(leaf, -.26) + '" stroke-width="2.600" stroke-linecap="round"/>'; }).join('');
+      s += [[150, 54], [252, 50], [52, 112], [348, 112], [164, 146], [244, 152]].map(function (f) { return '<circle cx="' + f[0] + '" cy="' + f[1] + '" r="7" fill="#F0694F"' + st(2.2) + '/><path d="M' + f[0] + ' ' + (f[1] - 7) + 'q1-4 4-5" fill="none"' + st(2) + '/><circle cx="' + (f[0] - 2.5) + '" cy="' + (f[1] - 2.5) + '" r="1.500" fill="#fff"/>'; }).join('') + '</g>';
+      // twigs reaching up into the leaves, then the two big branches people sit on
+      var twig = 'M92 180C86 154 70 136 54 126M152 182C146 160 136 146 122 134M248 182C254 160 264 146 278 134M308 180C314 154 330 136 346 126';
+      s += '<path d="' + twig + '" fill="none" stroke="' + K + '" stroke-width="9" stroke-linecap="round"' + NP + '/><path d="' + twig + '" fill="none" stroke="' + WOOD + '" stroke-width="4.500" stroke-linecap="round"' + NP + '/>';
+      s += c.Z(1, '<path d="M38 190C38 172 66 170 96 175C130 181 166 178 200 178C234 178 270 181 304 175C334 170 362 172 362 190C362 208 334 213 304 213C272 213 246 222 226 240H174C154 222 128 213 96 213C66 213 38 208 38 190Z"', WOOD, [200, 198]);
+      s += '<path d="M60 188q14-4 26 0M116 198q16 4 30 2M254 200q16 2 30-2M314 188q14-4 26 0M190 214q10 4 20 0" fill="none" stroke="' + BARK + '" stroke-width="2.400" stroke-linecap="round"' + NP + '/>';
       s += kid(c, 96, 346, 74);
       var lab = pill(200, 16, c.labels[2], { max: 24 }) + pill(78, 262, c.labels[1], { max: 14, fs: 12 }) + pill(318, 300, c.labels[0], { max: 14, fs: 12 });
       var P = [[[200, 282], [200, 338]], [[90, 192], [310, 192], [160, 200], [240, 200]], [[200, 62], [122, 102], [278, 102], [62, 166], [338, 166], [200, 122]]];
@@ -508,7 +550,7 @@
     try { return JSON.parse(atob(s.access_token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))).sub || null; } catch (e) { return null; }
   }
   function storeKey() { return 'lu_safe_v1:' + (uid() || 'anon'); }
-  var STORE = null, STORE_KEY = null, CLOUD = { state: 'off' }, pushT = 0, pushing = false;
+  var STORE = null, STORE_KEY = null, pushT = 0, pushing = false;
   function loadStore() {
     var k = storeKey(); if (STORE && STORE_KEY === k) return STORE;
     var got = null; try { got = JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) {}
@@ -524,6 +566,7 @@
   function curMap() {
     var s = loadStore(), k = childKey();
     if (!s.maps[k] || s.maps[k].deleted) s.maps[k] = blankMap();
+    s.maps[k].theme = themeFor(s.maps[k].layout, s.maps[k].theme);
     return s.maps[k];
   }
   // always newer than the last save, even if this device's clock is behind another device's
@@ -583,15 +626,9 @@
         DIRTY = false;
         return a._http('/rest/v1/safe_maps?on_conflict=user_id', { method: 'POST', headers: { Prefer: 'resolution=merge-duplicates,return=minimal' }, body: [{ user_id: me, data: body, updated_at: new Date().toISOString() }] });
       });
-    }).then(function () { setCloud('on'); }).catch(function () { setCloud('off'); }).then(function () { pushing = false; });
+    }).catch(function () { }).then(function () { pushing = false; });
   }
   var DIRTY = false, BOOT = true;
-  function setCloud(v) { if (CLOUD.state !== v) { CLOUD.state = v; refreshTrust(); } }
-  function trustText() {
-    if (uid() && CLOUD.state === 'on') return t('Saved privately to your account. Our admin tools can’t open it.', 'Tersimpan secara pribadi di akunmu. Alat admin kami tidak bisa membukanya.');
-    if (uid()) return t('Kept on this device for now. It saves to your account when you’re online.', 'Untuk sekarang tersimpan di perangkat ini. Akan tersimpan ke akunmu saat kamu online.');
-    return t('Kept only on this device. Log in to keep it in your account.', 'Hanya tersimpan di perangkat ini. Masuk ke akun agar tersimpan di akunmu.');
-  }
   function removePhotos(people) {
     (people || []).forEach(function (p) { if (p.av && p.av.kind === 'photo') { X.photoDel(p.av.pid); if (p.av.up) STORE.dels.push(p.av.pid); } });
   }
@@ -601,7 +638,7 @@
   function blankAdd() { return { step: 'how', group: 'family', c: null, pid: null, col: TAGCOLS[0], name: '', editing: null }; }
   function initState() {
     var m = curMap();
-    return { screen: m.started ? 'map' : 'layout', more: false, sheet: null, add: blankAdd(), edit: false, selected: null, look: null, dl: 'png', toast: null, drag: null, prompt: null, promptEdit: null, newPrompt: '', editFocus: null, confirm: false, photoBusy: false };
+    return { screen: m.started ? 'map' : 'layout', sheet: null, add: blankAdd(), edit: false, selected: null, look: null, dl: 'png', toast: null, drag: null, prompt: null, promptEdit: null, newPrompt: '', editFocus: null, confirm: false, photoBusy: false };
   }
   function kidName() { var p = X.prof(); return p && p.name ? p.name : ''; }
   function kidG() { var p = X.prof(); return (p && p.kid) || 'boy'; }
@@ -626,27 +663,23 @@
   };
   function dots(n) { return '<div class="spm-dots" aria-hidden="true">' + [0, 1, 2].map(function (i) { return '<i class="' + (i === n ? 'on' : i < n ? 'done' : '') + '"></i>'; }).join('') + '</div>'; }
   function topBar(back, n) {
-    var name = kidName();
-    return '<div class="spm-top wrap">' + back + '<div class="spm-toptx"><b>' + esc(t('Safe People Map', 'Peta Orang Aman')) + '</b><small>' + esc(name ? t('With ' + name, 'Bersama ' + name) : t('Fill it in together', 'Isi bersama-sama')) + '</small></div>' + dots(n) + '</div>';
+    return '<div class="spm-top wrap">' + back + '<div class="spm-toptx"><b>' + esc(t('Safe People Map', 'Peta Orang Aman')) + '</b></div>' + dots(n) + '</div>';
   }
   function layoutCard(l, m) {
     var free = !locked('safe.' + l.id);
-    return '<button type="button" class="spm-card' + (m.layout === l.id ? ' on' : '') + (free ? '' : ' lockd') + '" data-a="pick-layout" data-v="' + l.id + '"><span class="spm-thumb">' + thumb('L' + l.id + m.theme, { layout: l.id, theme: m.theme, people: sample(l.id), g: kidG() }) + '</span><b>' + esc(pick(l.name)) + '</b><small>' + esc(pick(l.sub)) + '</small>' +
+    return '<button type="button" class="spm-card' + (m.layout === l.id ? ' on' : '') + (free ? '' : ' lockd') + '" data-a="pick-layout" data-v="' + l.id + '"><span class="spm-thumb">' + thumb('L' + l.id + m.theme, { layout: l.id, theme: themeFor(l.id, m.theme), people: sample(l.id), g: kidG() }) + '</span><b>' + esc(pick(l.name)) + '</b><small>' + esc(pick(l.sub)) + '</small>' +
       (l.id === 'circles' ? '<span class="spm-sug">' + esc(t('Suggested', 'Disarankan')) + '</span>' : '') + plusPill('safe.' + l.id) + (m.layout === l.id ? '<span class="spm-tick">✓</span>' : '') + '</button>';
   }
   function screenLayout(m) {
-    var shown = LAYOUTS.filter(function (l) { return !hidden('safe.' + l.id); }), mains = shown.slice(0, 4), more = shown.slice(4), name = kidName();
+    var shown = LAYOUTS.filter(function (l) { return !hidden('safe.' + l.id); });
     return '<div class="spm-screen">' + topBar('<a class="spm-iconbtn" href="#/tools" aria-label="' + esc(t('Back', 'Kembali')) + '">‹</a>', 0) +
-      '<div class="spm-body wrap"><h2 class="spm-h">' + esc(t('Which map shall we make?', 'Peta mana yang mau kita buat?')) + '</h2><p class="spm-p">' + esc(name ? t('Choose together with ' + name + '. Circles is a good first map.', 'Pilih bersama ' + name + '. Lingkaran bagus untuk peta pertama.') : t('Choose together. Circles is a good first map.', 'Pilih bersama-sama. Lingkaran bagus untuk peta pertama.')) + '</p>' +
-      '<div class="spm-grid">' + mains.map(function (l) { return layoutCard(l, m); }).join('') + '</div>' +
-      (more.length ? '<button type="button" class="spm-morebtn" data-a="toggle-more" aria-expanded="' + !!ST.more + '"><span class="spm-morefaces">' + more.map(function (l) { return '<span>' + thumb('M' + l.id, { layout: l.id, theme: m.theme, people: [], g: kidG() }) + '</span>'; }).join('') + '</span><span class="spm-moretx"><b>' + esc(ST.more ? t('Fewer layouts', 'Lebih sedikit') : t('More layouts', 'Peta lainnya')) + '</b><small>' + esc(t('Bus, solar system, castle, pizza and superhero team', 'Bus, tata surya, istana, pizza, dan tim pahlawan')) + '</small></span><span class="spm-chev">' + (ST.more ? '⌃' : '⌄') + '</span></button>' : '') +
-      (ST.more ? '<div class="spm-grid">' + more.map(function (l) { return layoutCard(l, m); }).join('') + '</div>' : '') +
+      '<div class="spm-body wrap"><h2 class="spm-h">' + esc(t('Which map shall we make?', 'Peta mana yang mau kita buat?')) + '</h2>' +
+      '<div class="spm-grid">' + shown.map(function (l) { return layoutCard(l, m); }).join('') + '</div>' +
       '</div><div class="spm-foot"><button type="button" class="spm-cta" data-a="go-theme">' + esc(t('Next', 'Lanjut')) + '</button></div></div>';
   }
   function screenTheme(m) {
-    var name = kidName();
     return '<div class="spm-screen">' + topBar('<button type="button" class="spm-iconbtn" data-a="go-layout" aria-label="' + esc(t('Back', 'Kembali')) + '">‹</button>', 1) +
-      '<div class="spm-body wrap"><h2 class="spm-h">' + esc(t('What should it look like?', 'Mau terlihat seperti apa?')) + '</h2><p class="spm-p">' + esc(t('Pick something ' + (name || 'your child') + ' loves, or skip. This is the ' + layoutName(m.layout).toLowerCase() + ' in each theme.', 'Pilih yang disukai ' + (name || 'anakmu') + ', atau lewati. Ini peta ' + layoutName(m.layout).toLowerCase() + ' di tiap tema.')) + '</p>' +
+      '<div class="spm-body wrap"><h2 class="spm-h">' + esc(t('What should it look like?', 'Mau terlihat seperti apa?')) + '</h2>' +
       '<div class="spm-grid big">' + Object.keys(THEMES).filter(function (k) { return k === 'plain' || !hidden('safe.' + k); }).map(function (k) {
         var T = THEMES[k], lk = k !== 'plain' && locked('safe.' + k);
         return '<button type="button" class="spm-card' + (m.theme === k ? ' on' : '') + (lk ? ' lockd' : '') + '" data-a="pick-theme" data-v="' + k + '"><span class="spm-thumb">' + thumb('T' + k + m.layout, { layout: m.layout, theme: k, people: sample(m.layout), g: kidG() }) + '</span><b>' + esc(pick(T.name)) + '</b><small>' + esc(pick(T.sub)) + '</small>' + (k !== 'plain' ? plusPill('safe.' + k) : '') + (m.theme === k ? '<span class="spm-tick">✓</span>' : '') + '</button>';
@@ -662,28 +695,27 @@
     var name = kidName(), sel = m.people.filter(function (p) { return p.id === ST.selected; })[0], waiting = m.people.filter(function (p) { return p.zone == null; }), placed = m.people.length - waiting.length;
     if (sel) return sel.name ? [t('Where does ' + sel.name + ' go?', sel.name + ' ada di mana?'), t('Drag them onto the map, or tap a spot.', 'Seret ke peta, atau ketuk satu tempat.')] : [t('Where do they go?', 'Dia ada di mana?'), t('Drag them onto the map, or tap a spot.', 'Seret ke peta, atau ketuk satu tempat.')];
     if (waiting.length) return [t('Who’s waiting?', 'Siapa yang menunggu?'), t('Drag someone onto the map. Or tap them, then tap a spot.', 'Seret seseorang ke peta. Atau ketuk dia, lalu ketuk satu tempat.')];
-    if (!m.people.length) return [name ? t('Who are your safe people, ' + name + '?', 'Siapa orang amanmu, ' + name + '?') : t('Who are your safe people?', 'Siapa orang amanmu?'), t('Add someone you trust. Start with one or two.', 'Tambahkan orang yang kamu percaya. Mulai dari satu atau dua.')];
+    if (!m.people.length) return [name ? t('Who are your safe people, ' + name + '?', 'Siapa orang amanmu, ' + name + '?') : t('Who are your safe people?', 'Siapa orang amanmu?'), ''];
     return [t('Who else?', 'Siapa lagi?'), t(placed + (placed === 1 ? ' person' : ' people') + ' on the map. You can drag anyone to move them.', placed + ' orang di peta. Kamu bisa menyeret siapa saja untuk memindahkannya.')];
   }
   function screenMap(m) {
     var L = LBY[m.layout], T = THEMES[m.theme], h = hints(m), waiting = m.people.filter(function (p) { return p.zone == null; }), labels = labelsFor(m, m.layout);
-    var head = '<div class="spm-top">' + (ST.edit ? '' : '<button type="button" class="spm-iconbtn" data-a="go-theme" aria-label="' + esc(t('Back', 'Kembali')) + '">‹</button>') +
+    var head = '<div class="spm-top">' + (ST.edit ? '' : '<button type="button" class="spm-iconbtn" data-a="map-back" aria-label="' + esc(t('Back', 'Kembali')) + '">‹</button>') +
       '<div class="spm-toptx"><b class="big">' + esc(titleText()) + '</b><small>' + esc(ST.edit ? t('Editing', 'Sedang mengubah') : pick(L.name) + ' · ' + pick(T.name)) + '</small></div>' +
-      (ST.edit ? '<button type="button" class="spm-done" data-a="toggle-edit">' + esc(t('Done', 'Selesai')) + '</button>' : '<button type="button" class="spm-grown" data-a="open-tools"><i></i><i></i><i></i>' + esc(t('Grown-ups', 'Orang dewasa')) + '</button>') + '</div>';
+      (ST.edit ? '<button type="button" class="spm-done" data-a="toggle-edit">' + esc(t('Done', 'Selesai')) + '</button>' : '<button type="button" class="spm-grown" data-a="open-tools"><i></i><i></i><i></i>' + esc(t('Menu', 'Menu')) + '</button>') + '</div>';
     var prompt = ST.prompt ? '<div class="spm-prompt"><b>' + esc(ST.prompt) + '</b><button type="button" data-a="hide-prompt" aria-label="' + esc(t('Hide question', 'Sembunyikan pertanyaan')) + '">×</button></div>' : '';
     var side;
     if (ST.edit) {
-      var ZC = function (i) { return m.layout === 'tree' && i === 0 ? '#E5BE93' : palFor(m, m.theme)[i % 6]; };
+      var ZC = function (i) { return m.layout === 'tree' && i < 2 ? '#C99A6B' : palFor(m, m.theme)[i % 6]; };
       side = '<div class="spm-side"><div class="spm-editgrp"><div class="spm-edith"><b>' + esc(pick(L.group)) + '</b><small>' + esc(t('Tap to rename', 'Ketuk untuk mengganti nama')) + '</small></div>' +
         labels.map(function (s, i) { return '<label class="spm-editrow"><span class="spm-zdot" style="background:' + ZC(i) + '"></span><span class="spm-zname">' + esc(pick(L.zones[i])) + '</span><input class="spm-input sm" data-in="label" data-v="' + i + '" value="' + esc(s) + '" maxlength="40"></label>'; }).join('') + '</div>' +
         '<div class="spm-editgrp"><b>' + esc(t('Colours', 'Warna')) + '</b><div class="spm-pals">' + T.palettes.map(function (p, i) { return '<button type="button" class="spm-palbtn' + (((m.pal && m.pal[m.theme]) || 0) === i ? ' on' : '') + '" data-a="pick-pal" data-v="' + i + '"><span>' + p.c.slice(0, 3).map(function (c) { return '<i style="background:' + c + '"></i>'; }).join('') + '</span>' + esc(pick(p.name)) + '</button>'; }).join('') + '</div></div>' +
         '<div class="spm-editgrp"><b>' + esc(t('People', 'Orang')) + '</b>' + (m.people.length ? '<div class="spm-plist">' + m.people.map(function (p) { return '<div class="spm-prow"><span class="spm-av40">' + avatarSVG(p.av) + '</span><div><b>' + esc(p.name || t('No name', 'Tanpa nama')) + '</b><small>' + esc(p.zone == null ? t('Waiting beside the map', 'Menunggu di samping peta') : labels[p.zone]) + '</small></div><button type="button" class="spm-mini" data-a="edit-person" data-v="' + esc(p.id) + '">' + esc(t('Edit', 'Ubah')) + '</button><button type="button" class="spm-mini red" data-a="remove-person" data-v="' + esc(p.id) + '">' + esc(t('Remove', 'Hapus')) + '</button></div>'; }).join('') + '</div>' : '<p class="spm-p">' + esc(t('Nobody on the map yet.', 'Belum ada orang di peta.')) + '</p>') + '</div></div>';
     } else {
       var picking = ST.selected ? '<div class="spm-sr">' + L.caps.map(function (c, z) { return '<button type="button" data-a="place" data-v="' + z + '">' + esc(pick(L.zones[z]) + ': ' + labels[z]) + '</button>'; }).join('') + '</div>' : '';
-      side = '<div class="spm-side"><div class="spm-tray" data-zone="tray"><b>' + esc(h[0]) + '</b><span>' + esc(h[1]) + '</span>' + picking +
+      side = '<div class="spm-side"><div class="spm-tray" data-zone="tray"><b>' + esc(h[0]) + '</b>' + (h[1] ? '<span>' + esc(h[1]) + '</span>' : '') + picking +
         (waiting.length ? '<div class="spm-trayrow">' + waiting.map(function (p) { return '<button type="button" class="spm-trayp' + (p.id === ST.selected ? ' on' : '') + '" data-tray="' + esc(p.id) + '"><span class="spm-av62">' + avatarSVG(p.av) + '</span><small>' + esc(p.name || ' ') + '</small></button>'; }).join('') + '</div>' : '') + '</div>' +
-        '<button type="button" class="spm-add" data-a="open-add"><span class="spm-plus">+</span><b>' + esc(t('Add a person', 'Tambah orang')) + '</b><span class="spm-addfaces">' + ['f5', 's3', 'r4'].map(function (c) { return '<span>' + avatarSVG({ kind: 'ill', c: c }) + '</span>'; }).join('') + '</span></button>' +
-        '<div class="spm-trust">' + ICON.lock + '<span id="spmTrust">' + esc(trustText()) + '</span></div></div>';
+        '<button type="button" class="spm-add" data-a="open-add"><span class="spm-plus">+</span><b>' + esc(t('Add a person', 'Tambah orang')) + '</b><span class="spm-addfaces">' + ['f5', 's3', 'r4'].map(function (c) { return '<span>' + avatarSVG({ kind: 'ill', c: c }) + '</span>'; }).join('') + '</span></button></div>';
     }
     return '<div class="spm-screen mapscr">' + head + '<div class="spm-mapwrap"><div class="spm-mapcol">' + prompt + '<div class="spm-mapbox" id="spmMapBox">' + mapHTML(m) + '</div></div>' + side + '</div></div>';
   }
@@ -692,7 +724,7 @@
   function sheetAdd(m) {
     var a = ST.add, b = '';
     if (a.step === 'how') {
-      b = '<p class="spm-p">' + esc(t('Choose together. Tap one.', 'Pilih bersama-sama. Ketuk salah satu.')) + '</p><div class="spm-ways">' +
+      b = '<div class="spm-ways">' +
         '<button type="button" class="spm-way" data-a="add-step" data-v="library"><span class="spm-wayart faces">' + ['f1', 'h5', 'r3'].map(function (c) { return '<span>' + avatarSVG({ kind: 'ill', c: c }) + '</span>'; }).join('') + '</span><b>' + esc(t('Choose a character', 'Pilih tokoh')) + '</b><small>' + esc(t('Family, school, helpers, friends', 'Keluarga, sekolah, penolong, teman')) + '</small></button>' +
         '<button type="button" class="spm-way" data-a="add-step" data-v="tag"><span class="spm-wayart"><span class="spm-tagmini">' + esc(t('Name', 'Nama')) + '</span></span><b>' + esc(t('Just a name', 'Nama saja')) + '</b><small>' + esc(t('A name tag, no picture', 'Label nama, tanpa gambar')) + '</small></button>' +
         (hidden('safe.photos') ? '' : '<button type="button" class="spm-way" data-a="add-photo"><span class="spm-wayart">' + ICON.camera + '</span><b>' + esc(t('Use a photo', 'Pakai foto')) + '</b><small>' + esc(t('Camera or gallery', 'Kamera atau galeri')) + '</small>' + plusPill('safe.photos') + '</button>') + '</div>';
@@ -701,7 +733,7 @@
         '<div class="spm-chars">' + LIB.filter(function (l) { return l[1] === a.group; }).map(function (l) { return '<button type="button" style="background:' + l[2].bg + '" data-a="add-char" data-v="' + l[0] + '" aria-label="' + esc(charLabel(l[2])) + '">' + fullSVG(l[0]) + '</button>'; }).join('') + '</div>';
     } else if (a.step === 'name-char') {
       b = '<div class="spm-chosen"><span class="spm-chosenart" style="background:' + (CH[a.c] || CH.f1).bg + '">' + fullSVG(a.c) + '</span>' + (a.editing ? '' : '<button type="button" class="spm-linkbtn" data-a="add-step" data-v="library">' + esc(t('Pick someone else', 'Pilih yang lain')) + '</button>') + '</div>' +
-        '<label class="spm-field"><b>' + esc(t('Give them a name', 'Beri nama')) + '</b><input class="spm-input" data-in="add-name" value="' + esc(a.name) + '" placeholder="' + esc(t('Type a name', 'Ketik nama')) + '" maxlength="24"></label><small class="spm-note">' + esc(t('Or leave it blank. They’ll go on the map without a name.', 'Atau kosongkan. Dia akan masuk ke peta tanpa nama.')) + '</small>';
+        '<label class="spm-field"><b>' + esc(t('Give them a name', 'Beri nama')) + '</b><input class="spm-input" data-in="add-name" value="' + esc(a.name) + '" placeholder="' + esc(t('Type a name', 'Ketik nama')) + '" maxlength="24"></label>';
     } else if (a.step === 'tag') {
       b = '<div class="spm-tagbox"><span class="spm-tagbig" id="spmTag" style="background:' + a.col + '">' + esc(a.name.trim() || t('Name', 'Nama')) + '</span></div>' +
         '<label class="spm-field"><b>' + esc(t('Name', 'Nama')) + '</b><input class="spm-input" data-in="add-name" value="' + esc(a.name) + '" placeholder="' + esc(t('Type a name', 'Ketik nama')) + '" maxlength="24"></label>' +
@@ -733,13 +765,13 @@
         ['open-download', t('Download', 'Unduh'), t('Save a picture, or a PDF to print.', 'Simpan gambar, atau PDF untuk dicetak.')],
         ['open-new', t('Start a new map', 'Mulai peta baru'), t('Clears this map and its photos.', 'Menghapus peta ini beserta fotonya.')]
       ];
-      body = '<div class="spm-toolrows">' + rows.map(function (r) { return '<button type="button" data-a="' + r[0] + '"><div><b>' + esc(r[1]) + '</b><small>' + esc(r[2]) + '</small></div><span>›</span></button>'; }).join('') + '</div><div class="spm-safe big">' + ICON.lock + '<span>' + esc(trustText()) + '</span></div>';
+      body = '<div class="spm-toolrows">' + rows.map(function (r) { return '<button type="button" data-a="' + r[0] + '"><div><b>' + esc(r[1]) + '</b><small>' + esc(r[2]) + '</small></div><span>›</span></button>'; }).join('') + '</div>';
     } else if (s === 'look') {
       var lk = ST.look; title = t('Change look', 'Ganti tampilan');
-      body = '<div class="spm-tabs">' + [['layout', t('Layout', 'Peta')], ['theme', t('Theme', 'Tema')]].map(function (x) { return '<button type="button" class="' + (lk.tab === x[0] ? 'on' : '') + '" data-a="look-tab" data-v="' + x[0] + '">' + esc(x[1]) + '</button>'; }).join('') + '</div>' +
+      body = (PLAIN_ONLY[lk.layout] ? '' : '<div class="spm-tabs">' + [['layout', t('Layout', 'Peta')], ['theme', t('Theme', 'Tema')]].map(function (x) { return '<button type="button" class="' + (lk.tab === x[0] ? 'on' : '') + '" data-a="look-tab" data-v="' + x[0] + '">' + esc(x[1]) + '</button>'; }).join('') + '</div>') +
         '<div class="spm-info">' + esc(t('Everyone stays. They move into the new shape, and anyone who doesn’t fit waits beside the map.', 'Semua tetap ada. Mereka pindah ke bentuk baru, dan yang tidak muat menunggu di samping peta.')) + '</div>' +
         '<div class="spm-grid sm">' + (lk.tab === 'layout' ? LAYOUTS.filter(function (l) { return !hidden('safe.' + l.id); }).map(function (l) {
-          return '<button type="button" class="spm-card sm' + (lk.layout === l.id ? ' on' : '') + (locked('safe.' + l.id) ? ' lockd' : '') + '" data-a="look-layout" data-v="' + l.id + '"><span class="spm-thumb">' + thumb('K' + l.id + lk.theme, { layout: l.id, theme: lk.theme, pal: palFor(m, lk.theme), people: l.id === m.layout ? m.people : remap(m.people, m.layout, l.id).people, g: kidG() }) + '</span><b>' + esc(pick(l.name)) + '</b>' + (m.layout === l.id ? '<span class="spm-now">' + esc(t('Now', 'Sekarang')) + '</span>' : plusPill('safe.' + l.id)) + '</button>';
+          return '<button type="button" class="spm-card sm' + (lk.layout === l.id ? ' on' : '') + (locked('safe.' + l.id) ? ' lockd' : '') + '" data-a="look-layout" data-v="' + l.id + '"><span class="spm-thumb">' + thumb('K' + l.id + lk.theme, { layout: l.id, theme: themeFor(l.id, lk.theme), pal: palFor(m, themeFor(l.id, lk.theme)), people: l.id === m.layout ? m.people : remap(m.people, m.layout, l.id).people, g: kidG() }) + '</span><b>' + esc(pick(l.name)) + '</b>' + (m.layout === l.id ? '<span class="spm-now">' + esc(t('Now', 'Sekarang')) + '</span>' : plusPill('safe.' + l.id)) + '</button>';
         }).join('') : Object.keys(THEMES).filter(function (k) { return k === 'plain' || !hidden('safe.' + k); }).map(function (k) {
           return '<button type="button" class="spm-card sm' + (lk.theme === k ? ' on' : '') + (k !== 'plain' && locked('safe.' + k) ? ' lockd' : '') + '" data-a="look-theme" data-v="' + k + '"><span class="spm-thumb">' + thumb('KT' + k + lk.layout, { layout: lk.layout, theme: k, people: lk.layout === m.layout ? m.people : remap(m.people, m.layout, lk.layout).people, g: kidG() }) + '</span><b>' + esc(pick(THEMES[k].name)) + '</b>' + (m.theme === k ? '<span class="spm-now">' + esc(t('Now', 'Sekarang')) + '</span>' : k !== 'plain' ? plusPill('safe.' + k) : '') + '</button>';
         }).join('')) + '</div>';
@@ -785,8 +817,6 @@
   }
   function updateMapOnly() { var box = document.getElementById('spmMapBox'); if (box) box.innerHTML = mapHTML(curMap()); }
   function refresh() { if (ST && !ST.drag && !ST.sheet) { var m = curMap(); if (m.started && ST.screen === 'layout') ST.screen = 'map'; render(); } }
-  function refreshTrust() { var n = document.getElementById('spmTrust'); if (n) n.textContent = trustText(); }
-
   /* ===================== actions ===================== */
   function place(id, zone) {
     var m = curMap(), L = LBY[m.layout], me = m.people.filter(function (p) { return p.id === id; })[0]; if (!me) return;
@@ -856,7 +886,7 @@
   }
   function applyLook() {
     var lk = ST.look, m = curMap(), msg = null;
-    m.theme = lk.theme;
+    m.theme = themeFor(lk.layout, lk.theme);
     if (lk.layout !== m.layout) {
       var r = remap(m.people, m.layout, lk.layout), w = r.waiting.filter(Boolean);
       m.people = r.people; m.layout = lk.layout;
@@ -913,15 +943,17 @@
     switch (a) {
       case 'close': return set({ sheet: null });
       case 'sheet-back': return (function () { ST.add.step = { library: 'how', 'name-char': 'library', tag: 'how', photo: 'how' }[ST.add.step] || 'how'; render(); })();
-      case 'toggle-more': return set({ more: !ST.more });
       case 'go-layout': return set({ screen: 'layout' });
-      case 'go-theme': return set({ screen: 'theme', edit: false });
+      case 'map-back': return set({ screen: PLAIN_ONLY[m.layout] ? 'layout' : 'theme', edit: false });
+      case 'go-theme':
+        if (PLAIN_ONLY[m.layout]) { m.started = true; DIRTY = true; saveMap(); return set({ screen: 'map' }); }
+        return set({ screen: 'theme', edit: false });
       case 'go-map': m.started = true; DIRTY = true; saveMap(); return set({ screen: 'map' });
       case 'skip-theme': m.theme = 'plain'; m.started = true; DIRTY = true; saveMap(); return set({ screen: 'map' });
       case 'pick-layout':
         if (locked('safe.' + v)) return showLock('safe.' + v, el.querySelector('.spm-thumb').innerHTML);
         if (m.people.length && v !== m.layout) m.people = remap(m.people, m.layout, v).people;
-        m.layout = v; return render();
+        m.layout = v; m.theme = themeFor(v, m.theme); return render();
       case 'pick-theme':
         if (v !== 'plain' && locked('safe.' + v)) return showLock('safe.' + v, el.querySelector('.spm-thumb').innerHTML);
         m.theme = v; return render();
@@ -955,7 +987,7 @@
       case 'look-tab': ST.look.tab = v; return render();
       case 'look-layout':
         if (locked('safe.' + v) && v !== m.layout) return showLock('safe.' + v, el.querySelector('.spm-thumb').innerHTML);
-        ST.look.layout = v; return render();
+        ST.look.layout = v; if (PLAIN_ONLY[v]) ST.look.tab = 'layout'; return render();
       case 'look-theme':
         if (v !== 'plain' && locked('safe.' + v) && v !== m.theme) return showLock('safe.' + v, el.querySelector('.spm-thumb').innerHTML);
         ST.look.theme = v; return render();
@@ -1036,13 +1068,10 @@
     '.spm-tick{position:absolute;top:12px;right:12px;width:30px;height:30px;border-radius:50%;background:var(--sp-ink);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;box-shadow:0 0 0 2px #fff}',
     '.spm-pill{display:inline-block;padding:2px 9px;border-radius:999px;background:#2B2A35;color:#FFC94A;font:800 11px/1.5 Figtree,sans-serif;letter-spacing:.03em}.spm-pill.free{background:#DDF2E4;color:#1E6B45}',
     '.spm-card>.spm-pill,.spm-way>.spm-pill{position:absolute;top:13px;right:13px;box-shadow:0 0 0 2px #fff}',
-    '.spm-morebtn{display:flex;align-items:center;gap:14px;padding:12px 16px 12px 24px;background:#fff;border:1px solid #E4DCCF;border-radius:20px;box-shadow:0 3px 0 #EFE7DA;text-align:left;min-height:68px}',
-    '.spm-morefaces{flex:none;display:flex}.spm-morefaces span{width:40px;height:40px;border-radius:50%;overflow:hidden;margin-left:-12px;box-shadow:0 0 0 2.5px #fff;background:#F3EEE6}.spm-morefaces img{width:100%;height:100%;display:block}',
-    '.spm-moretx{flex:1;min-width:0;display:flex;flex-direction:column}.spm-moretx b{font:600 18px/1.2 Fredoka,sans-serif}.spm-moretx small{color:var(--sp-soft);font-size:13px;line-height:1.3}.spm-chev{flex:none;width:36px;height:36px;border-radius:50%;background:#F3EEE6;display:flex;align-items:center;justify-content:center;font-weight:800}',
     '.spm-foot{position:sticky;bottom:0;z-index:3;padding:12px 16px 20px;border-top:1px solid var(--sp-line);background:#FBF8F3;display:flex;justify-content:center}.spm-foot2{width:100%;max-width:440px;display:flex;gap:10px}.spm-foot>.spm-cta{max-width:440px}',
     '.spm-cta{width:100%;flex:1;min-height:58px;border-radius:18px;border:0;background:#FFC94A;box-shadow:0 3px 0 #E0A92A;font:600 21px Fredoka,sans-serif!important}.spm-cta:hover{background:#FFD060}.spm-cta.off{opacity:.5;cursor:default}',
     '.spm-soft{flex:0 0 34%;min-height:58px;border-radius:18px;border:0;background:#F3EEE6;font:600 18px Fredoka,sans-serif!important}',
-    '.spm-grown{flex:none;min-height:40px;padding:0 12px;border-radius:12px;border:0;background:#F3EEE6;font:700 13px Figtree,sans-serif!important;color:#4A4855!important;display:flex;align-items:center;gap:2.5px;white-space:nowrap}.spm-grown i{width:4px;height:4px;border-radius:50%;background:#4A4855}.spm-grown i:nth-child(3){margin-right:4px}',
+    '.spm-grown{flex:none;min-height:44px;padding:0 16px;border-radius:14px;border:0;background:#2B2A35;font:700 15px Figtree,sans-serif!important;color:#fff!important;display:flex;align-items:center;gap:2.5px;white-space:nowrap}.spm-grown:hover{background:#44424F}.spm-grown i{width:4px;height:4px;border-radius:50%;background:#FFC94A}.spm-grown i:nth-child(3){margin-right:4px}',
     '.spm-done{flex:none;min-height:44px;padding:0 20px;border-radius:14px;border:0;background:var(--sp-ink);color:#fff!important;font:700 15px Figtree,sans-serif!important}',
     '.spm-mapwrap{padding:4px 16px 24px;display:flex;flex-wrap:wrap;gap:16px 28px;align-items:flex-start;justify-content:center}',
     '.spm-mapcol{flex:1 1 340px;min-width:0;max-width:min(760px,calc(100dvh - 190px));display:flex;flex-direction:column;gap:10px}',
@@ -1056,7 +1085,6 @@
     '.spm-av62{width:62px;height:62px;display:block}.spm-av40{flex:none;width:40px;height:40px;display:block}',
     '.spm-add{display:flex;align-items:center;gap:14px;min-height:84px;padding:10px 18px 10px 12px;border-radius:22px;border:0;background:#FFC94A;box-shadow:0 4px 0 #E0A92A;text-align:left}.spm-add:hover{background:#FFD060}.spm-add:active{transform:translateY(2px);box-shadow:0 2px 0 #E0A92A}',
     '.spm-plus{flex:none;width:58px;height:58px;border-radius:50%;background:#fff;border:2.5px solid var(--sp-ink);display:flex;align-items:center;justify-content:center;font:600 34px/1 Fredoka,sans-serif}.spm-add>b{flex:1;font:600 24px/1.1 Fredoka,sans-serif}.spm-addfaces{flex:none;display:flex;padding-left:14px}.spm-addfaces span{width:34px;height:34px;display:block;margin-left:-14px;border-radius:50%}',
-    '.spm-trust{display:flex;gap:8px;align-items:center;padding:0 6px;font-size:12.5px;color:var(--sp-soft)}',
     '.spm-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}.spm-sr:focus-within{position:static;width:auto;height:auto;clip-path:none;display:flex;flex-wrap:wrap;gap:6px}.spm-sr button{min-height:40px;padding:0 10px;border-radius:10px;border:1px solid var(--sp-line);background:#fff}',
     '.spm-editgrp{display:flex;flex-direction:column;gap:8px}.spm-editgrp>b,.spm-edith b{font-size:15px}.spm-edith{display:flex;justify-content:space-between;align-items:baseline}.spm-edith small{color:var(--sp-soft);font-size:12.5px}',
     '.spm-editrow{display:flex;align-items:center;gap:10px;padding:6px 6px 6px 12px;border-radius:14px;background:#fff;border:1px solid var(--sp-line)}.spm-zdot{flex:none;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--sp-ink)}.spm-zname{flex:none;width:74px;font-size:12.5px;color:var(--sp-soft);font-weight:700;line-height:1.2}',
@@ -1080,7 +1108,6 @@
     '.spm-linkbtn{min-height:40px;display:inline-flex;align-items:center;border:0;background:none;font:700 14px Figtree,sans-serif!important;color:#4A4855!important;text-decoration:underline;text-underline-offset:4px;cursor:pointer;white-space:nowrap;align-self:center}.spm-linkbtn.red{color:#B23A4E!important;align-self:flex-start;padding:0 4px}',
     '.spm-field{display:flex;flex-direction:column;gap:8px}.spm-field>b{font:600 21px Fredoka,sans-serif}.spm-field>b.sm{font-size:19px}.spm-field .opt{font:600 14px Figtree,sans-serif;color:var(--sp-soft)}',
     '.spm-input{min-height:60px;border-radius:16px;border:2px solid var(--sp-ink);padding:0 16px;font:600 21px Fredoka,sans-serif!important;background:#fff;outline:0;box-sizing:border-box;width:100%;min-width:0}.spm-input:focus{box-shadow:0 0 0 4px #FFF1C7}.spm-input.sm{flex:1;min-height:44px;border-radius:11px;border:1.5px solid #E4DCCF;padding:0 12px;font:600 15px Figtree,sans-serif!important;background:#FBF8F3}.spm-input.sm:focus,.spm-input.sm.on{border-color:var(--sp-ink);background:#fff}.spm-input.dash{min-height:50px;border-radius:14px;border-style:dashed;border-color:#CFC4B2}',
-    '.spm-note{font-size:13.5px;color:var(--sp-soft)}',
     '.spm-tagbox{display:flex;justify-content:center;align-items:center;min-height:120px;padding:14px;border-radius:22px;background:#F3EEE6}.spm-tagbig{min-width:110px;max-width:100%;box-sizing:border-box;padding:14px 30px;border-radius:999px;border:3px solid var(--sp-ink);font:600 30px/1.1 Fredoka,sans-serif;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}',
     '.spm-cols{display:flex;gap:10px;flex-wrap:wrap}.spm-cols button{width:52px;height:52px;border-radius:50%;border:2px solid var(--sp-ink)}.spm-cols button.on{box-shadow:0 0 0 3px #FBF8F3,0 0 0 6px var(--sp-ink)}',
     '.spm-two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.spm-src{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;min-height:150px;border-radius:24px;background:#fff;border:1px solid #E4DCCF;box-shadow:0 3px 0 #EFE7DA;cursor:pointer;font:600 20px Fredoka,sans-serif;text-align:center;padding:8px}',
