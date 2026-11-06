@@ -1,7 +1,7 @@
 /* Little Us · service worker
    Lets the free tools open without internet once they have been opened before, and makes repeat visits fast.
    It never caches the admin page, the shop database or payments. */
-const CACHE = 'littleus-v55';
+const CACHE = 'littleus-v56';
 const IMAGES = 'littleus-img-v1';
 // the files every visit needs; tool scripts (calm, Conversation Starters, printing, articles, legal) are cached the first time they are used
 const ASSETS = ['/', '/tools.js?v=25', '/lu-account.js?v=17', '/lu-app.js?v=26', '/lu-app.css?v=21', '/tools-art.js?v=25', '/tools.css?v=20', '/logo.png'];
