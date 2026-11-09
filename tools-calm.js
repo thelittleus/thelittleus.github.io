@@ -1,5 +1,5 @@
 /* Little Us · Calm & feelings tools
-   Breathing Buddy, Feelings (check-in, body map and calm-down menu) and Worry jar.
+   Breathing Buddy, Feelings (check-in, body map and calm-down menu) and Worry Jar.
    Loaded after tools.js on the /tools pages and registers its pages there. Settings are saved per child on this
    device with the other tools. Nothing from the check-in or body map is recorded; the worry jar keeps its notes
    on this device until an adult lets them float away. */
@@ -410,7 +410,7 @@
     calmI: ['To feel calm, I can…', 'Supaya tenang, aku bisa…'], chooseAnother: ['Choose another', 'Pilih yang lain'], feelCalm: ['I feel calm', 'Aku sudah tenang'],
     wellDone: ['Well done for calming down', 'Hebat, kamu sudah tenang'], ready: ['I’m ready', 'Aku siap'], emptyMenu: ['Add a few cards to the calm-down menu first.', 'Tambahkan beberapa kartu ke menu tenang dulu.'],
     // worry jar
-    wjTitle: ['Worry jar', 'Toples khawatir'], wjDesc: ['Your child draws or writes a worry and puts it in a jar on screen. Later, you open the jar together and talk it through.', 'Anak menggambar atau menulis kekhawatirannya lalu memasukkannya ke toples di layar. Nanti, kalian membuka toples bersama dan membicarakannya.'],
+    wjTitle: ['Worry Jar', 'Toples Khawatir'], wjDesc: ['Your child draws or writes a worry and puts it in a jar on screen. Later, you open the jar together and talk it through.', 'Anak menggambar atau menulis kekhawatirannya lalu memasukkannya ke toples di layar. Nanti, kalian membuka toples bersama dan membicarakannya.'],
     inJar: [function (n) { return n === 0 ? 'The jar is empty' : n + (n === 1 ? ' worry in the jar' : ' worries in the jar'); }, function (n) { return n === 0 ? 'Toplesnya kosong' : n + ' kekhawatiran di toples'; }],
     lookTogether: ['Look together →', 'Lihat bersama →'], worryIn: [function (m) { return 'Worry time in ' + m + ' min'; }, function (m) { return 'Waktunya cerita dalam ' + m + ' menit'; }], worryNow: ['It’s worry time', 'Sudah waktunya cerita'],
     addedWhen: [function (s) { return 'Last added ' + s; }, function (s) { return 'Terakhir ditambahkan ' + s; }],
@@ -432,7 +432,7 @@
     dlBreath: ['Breathing card', 'Kartu napas'], dlBreathCards: ['Breathing buddies to cut out', 'Kartu teman napas untuk digunting'],
     dlColour: ['Colour in a dot after each breath', 'Warnai satu titik setiap selesai bernapas'],
     dlFeel: ['How do I feel?', 'Aku merasa apa?'], dlBig: ['How big?', 'Seberapa besar?'], dlBody: ['Where do I feel it?', 'Di mana aku merasakannya?'],
-    dlJar: ['My worry jar', 'Toples khawatirku'], dlJarP: ['Draw or write a worry, fold it, and put it in the jar.', 'Gambar atau tulis kekhawatiranmu, lipat, lalu masukkan ke toples.'], dlSlips: ['Worry notes to cut out', 'Catatan khawatir untuk digunting']
+    dlJar: ['My Worry Jar', 'Toples Khawatirku'], dlJarP: ['Draw or write a worry, fold it, and put it in the jar.', 'Gambar atau tulis kekhawatiranmu, lipat, lalu masukkan ke toples.'], dlSlips: ['Worry notes to cut out', 'Catatan khawatir untuk digunting']
   };
   function w(k) {
     var v = W[k]; if (!v) return k;
@@ -1057,7 +1057,7 @@
     }
   }
 
-  /* ===================== Worry jar ===================== */
+  /* ===================== Worry Jar ===================== */
   var NOTE_COLS = ['#FFE29A', '#BFDCF6', '#FBD5DE', '#C3E8CF', '#DCCFF3'];
   function relDay(t) {
     var d0 = new Date(); d0.setHours(0, 0, 0, 0);
@@ -1131,7 +1131,7 @@
     return api;
   }
 
-  /* ---------- Worry jar: child ---------- */
+  /* ---------- Worry Jar: child ---------- */
   function runWorry() {
     var c = CFG().wj;
     X.childOpen(function (el) {

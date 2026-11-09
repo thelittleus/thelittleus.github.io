@@ -55,7 +55,7 @@
   ACT.qDown = function (b) { P.moveTarget(ui.ctx(), b.dataset.v, 1); ui.touchProgram(); ui.render(); };
   ACT.qRemove = function (b) { P.removeTarget(ui.ctx(), b.dataset.v); ui.touchProgram(); ui.render(); };
   ACT.qAdd = function (b) { P.addTarget(ui.ctx(), b.dataset.v); ui.touchProgram(); ui.render(); };
-  ACT.editSet = function (b) { U.setId = b.dataset.id; U.view = 'set'; ui.render(); };
+  ACT.editSet = function (b) { if (ui.drawerOpen && ui.drawerOpen()) ACT.drClose(); U.setId = b.dataset.id; U.view = 'set'; ui.render(); window.scrollTo(0, 0); };
 
   function categories(p, set) {
     var tags = P.tagsOf(set);
@@ -208,7 +208,7 @@
         return '<div class="dtt-gamecard">' + ui.sw(k, s.scenes.indexOf(k) >= 0, pair(SCENE_NAMES[k]), '', 'sceneTog') + '<button type="button" class="tl-btn quiet sm" data-a="previewScene" data-v="' + k + '">' + esc(T('Preview', 'Coba')) + '</button></div>';
       }).join('') + '</div>') +
       opt(T('Photos', 'Foto'), '', sw('photos', s.photos, T('Show ' + name + '\'s photo', 'Tampilkan foto ' + name), T('The photo comes from the child\'s Little Us profile on this device.', 'Foto berasal dari profil Little Us anak di perangkat ini.')) +
-        sw('ownPhotos', s.ownPhotos, T('Use own reinforcer photos', 'Pakai foto reinforcer sendiri'), T('Add them under Student setup.', 'Tambahkan di Atur anak.'))) +
+        sw('ownPhotos', s.ownPhotos, T('Use own reinforcer photos', 'Pakai foto reinforcer sendiri'), T('Add them in Settings, under Reward Photos.', 'Tambahkan di Pengaturan, bagian Foto Reward.'))) +
       opt('Token board', '', sw('tokenOn', s.tokenOn, T('Use a token board', 'Pakai Token board'), T('Tokens are earned by the reinforcement schedule. A full board shows the reward and offers a break.', 'Token didapat sesuai jadwal Reinforcement. Papan penuh menampilkan hadiah dan menawarkan istirahat.')) +
         (s.tokenOn ? seg('tokens', s.tokens, [[3, '3'], [5, '5'], [10, '10']]) + tokenReward(s) : '')) +
       opt(T('Praise phrases on screen', 'Kalimat pujian di layar'), T('One phrase per line. {name} is replaced with the student\'s name. A phrase is picked at random and shown in big letters.', 'Satu kalimat per baris. {name} diganti dengan nama anak. Kalimat dipilih acak dan ditampilkan dengan huruf besar.'), ui.area(T('Phrases', 'Kalimat'), s.praise, 'data-in="txt" data-k="praise"', 6) + sw('cheer', s.cheer, T('Start with a cheer word', 'Mulai dengan kata sorakan'), T('Adds "Yay!", "Woohoo!" or "Hooray!" before the praise.', 'Menambahkan "Yay!", "Asyik!", atau "Hore!" sebelum pujian.'))) +
@@ -220,7 +220,7 @@
     var kid = ui.student(), photos = kid ? D.store.student(kid.id).photos : [];
     return '<div class="dtt-sublabel">' + esc(T('Reward when the board is full', 'Hadiah saat papan penuh')) + '</div><div class="dtt-imgs"><button type="button" class="dtt-card' + (s.tokenReward === 'celebration' ? ' on' : '') + '" aria-pressed="' + (s.tokenReward === 'celebration') + '" data-a="tokenReward" data-v="celebration"><b>' + esc(T('A celebration', 'Perayaan')) + '</b></button>' + photos.map(function (m) {
       var on = s.tokenReward === m.id; return '<button type="button" class="dtt-rewardpic' + (on ? ' on' : '') + '" aria-pressed="' + on + '" aria-label="' + esc(T('Use this photo as the reward', 'Pakai foto ini sebagai hadiah')) + '" data-a="tokenReward" data-v="' + m.id + '">' + ui.img(m, '') + '</button>';
-    }).join('') + '</div>' + (photos.length ? '' : '<p class="tl-note2">' + esc(T('To use a photo, add one under Student setup.', 'Untuk memakai foto, tambahkan di Atur anak.')) + '</p>');
+    }).join('') + '</div>' + (photos.length ? '' : '<p class="tl-note2">' + esc(T('To use a photo, add one in Settings, under Reward Photos.', 'Untuk memakai foto, tambahkan di Pengaturan, bagian Foto Reward.')) + '</p>');
   }
   ACT.tokenReward = function (b) { ui.ctx().settings.tokenReward = b.dataset.v; ui.touchProgram(); ui.render(); };
   function previewCtx() { var kid = ui.student(), st = kid ? D.store.student(kid.id) : { themes: [], photos: [] }; return { kid: kid, st: st }; }
@@ -230,18 +230,23 @@
   ACT.gameTog = function (b) { var s = ui.ctx().settings, k = b.dataset.k; s.games[k] = s.games[k] === false; ui.touchProgram(); ui.render(); };
 
   /* 8 mastery ------------------------------------------------------------------------------------------------- */
+  // two rules: Consecutive Sessions (classic) and Recent Trials (rolling). What counts: independent only, or independent + prompted.
   function secMastery(p, set, s) {
-    var roll = s.mRule === 'rolling';
-    return '<header><h2 class="tl-h2">' + esc(T('Mastery', '%mastery%')) + '</h2><p class="tl-p">' + esc(T('When a target meets this rule at the end of a session, it is marked as mastered and moves to this program\'s maintenance pool. Only independent correct responses count. You can undo mastery in the Data tab.', 'Saat %target% memenuhi aturan ini di akhir %session%, ia ditandai %mastered% dan masuk ke kumpulan %maintenance% program ini. Hanya respons Independent yang benar yang dihitung. %mastery% bisa dibatalkan di tab Data.')) + '</p></header>' +
-      opt(T('Mastery rule', 'Aturan %mastery%'), '', seg('mRule', s.mRule, [['rolling', T('Rolling', 'Rolling'), T('Mastered when at least ' + s.mNeed + ' of the last ' + s.mWin + ' trials of the target are independent, counted across sessions. A retention check follows.', '%mastered% jika setidaknya ' + s.mNeed + ' dari ' + s.mWin + ' trial terakhir Independent, dihitung lintas %sessions%. Lalu ada pemeriksaan retensi.')], ['classic', T('Classic', 'Klasik'), T('Mastered at ' + s.mPct + '% independent in ' + s.mSess + (s.mSess > 1 ? ' sessions' : ' session') + ' in a row, with a minimum number of trials each time.', '%mastered% pada ' + s.mPct + '% Independent dalam ' + s.mSess + ' %session% berturut-turut, dengan jumlah trial minimum.')]], true)) +
-      (roll ? opt(T('Trials looked at', 'Trial yang dilihat'), T('The last trials of the target, from target and maintenance trials. Error correction trials never count. Prompted correct counts as not independent.', 'Trial terakhir dari %target%, dari trial %target% dan %maintenance%. Trial Error correction tidak dihitung. Prompted dianggap tidak Independent.'), stepper('mWin', s.mWin, 'trial')) +
-        opt(T('Independent needed', 'Independent yang diperlukan'), '', stepper('mNeed', s.mNeed, T('of ' + s.mWin, 'dari ' + s.mWin), s.mWin)) +
-        opt(T('Retention check after', 'Pemeriksaan retensi setelah'), T('A mastered target comes back once in the maintenance trials after this many days. Independent and correct confirms it. Otherwise it goes back to learning at the partial prompt.', '%target% %mastered% muncul sekali lagi dalam trial %maintenance% setelah sekian hari. Independent dan benar mengonfirmasinya. Jika tidak, ia kembali dipelajari dengan Prompt Partial.'), stepper('retDays', s.retDays, T('days', 'hari')))
-      : opt(T('Independent correct', 'Independent yang benar'), '', seg('mPct', s.mPct, [[70, '70%'], [80, '80%'], [90, '90%'], [100, '100%']])) +
-        opt(T('Consecutive sessions', '%sessions% berturut-turut'), '', seg('mSess', s.mSess, [[1, '1'], [2, '2'], [3, '3']])) +
-        opt(T('Minimum trials per target', 'Trial minimum per %target%'), T('A session only counts toward mastery if the target had at least this many trials.', '%session% hanya dihitung jika %target% mendapat setidaknya sekian trial.'), stepper('mMin', s.mMin, 'trial'))) +
-      '<p class="tl-note2">' + esc(T('A target that is still not mastered after 10 sessions is flagged on the program page.', '%target% yang belum %mastered% setelah 10 %sessions% ditandai di halaman program.')) + '</p>';
+    var roll = s.mRule === 'rolling', word = s.mCount === 'any' ? T('correct', 'benar') : T('independent', 'independent');
+    var counts = opt(T('What Counts', 'Yang Dihitung'), '', seg('mCount', s.mCount, [['ind', T('Independent Only', 'Independent Saja'), T('No prompt needed', 'Tanpa Prompt')], ['any', T('Independent + Prompted', 'Independent + Prompted'), T('Any correct response', 'Semua respons benar')]], true));
+    var recheck = opt(T('Recheck After', 'Periksa Ulang Setelah'), T('Comes back once in maintenance', 'Muncul sekali lagi di %maintenance%'), stepper('retDays', s.retDays, T('days', 'hari')));
+    return opt(T('Mastery Rule', 'Aturan %mastery%'), '', seg('mRule', s.mRule, [['classic', T('Consecutive Sessions', '%sessions% Berturut-turut')], ['rolling', T('Recent Trials', 'Trial Terakhir')]])) +
+      (roll ? '<div class="dtt-sentence">' + esc(T('Mastered when', '%mastered% jika')) + ' ' + stepper('mNeed', s.mNeed, '', s.mWin) + ' ' + esc(T('of the last', 'dari')) + ' ' + stepper('mWin', s.mWin, '') + ' ' + esc(T('trials are ' + word, 'trial terakhir ' + word)) + '</div>' +
+          counts + '<p class="dtt-hint">' + esc(T('Counted across sessions. Error correction trials never count.', 'Dihitung lintas %sessions%. Trial Error correction tidak pernah dihitung.')) + '</p>' + recheck
+        : '<div class="dtt-sentence">' + esc(T('Mastered at', '%mastered% pada')) + ' ' + seg('mPct', s.mPct, [[70, '70%'], [80, '80%'], [90, '90%'], [100, '100%']]) + ' ' + esc(word) + ' ' + esc(T('for', 'selama')) + ' ' + seg('mSess', s.mSess, [[1, '1'], [2, '2'], [3, '3']]) + ' ' + esc(T('sessions in a row', '%sessions% berturut-turut')) + '</div>' +
+          counts +
+          opt(T('Min. Trials per Session', 'Trial Minimum per %session%'), T('Sessions with fewer don\'t count', '%sessions% dengan trial lebih sedikit tidak dihitung'), stepper('mMin', s.mMin, '')) +
+          opt(T('A Missed Session', '%session% yang Gagal'), T('Below ' + s.mPct + '% breaks the streak, or leaves it as it was', 'Di bawah ' + s.mPct + '% memutus rangkaian, atau membiarkannya'), seg('mMiss', s.mMiss, [['reset', T('Resets', 'Mulai Lagi')], ['pause', T('Pauses', 'Ditahan')]])));
   }
+  ui.masteryText = function (s) {
+    var w = s.mCount === 'any' ? T('correct', 'benar') : T('independent', 'independent');
+    return s.mRule === 'rolling' ? T(s.mNeed + ' of last ' + s.mWin + ' ' + w, s.mNeed + ' dari ' + s.mWin + ' terakhir ' + w) : T(s.mPct + '% ' + w + ' · ' + s.mSess + (s.mSess > 1 ? ' sessions' : ' session') + ' in a row', s.mPct + '% ' + w + ' · ' + s.mSess + ' %sessions% berturut-turut');
+  };
 
   var SEC = {
     targets: { name: function () { return T('Targets', '%targets%'); }, tint: 'sky', draw: secTargets, on: function () { return true; } },
@@ -257,13 +262,63 @@
   var ORDER = ['targets', 'type', 'array', 'order', 'prompt', 'ec', 'reinf', 'mastery'];
 
   ui.settingsList = function (p) { return ORDER.filter(function (k) { return SEC[k].on(p); }); };
-  ui.settingsScreen = function (p) {
-    var list = ui.settingsList(p);
-    if (list.indexOf(U.sec) < 0) U.sec = list[0];
-    var i = list.indexOf(U.sec), prev = list[i - 1], next = list[i + 1], set = D.store.set(p.setId);
-    return '<section class="dtt-sec tl-panel pad">' + SEC[U.sec].draw(p, set, p.settings) +
-      '<div class="dtt-secfoot">' + (prev ? '<button type="button" class="tl-btn quiet" data-a="sec" data-v="' + prev + '">← ' + esc(D.i18n.fill(SEC[prev].name())) + '</button>' : '<span></span>') +
-      (next ? '<button type="button" class="tl-btn primary" data-a="sec" data-v="' + next + '">' + esc(D.i18n.fill(SEC[next].name())) + ' →</button>' : '<button type="button" class="tl-btn primary" data-a="ptab" data-v="overview">' + esc(T('Done', 'Selesai')) + '</button>') + '</div></section>';
+
+  /* ---------- the drawer: five tabs that open from the summary cards on the program page; every change saves itself ---------- */
+  var TABS = {
+    trials: { name: function () { return T('Trials', 'Trial'); }, secs: ['type', 'array', 'order'] },
+    prompts: { name: function () { return T('Prompts', 'Prompt'); }, secs: ['prompt'] },
+    correction: { name: function () { return T('Error Correction', 'Error Correction'); }, secs: ['ec'] },
+    rewards: { name: function () { return T('Rewards', 'Reward'); }, secs: ['reinf'] },
+    mastery: { name: function () { return T('Mastery', '%mastery%'); }, secs: ['mastery'] }
   };
-  ACT.sec = function (b) { U.sec = b.dataset.v; ui.render(); window.scrollTo(0, 0); };
+  ui.TABS = TABS;
+  ui.TAB_ORDER = ['trials', 'prompts', 'correction', 'rewards', 'mastery'];
+  ui.tabBody = function (k, p, set) { return TABS[k].secs.filter(function (s) { return SEC[s].on(p); }).map(function (s) { return '<section class="dtt-dsec">' + SEC[s].draw(p, set, p.settings) + '</section>'; }).join(''); };
+  // one line per card on the program page
+  ui.summary = function (k, p) {
+    var s = p.settings, sec = secondsWord();
+    if (k === 'trials') return [p.type === 'tact' ? T('1 picture', '1 gambar') : T(s.array + (s.array === 1 ? ' card' : ' cards') + (s.rpos ? ' · shuffled' : ''), s.array + ' kartu' + (s.rpos ? ' · diacak' : '')), T(s.trials + ' per session · ' + (s.order === 'block' ? 'massed' : 'random'), s.trials + ' per %session% · ' + (s.order === 'block' ? 'massed' : 'acak')), isTouch(p) ? T(s.resp + ' s to respond', s.resp + ' dtk untuk merespons') : ''];
+    if (k === 'prompts') return [{ manual: 'Manual', mtl: T('Most-to-least', 'Most-to-least'), ltm: T('Least-to-most', 'Least-to-most'), td: T('Time delay', 'Time delay') }[s.prompt], s.prompt === 'mtl' || s.prompt === 'td' ? T('Fade after ' + s.fade + ' correct', 'Pudar setelah ' + s.fade + ' benar') : '', { both: T('Partial + Full', 'Partial + Full'), full: T('Full only', 'Full saja'), partial: T('Partial only', 'Partial saja') }[s.levels]];
+    if (k === 'correction') return s.ec ? [T('On', 'Aktif'), s.ecD ? T('Correct → distractor → retry', 'Koreksi → distraktor → ulang') : T('Correct → retry', 'Koreksi → ulang')] : [T('Off', 'Mati')];
+    if (k === 'rewards') return [{ crf: T('Every correct (CRF)', 'Setiap benar (CRF)'), fr2: T('Every 2nd (FR 2)', 'Setiap ke-2 (FR 2)'), fr3: T('Every 3rd (FR 3)', 'Setiap ke-3 (FR 3)'), vr2: T('About every 2nd (VR 2)', 'Sekitar ke-2 (VR 2)'), vr3: T('About every 3rd (VR 3)', 'Sekitar ke-3 (VR 3)') }[s.sched], s.dur + ' ' + sec + ' · ' + T(s.scenes.length + ' celebrations', s.scenes.length + ' perayaan'), s.tokenOn ? T('Token board: ' + s.tokens, 'Token board: ' + s.tokens) : ''];
+    if (k === 'mastery') return [ui.masteryText(s), s.mRule === 'rolling' ? T('Recheck after ' + s.retDays + ' days', 'Periksa ulang setelah ' + s.retDays + ' hari') : T('Min. ' + s.mMin + ' trials', 'Min. ' + s.mMin + ' trial')];
+    return [];
+  };
+
+  var DR = null; // { sh, tab, kind: 'settings' | 'order' }
+  function drawerHTML() {
+    var p = ui.ctx(); if (!p) return '';
+    var set = D.store.set(p.setId), body, head;
+    if (DR.kind === 'order') {
+      head = '<h2 class="dtt-drtitle">' + esc(T('Target Order', 'Urutan %targets%')) + '</h2>';
+      body = '<section class="dtt-dsec">' + SEC.targets.draw(p, set, p.settings) + '</section>';
+    } else {
+      head = '<div class="dtt-drtabs" role="tablist">' + ui.TAB_ORDER.map(function (k) {
+        var on = DR.tab === k; return '<button type="button" role="tab" aria-selected="' + on + '" class="' + (on ? 'on' : '') + '" data-a="drTab" data-v="' + k + '">' + esc(D.i18n.fill(TABS[k].name())) + '</button>';
+      }).join('') + '</div>';
+      body = ui.tabBody(DR.tab, p, set);
+    }
+    return '<div class="dtt-drawer"><div class="dtt-drhead">' + head + '<button type="button" class="dtt-x" data-a="drClose" aria-label="' + esc(T('Close', 'Tutup')) + '">✕</button></div>' +
+      '<div class="dtt-drbody">' + body + '</div>' +
+      '<div class="dtt-drfoot"><span class="dtt-saved show" role="status">✓ ' + esc(T('Saved', 'Tersimpan')) + '</span><button type="button" class="dtt-btn primary" data-a="drClose">' + esc(T('Done', 'Selesai')) + '</button></div></div>';
+  }
+  function redraw() {
+    if (!DR || !DR.sh.wrap.isConnected) return;
+    var b = DR.sh.el.querySelector('.dtt-drbody'), y = b ? b.scrollTop : 0, fk = document.activeElement && DR.sh.el.contains(document.activeElement) ? document.activeElement : null;
+    var sel = fk && fk.dataset ? ['a', 'in', 'k', 'v'].map(function (n) { return fk.dataset[n] != null ? '[data-' + n + '="' + String(fk.dataset[n]).replace(/["\\]/g, '\\$&') + '"]' : ''; }).join('') : '';
+    DR.sh.set(drawerHTML()); ui.hydrate(DR.sh.el);
+    var nb = DR.sh.el.querySelector('.dtt-drbody'); if (nb) nb.scrollTop = y;
+    if (sel) { var again = DR.sh.el.querySelector(sel); if (again && again.focus) again.focus({ preventScroll: true }); }
+  }
+  ui.openDrawer = function (kind, tab) {
+    if (DR && DR.sh.wrap.isConnected) DR.sh.close();
+    DR = { kind: kind, tab: tab || 'trials' };
+    DR.sh = X.sheet('', { drawer: true, onClose: function () { DR = null; ui.render(); } });
+    ui.bindIn(DR.sh.el);
+    redraw();
+  };
+  ui.drawerOpen = function () { return !!DR; };
+  ui.afterRender.push(function () { redraw(); });
+  ACT.drTab = function (b) { DR.tab = b.dataset.v; redraw(); var bd = DR.sh.el.querySelector('.dtt-drbody'); if (bd) bd.scrollTop = 0; };
+  ACT.drClose = function () { if (DR) DR.sh.close(); };
 })();

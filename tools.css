@@ -614,7 +614,7 @@ body.tl-childon{overflow:hidden}
 @media (max-width:640px) and (orientation:portrait){.tl-tnext.funnext{display:flex}}
 
 /* =====================================================================
-   Calm & feelings tools (tools-calm.js): Breathing Buddy, Feelings, Worry jar
+   Calm & feelings tools (tools-calm.js): Breathing Buddy, Feelings, Worry Jar
    ===================================================================== */
 .tl-grouph{font:600 18px/1.2 Fredoka,sans-serif;margin:12px 0 -2px;display:flex;align-items:center;gap:8px}
 .tl-newpill{font:700 11px Figtree,sans-serif;letter-spacing:.04em;background:var(--sunny);border-radius:999px;padding:3px 9px}

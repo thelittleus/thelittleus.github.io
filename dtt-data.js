@@ -36,8 +36,8 @@
         var k = TG.key(t.target, t.op);
         fresh[k] = fresh[k] || { recent: [], series: [], sessions: 0 };
         fresh[k].recent.push(t.result);
-        perKey[k] = perKey[k] || { n: 0, ind: 0 };
-        perKey[k].n++; if (t.result === 'independent') perKey[k].ind++;
+        perKey[k] = perKey[k] || { n: 0, ind: 0, pr: 0 };
+        perKey[k].n++; if (t.result === 'independent') perKey[k].ind++; if (t.result === 'prompted') perKey[k].pr++;
       });
       Object.keys(perKey).forEach(function (k) { fresh[k].series.push(perKey[k]); fresh[k].sessions++; });
     });

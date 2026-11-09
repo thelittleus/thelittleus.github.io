@@ -1197,6 +1197,240 @@
     { id: 'terima-kasih', cat: 'feel', en: 'Thank you', idn: 'Terima kasih', kid: true, tags: 'thank you thanks grateful terima kasih', draw: function (g) {
       return kidAt(g, 60, 56, 1, shirt(g), { eyes: 'closed', mouth: 'open' }) + G('translate(60 90) scale(1.5)', hrt(C.coral)) + O(46, 92, 5.5, C.skin) + O(74, 92, 5.5, C.skin) +
         star(24, 28, 5, C.yellowL) + star(98, 30, 6, C.yellow) + G('translate(20 58) scale(.8)', hrt(C.pink));
+    } },
+
+    /* ---------- set 5 (Nov 2026): 50 more cards ---------- */
+    // Self-care
+    { id: 'celana', cat: 'self', en: 'Trousers', idn: 'Celana', tags: 'trousers pants shorts celana pakai', draw: function () {
+      return sdw(32) + P('M36 26H84L88 104H66L60 54 54 104H32Z', C.blue) + R(34, 18, 52, 10, 4, C.blueL) + P('M60 28V48', 'none', SW(2.4)) +
+        P('M42 36Q48 40 52 34M78 36Q72 40 68 34', 'none', SW(2.2));
+    } },
+    { id: 'kaos', cat: 'self', en: 'T-shirt', idn: 'Kaos', tags: 't-shirt shirt top kaos baju', draw: function () {
+      return sdw(38) + P('M42 20 24 30 14 52 30 60 34 52V104H86V52L90 60 106 52 96 30 78 20C76 28 68 32 60 32 52 32 44 28 42 20Z', C.yellow) + star(60, 68, 11, C.coral);
+    } },
+    { id: 'pasta-gigi', cat: 'self', en: 'Toothpaste', idn: 'Pasta gigi', tags: 'toothpaste teeth brush pasta gigi odol', draw: function () {
+      return G('rotate(-12 60 46)', P('M30 30H78L86 36V56L78 62H30C26 62 24 58 24 54V38C24 34 26 30 30 30Z', '#fff') + R(86, 38, 12, 16, 3, C.blue) + P('M36 40h26M36 50h18', 'none', ' stroke="' + C.blue + '"' + SW(3))) +
+        R(14, 88, 64, 8, 4, C.green) + R(74, 84, 30, 12, 4, '#fff') + R(76, 74, 26, 10, 2, C.greyL) + P('M78 74C80 66 88 68 92 64 96 68 102 66 100 74Z', C.blueL, SW(2.2));
+    } },
+    { id: 'cermin', cat: 'self', en: 'Mirror', idn: 'Cermin', tags: 'mirror look face cermin kaca', draw: function () {
+      return sdw(28) + P('M60 92V102', 'none', SW(4)) + R(40, 100, 40, 8, 4, C.brownL) + E(60, 54, 32, 40, C.brownL) + E(60, 54, 25, 33, '#DCEFFB') +
+        P('M48 58 62 44M52 70 72 50', 'none', ' stroke="#fff" opacity=".85"' + SW(3)) + star(98, 24, 5, C.yellowL);
+    } },
+    { id: 'pispot', cat: 'self', en: 'Potty', idn: 'Pispot', tags: 'potty toilet training pispot pipis', draw: function () {
+      return sdw(36) + R(76, 28, 22, 30, 8, C.blueL) + P('M26 52H94C94 78 80 94 60 94 40 94 26 78 26 52Z', C.blueL) + R(40, 90, 40, 10, 5, C.blue) +
+        E(60, 52, 34, 10, '#fff') + E(60, 52, 24, 6, C.blue);
+    } },
+    { id: 'siram-toilet', cat: 'self', en: 'Flush the toilet', idn: 'Siram toilet', tags: 'flush toilet button siram toilet wc', draw: function () {
+      return R(30, 22, 60, 28, 6, '#fff') + R(52, 14, 16, 9, 3, C.coral) + P('M44 14l-6-4M76 14l6-4', 'none', ' stroke="' + C.coralD + '"' + SW(2.6)) +
+        P('M22 54H98C98 74 84 86 70 88L74 106H46L50 88C36 86 22 74 22 54Z', '#fff') + E(60, 54, 38, 8, C.greyL) +
+        P('M46 54C48 50 70 50 72 54 70 58 56 58 56 54', 'none', ' stroke="' + C.water + '"' + SW(3));
+    } },
+    { id: 'seragam', cat: 'self', en: 'School uniform', idn: 'Seragam', kid: true, tags: 'uniform school clothes seragam sekolah', draw: function (g) {
+      return R(38, 90, 44, 16, 4, C.coral) + kidAt(g, 60, 48, 1, '#fff', { mouth: 'smile' }) + P('M53 70 60 77 67 70', 'none', SW(2.2)) +
+        P('M60 77 56 88H64Z', C.coral, SW(2)) + R(66, 78, 8, 6, 1.5, C.blueL, SW(1.6));
+    } },
+    { id: 'losion', cat: 'self', en: 'Lotion', idn: 'Losion', tags: 'lotion cream skin losion krim', draw: function () {
+      return sdw(30) + P('M58 34V22H82', 'none', SW(4)) + R(50, 18, 16, 8, 3, '#fff') + O(86, 32, 4, '#fff', SW(2)) + R(52, 34, 16, 14, 3, '#fff') +
+        R(40, 46, 40, 58, 10, C.pinkL) + R(48, 62, 24, 26, 5, '#fff') + G('translate(60 73) scale(.8)', hrt(C.pink));
+    } },
+    // Food
+    { id: 'jagung', cat: 'food', en: 'Corn', idn: 'Jagung', tags: 'corn cob jagung sayur', draw: function () {
+      return G('rotate(-25 60 60)', P('M60 14C74 14 80 30 80 60 80 90 72 104 60 104 48 104 40 90 40 60 40 30 46 14 60 14Z', C.yellow) +
+        P('M44 40H76M42 56H78M42 72H78M50 18V96M60 14V96M70 18V96', 'none', ' stroke="#E3A52E"' + SW(2)) +
+        P('M60 104C40 100 30 80 32 56 40 76 50 88 60 92Z', C.green) + P('M60 104C80 100 90 80 88 56 80 76 70 88 60 92Z', C.green));
+    } },
+    { id: 'anggur', cat: 'food', en: 'Grapes', idn: 'Anggur', tags: 'grapes fruit anggur buah', draw: function () {
+      var g = [[46, 40], [60, 38], [74, 40], [40, 56], [53, 56], [67, 56], [80, 56], [47, 72], [60, 72], [73, 72], [53, 87], [67, 87], [60, 100]], s = '';
+      g.forEach(function (p) { s += O(p[0], p[1], 9.5, C.lilac); });
+      return sdw(26) + P('M60 30V16', 'none', ' stroke="' + C.brownD + '"' + SW(3.4)) + G('translate(74 20) rotate(60)', leaf(C.green)) + s;
+    } },
+    { id: 'roti-lapis', cat: 'food', en: 'Sandwich', idn: 'Roti lapis', tags: 'sandwich bread lunch roti lapis isi', draw: function () {
+      return sdw(44) + R(18, 80, 84, 18, 8, C.brownL) + P('M14 76Q22 68 30 76 38 68 46 76 54 68 62 76 70 68 78 76 86 68 94 76 102 68 106 74V84H14Z', C.green) +
+        R(22, 64, 76, 9, 4, C.coral) + P('M20 56H100L94 66H26Z', C.yellow) + P('M18 58C18 38 38 30 60 30 82 30 102 38 102 58Z', C.brownL) +
+        O(48, 42, 1.6, '#fff', NS) + O(62, 38, 1.6, '#fff', NS) + O(74, 46, 1.6, '#fff', NS);
+    } },
+    { id: 'yogurt', cat: 'food', en: 'Yoghurt', idn: 'Yoghurt', tags: 'yoghurt yogurt cup snack yoghurt', draw: function () {
+      return sdw(30) + G('rotate(25 92 30)', R(89, 6, 6, 34, 3, C.grey) + E(92, 44, 7, 9, C.grey)) + P('M32 44H88L82 102H38Z', '#fff') + R(28, 36, 64, 12, 5, C.pink) +
+        P('M36 64H84', 'none', ' stroke="' + C.pink + '"' + SW(3)) + O(60, 82, 8, C.coral) + G('translate(64 72) rotate(40) scale(.5)', leaf(C.green));
+    } },
+    { id: 'keju', cat: 'food', en: 'Cheese', idn: 'Keju', tags: 'cheese keju', draw: function () {
+      var h = '#E3A52E';
+      return sdw(42) + P('M18 60 84 30 102 52V60Z', C.yellowL) + R(18, 60, 84, 38, 4, C.yellow) +
+        E(40, 78, 6, 5, h, NS) + E(70, 72, 4, 3.5, h, NS) + E(86, 86, 5, 4, h, NS) + E(58, 90, 3.4, 3, h, NS) + E(70, 46, 4, 2.4, h, NS);
+    } },
+    { id: 'mangga', cat: 'food', en: 'Mango', idn: 'Mangga', tags: 'mango fruit mangga buah', draw: function () {
+      return sdw(40) + G('rotate(-28 60 64)', P('M14 66C14 48 34 38 60 38 88 38 108 50 106 68 104 84 86 92 64 92 46 92 36 88 26 84 16 80 14 74 14 66Z', '#FFC24A') +
+        E(30, 58, 12, 10, C.green, NS + ' opacity=".45"') + E(88, 74, 14, 10, '#F7884D', NS + ' opacity=".5"') + HL('M30 52C38 46 48 44 58 44')) +
+        P('M24 46C22 40 22 34 26 28', 'none', ' stroke="' + C.brownD + '"' + SW(3.4)) + G('translate(36 24) rotate(70)', leaf(C.green));
+    } },
+    { id: 'cokelat', cat: 'food', en: 'Chocolate', idn: 'Cokelat', tags: 'chocolate bar sweet treat cokelat coklat', draw: function () {
+      return sdw(38) + G('rotate(-12 60 62)', R(26, 30, 68, 56, 6, C.brownD) + P('M48 30V68M70 30V68M26 49H94', 'none', ' stroke="#5E3A27"' + SW(2.4)) +
+        R(22, 66, 76, 30, 4, C.coral) + P('M22 80H98', 'none', ' stroke="#fff"' + SW(2.4)) +
+        P('M24 66 30 60 36 66 42 60 48 66 54 60 60 66 66 60 72 66 78 60 84 66 90 60 96 66', 'none', ' stroke="' + C.grey + '"' + SW(2.4)));
+    } },
+    { id: 'permen', cat: 'food', en: 'Sweets', idn: 'Permen', tags: 'sweets candy lollipop permen lolipop', draw: function () {
+      return sdw(40) + TUBE('M84 56V104', 3, '#fff') + O(84, 38, 18, C.yellow) +
+        P('M84 38C84 34 90 34 90 38 90 44 82 46 78 40 74 32 84 26 92 30 98 34 98 44 94 48', 'none', ' stroke="' + C.coral + '"' + SW(3)) +
+        P('M26 82 12 70V94Z', C.pinkL) + P('M62 82 76 70V94Z', C.pinkL) + E(44, 82, 20, 13, C.pink) + P('M38 71 34 93M50 70 46 94', 'none', ' stroke="#fff"' + SW(2.4));
+    } },
+    { id: 'sendok-garpu', cat: 'food', en: 'Spoon and fork', idn: 'Sendok garpu', tags: 'spoon fork cutlery eat sendok garpu makan', draw: function () {
+      return sdw(36) + R(36, 52, 8, 54, 4, C.grey) + E(40, 34, 12, 18, C.grey) + E(40, 32, 7, 12, C.greyL, NS) +
+        R(68, 14, 4, 24, 2, C.grey) + R(74.7, 14, 4, 24, 2, C.grey) + R(81.3, 14, 4, 24, 2, C.grey) + R(88, 14, 4, 24, 2, C.grey) + R(68, 32, 24, 16, 8, C.grey) + R(76, 46, 8, 60, 4, C.grey);
+    } },
+    // Routines & chores
+    { id: 'mesin-cuci', cat: 'routine', en: 'Laundry', idn: 'Mesin cuci', tags: 'washing machine laundry clothes mesin cuci cucian', draw: function () {
+      return sdw(40) + R(22, 16, 76, 92, 10, '#fff') + P('M22 34H98', 'none', SW(2.4)) + O(34, 25, 3, C.coral, SW(2)) + R(70, 22, 20, 6, 3, C.blueL, SW(2)) +
+        O(60, 70, 28, C.grey) + O(60, 70, 20, C.water) + P('M42 72C48 66 54 78 60 72 66 66 72 78 78 72', 'none', ' stroke="#fff"' + SW(3)) + O(52, 62, 3, '#fff', SW(1.8));
+    } },
+    { id: 'mengepel', cat: 'routine', en: 'Mop the floor', idn: 'Mengepel', tags: 'mop floor clean bucket mengepel pel lantai', draw: function () {
+      return P('M66 70H102L98 104H70Z', C.blue) + E(84, 70, 18, 5, C.water) + P('M68 70C68 56 100 56 100 70', 'none', SW(2.6)) +
+        TUBE('M32 10 52 86', 4, C.brownL) + P('M38 84H66L70 100H34Z', '#fff') + P('M40 100 38 108M48 100V108M56 100V108M64 100 66 108', 'none', SW(2.4)) +
+        P('M10 108h18', 'none', ' stroke="' + C.water + '"' + SW(3));
+    } },
+    { id: 'naik-kereta', cat: 'routine', en: 'Ride the train', idn: 'Naik kereta', tags: 'train commuter krl mrt naik kereta', draw: function () {
+      return P('M36 96 26 110M84 96 94 110M30 104H90', 'none', SW(3)) + R(28, 14, 64, 84, 14, C.blue) + R(36, 24, 48, 26, 6, C.blueL) +
+        P('M28 56H92', 'none', ' stroke="#fff"' + SW(4)) + O(42, 74, 6, C.yellow) + O(78, 74, 6, C.yellow) + R(50, 68, 20, 8, 3, '#fff') + HL('M42 30h10');
+    } },
+    { id: 'naik-taksi', cat: 'routine', en: 'Ride a taxi', idn: 'Naik taksi', tags: 'taxi cab car ride naik taksi', draw: function () {
+      return R(48, 28, 24, 11, 3, C.yellowL) + P('M54 33.5h12', 'none', SW(2)) + car(C.yellow) + P('M20 72H100', 'none', ' stroke="' + K + '" stroke-dasharray="6 6"' + SW(3));
+    } },
+    { id: 'video-call', cat: 'routine', en: 'Video call', idn: 'Video call', tags: 'video call phone tablet family telepon vc', draw: function () {
+      return sdw(44) + R(14, 14, 92, 90, 12, C.grey) + R(22, 22, 76, 72, 6, C.blueL) + G('translate(60 52) scale(1.2)', head('girl', { mouth: 'open' })) +
+        O(48, 84, 5, C.coral, SW(2)) + O(72, 84, 5, C.green, SW(2));
+    } },
+    { id: 'kunci-pintu', cat: 'routine', en: 'Lock the door', idn: 'Kunci pintu', tags: 'lock door key kunci pintu', draw: function () {
+      return sdw(38) + R(22, 12, 56, 94, 6, C.brownL) + R(30, 22, 40, 26, 4, C.brown) + R(30, 56, 26, 40, 4, C.brown) + O(66, 60, 5, C.yellow) +
+        O(66, 72, 2.6, K, NS) + P('M66 72v6', 'none', SW(2.4)) +
+        G('translate(100 62) rotate(160)', R(8, -3, 26, 6, 2, C.yellow) + R(26, 3, 4, 7, 1, C.yellow) + R(18, 3, 4, 6, 1, C.yellow) + O(0, 0, 10, C.yellow) + O(0, 0, 4, '#fff', SW(2)));
+    } },
+    { id: 'kalender', cat: 'routine', en: 'Calendar', idn: 'Kalender', tags: 'calendar date day week kalender tanggal hari', draw: function () {
+      var d = ''; for (var r = 0; r < 3; r++) for (var c2 = 0; c2 < 4; c2++) d += R(28 + c2 * 17, 52 + r * 15, 10, 9, 2, (r === 1 && c2 === 2) ? C.yellow : C.greyL, SW(1.8));
+      return sdw(44) + R(18, 22, 84, 82, 8, '#fff') + R(18, 22, 84, 20, 8, C.coral) + R(36, 14, 6, 16, 3, C.grey) + R(78, 14, 6, 16, 3, C.grey) + d;
+    } },
+    { id: 'jam', cat: 'routine', en: 'Clock', idn: 'Jam', tags: 'clock time hour jam waktu', draw: function () {
+      return sdw(36) + O(60, 62, 40, C.lilac) + O(60, 62, 31, '#fff') + P('M60 35v5M60 84v5M33 62h5M82 62h5', 'none', SW(2.6)) +
+        P('M60 62V44M60 62 74 70', 'none', SW(3.4)) + O(60, 62, 3.5, K, NS);
+    } },
+    { id: 'siapkan-tas', cat: 'routine', en: 'Pack the bag', idn: 'Siapkan tas', tags: 'pack bag backpack school ready siapkan tas', draw: function () {
+      return sdw(36) + G('rotate(-12 60 30)', R(44, 10, 32, 40, 3, C.coral) + P('M50 10V50', 'none', ' stroke="#fff"' + SW(2.4))) +
+        R(28, 40, 64, 66, 14, C.blue) + R(40, 72, 40, 24, 7, C.blueL) + P('M100 20V40M94 34l6 6 6-6', 'none', ' stroke="' + C.greenD + '"' + SW(3));
+    } },
+    // Play & rewards
+    { id: 'gitar', cat: 'play', en: 'Guitar', idn: 'Gitar', tags: 'guitar music play gitar musik', draw: function () {
+      return G('translate(8 8) scale(.86) rotate(-35 60 64)', R(55, 6, 10, 50, 3, C.brownD) + R(52, -2, 16, 12, 3, C.brownD) +
+        P('M60 50C44 50 40 60 44 70 34 76 32 94 46 104 54 110 66 110 74 104 88 94 86 76 76 70 80 60 76 50 60 50Z', C.coral) + O(60, 78, 8, C.brownD) +
+        P('M58 6V96M62 6V96', 'none', ' stroke="#fff"' + SW(1.4)) + R(52, 92, 16, 5, 2, C.brownD, SW(2))) + note(96, 34);
+    } },
+    { id: 'piano', cat: 'play', en: 'Piano', idn: 'Piano', tags: 'piano keyboard music piano musik', draw: function () {
+      var b = ''; [27, 38, 60, 71, 82].forEach(function (x) { b += R(x - 3.5, 52, 7, 20, 1.5, K, NS); });
+      return sdw(46) + R(10, 36, 100, 56, 8, C.lilac) + R(16, 52, 88, 34, 3, '#fff') + P('M27 52V86M38 52V86M49 52V86M60 52V86M71 52V86M82 52V86M93 52V86', 'none', SW(2)) + b +
+        note(28, 28) + note(86, 24);
+    } },
+    { id: 'pesawat-kertas', cat: 'play', en: 'Paper plane', idn: 'Pesawat kertas', tags: 'paper plane fold fly pesawat kertas', draw: function () {
+      return P('M14 98C26 92 30 82 24 74', 'none', ' stroke="' + C.grey + '" stroke-dasharray="4 6"' + SW(2.6)) +
+        P('M106 22 14 54 50 66Z', '#fff') + P('M106 22 50 66 60 96Z', C.blueL) + P('M50 66 60 96 44 76Z', C.blue);
+    } },
+    { id: 'gasing', cat: 'play', en: 'Spinning top', idn: 'Gasing', tags: 'spinning top toy spin gasing', draw: function () {
+      return sdw(22) + R(56, 24, 8, 20, 3, C.brownL) + P('M60 104 32 66C30 52 44 42 60 42 76 42 90 52 88 66Z', C.coral) +
+        P('M36 60H84', 'none', ' stroke="' + C.yellow + '"' + SW(5)) + P('M46 76H74', 'none', ' stroke="#fff"' + SW(3)) +
+        P('M18 70q-6 6 0 12M102 70q6 6 0 12', 'none', ' stroke="' + C.grey + '"' + SW(2.6));
+    } },
+    { id: 'akuarium', cat: 'play', en: 'Fish tank', idn: 'Akuarium', tags: 'fish tank aquarium pet akuarium ikan hias', draw: function () {
+      return R(14, 28, 92, 74, 8, '#EEF6FD') + R(18, 40, 84, 58, 4, C.water) + P('M18 98V90C34 86 50 92 66 88 80 85 92 90 102 88V98Z', C.sand) +
+        TUBE('M30 92C26 82 34 74 30 60', 3, C.green) + TUBE('M88 92C92 84 84 76 88 64', 3, C.green) +
+        G('translate(56 66)', P('M12 0 24-8V8Z', C.coral) + E(0, 0, 14, 9, C.coral) + O(-6, -2, 2, K, NS)) +
+        O(42, 50, 3, '#fff', SW(1.8)) + O(46, 42, 2, '#fff', SW(1.6)) + R(10, 22, 100, 8, 4, C.grey) + R(10, 100, 100, 8, 4, C.grey);
+    } },
+    { id: 'burung', cat: 'play', en: 'Bird', idn: 'Burung', tags: 'bird pet tweet burung hewan', draw: function () {
+      return P('M30 62 12 52 16 70 30 74Z', C.blueL) + E(58, 66, 30, 24, C.blue) + P('M44 64C52 56 70 58 72 72 62 80 48 76 44 64Z', C.blueL) +
+        O(80, 46, 16, C.blue) + P('M94 42 106 47 94 52Z', C.yellow) + O(84, 43, 2.6, K, NS) + E(78, 52, 3.4, 2.2, C.cheek, NS + ' opacity=".8"') +
+        P('M54 88V100M66 88V100', 'none', ' stroke="' + C.coralD + '"' + SW(3)) + TUBE('M12 102H108', 4, C.brownL);
+    } },
+    { id: 'kupu-kupu', cat: 'play', en: 'Butterfly', idn: 'Kupu-kupu', tags: 'butterfly insect garden kupu-kupu', draw: function () {
+      return P('M58 58C44 30 16 28 16 50 16 66 40 70 58 62Z', C.lilac) + P('M62 58C76 30 104 28 104 50 104 66 80 70 62 62Z', C.lilac) +
+        P('M58 64C40 66 28 84 38 94 48 102 58 86 58 70Z', C.pink) + P('M62 64C80 66 92 84 82 94 72 102 62 86 62 70Z', C.pink) +
+        O(36, 48, 5, C.yellowL, SW(2)) + O(84, 48, 5, C.yellowL, SW(2)) + R(55, 44, 10, 50, 5, C.brownD) +
+        P('M57 46C54 36 48 30 44 28M63 46C66 36 72 30 76 28', 'none', SW(2.4)) + O(44, 28, 3, K, NS) + O(76, 28, 3, K, NS);
+    } },
+    { id: 'lompat-tali', cat: 'play', en: 'Skipping rope', idn: 'Lompat tali', kid: true, tags: 'skipping rope jump rope lompat tali', draw: function (g) {
+      return sdw(22, 114) + P('M28 82C16 40 30 8 60 8 90 8 104 40 92 82', 'none', ' stroke="' + C.coral + '"' + SW(4)) +
+        TUBE('M52 96 50 106M68 96 70 106', 6, C.skin) + O(49, 110, 4.5, C.coral) + O(71, 110, 4.5, C.coral) +
+        TUBE('M40 76 30 84M80 76 90 84', 6, C.skin) + kidAt(g, 60, 52, 1, shirt(g), { mouth: 'open' }) + R(24, 80, 8, 14, 3, C.yellow) + R(88, 80, 8, 14, 3, C.yellow);
+    } },
+    { id: 'kelereng', cat: 'play', en: 'Marbles', idn: 'Kelereng', tags: 'marbles game kelereng gundu', draw: function () {
+      var sw = function (x, y, r, col) { return P('M' + (x - r * 0.5) + ' ' + (y - r * 0.2) + 'C' + (x - r * 0.2) + ' ' + (y - r * 0.7) + ' ' + (x + r * 0.5) + ' ' + (y - r * 0.5) + ' ' + (x + r * 0.4) + ' ' + (y + r * 0.2), 'none', ' stroke="' + col + '"' + SW(3)); };
+      return sdw(42, 100) + O(62, 50, 12, C.greenL) + sw(62, 50, 12, C.greenD) + O(92, 60, 9, C.yellowL) + O(40, 74, 16, C.blueL) + sw(40, 74, 16, C.blue) +
+        O(76, 82, 14, C.coralL) + sw(76, 82, 14, C.coralD);
+    } },
+    // Places
+    { id: 'museum', cat: 'places', en: 'Museum', idn: 'Museum', tags: 'museum visit history museum', draw: function () {
+      var col = ''; [22, 42, 68, 88].forEach(function (x) { col += R(x, 46, 10, 44, 2, '#fff'); });
+      return sdw(50) + P('M12 40 60 14 108 40Z', '#fff') + O(60, 30, 5, C.yellow) + R(14, 38, 92, 8, 2, C.sand) + col +
+        R(14, 90, 92, 8, 2, C.sand) + R(10, 98, 100, 8, 2, C.sand);
+    } },
+    { id: 'toko-roti', cat: 'places', en: 'Bakery', idn: 'Toko roti', tags: 'bakery bread cake toko roti kue', draw: function () {
+      return R(14, 40, 92, 66, 5, '#fff') + P('M10 24H110L106 44H14Z', C.yellow) + P('M30 24 28 44M50 24V44M70 24V44M90 24 92 44', 'none', ' stroke="#fff"' + SW(4)) +
+        R(22, 54, 52, 34, 4, C.blueL) + E(48, 76, 18, 9, C.brownL) + P('M38 74l4-4M46 74l4-4M54 74l4-4', 'none', SW(2)) +
+        R(80, 58, 20, 48, 4, C.brownL) + O(95, 84, 1.8, K, NS);
+    } },
+    { id: 'mal', cat: 'places', en: 'Shopping mall', idn: 'Mal', tags: 'mall shopping centre plaza mal belanja', draw: function () {
+      return sdw(52) + R(10, 30, 100, 76, 6, C.lilacL) + R(10, 22, 100, 14, 5, C.lilac) + win(18, 44) + win(34, 44) + win(74, 44) + win(90, 44) +
+        R(42, 62, 36, 44, 3, C.blueL) + P('M60 62V106', 'none', SW(2.4)) +
+        G('translate(96 92)', R(-10, -8, 20, 20, 3, C.coral) + P('M-5-8C-5-16 5-16 5-8', 'none', SW(2.4)));
+    } },
+    { id: 'hotel', cat: 'places', en: 'Hotel', idn: 'Hotel', tags: 'hotel holiday stay hotel liburan menginap', draw: function () {
+      var w = ''; for (var r = 0; r < 3; r++) for (var c2 = 0; c2 < 3; c2++) w += win(36 + c2 * 18, 40 + r * 15);
+      return sdw(46) + R(28, 12, 64, 94, 4, C.coralL) + R(46, 18, 28, 14, 4, '#fff') + P('M54 21V29M66 21V29M54 25H66', 'none', SW(2.4)) + w + R(50, 88, 20, 18, 3, C.yellow);
+    } },
+    { id: 'gunung', cat: 'places', en: 'Mountain', idn: 'Gunung', tags: 'mountain hike trip gunung naik gunung', draw: function () {
+      return O(96, 24, 9, C.yellow) + P('M40 104 80 40 116 104Z', C.greenD) + P('M4 104 44 30 84 104Z', C.green) +
+        P('M36 44 44 30 52 44 48 48 44 44 40 48Z', '#fff') + P('M72 52 80 40 88 52 84 55 80 52 76 55Z', '#fff');
+    } },
+    { id: 'sawah', cat: 'places', en: 'Rice field', idn: 'Sawah', tags: 'rice field paddy farm village sawah desa', draw: function () {
+      var tuft = function (x, y) { return P('M' + x + ' ' + y + 'l-4-8M' + x + ' ' + y + 'V' + (y - 10) + 'M' + x + ' ' + y + 'l4-8', 'none', ' stroke="' + C.greenD + '"' + SW(2.4)); };
+      return O(92, 24, 10, C.yellow) + P('M6 60 34 32 62 60Z', C.blueL) + P('M44 60 74 26 104 60Z', C.blueL) +
+        R(6, 58, 108, 16, 8, C.greenL) + R(6, 74, 108, 16, 8, C.green) + R(6, 90, 108, 16, 8, C.greenL) +
+        tuft(24, 70) + tuft(48, 70) + tuft(72, 70) + tuft(96, 70) + tuft(36, 86) + tuft(60, 86) + tuft(84, 86) + tuft(24, 102) + tuft(48, 102) + tuft(72, 102) + tuft(96, 102);
+    } },
+    { id: 'lapangan', cat: 'places', en: 'Sports field', idn: 'Lapangan', tags: 'field pitch football sport lapangan bola olahraga', draw: function () {
+      return O(20, 22, 8, C.yellow) + P('M22 50H98L114 106H6Z', C.green) + P('M60 50V106M14 78H106', 'none', ' stroke="#fff"' + SW(2.4)) + E(60, 78, 14, 7, 'none', ' stroke="#fff"' + SW(2.4)) +
+        R(42, 34, 36, 16, 1, '#fff', ' opacity=".75"') + P('M40 50V34H80V50', 'none', SW(3)) + O(86, 94, 8, '#fff') + P('M86 90l3 2-1 4h-4l-1-4Z', K, NS);
+    } },
+    { id: 'pura', cat: 'places', en: 'Temple', idn: 'Pura', tags: 'temple pura bali hindu ibadah', draw: function () {
+      return O(60, 30, 7, C.yellow) + P('M16 104V44L22 40V32L28 28V20L36 16V10L46 14V104Z', C.brownL) + P('M104 104V44L98 40V32L92 28V20L84 16V10L74 14V104Z', C.brownL) +
+        P('M22 60H44M22 78H44M76 60H98M76 78H98', 'none', ' stroke="' + C.brownD + '"' + SW(2)) + R(40, 96, 40, 8, 2, C.sand) + R(34, 104, 52, 6, 2, C.sand);
+    } },
+    // Feelings & school
+    { id: 'bosan', cat: 'feel', en: 'Bored', idn: 'Bosan', kid: true, tags: 'bored boring nothing to do bosan', draw: function (g) {
+      return kidAt(g, 60, 58, 1, shirt(g), { mouth: 'none' }) + P('M54 68H66', 'none', SW(2.4)) + P('M50 56.5H57M63 56.5H70', 'none', SW(2.6)) +
+        O(60, 80, 6, C.skin) + O(88, 30, 2.6, K, NS) + O(96, 30, 2.6, K, NS) + O(104, 30, 2.6, K, NS);
+    } },
+    { id: 'sayang', cat: 'feel', en: 'Love', idn: 'Sayang', kid: true, tags: 'love heart care sayang cinta', draw: function (g) {
+      return kidAt(g, 60, 48, 1, shirt(g), { eyes: 'closed', mouth: 'smile' }) + G('translate(60 86) scale(2.4)', hrt(C.coral)) + O(40, 84, 5.5, C.skin) + O(80, 84, 5.5, C.skin) +
+        G('translate(98 26) scale(.9)', hrt(C.pink)) + G('translate(22 30) scale(.7)', hrt(C.pink));
+    } },
+    { id: 'aduh', cat: 'feel', en: 'Hurt', idn: 'Terluka', kid: true, tags: 'hurt ouch pain injury aduh sakit luka', draw: function (g) {
+      return TUBE('M74 84 94 90', 6, C.skin) + O(97, 91, 5.5, C.skin) + kidAt(g, 56, 58, 1, shirt(g), { eyes: 'closed', mouth: 'o' }) +
+        P('M44 49 51 52M68 49 61 52', 'none', SW(2.2)) + G('rotate(15 86 87)', R(80, 83, 12, 8, 3, C.sand, SW(1.8))) +
+        P('M84 74l1-7M92 76l5-5M78 72l-3-6', 'none', ' stroke="' + C.coral + '"' + SW(2.6));
+    } },
+    { id: 'berisik', cat: 'feel', en: 'Too loud', idn: 'Terlalu berisik', kid: true, tags: 'too loud noise noisy ears berisik bising', draw: function (g) {
+      return kidAt(g, 60, 60, 1, shirt(g), { eyes: 'closed', mouth: 'none' }) + P('M54 70Q57 67 60 70 63 73 66 70', 'none', SW(2.2)) +
+        TUBE('M44 82 39 70M76 82 81 70', 6, C.skin) + O(38, 63, 7, C.skin) + O(82, 63, 7, C.skin) +
+        P('M18 46q-6 8 0 16M26 42q-8 12 0 24', 'none', ' stroke="' + C.coral + '"' + SW(2.6)) + P('M102 46q6 8 0 16M94 42q8 12 0 24', 'none', ' stroke="' + C.coral + '"' + SW(2.6));
+    } },
+    { id: 'jijik', cat: 'feel', en: 'Yuck', idn: 'Jijik', kid: true, tags: 'yuck disgusted gross dislike jijik tidak suka', draw: function (g) {
+      return kidAt(g, 50, 58, 1, shirt(g), { eyes: 'closed', mouth: 'none' }) + P('M44 68Q50 65 56 68', 'none', SW(2.4)) + P('M48 68Q50 75 53 68Z', '#F28C8C', SW(2)) +
+        P('M37 48 44 51M63 48 56 51', 'none', SW(2.2)) + P('M84 88H108C108 98 102 104 96 104 90 104 84 98 84 88Z', C.blueL) + E(96, 88, 12, 3, C.greenL) +
+        P('M92 78c-3-6 3-8 0-14M100 80c-3-6 3-8 0-14', 'none', ' stroke="' + C.green + '"' + SW(2.6));
+    } },
+    { id: 'bersemangat', cat: 'feel', en: 'Excited', idn: 'Semangat', kid: true, tags: 'excited yay hooray happy semangat gembira', draw: function (g) {
+      return TUBE('M42 74 28 46M78 74 92 46', 6, C.skin) + O(27, 43, 6, C.skin) + O(93, 43, 6, C.skin) + kidAt(g, 60, 56, 1, shirt(g), { mouth: 'open' }) +
+        star(16, 22, 6, C.yellow) + star(104, 22, 6, C.yellow) + star(60, 14, 5, C.yellowL) + P('M14 64l-6-2M106 64l6-2', 'none', ' stroke="' + C.grey + '"' + SW(2.4));
+    } },
+    { id: 'papan-tulis', cat: 'feel', en: 'Board', idn: 'Papan tulis', tags: 'board blackboard whiteboard class papan tulis kelas', draw: function () {
+      return P('M30 86 24 108M90 86 96 108', 'none', SW(3.4)) + R(10, 18, 100, 64, 6, C.brownL) + R(16, 24, 88, 52, 3, '#3F6B55') +
+        P('M28 40H56M28 50H70M28 60H48', 'none', ' stroke="#fff"' + SW(3)) + star(84, 48, 9, C.yellow) + R(14, 80, 92, 6, 3, C.brownL) + R(70, 76, 12, 4, 2, '#fff', SW(1.6));
     } }
   ];
 

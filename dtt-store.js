@@ -1,5 +1,5 @@
-/* Little Us · DTT · where data lives. Signed-in accounts only: owner-only tables and the private dtt-images bucket
-   (see supabase/dtt-setup.sql). The backend can be swapped, which is how the tests run without an account. */
+/* Little Us · DTT · where data lives. Signed in: owner-only tables and the private dtt-images bucket (see supabase/dtt-setup.sql).
+   Not signed in: this browser only (dtt-guest.js), moved to the account at sign-in. The backend can be swapped, which is also how the tests run. */
 (function () {
   'use strict';
   var D = window.LUDtt, P = D.programs;
@@ -57,6 +57,10 @@
     setBackend: function (b) { B = b; DB.loadedFor = null; },
     userId: function () { return B.userId(); },
     allowed: function (id) { return B.allowed(id); },
+    // true while someone tries the tool without signing in: everything stays in this browser (dtt-guest.js)
+    guest: function () { return !!B.guest; },
+    canAddProgram: function () { return B.allowed('dtt.programs') || DB.programs.length < D.defaults.FREE_PROGRAMS; },
+    backend: function () { return B; },
     isLoaded: function () { return !!B.userId() && DB.loadedFor === B.userId(); },
     load: function () {
       var uid = B.userId();

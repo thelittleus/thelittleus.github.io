@@ -22,7 +22,7 @@
   /* ===================== words ===================== */
   var T = {
     freeTools: ['Free tools', 'Alat gratis'],
-    grpRoutine: ['Everyday routines', 'Rutinitas sehari-hari'], grpCalm: ['Emotional Regulation', 'Regulasi Emosi'], grpTalk: ['Social skills', 'Keterampilan sosial'], grpTeach: ['Teaching tools', 'Alat mengajar'], soon: ['Coming soon', 'Segera hadir'],
+    grpRoutine: ['Everyday Routines', 'Rutinitas Sehari-hari'], grpCalm: ['Emotional Regulation', 'Regulasi Emosi'], grpTalk: ['Social Skills', 'Keterampilan Sosial'], grpTeach: ['Teaching Tools', 'Alat Mengajar'], soon: ['Coming soon', 'Segera hadir'],
     timerL: ['A countdown your child can see, not just hear. It helps with waiting, taking turns and knowing when an activity will end.', 'Hitungan mundur yang bisa dilihat anak. Membantu saat menunggu, bergantian, dan tahu kapan kegiatan akan selesai.'],
     tokensL: ['Your child earns a star for each step or good effort, and gets the reward they chose when the board is full. Great for building new habits.', 'Anak mendapat bintang untuk setiap langkah atau usaha baik, lalu mendapat hadiah pilihannya saat papan penuh. Bagus untuk membangun kebiasaan baru.'],
     ftL: ['Shows the task that comes first and the fun thing that comes after, so “first bath, then play” is easy to understand.', 'Menunjukkan tugas yang dilakukan dulu dan hal menyenangkan sesudahnya, agar “mandi dulu, lalu main” mudah dipahami.'],
@@ -50,7 +50,7 @@
     startSetup: ['Start setup', 'Mulai'],
     orTry: ['What you’ll find here', 'Isi alat-alatnya'], orTryP: ['Set up your child first, then every tool is ready to use.', 'Atur profil anak dulu, lalu semua alat siap dipakai.'],
     parentSetup: ['Parent setup', 'Pengaturan orang tua'],
-    startChild: ['Hand to child', 'Serahkan ke anak'], forName: [function (n) { return 'for ' + n; }, function (n) { return 'untuk ' + n; }],
+    startChild: ['Show to Child', 'Tunjukkan ke Anak'], forName: [function (n) { return 'for ' + n; }, function (n) { return 'untuk ' + n; }],
     step4: [function (a) { return 'Step ' + a + ' of 4'; }, function (a) { return 'Langkah ' + a + ' dari 4'; }], callChild: ['What do you call your child?', 'Siapa nama panggilan anakmu?'],
     kidLike: [function (n) { return 'Which character looks more like ' + n + '?'; }, function (n) { return 'Karakter mana yang lebih mirip ' + n + '?'; }], kidLikeP: ['Cards that show a child use this character. You can switch it any time, even for a single card.', 'Kartu yang menampilkan anak memakai karakter ini. Bisa diganti kapan saja, bahkan per kartu.'],
     noPhotoCol: ['No photo? Pick a colour', 'Tanpa foto? Pilih warna'], nickLabel: ['Nickname', 'Nama panggilan'], takePhoto: ['Take a photo', 'Ambil foto'], fromGallery: ['From gallery', 'Dari galeri'],
@@ -1116,7 +1116,7 @@
 
   /* ===================== pages ===================== */
   var ROOT = null, ROUTE = 'tools', PAGE = {};
-  // extra tools (Breathing Buddy, Feelings, Worry jar) live in tools-calm.js and register here
+  // extra tools (Breathing Buddy, Feelings, Worry Jar) live in tools-calm.js and register here
   var EXT = {}, EXT_ORDER = [];
   function rerender() { if (ROOT && document.body.contains(ROOT)) render(); }
   function go(h) { if (window.LU) LU.go(h); }
@@ -1294,7 +1294,7 @@
       '<div class="tl-lab2">' + esc(tr('whatsNext')) + '</div><div class="tl-panel">' + row(esc(tr('showNext')), esc(tr('showNextD')), toggle('showNext', c.showNext)) + '</div>' +
       (c.showNext ? '<div class="tl-panel pick">' + (c.next && cardInfo(c.next) ? cardHTML(c.next, { size: 'xs' }) : '<span class="tl-card tl-xs tl-addcard"><span>+</span></span>') + '<div><b>' + esc(c.next ? cardLabel(c.next) : '—') + '</b><small>' + esc(tr('fromLib')) + '</small></div><button type="button" class="tl-link" data-act="tnext">' + esc(tr('change')) + '</button></div>' : '') +
       '<div class="tl-lab2">' + esc(tr('endSig')) + '</div>' + seg('tend', [['chime', tr('chime')], ['vibrate', tr('vibrate')], ['silent', tr('silent')]], c.end) +
-      '<div class="tl-foot"><button type="button" class="tl-btn primary lg block" data-act="tstart">' + esc(tr('startChild')) + '</button><small>' + esc(tr('alsoOpens')) + '</small></div></div>';
+      '<div class="tl-foot"><button type="button" class="tl-btn primary lg block" data-act="tstart">' + esc(tr('startChild')) + '</button></div></div>';
   }
 
   /* ---------- token board page ---------- */
@@ -1852,12 +1852,13 @@
     vis: function () { return '<div class="tl-mini-art">' + (A.toolArt ? A.toolArt('talk') : '') + '</div>'; },
     title: function () { return L() === 'id' ? 'Pembuka Obrolan' : 'Conversation Starters'; },
     desc: function () { return L() === 'id' ? 'Permainan papan dan permainan seru untuk dimainkan anak bersama orang dewasa. Setiap giliran membuka obrolan hangat tentang perasaan, teman, dan pilihan.' : 'Board and party games for a grown-up and child to play together. Each turn opens up a gentle chat about feelings, friends and choices.'; } } });
-  window.LUTools.register('tools/dtt', { card: { grp: 'teach', tint: '#FFF1C7',
-    vis: function () { return '<div class="tl-mini-art">' + (A.toolArt ? A.toolArt('dtt') : '') + '</div>'; },
-    title: function () { return 'Discrete Trial Teaching'; },
-    desc: function () { return L() === 'id' ? 'Buat program mengajar untuk anak, jalankan session yang dipimpin guru dengan kartu gambar, dan pantau kemajuannya.' : 'Create teaching programs for a child, run teacher-led sessions with picture cards, and follow the progress.'; } } });
   window.LUTools.register('tools/safe-people', { card: { grp: 'talk', tint: '#DDF2E4',
     vis: function () { return '<div class="tl-mini-art">' + (A.toolArt ? A.toolArt('safe') : '') + '</div>'; },
     title: function () { return L() === 'id' ? 'Peta Orang Aman' : 'Safe People Map'; },
     desc: function () { return L() === 'id' ? 'Anak dan orang dewasa memetakan bersama orang-orang yang dipercaya anak, dan kapan harus menghampiri mereka.' : 'A child and a grown-up map out, together, the people the child trusts and when to go to each of them.'; } } });
+  // Discrete Trial Teaching opens as its own full-screen page (/dtt); #/tools/dtt redirects there
+  window.LUTools.register('tools/dtt', { card: { grp: 'teach', tint: '#FFF1C7',
+    vis: function () { return '<div class="tl-mini-art">' + (A.toolArt ? A.toolArt('dtt') : '') + '</div>'; },
+    title: function () { return 'Discrete Trial Teaching'; },
+    desc: function () { return L() === 'id' ? 'Buat program mengajar untuk anak, jalankan session yang dipimpin guru dengan kartu gambar, dan pantau kemajuannya.' : 'Create teaching programs for a child, run teacher-led sessions with picture cards, and follow the progress.'; } } });
 })();

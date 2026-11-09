@@ -131,11 +131,11 @@ function ie(u,e,r){const y=!u;u=u||{slug:"",name_en:"",name_id:"",tint:V[0][0],i
 /* ===== Articles: write, preview and publish blog posts (stored in the Supabase "articles" table) ===== */
 const d=A.$,I=A.$$,i=A.esc;
 const CATS=[["tips","Tips for home & class"],["tools","Tool guides"],["resources","New resources"],["bts","Behind the scenes"]];
-const TOOLS=[["timer","Visual Timer"],["tokens","Token Board"],["ft","First–Then Board"],["sched","Visual Schedule"],["breathe","Breathing Buddy"],["feelings","Feelings Check-In"],["worry","Worry jar"]];
+const TOOLS=[["timer","Visual Timer"],["tokens","Token Board"],["ft","First–Then Board"],["sched","Visual Schedule"],["breathe","Breathing Buddy"],["feelings","Feelings Check-In"],["worry","Worry Jar"]];
 const KINDS=[["p","Paragraph"],["h2","Subtitle"],["h3","Small subtitle"],["ul","Bullet list"],["ol","Numbered steps"],["tip","Tip box"],["quote","Quote"],["img","Photo"],["tool","Free tool card"],["product","Shop resource card"]];
 const KNAME=Object.fromEntries(KINDS);
 let st=null,PRODUCTS=null;
-function loadRenderer(){return window.LUArticles?Promise.resolve():new Promise((res,rej)=>{const s=document.createElement("script");s.src="/articles.js?v=12";s.onload=res;s.onerror=rej;document.head.appendChild(s)})}
+function loadRenderer(){return window.LUArticles?Promise.resolve():new Promise((res,rej)=>{const s=document.createElement("script");s.src="/articles.js?v=15";s.onload=res;s.onerror=rej;document.head.appendChild(s)})}
 function products(){return PRODUCTS?Promise.resolve(PRODUCTS):A.api("adminListProducts").then(r=>(PRODUCTS=(r.products||[]).map(p=>({id:p.id,title:p.title_en||p.id})),PRODUCTS)).catch(()=>(PRODUCTS=[],PRODUCTS))}
 function statusOf(a){return a.status!=="published"?"draft":new Date(a.published_at)>new Date()?"scheduled":"published"}
 function pill(s){return'<span class="pill st-'+s+'">'+stLabel(s)+"</span>"}function stLabel(s){return{draft:"Draft",scheduled:"Scheduled",published:"Published"}[s]}

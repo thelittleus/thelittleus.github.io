@@ -61,37 +61,38 @@
     if (U.view === 'set' && !D.store.set(U.setId)) U.view = 'sets';
     var fk = focusKey(document.activeElement), y = window.scrollY;
     el.innerHTML = page();
+    document.title = (U.view === 'sets' || U.view === 'set' ? T('Stimulus Sets', 'Stimulus Set') : U.view === 'settings' ? T('Settings', 'Pengaturan') : T('Programs', 'Program')) + ' · Little Us DTT';
     hydrate(el);
     ui.afterRender.forEach(function (f) { f(el); });
     if (fk) { var again = el.querySelector(fk); if (again && again.focus) again.focus({ preventScroll: true }); }
     window.scrollTo(0, y);
   }
   ui.render = render;
+  // the whole page: the menu on the left (a bar on phones) and the current view
   function page() {
-    if (!D.store.userId()) return gate(T('Sign in to use Discrete Trial Teaching', 'Masuk untuk memakai Discrete Trial Teaching'),
-      T('Programs, photos and session data are saved privately in your account, so they stay with you on every device. A free account is enough to start.', 'Program, foto, dan data session disimpan secara privat di akunmu, sehingga bisa dibuka di semua perangkatmu. Akun gratis sudah cukup untuk memulai.'),
-      '<a class="tl-btn primary" href="#/login">' + esc(T('Log in', 'Masuk')) + '</a><a class="tl-btn outline" href="#/signup">' + esc(T('Create a free account', 'Buat akun gratis')) + '</a>');
-    if (!student()) return gate(T('Add a child first', 'Tambahkan anak dulu'),
-      T('Each program belongs to a child in your Little Us profiles. Add one, then come back here.', 'Setiap program terhubung dengan profil anak di Little Us. Tambahkan dulu, lalu kembali ke sini.'),
-      '<a class="tl-btn primary" href="#/tools/setup?new=1">' + esc(T('Add a child', 'Tambah anak')) + '</a>');
+    return '<div class="dtt-shell">' + ui.sidebar() + '<main class="dtt-mainc" id="dttMain">' + (ui.guestLine ? ui.guestLine() : '') + ui.savedSlot() + body() + '</main></div>' + (ui.tabbar ? ui.tabbar() : '');
+  }
+  function body() {
+    if (!D.store.userId() || (D.guest && D.guest.moving())) return '<div class="dtt-loading" role="status">' + esc(T('Opening...', 'Membuka...')) + '</div>';
     if (U.resume) return resumeCard(U.resume);
+    if (!student()) return '<div class="dtt-empty dtt-first"><div class="dtt-firstart" aria-hidden="true">' + (D.themes && D.themes.chosen ? D.themes.chosen(['garden'])[0].characters.slice(0, 3).map(function (c) { return D.themes.svg(c, 'dtt-char'); }).join('') : '') + '</div>' +
+      '<h1 class="dtt-h1">' + esc(T('Who are you teaching?', 'Siapa yang kamu ajar?')) + '</h1><p class="dtt-p">' + esc(T('Add a student to make their first program.', 'Tambahkan anak untuk membuat program pertamanya.')) + '</p>' +
+      '<button type="button" class="dtt-btn primary" data-a="addStudent">' + esc(T('+ Add Student', '+ Tambah Anak')) + '</button></div>';
     if (U.error) return gate(T('We could not open your programs', 'Program belum bisa dibuka'),
-      T('Check your connection and try again. Creating and editing programs needs internet.', 'Periksa koneksi lalu coba lagi. Membuat dan mengubah program perlu internet.'),
-      '<button type="button" class="tl-btn primary" data-a="retry">' + esc(T('Try again', 'Coba lagi')) + '</button>');
+      T('Check your connection and try again.', 'Periksa koneksi lalu coba lagi.'),
+      '<button type="button" class="dtt-btn primary" data-a="retry">' + esc(T('Try again', 'Coba lagi')) + '</button>');
     if (!D.store.isLoaded()) { start(); return '<div class="dtt-loading" role="status">' + esc(T('Opening your programs...', 'Membuka program...')) + '</div>'; }
-    return X.topbar(T('Discrete Trial Teaching', 'Discrete Trial Teaching'), T('For ' + student().name, 'Untuk ' + student().name)) + ui.menuButton() +
-      '<div class="dtt-shell"><div class="dtt-sidewrap' + (U.menuOpen ? ' open' : '') + '">' + ui.sidebar() + '</div><div class="dtt-mainc">' + ui.savedSlot() + (VIEWS[wiz() ? 'wizard' : U.view] || VIEWS.programs)() + '</div></div>';
+    return (VIEWS[U.view] || VIEWS.programs)();
   }
   function gate(h, p, btns) {
-    return X.topbar(T('Discrete Trial Teaching', 'Discrete Trial Teaching'), '', { noProf: true }) +
-      '<div class="dtt-gate tl-panel pad"><h2 class="tl-h2">' + esc(h) + '</h2><p class="tl-p">' + esc(p) + '</p><div class="dtt-rowbtns">' + btns + '</div></div>';
+    return '<div class="dtt-empty"><h1 class="dtt-h1">' + esc(h) + '</h1><p class="dtt-p">' + esc(p) + '</p><div class="dtt-rowbtns center">' + btns + '</div></div>';
   }
   // works offline too: everything it needs is in the saved session
   function resumeCard(snap) {
     var n = snap.st.trials.filter(function (t) { return D.errorCorrection.counted(t.kind); }).length;
     return gate(T('A session was interrupted', 'Ada %session% yang terhenti'),
       T(snap.program.name + ': ' + n + ' of ' + snap.st.total + ' trials done. You can pick up where it stopped, or discard it.', snap.program.name + ': ' + n + ' dari ' + snap.st.total + ' trial selesai. Kamu bisa melanjutkan dari titik terakhir, atau membuangnya.'),
-      '<button type="button" class="tl-btn primary" data-a="resumeGo">' + esc(T('Resume', 'Lanjutkan')) + '</button><button type="button" class="tl-link dtt-danger" data-a="resumeDrop" data-confirm="' + esc(T('Tap again to discard it', 'Ketuk lagi untuk membuang')) + '">' + esc(T('Discard', 'Buang')) + '</button>');
+      '<button type="button" class="dtt-btn primary" data-a="resumeGo">' + esc(T('Resume', 'Lanjutkan')) + '</button><button type="button" class="tl-link dtt-danger" data-a="resumeDrop" data-confirm="' + esc(T('Tap again to discard it', 'Ketuk lagi untuk membuang')) + '">' + esc(T('Discard', 'Buang')) + '</button>');
   }
   ACT.resumeGo = function () { D.session.resumeFrom(U.resume); };
   ACT.resumeDrop = function () { D.session.discard(); };
@@ -110,10 +111,18 @@
   function onClick(e) {
     var b = e.target.closest('[data-a]'); if (!b || !app().contains(b) || b.disabled) return;
     if (b.hasAttribute('data-confirm') && !confirmed(b)) return;
-    // a sidebar choice sets the draft aside, unless it is one of the wizard's own steps
-    if (b.hasAttribute('data-nav')) { U.menuOpen = false; if (U.wizard && !b.hasAttribute('data-keepwiz')) U.wizard.away = true; }
+    if (b.hasAttribute('data-nav')) U.menuOpen = false;
     var fn = ACT[b.dataset.a]; if (fn) { e.preventDefault(); fn(b, e); }
   }
+  // dialogs and drawers live outside #dttApp but use the same data-a / data-in actions
+  ui.bindIn = function (el) {
+    el.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-a]'); if (!b || !el.contains(b) || b.disabled) return;
+      if (b.hasAttribute('data-confirm') && !confirmed(b)) return;
+      var fn = ACT[b.dataset.a]; if (fn) { e.preventDefault(); fn(b, e); }
+    });
+    el.addEventListener('input', onInput); el.addEventListener('change', onInput);
+  };
   // destructive buttons ask once on the button itself (design guidelines, section 5)
   function confirmed(b) {
     if (b.dataset.sure) return true;
@@ -189,9 +198,18 @@
   ui.photoRoom = function (n) {
     var used = D.store.photoCount(), lim = D.store.photoLimit();
     if (used + (n || 1) <= lim) return true;
-    if (lim < D.defaults.PHOTO.maxLimit && window.LUAcc) LUAcc.lockSheet('dtt.photos');
+    if (lim < D.defaults.PHOTO.maxLimit) ui.plusSheet('photos');
     else X.toast(T('You have reached the limit of 500 photos. Remove some to add more.', 'Batas 500 foto sudah tercapai. Hapus beberapa untuk menambah.'));
     return false;
+  };
+  // the free limits: 2 programs and 50 photos. Little Us Plus lifts them.
+  ui.plusSheet = function (what) {
+    var progs = what === 'programs', n = progs ? D.defaults.FREE_PROGRAMS : D.defaults.PHOTO.freeLimit;
+    var sh = X.sheet('<div class="dtt-dlg"><div class="dtt-dlghead"><span class="dtt-plus">Plus</span><button type="button" class="dtt-x" data-x aria-label="' + esc(T('Close', 'Tutup')) + '">✕</button></div>' +
+      '<h2>' + esc(progs ? T('More programs come with Little Us Plus', 'Program tambahan ada di Little Us Plus') : T('More photos come with Little Us Plus', 'Foto tambahan ada di Little Us Plus')) + '</h2>' +
+      '<p class="dtt-dlgp">' + esc(progs ? T('The free plan holds ' + n + ' programs. With Plus you can make as many as you need, for every student.', 'Paket gratis menyimpan ' + n + ' program. Dengan Plus kamu bisa membuat sebanyak yang dibutuhkan, untuk setiap anak.') : T('The free plan holds ' + n + ' uploaded photos. Plus holds up to 500. Ready-made Little Us sets never count.', 'Paket gratis menyimpan ' + n + ' foto unggahan. Plus menyimpan hingga 500. Set siap pakai Little Us tidak dihitung.')) + '</p>' +
+      '<div class="dtt-dlgbtns col"><a class="dtt-btn primary block" href="/#/plus">' + esc(T('Get Little Us Plus', 'Dapatkan Little Us Plus')) + '</a><button type="button" class="dtt-btn quiet block" data-x>' + esc(T('Not now', 'Nanti saja')) + '</button></div></div>');
+    sh.el.addEventListener('click', function (e) { if (e.target.closest('[data-x]')) sh.close(); });
   };
   ui.photoError = photoError;
   // one file: lets the teacher choose the square. Calls done(blob).

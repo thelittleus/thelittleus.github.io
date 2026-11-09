@@ -10,13 +10,16 @@
   function newProgress(s) { var ps = PR.newState(s); ps.recent = []; ps.series = []; ps.sessions = 0; ps.masteredAt = null; ps.retentionDue = null; return ps; }
   function get(progress, id, op, s) { var k = TG.key(id, op); if (!progress[k]) progress[k] = newProgress(s); return progress[k]; }
 
+  // mCount 'any': prompted correct counts too (covers rules like "80% prompted")
+  function counts(r, s) { return r === 'independent' || (s.mCount === 'any' && r === 'prompted'); }
   function rollingMet(ps, s) {
     var win = (ps.recent || []).slice(-s.mWin);
-    return win.length >= s.mWin && win.filter(function (r) { return r === 'independent'; }).length >= s.mNeed;
+    return win.length >= s.mWin && win.filter(function (r) { return counts(r, s); }).length >= s.mNeed;
   }
+  function sessionPct(x, s) { return Math.round(100 * (x.ind + (s.mCount === 'any' ? (x.pr || 0) : 0)) / x.n); }
   function classicMet(ps, s) {
     var ser = (ps.series || []).filter(function (x) { return x.n >= s.mMin; }).slice(-s.mSess);
-    return ser.length >= s.mSess && ser.every(function (x) { return Math.round(100 * x.ind / x.n) >= s.mPct; });
+    return ser.length >= s.mSess && ser.every(function (x) { return sessionPct(x, s) >= s.mPct; });
   }
 
   function unmaster(ps, s) {
@@ -31,9 +34,10 @@
     var real = trials.filter(function (t) { return EC.counted(t.kind); }), byKey = {}, order = [];
     real.forEach(function (t) {
       var k = TG.key(t.target, t.op);
-      if (!byKey[k]) { byKey[k] = { id: t.target, op: t.op, n: 0, ind: 0, retention: null }; order.push(k); }
+      if (!byKey[k]) { byKey[k] = { id: t.target, op: t.op, n: 0, ind: 0, pr: 0, retention: null }; order.push(k); }
       var b = byKey[k]; b.n++;
       if (t.result === 'independent') b.ind++;
+      if (t.result === 'prompted') b.pr++;
       var ps = get(progress, t.target, t.op, s);
       ps.recent = (ps.recent || []).concat([t.result]).slice(-KEEP_RECENT);
       if (t.retention && b.retention == null) b.retention = t.result === 'independent';
@@ -41,7 +45,9 @@
     var newly = [], retention = [];
     order.forEach(function (k) {
       var b = byKey[k], ps = get(progress, b.id, b.op, s), wasMastered = !!ps.masteredAt;
-      ps.series = (ps.series || []).concat([{ n: b.n, ind: b.ind }]).slice(-KEEP_SERIES);
+      // "Pauses": a counted session below the rule leaves the streak as it was instead of breaking it
+      var skip = s.mRule === 'classic' && s.mMiss === 'pause' && b.n >= s.mMin && sessionPct(b, s) < s.mPct;
+      if (!skip) ps.series = (ps.series || []).concat([{ n: b.n, ind: b.ind, pr: b.pr }]).slice(-KEEP_SERIES);
       if (b.retention != null && wasMastered) {
         retention.push({ target: b.id, op: b.op, ok: b.retention });
         if (b.retention) ps.retentionDue = null; else unmaster(ps, s);

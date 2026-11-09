@@ -33,7 +33,7 @@
     whoFor: ['Who is this for?', 'Untuk siapa ini?'], usingNow: ['Using now', 'Sedang dipakai'], addChild: ['Add a child', 'Tambah anak'], editProfiles: ['Edit profiles', 'Ubah profil'],
     cards: ['Cards', 'Kartu'], pickTool: [function (n) { return 'Pick a tool, set it up in a minute, then hand it to ' + n + '.'; }, function (n) { return 'Pilih alat, atur dalam semenit, lalu serahkan ke ' + n + '.'; }],
     pickTool0: ['Pick a tool, set it up in a minute, then use it together with your child.', 'Pilih alat, atur dalam semenit, lalu gunakan bersama anakmu.'],
-    grpRoutine: ['Everyday routines', 'Rutinitas sehari-hari'], grpCalm: ['Emotional Regulation', 'Regulasi Emosi'], grpTalk: ['Social skills', 'Keterampilan sosial'], grpTeach: ['Teaching tools', 'Alat mengajar'], soon: ['Coming soon', 'Segera hadir'],
+    grpRoutine: ['Everyday Routines', 'Rutinitas Sehari-hari'], grpCalm: ['Emotional Regulation', 'Regulasi Emosi'], grpTalk: ['Social Skills', 'Keterampilan Sosial'], grpTeach: ['Teaching Tools', 'Alat Mengajar'], soon: ['Coming soon', 'Segera hadir'],
     usingDefaults: ['Using default settings.', 'Memakai pengaturan bawaan.'], setUpFor: ['Set up for your child', 'Atur untuk anakmu'],
     close: ['Close', 'Tutup'], open: ['Open', 'Buka'],
     skipH: ['No problem! Until you set up a child, the tools use:', 'Tidak apa-apa! Sebelum anak diatur, alat memakai:'],
@@ -138,8 +138,8 @@
   function accStatus() { var a = acc(); try { return a ? a.status() : 'none'; } catch (e) { return 'none'; } }
   function load() {
     if (!window.luLoad) return Promise.resolve();
-    return luLoad('/tools.css?v=20').then(function () { return luLoad('/tools-art.js?v=25'); }).then(function () { return luLoad('/tools.js?v=25'); })
-      .then(function () { return luLoad('/tools-calm.js?v=17'); }).then(function () { var a = api(); return a && a.photosLoad ? a.photosLoad() : null; }).catch(function () { });
+    return luLoad('/tools.css?v=20').then(function () { return luLoad('/tools-art.js?v=28'); }).then(function () { return luLoad('/tools.js?v=28'); })
+      .then(function () { return luLoad('/tools-calm.js?v=18'); }).then(function () { var a = api(); return a && a.photosLoad ? a.photosLoad() : null; }).catch(function () { });
   }
   function photo(p) { var a = api(); return p && p.photo && a && a.PH && a.PH[p.photo] ? a.PH[p.photo] : ''; }
   function ava(p, size, cls) {
@@ -172,6 +172,7 @@
     { k: 'ft', r: 'tools/first-then', tint: '#DDF2E4', g: 'routine' }, { k: 'sched', r: 'tools/schedule', tint: '#E9E1F7', g: 'routine' },
     { k: 'breathe', r: 'tools/breathe', tint: '#DCEBFA', g: 'calm' }, { k: 'feelings', r: 'tools/feelings', tint: '#E9E1F7', g: 'calm' }, { k: 'worry', r: 'tools/worry', tint: '#FBE0E6', g: 'calm' },
     { k: 'talk', r: 'tools/conversation-starters', tint: '#FFF1C7', g: 'talk' }, { k: 'safe', r: 'tools/safe-people', tint: '#DDF2E4', g: 'talk' },
+    // its own full-screen page: #/tools/dtt sends the browser to /dtt
     { k: 'dtt', r: 'tools/dtt', tint: '#FFF1C7', g: 'teach' }
   ];
   function toolName(k) { return W.tl[k][isId() ? 1 : 0][0]; }

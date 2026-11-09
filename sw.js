@@ -1,10 +1,10 @@
 /* Little Us · service worker
    Lets the free tools open without internet once they have been opened before, and makes repeat visits fast.
    It never caches the admin page, the shop database or payments. */
-const CACHE = 'littleus-v59';
+const CACHE = 'littleus-v62';
 const IMAGES = 'littleus-img-v1';
 // the files every visit needs; tool scripts (calm, Conversation Starters, printing, articles, legal) are cached the first time they are used
-const ASSETS = ['/', '/tools.js?v=25', '/lu-account.js?v=17', '/lu-app.js?v=28', '/lu-app.css?v=22', '/tools-art.js?v=25', '/tools.css?v=20', '/logo.png'];
+const ASSETS = ['/', '/tools.js?v=28', '/lu-account.js?v=19', '/lu-app.js?v=31', '/lu-app.css?v=23', '/tools-art.js?v=28', '/tools.css?v=20', '/logo.png'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(ASSETS)).catch(() => {}).then(() => self.skipWaiting()));
@@ -38,16 +38,18 @@ self.addEventListener('fetch', (e) => {
   if (url.origin === self.location.origin) {
     if (url.pathname.startsWith('/admin')) return;
     // pages: the network first so the site stays up to date, but if it is slow (over 2.5 s) show the saved copy
+    // the DTT page (/dtt) is a different page from the site, so it keeps its own saved copy
     if (req.mode === 'navigate') {
+      const page = /^\/dtt(\.html|\/)?$/.test(url.pathname) ? '/dtt' : '/';
       e.respondWith(new Promise((resolve) => {
         let done = false;
-        const fallback = () => caches.match('/').then((hit) => { if (!done && hit) { done = true; resolve(hit); } });
+        const fallback = () => caches.match(page).then((hit) => { if (!done && hit) { done = true; resolve(hit); } });
         const timer = setTimeout(fallback, 2500);
         fetch(req).then((res) => {
           clearTimeout(timer);
-          if (res.ok) { const copy = res.clone(); caches.open(CACHE).then((c) => c.put('/', copy)); }
+          if (res.ok) { const copy = res.clone(); caches.open(CACHE).then((c) => c.put(page, copy)); }
           if (!done) { done = true; resolve(res); }
-        }).catch(() => { clearTimeout(timer); caches.match('/').then((hit) => { if (!done) { done = true; resolve(hit || Response.error()); } }); });
+        }).catch(() => { clearTimeout(timer); caches.match(page).then((hit) => { if (!done) { done = true; resolve(hit || Response.error()); } }); });
       }));
       return;
     }

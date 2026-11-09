@@ -1,2 +1,5 @@
-# Send every page address to the shop. Real files (admin.html, images) are served as normal.
+# Discrete Trial Teaching is its own full-screen page.
+/dtt    /dtt.html    200
+/dtt/   /dtt.html    200
+# Send every other page address to the shop. Real files (admin.html, images) are served as normal.
 /*    /index.html    200

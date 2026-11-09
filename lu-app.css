@@ -294,7 +294,7 @@ html.lu-land .ua-a2hs{bottom:20px;left:calc(var(--ua-rail) + 20px)}
 .ua-ios p{flex:1;margin:0;font-size:15px}.ua-ios i{width:38px;height:38px;border-radius:10px;border:1px solid #ECE6DC;display:flex;align-items:center;justify-content:center;font-style:normal}
 
 /* ===================== shared pages inside the app ===================== */
-/* tool pages: centred title with "for Raka", back button, big preview, sticky "Hand to child" */
+/* tool pages: centred title with "for Raka", back button, big preview, sticky "Show to Child" */
 html.lu-app .tl-main{padding-top:env(safe-area-inset-top)}
 html.lu-app .tl-page{padding:10px 16px 24px;gap:12px}
 html.lu-app .tl-top{display:grid;grid-template-columns:46px 1fr auto;align-items:center;gap:8px;min-height:64px}
@@ -419,7 +419,7 @@ html.ud-home.ud-plus .closing .signup{display:block}
 .ud-pname{display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
 .ud-upcard p{margin:0;font-size:15px;line-height:1.5;color:#4A4855}
 .ud-pben{list-style:none;margin:6px 0 4px;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.ud-pben li{display:flex;align-items:center;min-height:48px;padding:10px 18px;border-radius:14px;background:#FFF0E2;font-size:15px;line-height:1.3;font-weight:700;color:#7A3D0C}
+.ud-pben li{display:flex;align-items:center;min-height:48px;padding:10px 18px;border-radius:14px;background:#FFF1C7;font-size:15px;line-height:1.3;font-weight:700;color:#2B2A35}
 .ud-pfoot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px 20px;margin-top:8px;padding-top:16px;border-top:1.5px dashed #ECE6DC}
 .ud-from{font-size:15px;color:#4A4855}.ud-from b{font:800 18px Figtree,sans-serif;color:#2B2A35}
 .ud-pfoot .btn{min-width:180px;padding-left:28px;padding-right:28px}

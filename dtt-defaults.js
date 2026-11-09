@@ -50,7 +50,9 @@
       tokenOn: false, tokens: 5, tokenReward: 'celebration',
       praise: PRAISE[l], brief: BRIEF[l], cheer: true, inter: 3, games: gamesOn(),
       // 8 mastery
-      mRule: 'rolling', mWin: 5, mNeed: 4, retDays: 3, mPct: 80, mSess: 2, mMin: 2
+      mRule: 'rolling', mWin: 5, mNeed: 4, retDays: 3, mPct: 80, mSess: 2, mMin: 2,
+      // what counts toward mastery (ind: independent only, any: independent or prompted correct), and what a session below the rule does to the streak
+      mCount: 'ind', mMiss: 'reset'
     };
   }
 
@@ -62,7 +64,7 @@
   var CHOICES = {
     array: [1, 2, 3, 4, 6], bins: [1, 2, 3], tokens: [3, 5, 10], maint: [0, 4, 3, 2], inter: [0, 3, 5], mPct: [70, 80, 90, 100], mSess: [1, 2, 3],
     dis: ['random', 'different', 'similar', 'avoid'], order: ['random', 'block'], levels: ['both', 'full', 'partial'], prompt: ['manual', 'mtl', 'ltm', 'td'],
-    sched: ['crf', 'fr2', 'fr3', 'vr2', 'vr3'], mRule: ['rolling', 'classic'], matchKind: ['identical', 'nonidentical', 'both'], samplePos: ['centre', 'top', 'side'],
+    sched: ['crf', 'fr2', 'fr3', 'vr2', 'vr3'], mRule: ['rolling', 'classic'], mCount: ['ind', 'any'], mMiss: ['reset', 'pause'], matchKind: ['identical', 'nonidentical', 'both'], samplePos: ['centre', 'top', 'side'],
     lPart: ['pulse', 'point', 'bigger'], lFull: ['glow', 'only'], tPart: ['first', 'fill', 'label'],
     mPart: ['position', 'pulse', 'point'], mFull: ['slide'], sPart: ['pulse', 'point'], sFull: ['slide', 'only'], patPart: ['flash', 'pulse'], patFull: ['glow', 'only']
   };
@@ -80,7 +82,9 @@
   return {
     TYPES: TYPES, FAMILY: FAMILY, OPS: OPS, SCENES: SCENES, GAMES: GAMES, THEMES: THEMES, PATTERN_UNITS: PATTERN_UNITS,
     RANGES: RANGES, CHOICES: CHOICES, PRESETS: PRESETS, DEF_PREFS: DEF_PREFS, ACTIVE_DEFAULT: 3,
-    PHOTO: { freeLimit: 10, maxLimit: 500, side: 800, targetBytes: 120000, hardBytes: 256000, maxPickBytes: 50000000 },
+    // free accounts (and people trying it before signing in): 2 programs and 50 uploaded photos. Plus: no program limit, 500 photos.
+    FREE_PROGRAMS: 2,
+    PHOTO: { freeLimit: 50, maxLimit: 500, side: 800, targetBytes: 120000, hardBytes: 256000, maxPickBytes: 50000000 },
     settings: base
   };
 });

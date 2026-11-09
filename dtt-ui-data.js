@@ -102,8 +102,20 @@
     D.store.saveProgress(p.id, DA.toRows(pr, [D.targets.key(id, op)])).then(function () { ui.render(); }, function () { X.toast(T('This was not saved. Check your connection.', 'Belum tersimpan. Periksa koneksi.')); ui.render(); });
   };
 
+  // one row per trial, so any spreadsheet can rebuild the numbers
+  ACT.exportCsv = function () {
+    var p = ui.ctx(), set = D.store.set(p.setId), c = cache[p.id]; if (!c || !c.sessions) return;
+    function q(v) { v = String(v == null ? '' : v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }
+    var out = [['session_date', 'session_id', 'trial', 'target', 'operation', 'kind', 'result', 'prompt_level', 'counted'].join(',')];
+    c.sessions.slice().sort(function (a, b) { return String(a.started_at).localeCompare(String(b.started_at)); }).forEach(function (s) {
+      (s.trials || []).forEach(function (t, i) { out.push([s.started_at, s.id, i + 1, ui.targetName(p, set, t.target), t.op, t.kind, t.result, t.level == null ? '' : t.level, D.errorCorrection.counted(t.kind) ? 'yes' : 'no'].map(q).join(',')); });
+    });
+    var a = document.createElement('a'), url = URL.createObjectURL(new Blob(['﻿' + out.join('\r\n')], { type: 'text/csv' }));
+    a.href = url; a.download = (p.name || 'program').replace(/[^\w\- ]+/g, '').trim().replace(/\s+/g, '-') + '-dtt-data.csv';
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+  };
   function tablePanel(sessions) {
-    return '<section class="tl-panel dtt-tablewrap"><table class="dtt-table"><caption class="dtt-sr">' + esc(T('All sessions, newest first', 'Semua %sessions%, terbaru lebih dulu')) + '</caption><thead><tr><th>' + esc(T('Date', 'Tanggal')) + '</th><th>' + esc(T('Trials', 'Trial')) + '</th><th>Independent</th><th>Prompted</th><th>' + esc(T('Incorrect', 'Salah')) + '</th><th><span class="dtt-sr">' + esc(T('Delete', 'Hapus')) + '</span></th></tr></thead><tbody>' +
+    return '<section class="tl-panel dtt-tablewrap"><div class="dtt-panelhead pad"><h2 class="tl-h2">' + esc(T('Sessions', '%sessions%')) + '</h2><button type="button" class="dtt-btn sm" data-a="exportCsv">⤓ ' + esc(T('Export CSV', 'Ekspor CSV')) + '</button></div><table class="dtt-table"><caption class="dtt-sr">' + esc(T('All sessions, newest first', 'Semua %sessions%, terbaru lebih dulu')) + '</caption><thead><tr><th>' + esc(T('Date', 'Tanggal')) + '</th><th>' + esc(T('Trials', 'Trial')) + '</th><th>Independent</th><th>Prompted</th><th>' + esc(T('Incorrect', 'Salah')) + '</th><th><span class="dtt-sr">' + esc(T('Delete', 'Hapus')) + '</span></th></tr></thead><tbody>' +
       DA.rows(sessions).map(function (r) {
         return '<tr><td><b>' + esc(new Date(r.date).toLocaleDateString(locale(), { day: 'numeric', month: 'short', year: 'numeric' })) + '</b>' + (r.early ? ' <span class="dtt-chip">' + esc(T('Ended early', 'Diakhiri awal')) + '</span>' : '') + '</td><td>' + r.n + '</td><td>' + r.sum.pctInd + '%</td><td>' + r.sum.pctPr + '%</td><td>' + r.sum.pctEr + '%</td>' +
           '<td><button type="button" class="tl-link dtt-danger" data-a="delSession" data-id="' + r.id + '" data-confirm="' + esc(T('Tap again', 'Ketuk lagi')) + '">' + esc(T('Delete', 'Hapus')) + '</button></td></tr>';

@@ -17,12 +17,15 @@
   function label(id) { return ui.targetName(S.program, S.set, id); }
 
   function snapshot() {
-    D.offline.saveActive(S.uid, { id: S.st.id, st: S.st, program: S.program, set: S.set, saved: S.saved, student: S.student, at: Date.now() }).catch(function () { });
+    D.offline.saveActive(S.uid, { id: S.st.id, st: S.st, program: S.program, set: S.set, saved: S.saved, student: S.student, practice: S.practice, at: Date.now() }).catch(function () { });
   }
 
   /* ---------- starting ---------- */
-  function start(program) {
+  // opts.practice: a practice run. It looks the same, but nothing is recorded and mastery does not move.
+  var startOpts = null;
+  function start(program, opts) {
     if (S) return;
+    startOpts = opts || null;
     var set = D.store.set(program.setId), saved = D.store.progressOf(program.id);
     D.reinforce.audio(); // browsers only allow sound after a tap, and this is that tap
     var st = EN.create({ id: P.uuid(), program: program, progress: saved, now: Date.now() });
@@ -31,14 +34,16 @@
     var student = JSON.parse(JSON.stringify(D.store.student(program.studentId)));
     D.store.cacheImages(set, student.photos).then(function (failed) {
       if (failed) { X.toast(T('Some pictures could not load. Check your connection and try again.', 'Beberapa gambar belum bisa dimuat. Periksa koneksi lalu coba lagi.')); return; }
-      open(st, JSON.parse(JSON.stringify(program)), JSON.parse(JSON.stringify(set)), JSON.parse(JSON.stringify(saved)), student);
+      open(st, JSON.parse(JSON.stringify(program)), JSON.parse(JSON.stringify(set)), JSON.parse(JSON.stringify(saved)), student, startOpts && startOpts.practice);
     });
   }
-  function open(st, program, set, saved, student) {
-    S = { st: st, program: program, set: set, saved: saved, student: student || { themes: [], photos: [] }, uid: D.store.userId(), kid: kidOf(st.studentId), prefs: ui.prefs(), timers: [], curTimers: [], paused: false, waiting: false, ended: false, lock: null, peek: false, flash: false };
+  function open(st, program, set, saved, student, practice, resumed) {
+    S = { st: st, program: program, set: set, saved: saved, student: student || { themes: [], photos: [] }, uid: D.store.userId(), kid: kidOf(st.studentId), prefs: ui.prefs(), timers: [], curTimers: [], paused: false, waiting: false, ended: false, lock: null, peek: false, flash: false, practice: !!practice };
     var el = document.createElement('div');
-    el.className = 'dtt-session' + (S.prefs.reduce ? ' calm' : ''); el.id = 'dttSession';
-    el.innerHTML = '<div class="dtt-stop"><button type="button" class="dtt-pausebtn" id="dttPause"><span class="fill"></span><span>' + esc(T('Hold to pause', 'Tahan untuk jeda')) + '</span></button><div class="dtt-tokens" id="dttTokens" aria-hidden="true"></div><div class="dtt-sdots" id="dttDots" aria-hidden="true"></div></div>' +
+    el.className = 'dtt-session' + (S.prefs.reduce ? ' calm' : '') + (S.practice ? ' practice' : ''); el.id = 'dttSession';
+    el.innerHTML = '<div class="dtt-stop"><button type="button" class="dtt-pausebtn" id="dttPause"><span class="fill"></span><span>❚❚ ' + esc(T('Hold to Pause', 'Tahan untuk Jeda')) + '</span></button>' +
+      (S.practice ? '<span class="dtt-practag">' + esc(T('Practice · Not Recorded', 'Latihan · Tidak Dicatat')) + '</span><button type="button" class="dtt-endprac" id="dttEndPrac">' + esc(T('End Practice', 'Akhiri Latihan')) + '</button>' : '') +
+      '<div class="dtt-tokens" id="dttTokens" aria-hidden="true"></div><span class="dtt-count" id="dttCount"></span><div class="dtt-sdots" id="dttDots" aria-hidden="true"></div></div>' +
       '<div class="dtt-stage" id="dttStage"></div><div class="dtt-teacher" id="dttTeacher"></div>';
     document.body.appendChild(el); document.body.style.overflow = 'hidden';
     holdable($('dttPause'), HOLD_PAUSE, pause);
@@ -47,14 +52,38 @@
     document.addEventListener('fullscreenchange', onFullscreen); window.addEventListener('resize', layout);
     try { var f = document.documentElement.requestFullscreen && document.documentElement.requestFullscreen(); if (f && f.catch) f.catch(function () { }); } catch (e) { }
     try { if (navigator.wakeLock) navigator.wakeLock.request('screen').then(function (l) { if (S) S.lock = l; else l.release(); }).catch(function () { }); } catch (e) { }
+    if (S.practice) $('dttEndPrac').onclick = function () { endWithoutSaving(); };
     dots(); snapshot();
-    later(500, nextTrial);
+    if (resumed) later(500, nextTrial); else ready();
+  }
+  // before trial 1: a calm screen for the student, and a moment for the teacher to get set
+  function ready() {
+    var kid = S.kid, s = S.program.settings, g = document.createElement('div');
+    g.className = 'dtt-ready'; g.id = 'dttReady';
+    g.innerHTML = '<div class="dtt-readyart" aria-hidden="true">' + D.themes.chosen(S.student.themes && S.student.themes.length ? S.student.themes : ['space'])[0].characters.slice(0, 1).map(function (c) { return D.themes.svg(c, 'dtt-char'); }).join('') + '</div>' +
+      '<h1>' + esc(T('Ready, ' + ((kid && kid.name) || 'friend') + '?', 'Siap, ' + ((kid && kid.name) || 'teman') + '?')) + '</h1>';
+    $('dttStage').appendChild(g);
+    $('dttTeacher').innerHTML = '<div class="dtt-tinfo"><b class="dtt-rname">' + esc(S.program.name) + '</b><span class="dtt-say">' + esc(T(S.st.total + ' trials', S.st.total + ' trial') + ' · ' + { manual: 'Manual', mtl: 'Most → Least', ltm: 'Least → Most', td: 'Time delay' }[s.prompt]) + '</span></div>' +
+      '<div class="dtt-tbtns"><button type="button" class="dtt-tbtn quiet" id="dttKeys" aria-label="' + esc(T('Keyboard shortcuts', 'Pintasan keyboard')) + '">?</button><button type="button" class="dtt-tbtn go" id="dttGo"><span>▶ ' + esc(T('Start', 'Mulai')) + '</span><kbd>Enter</kbd></button></div>';
+    $('dttGo').onclick = go; $('dttKeys').onclick = shortcuts;
+    S.readyOn = true;
+    function go() { if (!S || !S.readyOn) return; S.readyOn = false; var r = $('dttReady'); if (r) r.remove(); teacher(); later(250, nextTrial); }
+    S.go = go;
+    try { $('dttGo').focus(); } catch (e) { }
+  }
+  function shortcuts() {
+    var rows = [['C', T('Correct', 'Benar')], ['X', T('Incorrect', 'Salah')], ['P', T('Partial Prompt', 'Prompt Partial')], ['F', T('Full Prompt', 'Prompt Full')], ['N', T('No Response', 'Tidak Ada Respons')], ['W', T('Hold: See Label', 'Tahan: Lihat Label')], ['Esc', T('Pause', 'Jeda')], ['?', T('This List', 'Daftar Ini')]];
+    var sh = X.sheet('<div class="dtt-dlg"><div class="dtt-dlghead"><h2>' + esc(T('Keyboard Shortcuts', 'Pintasan Keyboard')) + '</h2><button type="button" class="dtt-x" data-x aria-label="' + esc(T('Close', 'Tutup')) + '">✕</button></div><div class="dtt-keys">' +
+      rows.map(function (r) { return '<span>' + esc(r[1]) + '</span><kbd>' + esc(r[0]) + '</kbd>'; }).join('') + '</div></div>');
+    sh.wrap.classList.add('over');
+    sh.el.addEventListener('click', function (e) { if (e.target.closest('[data-x]')) sh.close(); });
   }
 
   /* ---------- trials ---------- */
   function dots() {
     var d = $('dttDots'); if (!d) return;
-    var done = EN.countedDone(S.st), h = '';
+    var done = EN.countedDone(S.st), h = '', cn = $('dttCount');
+    if (cn) cn.textContent = Math.min(done + (S.st.cur ? 1 : 0), S.st.total) + ' / ' + S.st.total;
     for (var i = 0; i < S.st.total; i++) h += '<i class="' + (i < done ? 'd' : '') + '"></i>';
     d.innerHTML = h;
     var tk = $('dttTokens'), s = S.program.settings;
@@ -70,7 +99,7 @@
     var stage = $('dttStage'), st = stageFor(c.spec.op);
     S.peek = false; S.flash = false;
     $('dttSession').style.setProperty('--dtt-cardc', 'var(--dtt-c' + (1 + c.no % COLORS) + ')');
-    st.draw(stage, c, S); st.layout(stage);
+    st.draw(stage, c, S); st.layout(stage); dots();
     if (S.prefs.labelView === 'flash') { S.flash = true; curLater(2000, function () { S.flash = false; refreshLabel(); }); }
     teacher(); snapshot();
     if (c.startLevel > 0) curLater(350, function () { prompt(c.startLevel); });
@@ -168,10 +197,20 @@
     var hint = { listener: s.sdHint, matching: s.mHint, sorting: s.sHint, pattern: s.patHint }[op] || '';
     return say + hint.replace(/\{label\}/g, name);
   }
+  // the teacher bar shows a small heading, what to say, and the target word (hidden until held, by default)
+  function sayParts(c, show) {
+    var s = S.program.settings, op = c.spec.op, word = label(c.spec.target);
+    if (op === 'tact') {
+      var tx = c.level >= 2 ? T('Say the whole word', 'Ucapkan seluruh kata') : c.level === 1 && s.tPart === 'first' ? T('First sound: ', 'Bunyi awal: ') + firstSound(word) + '...' : c.level === 1 && s.tPart === 'fill' ? (s.tFill || '').replace(/\{label\}/g, '...') : (s.tHint || '');
+      return { head: T('Ask · Answer', 'Tanya · Jawaban'), text: tx };
+    }
+    var hint = { listener: s.sdHint, matching: s.mHint, sorting: s.sHint, pattern: s.patHint }[op] || '';
+    return { head: T('Say', 'Ucapkan'), text: hint.replace(/\s*\{label\}\s*/g, ' ').trim() };
+  }
   function refreshLabel() {
-    var c = S && S.st.cur, w = $('dttLabel'), y = $('dttSay'); if (!c || !w) return;
+    var c = S && S.st.cur, w = $('dttLabel'); if (!c || !w) return;
     var v = labelVisible(c); w.textContent = v ? label(c.spec.target) : '•••'; w.classList.toggle('masked', !v);
-    if (y) y.textContent = sayText(c, v);
+    var pk = $('dttPeek'); if (pk) pk.classList.toggle('on', !!S.peek);
   }
   function resultStrip() {
     return S.st.trials.slice(-8).map(function (t) {
@@ -181,19 +220,19 @@
   }
   function teacher() {
     var el = $('dttTeacher'); if (!el || !S) return;
-    var c = S.st.cur, done = EN.countedDone(S.st), total = S.st.total, chain = PR.chain(S.program.settings), no = Math.min(done + 1, total);
-    var count = '<span class="dtt-tcount">' + esc(T('Trial ' + no + ' of ' + total, 'Trial ' + no + ' dari ' + total)) + '</span>', strip = '<span class="dtt-strip">' + resultStrip() + '</span>';
-    if (!c) { el.innerHTML = '<div class="dtt-tinfo">' + count + strip + '</div>'; return; }
-    var kind = { maintenance: T('Maintenance', '%maintenance%'), 'ec-correction': T('Error correction: correction', 'Error correction: koreksi'), 'ec-distractor': T('Error correction: distractor', 'Error correction: distraktor'), 'ec-transfer': T('Error correction: transfer', 'Error correction: transfer') }[c.spec.kind];
-    var mode = S.prefs.labelView, vis = labelVisible(c), lk = c.locked;
-    el.innerHTML = '<div class="dtt-tinfo' + (mode === 'small' ? ' tiny' : '') + '">' + count +
-      '<b class="dtt-tlabel' + (vis ? '' : ' masked') + '" id="dttLabel">' + esc(vis ? label(c.spec.target) : '•••') + '</b>' +
-      ((mode === 'hold' || mode === 'flash') && !lk ? '<button type="button" class="dtt-peek" id="dttPeek" aria-label="' + esc(T('Hold to see the label', 'Tahan untuk melihat label')) + '">' + ICON.eye + '<kbd>W</kbd></button>' : '') +
-      (kind ? '<span class="dtt-chip">' + esc(kind) + '</span>' : '') + (c.spec.retention ? '<span class="dtt-chip">' + esc(T('Retention check', 'Pemeriksaan retensi')) + '</span>' : '') +
-      '<span class="dtt-chip' + (c.level ? ' warn' : '') + '">' + esc(levelName(c.level)) + '</span>' +
-      '<span class="dtt-say" id="dttSay">' + esc(sayText(c, vis)) + '</span>' + strip + '</div>' +
-      '<div class="dtt-tbtns">' + (chain.indexOf(1) >= 0 ? btn('partial', 'Partial', 'P', lk || c.level >= 1) : '') + (chain.indexOf(2) >= 0 ? btn('full', 'Full', 'F', lk || c.level >= 2) : '') +
-      (stageFor(c.spec.op).touch ? btn('nr', T('No response', 'Tidak ada respons'), 'N', lk) : btn('bad', T('Incorrect', 'Salah'), '2', lk) + btn('ok', T('Correct', 'Benar'), '1', lk)) + '</div>';
+    var c = S.st.cur, chain = PR.chain(S.program.settings), strip = '<span class="dtt-strip">' + resultStrip() + '</span>';
+    if (S.readyOn) return;
+    if (!c) { el.innerHTML = '<div class="dtt-tinfo">' + strip + '</div>'; return; }
+    var kind = { maintenance: T('Maintenance', '%maintenance%'), 'ec-correction': T('Error Correction · Full Prompt', 'Error Correction · Prompt Full'), 'ec-distractor': T('Distractor Trial', 'Trial Distraktor'), 'ec-transfer': T('Transfer Trial', 'Trial Transfer') }[c.spec.kind];
+    var mode = S.prefs.labelView, vis = labelVisible(c), lk = c.locked, sp = sayParts(c, vis), mixed = D.defaults.OPS[S.program.type].length > 1;
+    var badge = kind || (c.spec.retention ? T('Retention Check', 'Pemeriksaan Retensi') : T('Learning', 'Dipelajari'));
+    el.innerHTML = '<div class="dtt-tinfo' + (mode === 'small' ? ' tiny' : '') + '"><span class="dtt-saylab">' + esc(sp.head) + '</span>' +
+      '<span class="dtt-sayrow"><span class="dtt-say" id="dttSay">' + esc(sp.text) + '</span><b class="dtt-tlabel' + (vis ? '' : ' masked') + '" id="dttLabel">' + esc(vis ? label(c.spec.target) : '•••') + '</b>' +
+      ((mode === 'hold' || mode === 'flash') && !lk ? '<button type="button" class="dtt-peek" id="dttPeek" aria-label="' + esc(T('Hold to see the label', 'Tahan untuk melihat label')) + '">' + ICON.eye + '</button>' : '') + '</span></div>' +
+      '<div class="dtt-tmid">' + (mixed ? '<span class="dtt-tbadge op">' + esc(c.spec.op === 'tact' ? 'Tact' : 'Listener') + '</span>' : '') + '<span class="dtt-tbadge' + (kind ? ' warn' : '') + '">' + esc(badge) + '</span>' + (c.level ? '<span class="dtt-tbadge pr">' + esc(levelName(c.level)) + '</span>' : '') + strip + '</div>' +
+      '<div class="dtt-tbtns">' + (stageFor(c.spec.op).touch ? '' : btn('ok', T('Correct', 'Benar'), 'C', lk) + btn('bad', T('Incorrect', 'Salah'), 'X', lk)) +
+      (chain.indexOf(1) >= 0 ? btn('partial', 'Partial', 'P', lk || c.level >= 1) : '') + (chain.indexOf(2) >= 0 ? btn('full', 'Full', 'F', lk || c.level >= 2) : '') +
+      (stageFor(c.spec.op).touch ? btn('nr', T('No Response', 'Tidak Ada Respons'), 'N', lk) : '') + '</div>';
     Array.prototype.forEach.call(el.querySelectorAll('.dtt-tbtn'), function (b) {
       if (S.prefs.hold) holdable(b, HOLD_PRESS, function () { command(b.dataset.cmd); }); else b.addEventListener('click', function () { command(b.dataset.cmd); });
     });
@@ -225,12 +264,14 @@
   function onKey(e) {
     if (!S || S.ended) return;
     if (D.games.isActive()) { if (e.key === 'Escape' || e.key.toLowerCase() === 's') { e.preventDefault(); D.games.skip(); } return; }
-    if ($('dttBoard')) return;
+    if ($('dttBoard') || document.querySelector('.tl-sheetwrap')) return;
+    if (S.readyOn) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); S.go(); } else if (e.key === '?') shortcuts(); return; }
     if (e.key === 'Escape') { e.preventDefault(); if (S.paused) resume(); else pause(); return; }
     if (S.paused || e.ctrlKey || e.metaKey || e.altKey) return;
     var k = e.key.toLowerCase();
+    if (k === '?') { e.preventDefault(); shortcuts(); return; }
     if (k === 'w') { e.preventDefault(); if (S.st.cur && !S.peek) { S.peek = true; refreshLabel(); } return; }
-    var map = { p: 'partial', f: 'full', n: 'nr', '1': 'ok', '2': 'bad' };
+    var map = { p: 'partial', f: 'full', n: 'nr', c: 'ok', x: 'bad', '1': 'ok', '2': 'bad' };
     if (map[k]) { e.preventDefault(); command(map[k]); }
   }
   function onKeyUp(e) { if (S && e.key.toLowerCase() === 'w') { S.peek = false; refreshLabel(); } }
@@ -244,11 +285,21 @@
     if (S.st.cur && !S.st.cur.locked) { EN.resume(S.st); $('dttStage').innerHTML = ''; teacher(); snapshot(); }
     var n = EN.countedDone(S.st), p = document.createElement('div');
     p.className = 'dtt-paused'; p.id = 'dttPaused';
-    p.innerHTML = '<div class="tl-panel pad" role="dialog" aria-modal="true"><h2 class="tl-h2">' + esc(T('Session paused', '%session% dijeda')) + '</h2><p class="tl-p">' + esc(T(n + ' of ' + S.st.total + ' trials done. Completed trials are kept if you end now.', n + ' dari ' + S.st.total + ' trial selesai. Trial yang selesai tetap tersimpan jika diakhiri sekarang.')) + '</p>' +
-      '<button type="button" class="tl-btn primary lg" id="dttResume">' + esc(T('Resume', 'Lanjutkan')) + '</button><button type="button" class="tl-btn outline" id="dttEnd">' + esc(T('End session', 'Akhiri %session%')) + '</button></div>';
+    p.innerHTML = '<div class="dtt-pausecard" role="dialog" aria-modal="true"><h2>' + esc(T('Paused', 'Dijeda')) + '</h2><p>' + esc(T(n + ' of ' + S.st.total + ' trials done', n + ' dari ' + S.st.total + ' trial selesai')) + '</p>' +
+      '<button type="button" class="dtt-btn primary block" id="dttResume">▶ ' + esc(T('Resume', 'Lanjutkan')) + '</button>' +
+      (S.practice ? '' : '<button type="button" class="dtt-btn block" id="dttEnd">' + esc(T('End and Save', 'Akhiri dan Simpan')) + '</button>') +
+      '<button type="button" class="dtt-btn quiet block danger" id="dttDrop">' + esc(S.practice ? T('End Practice', 'Akhiri Latihan') : T('End Without Saving', 'Akhiri Tanpa Menyimpan')) + '</button></div>';
     $('dttSession').appendChild(p);
-    $('dttResume').onclick = resume; $('dttEnd').onclick = function () { finish(true); };
+    $('dttResume').onclick = resume; if ($('dttEnd')) $('dttEnd').onclick = function () { finish(true); };
+    $('dttDrop').onclick = endWithoutSaving;
     $('dttResume').focus();
+  }
+  function endWithoutSaving() {
+    if (!S || S.ended) return;
+    S.ended = true; clearAll();
+    if (D.games.isActive()) D.games.skip();
+    D.offline.clearActive(S.uid).catch(function () { });
+    close();
   }
   function resume() {
     if (!S || !S.paused) return;
@@ -267,7 +318,7 @@
     var out = EN.finish(S.st, S.program, S.saved, Date.now(), early);
     D.offline.clearActive(S.uid).catch(function () { });
     if (!out) { close(); return; } // nothing was done, so there is nothing to save
-    var saving = D.store.recordSession(S.program.id, out).catch(function () { });
+    var saving = S.practice ? Promise.resolve() : D.store.recordSession(S.program.id, out).catch(function () { });
     $('dttStage').innerHTML = ''; $('dttTeacher').innerHTML = ''; $('dttDots').innerHTML = '';
     var pb = $('dttPause'); if (pb) pb.style.display = 'none';
     function show() { D.summary.show($('dttSession'), S.program, S.set, S.kid, out, saving, api); }
@@ -296,9 +347,9 @@
   }
   function resumeFrom(snap) {
     U.resume = null;
-    open(EN.resume(snap.st), snap.program, snap.set, snap.saved, snap.student);
+    open(EN.resume(snap.st), snap.program, snap.set, snap.saved, snap.student, snap.practice, true);
   }
   function discard() { var uid = D.store.userId(); U.resume = null; D.offline.clearActive(uid).catch(function () { }); D.offline.clearImages().catch(function () { }); ui.render(); }
 
-  var api = D.session = { start: start, close: close, checkResume: checkResume, resumeFrom: resumeFrom, discard: discard, running: function () { return !!S; } };
+  var api = D.session = { start: start, close: close, checkResume: checkResume, resumeFrom: resumeFrom, discard: discard, running: function () { return !!S; }, practice: function () { return !!(S && S.practice); } };
 })();
