@@ -5,7 +5,7 @@
   else { root.LUDtt = root.LUDtt || {}; root.LUDtt.mastery = factory(root.LUDtt.prompting, root.LUDtt.errorCorrection, root.LUDtt.targets); }
 })(typeof self !== 'undefined' ? self : this, function (PR, EC, TG) {
   'use strict';
-  var KEEP_RECENT = 10, KEEP_SERIES = 3, DAY = 86400000, FLAG_AFTER = 10;
+  var KEEP_RECENT = 20, KEEP_SERIES = 10, DAY = 86400000, FLAG_AFTER = 10;
 
   function newProgress(s) { var ps = PR.newState(s); ps.recent = []; ps.series = []; ps.sessions = 0; ps.masteredAt = null; ps.retentionDue = null; return ps; }
   function get(progress, id, op, s) { var k = TG.key(id, op); if (!progress[k]) progress[k] = newProgress(s); return progress[k]; }
@@ -57,7 +57,8 @@
       ps.sessions = (ps.sessions || 0) + 1;
       if (s.mRule === 'rolling' ? rollingMet(ps, s) : classicMet(ps, s)) {
         ps.masteredAt = now;
-        ps.retentionDue = s.mRule === 'rolling' ? now + s.retDays * DAY : null;
+        // both rules recheck a mastered target once, after retDays, in the maintenance trials
+        ps.retentionDue = now + s.retDays * DAY;
         PR.mastered(ps);
         newly.push({ target: b.id, op: b.op });
       }

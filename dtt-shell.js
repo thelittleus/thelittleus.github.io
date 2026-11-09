@@ -114,7 +114,7 @@
       size = size || 32;
       var ini = p ? (p.name || '?').trim().charAt(0).toUpperCase() : '?';
       return '<span class="dtt-ava" style="width:' + size + 'px;height:' + size + 'px;font-size:' + Math.round(size * 0.44) + 'px;background:' + esc((p && p.color) || '#F3EEE6') + '">' +
-        (p && p.photo && PH[p.photo] ? '<img src="' + PH[p.photo] + '" alt="">' : esc(ini)) + '</span>';
+        (p && p.photo && PH[p.photo] ? '<img src="' + PH[p.photo] + '" alt="">' : window.LUAcc && LUAcc.face ? LUAcc.face(p && p.kid === 'girl' ? 'girl' : 'boy', ini) : esc(ini)) + '</span>';
     }
   };
 

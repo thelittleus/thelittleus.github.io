@@ -41,9 +41,11 @@
     S = { st: st, program: program, set: set, saved: saved, student: student || { themes: [], photos: [] }, uid: D.store.userId(), kid: kidOf(st.studentId), prefs: ui.prefs(), timers: [], curTimers: [], paused: false, waiting: false, ended: false, lock: null, peek: false, flash: false, practice: !!practice };
     var el = document.createElement('div');
     el.className = 'dtt-session' + (S.prefs.reduce ? ' calm' : '') + (S.practice ? ' practice' : ''); el.id = 'dttSession';
-    el.innerHTML = '<div class="dtt-stop"><button type="button" class="dtt-pausebtn" id="dttPause"><span class="fill"></span><span>❚❚ ' + esc(T('Hold to Pause', 'Tahan untuk Jeda')) + '</span></button>' +
-      (S.practice ? '<span class="dtt-practag">' + esc(T('Practice · Not Recorded', 'Latihan · Tidak Dicatat')) + '</span><button type="button" class="dtt-endprac" id="dttEndPrac">' + esc(T('End Practice', 'Akhiri Latihan')) + '</button>' : '') +
-      '<div class="dtt-tokens" id="dttTokens" aria-hidden="true"></div><span class="dtt-count" id="dttCount"></span><div class="dtt-sdots" id="dttDots" aria-hidden="true"></div></div>' +
+    // 1e: hold to pause on the left, the token board and progress in the middle, the count on the right
+    el.innerHTML = '<div class="dtt-stop"><div class="dtt-stopl"><button type="button" class="dtt-pausebtn" id="dttPause"><span class="fill"></span><span>❚❚ ' + esc(T('Hold to Pause', 'Tahan untuk Jeda')) + '</span></button>' +
+      '<button type="button" class="dtt-pausebtn" id="dttExit" hidden>✕ ' + esc(T('Exit', 'Keluar')) + '</button>' +
+      (S.practice ? '<span class="dtt-practag">' + esc(T('Practice · Not Recorded', 'Latihan · Tidak Dicatat')) + '</span><button type="button" class="dtt-endprac" id="dttEndPrac">' + esc(T('End Practice', 'Akhiri Latihan')) + '</button>' : '<span class="dtt-practag real" id="dttRealTag" hidden>' + esc(T('Real Session · Saved to Data', 'Session Nyata · Tersimpan di Data')) + '</span>') + '</div>' +
+      '<div class="dtt-stopm"><div class="dtt-tokens" id="dttTokens" aria-hidden="true"></div><div class="dtt-sdots" id="dttDots" aria-hidden="true"></div></div><span class="dtt-count" id="dttCount"></span></div>' +
       '<div class="dtt-stage" id="dttStage"></div><div class="dtt-teacher" id="dttTeacher"></div>';
     document.body.appendChild(el); document.body.style.overflow = 'hidden';
     holdable($('dttPause'), HOLD_PAUSE, pause);
@@ -63,18 +65,21 @@
     g.innerHTML = '<div class="dtt-readyart" aria-hidden="true">' + D.themes.chosen(S.student.themes && S.student.themes.length ? S.student.themes : ['space'])[0].characters.slice(0, 1).map(function (c) { return D.themes.svg(c, 'dtt-char'); }).join('') + '</div>' +
       '<h1>' + esc(T('Ready, ' + ((kid && kid.name) || 'friend') + '?', 'Siap, ' + ((kid && kid.name) || 'teman') + '?')) + '</h1>';
     $('dttStage').appendChild(g);
-    $('dttTeacher').innerHTML = '<div class="dtt-tinfo"><b class="dtt-rname">' + esc(S.program.name) + '</b><span class="dtt-say">' + esc(T(S.st.total + ' trials', S.st.total + ' trial') + ' · ' + { manual: 'Manual', mtl: 'Most → Least', ltm: 'Least → Most', td: 'Time delay' }[s.prompt]) + '</span></div>' +
-      '<div class="dtt-tbtns"><button type="button" class="dtt-tbtn quiet" id="dttKeys" aria-label="' + esc(T('Keyboard shortcuts', 'Pintasan keyboard')) + '">?</button><button type="button" class="dtt-tbtn go" id="dttGo"><span>▶ ' + esc(T('Start', 'Mulai')) + '</span><kbd>Enter</kbd></button></div>';
+    // 5c: what is about to run, in the teacher's bar
+    var names = [], seen = {};
+    S.st.queue.forEach(function (q) { if (!seen[q.target] && names.length < 4) { seen[q.target] = 1; names.push(label(q.target)); } });
+    $('dttTeacher').innerHTML = '<div class="dtt-tinfo"><b class="dtt-rname">' + esc(S.program.name) + '</b><span class="dtt-rsub">' + esc(T(S.st.total + ' trials', S.st.total + ' trial') + ' · ' + names.join(', ') + ' · ' + { manual: 'Manual', mtl: 'Most → Least', ltm: 'Least → Most', td: 'Time delay' }[s.prompt]) + '</span></div>' +
+      '<div class="dtt-tbtns"><button type="button" class="dtt-keysbtn" id="dttKeys">' + esc(T('Shortcuts', 'Pintasan')) + ' <kbd>?</kbd></button><button type="button" class="dtt-tbtn go" id="dttGo">▶ ' + esc(T('Start', 'Mulai')) + '</button></div>';
     $('dttGo').onclick = go; $('dttKeys').onclick = shortcuts;
+    $('dttPause').hidden = true; $('dttExit').hidden = false; $('dttExit').onclick = endWithoutSaving; if ($('dttRealTag')) $('dttRealTag').hidden = false;
     S.readyOn = true;
-    function go() { if (!S || !S.readyOn) return; S.readyOn = false; var r = $('dttReady'); if (r) r.remove(); teacher(); later(250, nextTrial); }
+    function go() { if (!S || !S.readyOn) return; S.readyOn = false; var r = $('dttReady'); if (r) r.remove(); $('dttPause').hidden = false; $('dttExit').hidden = true; if ($('dttRealTag')) $('dttRealTag').hidden = true; teacher(); later(250, nextTrial); }
     S.go = go;
     try { $('dttGo').focus(); } catch (e) { }
   }
   function shortcuts() {
-    var rows = [['C', T('Correct', 'Benar')], ['X', T('Incorrect', 'Salah')], ['P', T('Partial Prompt', 'Prompt Partial')], ['F', T('Full Prompt', 'Prompt Full')], ['N', T('No Response', 'Tidak Ada Respons')], ['W', T('Hold: See Label', 'Tahan: Lihat Label')], ['Esc', T('Pause', 'Jeda')], ['?', T('This List', 'Daftar Ini')]];
-    var sh = X.sheet('<div class="dtt-dlg"><div class="dtt-dlghead"><h2>' + esc(T('Keyboard Shortcuts', 'Pintasan Keyboard')) + '</h2><button type="button" class="dtt-x" data-x aria-label="' + esc(T('Close', 'Tutup')) + '">✕</button></div><div class="dtt-keys">' +
-      rows.map(function (r) { return '<span>' + esc(r[1]) + '</span><kbd>' + esc(r[0]) + '</kbd>'; }).join('') + '</div></div>');
+    var rows = [['C', T('Correct', 'Benar')], ['X', T('Incorrect', 'Salah')], ['P', T('Partial Prompt', 'Prompt Partial')], ['F', T('Full Prompt', 'Prompt Full')], ['N', T('No Response', 'Tidak Ada Respons')], ['W', T('Hold: See Label', 'Tahan: Lihat Label')], ['Space', T('Hold: Pause', 'Tahan: Jeda')], ['S', T('Skip Trial', 'Lewati Trial')], ['?', T('This List', 'Daftar Ini')]];
+    var sh = X.sheet(ui.dlg({ title: T('Keyboard Shortcuts', 'Pintasan Keyboard'), body: '<div class="dtt-keys">' + rows.map(function (r) { return '<span>' + esc(r[1]) + '</span><kbd>' + esc(r[0]) + '</kbd>'; }).join('') + '</div>' }));
     sh.wrap.classList.add('over');
     sh.el.addEventListener('click', function (e) { if (e.target.closest('[data-x]')) sh.close(); });
   }
@@ -82,12 +87,19 @@
   /* ---------- trials ---------- */
   function dots() {
     var d = $('dttDots'); if (!d) return;
-    var done = EN.countedDone(S.st), h = '', cn = $('dttCount');
+    // a short bar per trial: green independent, yellow prompted, pink error, grey still to come
+    var done = EN.countedDone(S.st), h = '', cn = $('dttCount'), res = S.st.trials.filter(function (t) { return D.errorCorrection.counted(t.kind); });
     if (cn) cn.textContent = Math.min(done + (S.st.cur ? 1 : 0), S.st.total) + ' / ' + S.st.total;
-    for (var i = 0; i < S.st.total; i++) h += '<i class="' + (i < done ? 'd' : '') + '"></i>';
+    for (var i = 0; i < S.st.total; i++) h += '<i class="' + (res[i] ? { independent: 'i', prompted: 'p' }[res[i].result] || 'e' : i === done && S.st.cur ? 'now' : '') + '"></i>';
     d.innerHTML = h;
+    // 5d: the token board, with the reward at the end
     var tk = $('dttTokens'), s = S.program.settings;
-    if (tk && s.tokenOn) { var out = ''; for (var j = 0; j < s.tokens; j++) out += '<svg viewBox="0 0 60 60" class="' + (j < (S.st.reinf.tokens || 0) ? 'on' : '') + '">' + D.themes.star(30, 30, 26, j < (S.st.reinf.tokens || 0) ? '#FFC94A' : 'none') + '</svg>'; tk.innerHTML = out; }
+    if (tk && s.tokenOn) {
+      var have = S.st.reinf.tokens || 0, out = '', rw = s.tokenReward !== 'celebration' && (S.student.photos || []).filter(function (m) { return m.id === s.tokenReward; })[0];
+      for (var j = 0; j < s.tokens; j++) out += '<span class="dtt-token' + (j < have ? ' on' : '') + '">' + (j < have ? '★' : '') + '</span>';
+      tk.innerHTML = out + '<span class="dtt-tokar">→</span><span class="dtt-tokrw">' + (rw ? ui.img(rw, '') : '★') + '</span>';
+      ui.hydrate(tk);
+    }
   }
   function rctx() { return { s: S.program.settings, prefs: S.prefs, kid: S.kid, themes: S.student.themes, photos: S.student.photos }; }
   function layout() { if (!S || !S.st.cur) return; stageFor(S.st.cur.spec.op).layout($('dttStage')); }
@@ -220,18 +232,20 @@
   }
   function teacher() {
     var el = $('dttTeacher'); if (!el || !S) return;
-    var c = S.st.cur, chain = PR.chain(S.program.settings), strip = '<span class="dtt-strip">' + resultStrip() + '</span>';
+    var c = S.st.cur, chain = PR.chain(S.program.settings);
     if (S.readyOn) return;
-    if (!c) { el.innerHTML = '<div class="dtt-tinfo">' + strip + '</div>'; return; }
-    var kind = { maintenance: T('Maintenance', '%maintenance%'), 'ec-correction': T('Error Correction · Full Prompt', 'Error Correction · Prompt Full'), 'ec-distractor': T('Distractor Trial', 'Trial Distraktor'), 'ec-transfer': T('Transfer Trial', 'Trial Transfer') }[c.spec.kind];
+    if (!c) return; // between trials the bar keeps showing the last one, so it does not flicker
+    // 5h: one badge, only on the teacher's bar
+    var kind = { maintenance: T('Maintenance', '%maintenance%'), 'ec-correction': T('Error Correction · ' + (c.level >= 2 ? 'Full' : 'Partial') + ' Prompt', 'Error Correction · Prompt ' + (c.level >= 2 ? 'Full' : 'Partial')), 'ec-distractor': T('Distractor Trial', 'Trial Distraktor'), 'ec-transfer': T('Transfer Trial', 'Trial Transfer') }[c.spec.kind];
     var mode = S.prefs.labelView, vis = labelVisible(c), lk = c.locked, sp = sayParts(c, vis), mixed = D.defaults.OPS[S.program.type].length > 1;
-    var badge = kind || (c.spec.retention ? T('Retention Check', 'Pemeriksaan Retensi') : T('Learning', 'Dipelajari'));
+    var badge = kind || (c.spec.retention ? T('Retention Check', 'Pemeriksaan Retensi') : T('Learning', 'Dipelajari')), bcls = c.spec.kind === 'maintenance' ? 'mint' : c.spec.retention ? 'lilac' : kind ? 'rose' : 'butter';
+    if (mixed) sp.head = (c.spec.op === 'tact' ? T('Ask · Answer', 'Tanya · Jawaban') : T('Say', 'Ucapkan'));
     el.innerHTML = '<div class="dtt-tinfo' + (mode === 'small' ? ' tiny' : '') + '"><span class="dtt-saylab">' + esc(sp.head) + '</span>' +
-      '<span class="dtt-sayrow"><span class="dtt-say" id="dttSay">' + esc(sp.text) + '</span><b class="dtt-tlabel' + (vis ? '' : ' masked') + '" id="dttLabel">' + esc(vis ? label(c.spec.target) : '•••') + '</b>' +
+      '<span class="dtt-sayrow">' + (sp.text ? '<span class="dtt-say" id="dttSay">' + esc(sp.text) + '</span>' : '') + '<b class="dtt-tlabel' + (vis ? '' : ' masked') + '" id="dttLabel">' + esc(vis ? label(c.spec.target) : '•••') + '</b>' +
       ((mode === 'hold' || mode === 'flash') && !lk ? '<button type="button" class="dtt-peek" id="dttPeek" aria-label="' + esc(T('Hold to see the label', 'Tahan untuk melihat label')) + '">' + ICON.eye + '</button>' : '') + '</span></div>' +
-      '<div class="dtt-tmid">' + (mixed ? '<span class="dtt-tbadge op">' + esc(c.spec.op === 'tact' ? 'Tact' : 'Listener') + '</span>' : '') + '<span class="dtt-tbadge' + (kind ? ' warn' : '') + '">' + esc(badge) + '</span>' + (c.level ? '<span class="dtt-tbadge pr">' + esc(levelName(c.level)) + '</span>' : '') + strip + '</div>' +
+      '<span class="dtt-tbadge ' + bcls + '">' + esc((mixed ? (c.spec.op === 'tact' ? 'Tact · ' : 'Listener · ') : '') + badge) + '</span>' +
       '<div class="dtt-tbtns">' + (stageFor(c.spec.op).touch ? '' : btn('ok', T('Correct', 'Benar'), 'C', lk) + btn('bad', T('Incorrect', 'Salah'), 'X', lk)) +
-      (chain.indexOf(1) >= 0 ? btn('partial', 'Partial', 'P', lk || c.level >= 1) : '') + (chain.indexOf(2) >= 0 ? btn('full', 'Full', 'F', lk || c.level >= 2) : '') +
+      (chain.indexOf(1) >= 0 ? btn('partial' + (c.level === 1 ? ' cur' : ''), 'Partial', 'P', lk || c.level >= 1) : '') + (chain.indexOf(2) >= 0 ? btn('full' + (c.level === 2 ? ' cur' : ''), 'Full', 'F', lk || c.level >= 2) : '') +
       (stageFor(c.spec.op).touch ? btn('nr', T('No Response', 'Tidak Ada Respons'), 'N', lk) : '') + '</div>';
     Array.prototype.forEach.call(el.querySelectorAll('.dtt-tbtn'), function (b) {
       if (S.prefs.hold) holdable(b, HOLD_PRESS, function () { command(b.dataset.cmd); }); else b.addEventListener('click', function () { command(b.dataset.cmd); });
@@ -243,7 +257,7 @@
       pk.addEventListener('contextmenu', function (e) { e.preventDefault(); });
     }
   }
-  function btn(cmd, name, key, off) { return '<button type="button" class="dtt-tbtn ' + cmd + '" data-cmd="' + cmd + '"' + (off ? ' disabled' : '') + '><span class="fill"></span><span>' + esc(name) + '</span><kbd>' + key + '</kbd></button>'; }
+  function btn(cls, name, key, off) { return '<button type="button" class="dtt-tbtn ' + cls + '" data-cmd="' + cls.split(' ')[0] + '"' + (off && !/ cur/.test(cls) ? ' disabled' : '') + (/ cur/.test(cls) ? ' aria-pressed="true"' : '') + '><span class="fill"></span><span>' + esc(name) + '</span><kbd>' + key + '</kbd></button>'; }
   function command(cmd) {
     if (!S || !S.st.cur || S.st.cur.locked || S.paused) return;
     if (cmd === 'partial') prompt(1);
@@ -271,6 +285,8 @@
     var k = e.key.toLowerCase();
     if (k === '?') { e.preventDefault(); shortcuts(); return; }
     if (k === 'w') { e.preventDefault(); if (S.st.cur && !S.peek) { S.peek = true; refreshLabel(); } return; }
+    if (k === ' ' && !e.repeat) { e.preventDefault(); pause(); return; }
+    if (k === 's' && S.st.cur && !S.st.cur.locked) { e.preventDefault(); clearCur(); EN.skip(S.st); $('dttStage').innerHTML = ''; dots(); snapshot(); later(300, nextTrial); return; }
     var map = { p: 'partial', f: 'full', n: 'nr', c: 'ok', x: 'bad', '1': 'ok', '2': 'bad' };
     if (map[k]) { e.preventDefault(); command(map[k]); }
   }
@@ -281,18 +297,27 @@
   /* ---------- pausing ---------- */
   function pause() {
     if (!S || S.paused || S.ended) return;
-    S.paused = true; clearCur();
-    if (S.st.cur && !S.st.cur.locked) { EN.resume(S.st); $('dttStage').innerHTML = ''; teacher(); snapshot(); }
+    S.paused = true; clearCur(); S.skipSpec = null;
+    if (S.st.cur && !S.st.cur.locked) { S.skipSpec = S.st.cur.spec; EN.resume(S.st); $('dttStage').innerHTML = ''; snapshot(); }
     var n = EN.countedDone(S.st), p = document.createElement('div');
     p.className = 'dtt-paused'; p.id = 'dttPaused';
-    p.innerHTML = '<div class="dtt-pausecard" role="dialog" aria-modal="true"><h2>' + esc(T('Paused', 'Dijeda')) + '</h2><p>' + esc(T(n + ' of ' + S.st.total + ' trials done', n + ' dari ' + S.st.total + ' trial selesai')) + '</p>' +
+    // 3k
+    p.innerHTML = '<div class="dtt-pausecard" role="dialog" aria-modal="true" aria-label="' + esc(T('Paused', 'Dijeda')) + '"><b class="dtt-pausehead">' + esc(T('Paused', 'Dijeda')) + ' · ' + esc(T(n + ' of ' + S.st.total + ' done', n + ' dari ' + S.st.total + ' selesai')) + '</b>' +
       '<button type="button" class="dtt-btn primary block" id="dttResume">▶ ' + esc(T('Resume', 'Lanjutkan')) + '</button>' +
-      (S.practice ? '' : '<button type="button" class="dtt-btn block" id="dttEnd">' + esc(T('End and Save', 'Akhiri dan Simpan')) + '</button>') +
-      '<button type="button" class="dtt-btn quiet block danger" id="dttDrop">' + esc(S.practice ? T('End Practice', 'Akhiri Latihan') : T('End Without Saving', 'Akhiri Tanpa Menyimpan')) + '</button></div>';
+      (S.skipSpec ? '<button type="button" class="dtt-btn sec block" id="dttSkip">' + esc(T('Skip This Trial', 'Lewati Trial Ini')) + '</button>' : '') +
+      (S.practice ? '' : '<button type="button" class="dtt-btn sec block" id="dttEnd">' + esc(T('End and Save', 'Akhiri dan Simpan')) + '</button>') +
+      '<button type="button" class="dtt-btn sec block danger" id="dttDrop">' + esc(S.practice ? T('End Practice', 'Akhiri Latihan') : T('End Without Saving', 'Akhiri Tanpa Menyimpan')) + '</button></div>';
     $('dttSession').appendChild(p);
     $('dttResume').onclick = resume; if ($('dttEnd')) $('dttEnd').onclick = function () { finish(true); };
+    if ($('dttSkip')) $('dttSkip').onclick = skipTrial;
     $('dttDrop').onclick = endWithoutSaving;
     $('dttResume').focus();
+  }
+  // the trial that was on screen is dropped: not recorded, and the session is one trial shorter
+  function skipTrial() {
+    if (!S) return;
+    if (S.skipSpec && S.st.pending[0] === S.skipSpec) { S.st.pending.shift(); S.st.trialNo++; if (D.errorCorrection.counted(S.skipSpec.kind)) S.st.total = Math.max(EN.countedDone(S.st), S.st.total - 1); }
+    S.skipSpec = null; dots(); snapshot(); resume();
   }
   function endWithoutSaving() {
     if (!S || S.ended) return;

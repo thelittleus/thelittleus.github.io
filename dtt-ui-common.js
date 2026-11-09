@@ -149,14 +149,28 @@
       return '<button type="button" class="' + (on ? 'on' : '') + '" aria-pressed="' + on + '" data-a="set" data-k="' + key + '" data-v="' + esc(o[0]) + '">' + esc(o[1]) + '</button>';
     }).join('') + '</div>';
   };
+  // a row: the title (and a short line under it) on the left, the switch on the right
   ui.sw = function (key, on, title, desc, action) {
-    return '<button type="button" class="dtt-switch" role="switch" aria-checked="' + !!on + '" data-a="' + (action || 'tog') + '" data-k="' + esc(key) + '"><span class="tl-tog" aria-hidden="true"></span><span class="dtt-swtx"><b>' + esc(title) + '</b>' + (desc ? '<small>' + esc(desc) + '</small>' : '') + '</span></button>';
+    return '<button type="button" class="dtt-switch" role="switch" aria-checked="' + !!on + '" data-a="' + (action || 'tog') + '" data-k="' + esc(key) + '"><span class="dtt-swtx"><b>' + esc(title) + '</b>' + (desc ? '<small>' + esc(desc) + '</small>' : '') + '</span><span class="tl-tog" aria-hidden="true"></span></button>';
   };
-  ui.stepper = function (key, val, unit, max) {
-    var r = D.defaults.RANGES[key], top = max == null ? r[1] : Math.min(max, r[1]);
-    return '<div class="dtt-stepper"><button type="button" class="tl-iconbtn" data-a="step" data-k="' + key + '" data-v="-1" aria-label="' + esc(T('Less', 'Kurangi')) + '"' + (val <= r[0] ? ' disabled' : '') + '>−</button>' +
-      '<output aria-live="polite"><b>' + val + '</b>' + (unit ? ' <span>' + esc(unit) + '</span>' : '') + '</output>' +
-      '<button type="button" class="tl-iconbtn" data-a="step" data-k="' + key + '" data-v="1" aria-label="' + esc(T('More', 'Tambah')) + '"' + (val >= top ? ' disabled' : '') + '>+</button></div>';
+  // − value + in one bordered pill. The step comes from the setting's range.
+  ui.stepper = function (key, val, unit, max, action) {
+    var r = D.defaults.RANGES[key], top = max == null ? r[1] : Math.min(max, r[1]), st = r[2] || 1, a = action || 'step';
+    return '<div class="dtt-stepper"><button type="button" data-a="' + a + '" data-k="' + key + '" data-v="-' + st + '" aria-label="' + esc(T('Less', 'Kurangi')) + '"' + (val <= r[0] ? ' disabled' : '') + '>−</button>' +
+      '<output aria-live="polite">' + val + (unit ? ' ' + esc(unit) : '') + '</output>' +
+      '<button type="button" data-a="' + a + '" data-k="' + key + '" data-v="' + st + '" aria-label="' + esc(T('More', 'Tambah')) + '"' + (val >= top ? ' disabled' : '') + '>+</button></div>';
+  };
+  // a labelled row with the control on the right
+  ui.row = function (title, sub, ctrl) {
+    return '<div class="dtt-crow"><span class="dtt-swtx"><b>' + esc(title) + '</b>' + (sub ? '<small>' + esc(sub) + '</small>' : '') + '</span>' + ctrl + '</div>';
+  };
+  ui.divider = function () { return '<div class="dtt-div" aria-hidden="true"></div>'; };
+  ui.lab = function (t, extra) { return '<div class="dtt-lab">' + esc(t) + (extra ? '<span>' + esc(extra) + '</span>' : '') + '</div>'; };
+  // one dialog look everywhere: title and ✕, a cream body, a white footer (o.foot: buttons; o.note: text on the left)
+  ui.dlg = function (o) {
+    return '<div class="dtt-dlg' + (o.cls ? ' ' + o.cls : '') + '"><div class="dtt-dlghead">' + (o.back ? '<button type="button" class="dtt-x" data-back aria-label="' + esc(T('Back', 'Kembali')) + '">‹</button>' : '') +
+      '<div class="dtt-dlgtitle"><h2>' + esc(o.title) + '</h2>' + (o.sub ? '<p class="dtt-hint">' + o.sub + '</p>' : '') + '</div><button type="button" class="dtt-x" data-x aria-label="' + esc(T('Close', 'Tutup')) + '">✕</button></div>' +
+      '<div class="dtt-dlgbody">' + o.body + '</div>' + (o.foot ? '<div class="dtt-dlgfoot">' + (o.note != null ? '<span class="dtt-hint">' + o.note + '</span>' : '<span></span>') + '<div class="dtt-dlgbtns">' + o.foot + '</div></div>' : '') + '</div>';
   };
   ui.field = function (label, value, attrs, placeholder) {
     return '<label class="tl-field"><span>' + esc(label) + '</span><input type="text" value="' + esc(value == null ? '' : value) + '" ' + attrs + (placeholder ? ' placeholder="' + esc(placeholder) + '"' : '') + '></label>';
@@ -178,6 +192,7 @@
     if (P.setValue(p.settings, k, v)) { ui.touchProgram(); render(); }
   };
   ACT.tog = function (b) { var p = ctx(), k = b.dataset.k; if (!p) return; p.settings[k] = !p.settings[k]; ui.touchProgram(); render(); };
+  INP.selSet = function (el) { var p = ctx(); if (!p) return; if (P.setValue(p.settings, el.dataset.k, el.value)) { ui.touchProgram(); render(); } };
   ACT.step = function (b) {
     var p = ctx(), k = b.dataset.k, d = Number(b.dataset.v); if (!p) return;
     if (k === 'activeCount') { var r = D.defaults.RANGES.activeCount; p.activeCount = Math.max(r[0], Math.min(r[1], p.activeCount + d)); }
@@ -205,20 +220,20 @@
   // the free limits: 2 programs and 50 photos. Little Us Plus lifts them.
   ui.plusSheet = function (what) {
     var progs = what === 'programs', n = progs ? D.defaults.FREE_PROGRAMS : D.defaults.PHOTO.freeLimit;
-    var sh = X.sheet('<div class="dtt-dlg"><div class="dtt-dlghead"><span class="dtt-plus">Plus</span><button type="button" class="dtt-x" data-x aria-label="' + esc(T('Close', 'Tutup')) + '">✕</button></div>' +
-      '<h2>' + esc(progs ? T('More programs come with Little Us Plus', 'Program tambahan ada di Little Us Plus') : T('More photos come with Little Us Plus', 'Foto tambahan ada di Little Us Plus')) + '</h2>' +
-      '<p class="dtt-dlgp">' + esc(progs ? T('The free plan holds ' + n + ' programs. With Plus you can make as many as you need, for every student.', 'Paket gratis menyimpan ' + n + ' program. Dengan Plus kamu bisa membuat sebanyak yang dibutuhkan, untuk setiap anak.') : T('The free plan holds ' + n + ' uploaded photos. Plus holds up to 500. Ready-made Little Us sets never count.', 'Paket gratis menyimpan ' + n + ' foto unggahan. Plus menyimpan hingga 500. Set siap pakai Little Us tidak dihitung.')) + '</p>' +
-      '<div class="dtt-dlgbtns col"><a class="dtt-btn primary block" href="/#/plus">' + esc(T('Get Little Us Plus', 'Dapatkan Little Us Plus')) + '</a><button type="button" class="dtt-btn quiet block" data-x>' + esc(T('Not now', 'Nanti saja')) + '</button></div></div>');
+    var sh = X.sheet(ui.dlg({ title: progs ? T('More programs come with Little Us Plus', 'Program tambahan ada di Little Us Plus') : T('More photos come with Little Us Plus', 'Foto tambahan ada di Little Us Plus'), sub: '<span class="dtt-plus">Plus</span>',
+      body: '<p class="dtt-dlgp">' + esc(progs ? T('The free plan holds ' + n + ' programs. With Plus you can make as many as you need, for every student.', 'Paket gratis menyimpan ' + n + ' program. Dengan Plus kamu bisa membuat sebanyak yang dibutuhkan, untuk setiap anak.') : T('The free plan holds ' + n + ' uploaded photos. Plus holds up to 500. Ready-made Little Us sets never count.', 'Paket gratis menyimpan ' + n + ' foto unggahan. Plus menyimpan hingga 500. Set siap pakai Little Us tidak dihitung.')) + '</p>',
+      foot: '<button type="button" class="dtt-btn sec" data-x>' + esc(T('Not Now', 'Nanti Saja')) + '</button><a class="dtt-btn primary" href="/#/plus">' + esc(T('Get Little Us Plus', 'Dapatkan Little Us Plus')) + '</a>' }));
     sh.el.addEventListener('click', function (e) { if (e.target.closest('[data-x]')) sh.close(); });
   };
   ui.photoError = photoError;
   // one file: lets the teacher choose the square. Calls done(blob).
   ui.cropper = function (file, done) {
     D.photo.open(file).then(function (img) {
-      var st = { x: 0.5, y: 0.5, zoom: 1 }, sh = X.sheet('<div class="tl-sheethead"><h2>' + esc(T('Choose the square', 'Pilih bagian foto')) + '</h2></div>' +
-        '<canvas class="dtt-crop" width="320" height="320" tabindex="0" aria-label="' + esc(T('Photo preview. Use the arrow keys to move it.', 'Pratinjau foto. Gunakan tombol panah untuk menggeser.')) + '"></canvas>' +
-        '<label class="tl-field"><span>' + esc(T('Zoom', 'Perbesar')) + '</span><input class="tl-range" type="range" min="1" max="3" step="0.05" value="1" data-zoom></label>' +
-        '<div class="tl-sheetfoot"><button type="button" class="tl-btn outline" data-no>' + esc(T('Cancel', 'Batal')) + '</button><button type="button" class="tl-btn primary" data-yes>' + esc(T('Use this photo', 'Pakai foto ini')) + '</button></div>');
+      var st = { x: 0.5, y: 0.5, zoom: 1 }, sh = X.sheet(ui.dlg({ title: T('Choose the Square', 'Pilih Bagian Foto'),
+        body: '<canvas class="dtt-crop" width="320" height="320" tabindex="0" aria-label="' + esc(T('Photo preview. Use the arrow keys to move it.', 'Pratinjau foto. Gunakan tombol panah untuk menggeser.')) + '"></canvas>' +
+          '<label class="dtt-field"><span>' + esc(T('Zoom', 'Perbesar')) + '</span><input class="tl-range" type="range" min="1" max="3" step="0.05" value="1" data-zoom></label>',
+        foot: '<button type="button" class="dtt-btn sec" data-no>' + esc(T('Cancel', 'Batal')) + '</button><button type="button" class="dtt-btn primary" data-yes>' + esc(T('Use This Photo', 'Pakai Foto Ini')) + '</button>' }));
+      sh.el.querySelector('[data-x]').onclick = function () { sh.close(); };
       var cv = sh.el.querySelector('canvas'), g = cv.getContext('2d');
       function paint() { g.drawImage(D.photo.draw(img, st, 320), 0, 0); }
       paint();

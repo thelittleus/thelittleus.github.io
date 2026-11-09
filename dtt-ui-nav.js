@@ -46,9 +46,9 @@
   ACT.whoMenu = function () {
     var list = PF.list(), cur = ui.student();
     if (!list.length) return ACT.addStudent();
-    var sh = X.sheet('<div class="dtt-dlg"><div class="dtt-dlghead"><h2>' + esc(T('Students', 'Anak')) + '</h2><button type="button" class="dtt-x" data-x aria-label="' + esc(T('Close', 'Tutup')) + '">✕</button></div><div class="dtt-wholist">' +
+    var sh = X.sheet(ui.dlg({ title: T('Students', 'Anak'), body: '<div class="dtt-wholist">' +
       list.map(function (p) { var on = cur && p.id === cur.id; return '<button type="button" class="dtt-whorow' + (on ? ' on' : '') + '" data-kid="' + esc(p.id) + '" aria-pressed="' + !!on + '">' + PF.avatar(p, 36) + '<b>' + esc(p.name) + '</b>' + (on ? '<span aria-hidden="true">✓</span>' : '') + '</button>'; }).join('') +
-      '<button type="button" class="dtt-whorow add" data-add><span class="dtt-ava add" aria-hidden="true">+</span><b>' + esc(T('Add Student', 'Tambah Anak')) + '</b></button></div></div>');
+      '<button type="button" class="dtt-whorow add" data-add><span class="dtt-ava add" aria-hidden="true">+</span><b>' + esc(T('Add Student', 'Tambah Anak')) + '</b></button></div>' }));
     sh.el.addEventListener('click', function (e) {
       var t = e.target.closest('button'); if (!t) return;
       if (t.hasAttribute('data-x')) return sh.close();
@@ -65,11 +65,11 @@
     }
     function draw() {
       var name = sh.el.querySelector('input') ? sh.el.querySelector('input').value : '';
-      sh.set('<div class="dtt-dlg"><div class="dtt-dlghead"><h2>' + esc(T('Add Student', 'Tambah Anak')) + '</h2><button type="button" class="dtt-x" data-x aria-label="' + esc(T('Close', 'Tutup')) + '">✕</button></div>' +
-        '<label class="dtt-field"><span>' + esc(T('First Name or Nickname', 'Nama Depan atau Panggilan')) + '</span><input type="text" maxlength="30" autocomplete="off" value="' + esc(name) + '" autofocus></label>' +
-        '<div class="dtt-field"><span>' + esc(T('Profile Picture', 'Gambar Profil')) + '</span><div class="dtt-kidpicks">' + pick('girl', T('Girl', 'Perempuan')) + pick('boy', T('Boy', 'Laki-laki')) + '</div></div>' +
-        '<p class="dtt-hint">' + esc(T('Also added to your Little Us profile.', 'Juga ditambahkan ke profil Little Us-mu.')) + '</p>' +
-        '<div class="dtt-dlgbtns"><button type="button" class="dtt-btn" data-x>' + esc(T('Cancel', 'Batal')) + '</button><button type="button" class="dtt-btn primary" data-go>' + esc(T('Add Student', 'Tambah Anak')) + '</button></div></div>');
+      sh.set(ui.dlg({ title: T('Add Student', 'Tambah Anak'),
+        body: '<label class="dtt-field"><span>' + esc(T('First Name or Nickname', 'Nama Depan atau Panggilan')) + '</span><input type="text" maxlength="30" autocomplete="off" value="' + esc(name) + '" autofocus></label>' +
+          '<div class="dtt-field"><span>' + esc(T('Profile Picture', 'Gambar Profil')) + '</span><div class="dtt-kidpicks">' + pick('girl', T('Girl', 'Perempuan')) + pick('boy', T('Boy', 'Laki-laki')) + '</div></div>' +
+          '<p class="dtt-hint">' + esc(T('Also added to your Little Us profile.', 'Juga ditambahkan ke profil Little Us-mu.')) + '</p>',
+        foot: '<button type="button" class="dtt-btn sec" data-x>' + esc(T('Cancel', 'Batal')) + '</button><button type="button" class="dtt-btn primary" data-go>' + esc(T('Add Student', 'Tambah Anak')) + '</button>' }));
     }
     draw();
     sh.el.addEventListener('click', function (e) {

@@ -47,10 +47,11 @@
       ec: true, ecD: true,
       // 7 reinforcement
       sched: 'crf', diff: true, dur: 3, scenes: arr(SCENES), photos: true, ownPhotos: false,
-      tokenOn: false, tokens: 5, tokenReward: 'celebration',
+      // token board: one token per correct response; a full board shows the reward and starts a break of breakMin minutes
+      tokenOn: false, tokens: 5, tokenReward: 'celebration', tokenPrompted: true, breakMin: 1,
       praise: PRAISE[l], brief: BRIEF[l], cheer: true, inter: 3, games: gamesOn(),
       // 8 mastery
-      mRule: 'rolling', mWin: 5, mNeed: 4, retDays: 3, mPct: 80, mSess: 2, mMin: 2,
+      mRule: 'rolling', mWin: 5, mNeed: 4, retDays: 7, mPct: 80, mSess: 3, mMin: 2,
       // what counts toward mastery (ind: independent only, any: independent or prompted correct), and what a session below the rule does to the streak
       mCount: 'ind', mMiss: 'reset'
     };
@@ -59,10 +60,11 @@
   // [min, max, step]
   var RANGES = {
     activeCount: [1, 6, 1], trials: [3, 40, 1], iti: [0, 10, 1], resp: [3, 20, 1], fade: [1, 5, 1], tdDelay: [1, 10, 1],
-    dur: [2, 8, 1], mWin: [3, 10, 1], mNeed: [2, 10, 1], retDays: [1, 14, 1], mMin: [1, 6, 1]
+    dur: [2, 8, 1], mWin: [3, 20, 1], mNeed: [1, 20, 1], retDays: [1, 30, 1], mMin: [1, 20, 1],
+    mPct: [50, 100, 5], mSess: [1, 10, 1], tokens: [2, 10, 1], breakMin: [1, 10, 1]
   };
   var CHOICES = {
-    array: [1, 2, 3, 4, 6], bins: [1, 2, 3], tokens: [3, 5, 10], maint: [0, 4, 3, 2], inter: [0, 3, 5], mPct: [70, 80, 90, 100], mSess: [1, 2, 3],
+    array: [1, 2, 3, 4, 6], bins: [1, 2, 3], maint: [0, 4, 3, 2], inter: [0, 3, 5],
     dis: ['random', 'different', 'similar', 'avoid'], order: ['random', 'block'], levels: ['both', 'full', 'partial'], prompt: ['manual', 'mtl', 'ltm', 'td'],
     sched: ['crf', 'fr2', 'fr3', 'vr2', 'vr3'], mRule: ['rolling', 'classic'], mCount: ['ind', 'any'], mMiss: ['reset', 'pause'], matchKind: ['identical', 'nonidentical', 'both'], samplePos: ['centre', 'top', 'side'],
     lPart: ['pulse', 'point', 'bigger'], lFull: ['glow', 'only'], tPart: ['first', 'fill', 'label'],

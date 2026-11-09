@@ -4,7 +4,7 @@
   else { root.LUDtt = root.LUDtt || {}; root.LUDtt.data = factory(root.LUDtt.mastery, root.LUDtt.errorCorrection, root.LUDtt.targets); }
 })(typeof self !== 'undefined' ? self : this, function (MA, EC, TG) {
   'use strict';
-  var KEEP_RECENT = 10, KEEP_SERIES = 3;
+  var KEEP_RECENT = 20, KEEP_SERIES = 10; // the same as dtt-mastery.js
   function byDate(a, b) { return String(a.started_at).localeCompare(String(b.started_at)); }
 
   // oldest first. op limits it to one operation; a session with no trials of that operation is left out.

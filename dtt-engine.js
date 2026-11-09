@@ -53,7 +53,7 @@
       if (s.inter && countedDone(st) % s.inter === 0 && st.queue.length) st.breakDue = true;
     }
     var full = false, boardFull = false;
-    if (a.correct) { full = RF.decide(st.reinf, s, result, spec.kind, rng); if (full) boardFull = RF.earnToken(st.reinf, s); }
+    if (a.correct) { full = RF.decide(st.reinf, s, result, spec.kind, rng); boardFull = RF.earnToken(st.reinf, s, result, spec.kind); }
     else if (s.ec && real) {
       var pool = TG.maintenancePool(program, st.progress, spec.op), others = TG.active(program, st.progress, spec.op);
       st.pending = EC.sequence(spec, s, pool, others, rng).concat(st.pending);
@@ -68,6 +68,14 @@
     if (st.cur && !st.cur.locked) { st.pending.unshift(st.cur.spec); st.trialNo--; }
     st.cur = null;
     return st;
+  }
+
+  // the teacher skips the trial on screen: it is not recorded and the session gets one trial shorter
+  function skip(st) {
+    if (!st.cur || st.cur.locked) return false;
+    if (EC.counted(st.cur.spec.kind)) st.total = Math.max(countedDone(st), st.total - 1);
+    st.cur = null;
+    return true;
   }
 
   // ends the session: mastery runs now, on the saved progress plus this session's prompt state. Null when no real trial was done.
@@ -91,5 +99,5 @@
       summary: MA.summarize(st.trials), perTarget: MA.perTarget(st.trials)
     };
   }
-  return { create: create, next: next, applyPrompt: applyPrompt, onTimeout: onTimeout, respond: respond, takeBreak: takeBreak, resume: resume, finish: finish, countedDone: countedDone };
+  return { create: create, next: next, applyPrompt: applyPrompt, onTimeout: onTimeout, respond: respond, takeBreak: takeBreak, resume: resume, skip: skip, finish: finish, countedDone: countedDone };
 });

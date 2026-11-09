@@ -62,6 +62,13 @@
         return put(t);
       });
     },
+    patch: function (t, filter, fields) {
+      return all().then(function (r) {
+        var m = /id=eq\.([^&]+)/.exec(filter); if (!m) return;
+        r[t].forEach(function (x) { if (String(x.id) === decodeURIComponent(m[1])) Object.assign(x, copy(fields)); });
+        return put(t);
+      });
+    },
     upload: function (path, blob) { return run('files', 'readwrite', function (s) { return s.put(blob, path); }); },
     download: function (path) { return run('files', 'readonly', function (s) { return s.get(path); }).then(function (b) { if (!b) throw new Error('missing'); return b; }); },
     removeFile: function (path) { return run('files', 'readwrite', function (s) { return s.delete(path); }).catch(function () { }); },
@@ -167,10 +174,10 @@
   /* ---------- the sign-in popup and the line shown while signed out ---------- */
   function loginUrl(page) { try { sessionStorage.setItem('lu_after_login', JSON.stringify('#/dtt')); } catch (e) { } return '/#/' + page; }
   D.ui.signIn = function () {
-    var sh = X.sheet('<div class="dtt-dlg dtt-login"><div class="dtt-dlghead"><h2>' + esc(T('Sign in to save your work', 'Masuk agar pekerjaanmu tersimpan')) + '</h2><button type="button" class="dtt-x" data-x aria-label="' + esc(T('Close', 'Tutup')) + '">✕</button></div>' +
-      '<p class="dtt-dlgp">' + esc(T('Programs, pictures and session results are saved to your account, so nothing is lost and you can open them on any device. A free account is enough.', 'Program, gambar, dan hasil session disimpan di akunmu, jadi tidak ada yang hilang dan bisa dibuka di perangkat mana pun. Akun gratis sudah cukup.')) + '</p>' +
-      '<div class="dtt-dlgbtns col"><a class="dtt-btn primary block" href="' + loginUrl('login') + '">' + esc(T('Log in', 'Masuk')) + '</a><a class="dtt-btn block" href="' + loginUrl('signup') + '">' + esc(T('Create a free account', 'Buat akun gratis')) + '</a>' +
-      '<button type="button" class="dtt-btn quiet block" data-x>' + esc(T('Not now, keep it on this device', 'Nanti saja, simpan di perangkat ini')) + '</button></div></div>');
+    var sh = X.sheet(D.ui.dlg({ title: T('Sign in to save your work', 'Masuk agar pekerjaanmu tersimpan'), cls: 'dtt-login',
+      body: '<p class="dtt-dlgp">' + esc(T('Programs, pictures and session results are saved to your account, so nothing is lost and you can open them on any device. A free account is enough.', 'Program, gambar, dan hasil session disimpan di akunmu, jadi tidak ada yang hilang dan bisa dibuka di perangkat mana pun. Akun gratis sudah cukup.')) + '</p>' +
+        '<div class="dtt-stack"><a class="dtt-btn primary block" href="' + loginUrl('login') + '">' + esc(T('Log In', 'Masuk')) + '</a><a class="dtt-btn sec block" href="' + loginUrl('signup') + '">' + esc(T('Create a Free Account', 'Buat Akun Gratis')) + '</a>' +
+        '<button type="button" class="dtt-linkbtn center" data-x>' + esc(T('Not now, keep it on this device', 'Nanti saja, simpan di perangkat ini')) + '</button></div>' }));
     sh.el.addEventListener('click', function (e) { if (e.target.closest('[data-x]')) sh.close(); });
   };
   D.ui.guestLine = function () {

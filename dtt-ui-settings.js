@@ -1,30 +1,21 @@
-/* Little Us · DTT · the settings sections. The left-navigation screen and the wizard both draw from SEC.
-   Wording comes from the reference app wherever it still applies. */
+/* Little Us · DTT · a program's settings, drawn as the five drawer tabs (Trials, Prompts, Error Correction, Rewards, Mastery)
+   and the Target Order drawer, plus the one-line summaries on the program page's cards. Every change saves itself. */
 (function () {
   'use strict';
   var D = window.LUDtt, X = LUTools.api, P = D.programs, DEF = D.defaults, T = D.i18n.T, esc = X.esc, ui = D.ui, U = ui.U, ACT = ui.ACT, INP = ui.INP;
-  var opt = ui.opt, seg = ui.seg, sw = ui.sw, stepper = ui.stepper;
+  var seg = ui.seg, sw = ui.sw, stepper = ui.stepper, row = ui.row, lab = ui.lab, div = ui.divider;
 
-  function secondsWord() { return T('s', 'dtk'); }
+  function sec() { return T('s', 'dtk'); }
   function isLT(p) { return p.type === 'listener' || p.type === 'tact' || p.type === 'mixed'; }
   function hasListener(p) { return p.type === 'listener' || p.type === 'mixed'; }
   function hasTact(p) { return p.type === 'tact' || p.type === 'mixed'; }
   function isTouch(p) { return p.type !== 'tact'; }
+  function block(title, html, extra) { return '<div class="dtt-blk">' + lab(title, extra) + html + '</div>'; }
 
   ui.typeName = function (t) {
-    return { listener: 'Listener Responding', tact: 'Tact', mixed: T('Mixed (Listener and Tact)', 'Mixed (Listener dan Tact)'), matching: 'Matching', sorting: T('Sorting', 'Mengelompokkan'), pattern: T('Pattern', 'Pola') }[t] || t;
+    return { listener: 'Listener', tact: 'Tact', mixed: T('Mixed', 'Mixed'), matching: 'Matching', sorting: T('Sorting', 'Mengelompokkan'), pattern: T('Pattern', 'Pola') }[t] || t;
   };
   ui.schedName = function (v) { return { crf: 'CRF', fr2: 'FR 2', fr3: 'FR 3', vr2: 'VR 2', vr3: 'VR 3' }[v] || v; };
-
-  /* 1 targets ------------------------------------------------------------------------------------------------- */
-  function secTargets(p, set) {
-    var head = '<header><h2 class="tl-h2">' + esc(T('Targets', 'Target')) + '</h2><p class="tl-p">' + esc(T('The app teaches the first targets in this queue that are not mastered. When one is mastered, the next enters by itself. Pinned targets are always active.', 'Aplikasi mengajarkan %targets% pertama dalam antrean ini yang belum %mastered%. Saat satu %target% %mastered%, %target% berikutnya masuk dengan sendirinya. %target% yang disematkan selalu aktif.')) + '</p></header>';
-    var h = head + opt(T('Active targets at a time', '%targets% aktif sekaligus'), '', stepper('activeCount', p.activeCount));
-    if (p.type === 'sorting') h += categories(p, set);
-    if (p.type === 'pattern') h += patterns(p, set);
-    h += queue(p, set);
-    return h;
-  }
   function targetName(p, set, id) {
     if (p.type === 'pattern') {
       var pt = (p.patterns || []).filter(function (x) { return x.id === id; })[0]; if (!pt) return '';
@@ -33,51 +24,239 @@
     return P.labelOf(p, P.itemById(set, id));
   }
   ui.targetName = targetName;
-  function queue(p, set) {
-    if (!set) return ui.tip(T('Choose a stimulus set first.', 'Pilih stimulus set dulu.'));
-    var rows = p.queue.map(function (id, n) {
-      var it = p.type === 'pattern' ? null : P.itemById(set, id), pinned = p.pinned.indexOf(id) >= 0, st = ui.targetStatus ? ui.targetStatus(p, id, DEF.OPS[p.type][0]) : 'waiting', active = st === 'learning' || st === 'attention', a = 'data-v="' + id + '"';
-      return '<li class="dtt-q' + (active ? ' active' : '') + '"><span class="dtt-thumb">' + (it ? ui.img(it.images[0], P.labelOf(p, it)) : '<span class="dtt-noimg" aria-hidden="true"></span>') + '</span>' +
-        '<b class="dtt-qlab">' + esc(targetName(p, set, id) || T('No label yet', 'Belum ada label')) + '</b>' +
-        ui.statusChips(p, id) +
-        '<span class="dtt-qbtns"><button type="button" class="tl-iconbtn" data-a="qPin" ' + a + ' aria-pressed="' + pinned + '" aria-label="' + esc(T('Pin as always active', 'Sematkan agar selalu aktif')) + '">' + (pinned ? '★' : '☆') + '</button>' +
-        '<button type="button" class="tl-iconbtn" data-a="qUp" ' + a + ' aria-label="' + esc(T('Move up', 'Naikkan')) + '"' + (n === 0 ? ' disabled' : '') + '>↑</button>' +
-        '<button type="button" class="tl-iconbtn" data-a="qDown" ' + a + ' aria-label="' + esc(T('Move down', 'Turunkan')) + '"' + (n === p.queue.length - 1 ? ' disabled' : '') + '>↓</button>' +
-        '<button type="button" class="tl-iconbtn" data-a="qRemove" ' + a + ' aria-label="' + esc(T('Remove from this program', 'Hapus dari program ini')) + '">✕</button></span></li>';
-    }).join('');
-    var out = (p.excluded || []).length ? '<p class="dtt-optd">' + esc(T('Removed from this program. Tap to add back:', 'Dihapus dari program ini. Ketuk untuk menambahkan lagi:')) + '</p><div class="tl-chips">' + p.excluded.map(function (id) { return '<button type="button" class="tl-chip" data-a="qAdd" data-v="' + id + '">' + esc(targetName(p, set, id) || '?') + ' +</button>'; }).join('') + '</div>' : '';
-    return opt(T('Target queue', 'Antrean %targets%'), T('To change a label, edit the item in its stimulus set.', 'Untuk mengubah label, ubah item di stimulus set.'),
-      (rows ? '<ol class="dtt-queue">' + rows + '</ol>' : ui.tip(T('The queue is empty.', 'Antrean masih kosong.'))) + out +
-      (ui.wiz() ? '' : '<div class="dtt-rowbtns"><button type="button" class="tl-btn outline sm" data-a="editSet" data-id="' + set.id + '">' + esc(T('Add or edit items in the set', 'Tambah atau ubah item di set')) + '</button></div>'));
+
+  /* ---------- Trials (3e) ---------- */
+  function hintKey(p) { return { listener: 'sdHint', tact: 'tHint', mixed: 'sdHint', matching: 'mHint', sorting: 'sHint', pattern: 'patHint' }[p.type]; }
+  function sayField(key, s, title) {
+    return block(title, '<label class="dtt-input"><input type="text" value="' + esc(s[key]) + '" data-in="txt" data-k="' + key + '" aria-label="' + esc(title) + '"></label><p class="dtt-hint">' + esc(T('{label} becomes the target word. Shown only on your bar.', '{label} diganti kata target. Hanya tampil di panelmu.')) + '</p>');
+  }
+  function tabTrials(p, set, s) {
+    var h = '';
+    if (isLT(p)) h += block(T('Response Type', 'Jenis Respons'), seg('type', p.type, [['listener', 'Listener'], ['tact', 'Tact'], ['mixed', T('Mixed', 'Mixed')]]));
+    else h += block(T('Activity', 'Aktivitas'), '<div class="dtt-static">' + esc(ui.typeName(p.type)) + '</div>');
+    h += sayField(hintKey(p), s, hasTact(p) && !hasListener(p) ? T('What You Ask', 'Yang Kamu Tanyakan') : T('What You Say', 'Yang Kamu Ucapkan'));
+    if (p.type === 'mixed') h += sayField('tHint', s, T('What You Ask (Tact)', 'Yang Kamu Tanyakan (Tact)'));
+    if (p.type === 'sorting') h += block(T('Number of Bins', 'Jumlah Wadah'), seg('bins', s.bins, [[1, '1'], [2, '2'], [3, '3']]));
+    else if (p.type !== 'tact') h += block(p.type === 'matching' ? T('Cards to Choose From', 'Kartu Pilihan') : T('Number of Cards', 'Jumlah Kartu'), seg('array', s.array, [[1, '1'], [2, '2'], [3, '3'], [4, '4'], [6, '6']]));
+    if (p.type === 'matching') h += block(T('Match', 'Cocokkan'), seg('matchKind', s.matchKind, [['identical', T('Same Picture', 'Gambar Sama')], ['nonidentical', T('Another Picture', 'Gambar Lain')], ['both', T('Both', 'Keduanya')]])) +
+      block(T('Sample Position', 'Posisi Contoh'), seg('samplePos', s.samplePos, [['centre', T('Centre', 'Tengah')], ['top', T('Top', 'Atas')], ['side', T('Side', 'Samping')]]));
+    if (p.type !== 'sorting' && p.type !== 'tact') h += block(T('Other Cards', 'Kartu Lain'), seg('dis', s.dis, [['random', T('Random', 'Acak')], ['different', T('Very Different', 'Sangat Beda')], ['similar', T('Similar', 'Mirip')], ['avoid', T('No Look-alikes', 'Tanpa Mirip')]]));
+    if (p.type !== 'tact') h += sw('rpos', s.rpos, T('Shuffle Card Positions', 'Acak Posisi Kartu'), '');
+    h += div() + block(T('Trial Order', 'Urutan Trial'), seg('order', s.order, [['random', T('Random', 'Acak')], ['block', T('Massed', 'Massed')]])) +
+      block(T('Maintenance Trials', 'Trial %maintenance%'), seg('maint', s.maint, [[0, T('Off', 'Mati')], [4, T('Every 4', 'Tiap 4')], [3, T('Every 3', 'Tiap 3')], [2, T('Every 2', 'Tiap 2')]])) +
+      '<div class="dtt-steps3">' + block(T('Trials', 'Trial'), stepper('trials', s.trials)) + block(T('Time Between', 'Jeda'), stepper('iti', s.iti, sec())) +
+      (isTouch(p) ? block(T('Time to Respond', 'Waktu Respons'), stepper('resp', s.resp, sec())) : '') + '</div>';
+    return h;
+  }
+
+  /* ---------- Prompts (1c): with a small picture of each style ---------- */
+  function mini(kind) {
+    var c = '<i class="pv-c"></i>';
+    return '<span class="dtt-pv pv-' + kind + '" aria-hidden="true">' + ({
+      pulse: c, point: '<b class="pv-ar">▼</b>' + c, bigger: c, glow: '<i class="pv-s f"></i><i class="pv-s on"></i><i class="pv-s f"></i>', only: '<i class="pv-s d"></i><i class="pv-s"></i><i class="pv-s d"></i>',
+      position: '<i class="pv-s"></i><i class="pv-s big"></i><i class="pv-s"></i>', first: '<b class="pv-tx">c…</b>', fill: '<b class="pv-tx sm">It\'s a …</b>', label: c + '<b class="pv-tx sm">cat</b>',
+      slide: '<i class="pv-s"></i><b class="pv-ar">→</b><i class="pv-s"></i>', flash: '<i class="pv-s on"></i><i class="pv-s"></i><i class="pv-s on"></i>'
+    }[kind] || c) + '</span>';
+  }
+  function styles(title, key, cur, list) {
+    return block(title, '<div class="dtt-pvgrid n' + list.length + '">' + list.map(function (o) {
+      var on = String(cur) === o[0];
+      return '<button type="button" class="dtt-pvcard' + (on ? ' on' : '') + '" aria-pressed="' + on + '" data-a="set" data-k="' + key + '" data-v="' + o[0] + '">' + mini(o[2] || o[0]) + '<span>' + esc(o[1]) + '</span></button>';
+    }).join('') + '</div>');
+  }
+  function tabPrompts(p, set, s) {
+    var desc = { manual: T('No prompt until you press Partial or Full.', 'Tanpa Prompt sampai kamu menekan Partial atau Full.'), mtl: T('Starts at full prompt, fades after a correct streak, steps back on error.', 'Mulai dari Prompt penuh, memudar setelah benar berturut-turut, naik lagi saat salah.'), ltm: T('Starts with no prompt, steps up when there is no response.', 'Mulai tanpa Prompt, naik saat tidak ada respons.'), td: T('Prompts straight away at first, then waits a little longer before prompting.', 'Awalnya langsung memberi Prompt, lalu menunggu sebelum memberi Prompt.') }[s.prompt];
+    var part = s.levels !== 'full', full = s.levels !== 'partial', h = '';
+    h += block(T('Prompt Levels', 'Tingkat Prompt'), seg('levels', s.levels, [['both', T('Partial + Full', 'Partial + Full')], ['full', T('Full Only', 'Full Saja')], ['partial', T('Partial Only', 'Partial Saja')]]));
+    h += block(T('Method', 'Metode'), seg('prompt', s.prompt, [['manual', 'Manual'], ['mtl', 'Most → Least'], ['ltm', 'Least → Most'], ['td', T('Delay', 'Jeda')]]) + '<p class="dtt-hint">' + esc(desc) + '</p>');
+    if (s.prompt === 'mtl' || s.prompt === 'td') h += row(T('Fade After', 'Pudar Setelah'), '', stepper('fade', s.fade, T('correct', 'benar')));
+    if (s.prompt === 'td') h += row(T('Delay', 'Jeda'), '', stepper('tdDelay', s.tdDelay, sec()));
+    if (hasListener(p)) {
+      if (part) h += styles(T('Partial Prompt Style', 'Gaya Prompt Partial'), 'lPart', s.lPart, [['pulse', T('Pulse', 'Berdenyut')], ['point', T('Arrow', 'Panah')], ['bigger', T('Grow', 'Membesar')]]);
+      if (full) h += styles(T('Full Prompt Style', 'Gaya Prompt Full'), 'lFull', s.lFull, [['glow', T('Glow, Fade Others', 'Menyala, Lain Pudar')], ['only', T('Correct Card Only', 'Hanya Kartu Benar')]]);
+    }
+    if (hasTact(p)) {
+      if (part) h += styles(T('Tact: Partial Prompt', 'Tact: Prompt Partial'), 'tPart', s.tPart, [['first', T('First Sound', 'Bunyi Awal')], ['fill', T('Fill-in', 'Melengkapi')], ['label', T('Written Word', 'Kata Tertulis')]]);
+      if (part && s.tPart === 'fill') h += block(T('Fill-in Script', 'Naskah Melengkapi'), '<label class="dtt-input"><input type="text" value="' + esc(s.tFill) + '" data-in="txt" data-k="tFill"></label>');
+      if (full) h += '<p class="dtt-hint">' + esc(T('Full prompt for Tact: you say the whole word (your bar reminds you).', 'Prompt Full untuk Tact: kamu ucapkan seluruh kata (panelmu mengingatkan).')) + '</p>';
+    }
+    if (p.type === 'matching') {
+      if (part) h += styles(T('Partial Prompt Style', 'Gaya Prompt Partial'), 'mPart', s.mPart, [['position', T('Closer', 'Lebih Dekat')], ['pulse', T('Pulse', 'Berdenyut')], ['point', T('Arrow', 'Panah')]]) + sw('mFade', s.mFade, T('Fade the Other Cards', 'Pudarkan Kartu Lain'), T('They shrink step by step as the prompt fades', 'Mengecil bertahap saat Prompt memudar'));
+      if (full) h += '<p class="dtt-hint">' + esc(T('Full prompt: the sample slides most of the way to the match.', 'Prompt Full: contoh bergeser hampir sampai ke pasangannya.')) + '</p>';
+    }
+    if (p.type === 'sorting') {
+      if (part) h += styles(T('Partial Prompt Style', 'Gaya Prompt Partial'), 'sPart', s.sPart, [['pulse', T('Bin Pulses', 'Wadah Berdenyut')], ['point', T('Arrow', 'Panah')]]);
+      if (full) h += styles(T('Full Prompt Style', 'Gaya Prompt Full'), 'sFull', s.sFull, [['slide', T('Card Slides Halfway', 'Kartu Bergeser')], ['only', T('Correct Bin Only', 'Hanya Wadah Benar')]]);
+    }
+    if (p.type === 'pattern') {
+      if (part) h += styles(T('Partial Prompt Style', 'Gaya Prompt Partial'), 'patPart', s.patPart, [['flash', T('Pattern Flashes', 'Pola Menyala')], ['pulse', T('Pulse', 'Berdenyut')]]);
+      if (full) h += styles(T('Full Prompt Style', 'Gaya Prompt Full'), 'patFull', s.patFull, [['glow', T('Glow', 'Menyala')], ['only', T('Correct Card Only', 'Hanya Kartu Benar')]]);
+    }
+    return h;
+  }
+
+  /* ---------- Error Correction (3f) ---------- */
+  function tabEC(p, set, s) {
+    var step = function (n, title, sub, extra, dashed) { return '<div class="dtt-ecstep' + (dashed ? ' dashed' : '') + '"><span class="dtt-ecn">' + n + '</span><span class="dtt-swtx"><b>' + esc(title) + '</b><small>' + esc(sub) + '</small></span>' + (extra || '') + '</div>'; };
+    return sw('ec', s.ec, T('Use Error Correction', 'Pakai Error Correction'), T('Correction trials are not counted', 'Trial koreksi tidak dihitung')) +
+      (s.ec ? div() + block(T('After an Error', 'Setelah Salah'), '<div class="dtt-ecsteps">' +
+        step(1, T('Correction Trial', 'Trial Koreksi'), T('Same target, ' + (s.levels === 'partial' ? 'partial' : 'full') + ' prompt', '%target% sama, Prompt ' + (s.levels === 'partial' ? 'Partial' : 'Full'))) +
+        step(2, T('Distractor Trial', 'Trial Distraktor'), T('An easier or mastered target', '%target% yang lebih mudah atau sudah %mastered%'), '<button type="button" class="dtt-mini-sw" role="switch" aria-checked="' + !!s.ecD + '" aria-label="' + esc(T('Distractor trial', 'Trial distraktor')) + '" data-a="tog" data-k="ecD"><span class="tl-tog"></span></button>', true) +
+        step(3, T('Transfer Trial', 'Trial Transfer'), T('Same target, no prompt', '%target% sama, tanpa Prompt')) + '</div>') : '');
+  }
+
+  /* ---------- Rewards (3g, 5f) ---------- */
+  var SCENE_NAMES = {
+    center: ['Bouncing', 'Melompat'], walk: ['Parade', 'Parade'], race: ['Running Race', 'Lomba Lari'], hop: ['Hopping', 'Melompat-lompat'], skate: ['Skateboarding', 'Skateboard'], balloons: ['Balloon Float', 'Balon Terbang'], popup: ['Peekaboo', 'Cilukba'], dance: ['Dance Party', 'Pesta Dansa'], slide: ['Rainbow Slide', 'Perosotan Pelangi'], rocket: ['Rocket Launch', 'Roket'], fireworks: ['Fireworks', 'Kembang Api'], train: ['Train Ride', 'Naik Kereta'], surf: ['Surf and Splash', 'Berselancar']
+  };
+  var GAME_NAMES = { shadow: ['Shadow Guess', 'Tebak Bayangan'], peek: ['Peekaboo', 'Cilukba'], closeup: ['Close-up', 'Dari Dekat'], silly: ['Silly Mix', 'Campuran Lucu'], open: ['Tap to Open', 'Ketuk Buka'], feed: ['Feed or Give', 'Beri Makan'], match: ['Find the Match', 'Cari Pasangan'], pop: ['Pop and Splash', 'Pecahkan'] };
+  ui.SCENE_NAMES = SCENE_NAMES;
+  function pair(a) { return T(a[0], a[1]); }
+  function tabRewards(p, set, s) {
+    var kid = ui.student(), name = kid ? kid.name : T('the student', 'anak'), photos = kid ? D.store.student(kid.id).photos : [];
+    var h = block(T('Full Celebration Every', 'Perayaan Penuh Setiap'), seg('sched', s.sched, [['crf', T('Correct', 'Benar')], ['fr2', T('2nd', 'Ke-2')], ['fr3', T('3rd', 'Ke-3')], ['vr2', '~' + T('2nd', 'ke-2')], ['vr3', '~' + T('3rd', 'ke-3')]])) +
+      sw('diff', s.diff, T('Only for Independent', 'Hanya untuk Independent'), T('Prompted gets a quick "Yes!"', 'Prompted mendapat "Ya!" singkat')) +
+      row(T('Celebration Length', 'Lama Perayaan'), '', stepper('dur', s.dur, sec())) + div() +
+      block(T('Celebrations', 'Perayaan'), '<div class="dtt-chips">' + DEF.SCENES.map(function (k) {
+        var on = s.scenes.indexOf(k) >= 0;
+        return '<span class="dtt-schip' + (on ? ' on' : '') + '"><button type="button" class="dtt-schipt" role="switch" aria-checked="' + on + '" data-a="sceneTog" data-k="' + k + '">' + esc(pair(SCENE_NAMES[k])) + '</button><button type="button" class="dtt-play" data-a="previewScene" data-v="' + k + '" aria-label="' + esc(T('Preview', 'Coba')) + '">▶</button></span>';
+      }).join('') + '</div>', T(s.scenes.length + ' of ' + DEF.SCENES.length + ' On', s.scenes.length + ' dari ' + DEF.SCENES.length + ' Aktif')) +
+      sw('photos', s.photos, T('Show ' + name + '\'s Photo', 'Tampilkan Foto ' + name), T('Their Little Us profile picture', 'Foto profil Little Us-nya')) +
+      sw('ownPhotos', s.ownPhotos, T('Show Reward Photos', 'Tampilkan Foto Reward'), T('From Reward Photos in Settings', 'Dari Foto Reward di Pengaturan')) + div() +
+      sw('tokenOn', s.tokenOn, T('Token Board', 'Token Board'), T('One token per correct response', 'Satu token per respons benar'));
+    if (s.tokenOn) h += row(T('Tokens to Earn', 'Token yang Dikumpulkan'), '', stepper('tokens', s.tokens)) +
+      block(T('Reward', 'Hadiah'), '<div class="dtt-rewards"><button type="button" class="dtt-reward' + (s.tokenReward === 'celebration' ? ' on' : '') + '" aria-pressed="' + (s.tokenReward === 'celebration') + '" data-a="tokenReward" data-v="celebration"><span class="dtt-rewardimg">★</span><span>' + esc(T('Celebration', 'Perayaan')) + '</span></button>' +
+        photos.map(function (m, i) { var on = s.tokenReward === m.id; return '<button type="button" class="dtt-reward' + (on ? ' on' : '') + '" aria-pressed="' + on + '" data-a="tokenReward" data-v="' + m.id + '"><span class="dtt-rewardimg">' + ui.img(m, '') + '</span><span>' + esc(m.name || T('Photo ' + (i + 1), 'Foto ' + (i + 1))) + '</span></button>'; }).join('') +
+        '<button type="button" class="dtt-reward add" data-a="goRewardPhotos"><span class="dtt-rewardimg">+</span><span>' + esc(T('Add', 'Tambah')) + '</span></button></div>') +
+      row(T('Break Length', 'Lama Istirahat'), T('After a full board', 'Setelah papan penuh'), stepper('breakMin', s.breakMin, 'min')) +
+      sw('tokenPrompted', s.tokenPrompted, T('Count Prompted Correct', 'Hitung Prompted yang Benar'), '');
+    h += div() + block(T('Fun Breaks', 'Istirahat Seru'), seg('inter', s.inter, [[0, T('Off', 'Mati')], [3, T('Every 3 trials', 'Tiap 3 trial')], [5, T('Every 5 trials', 'Tiap 5 trial')]]) +
+      (s.inter ? '<div class="dtt-chips">' + DEF.GAMES.map(function (k) { var on = s.games[k] !== false; return '<span class="dtt-schip' + (on ? ' on' : '') + '"><button type="button" class="dtt-schipt" role="switch" aria-checked="' + on + '" data-a="gameTog" data-k="' + k + '">' + esc(pair(GAME_NAMES[k])) + '</button><button type="button" class="dtt-play" data-a="tryGame" data-v="' + k + '" aria-label="' + esc(T('Try it', 'Coba')) + '">▶</button></span>'; }).join('') + '</div>' : '')) +
+      '<details class="dtt-fold"><summary>' + esc(T('Praise Words', 'Kata Pujian')) + '</summary>' +
+      block(T('Big Praise', 'Pujian Besar'), '<textarea class="dtt-textarea" rows="5" data-in="txt" data-k="praise">' + esc(s.praise) + '</textarea><p class="dtt-hint">' + esc(T('One per line. {name} becomes the student\'s name.', 'Satu per baris. {name} diganti nama anak.')) + '</p>') +
+      sw('cheer', s.cheer, T('Start With a Cheer', 'Mulai dengan Sorakan'), '"Yay!", "Woohoo!"') +
+      block(T('Quick Praise', 'Pujian Singkat'), '<textarea class="dtt-textarea" rows="3" data-in="txt" data-k="brief">' + esc(s.brief) + '</textarea>') + '</details>';
+    return h;
+  }
+  ACT.tokenReward = function (b) { ui.ctx().settings.tokenReward = b.dataset.v; ui.touchProgram(); ui.render(); };
+  ACT.goRewardPhotos = function () { if (ui.drawerOpen()) ACT.drClose(); U.view = 'settings'; ui.render(); window.scrollTo(0, 0); };
+  function previewCtx() { var kid = ui.student(), st = kid ? D.store.student(kid.id) : { themes: [], photos: [] }; return { kid: kid, st: st }; }
+  ACT.previewScene = function (b) { ui.celebrationPreview(b.dataset.v); };
+  // 5i: a celebration plays for real, with ‹ › to step through and "Use This" to switch it on
+  ui.celebrationPreview = function (k) {
+    var p = ui.ctx(), list = DEF.SCENES, i = list.indexOf(k), c = previewCtx();
+    D.reinforce.preview(list[i], p.settings, c.kid, c.st.themes, c.st.photos);
+    var bar = document.createElement('div'); bar.className = 'dtt-pvbar';
+    function draw() {
+      var key = list[i], on = p.settings.scenes.indexOf(key) >= 0;
+      bar.innerHTML = '<button type="button" data-n="-1" aria-label="' + esc(T('Previous', 'Sebelumnya')) + '">‹</button><span><b>' + esc(pair(SCENE_NAMES[key])) + '</b><small>' + (i + 1) + ' ' + esc(T('of', 'dari')) + ' ' + list.length + '</small></span><button type="button" data-n="1" aria-label="' + esc(T('Next', 'Berikutnya')) + '">›</button>' +
+        '<button type="button" class="dtt-btn sm" data-r>↻ ' + esc(T('Replay', 'Ulangi')) + '</button><button type="button" class="dtt-btn sm primary" data-use>' + esc(on ? T('In Use ✓', 'Dipakai ✓') : T('Use This', 'Pakai Ini')) + '</button><button type="button" class="dtt-x" data-x aria-label="' + esc(T('Close', 'Tutup')) + '">✕</button>';
+    }
+    function play() { document.querySelectorAll('.dtt-cele').forEach(function (x) { x.remove(); }); D.reinforce.preview(list[i], p.settings, c.kid, c.st.themes, c.st.photos); document.body.appendChild(bar); }
+    bar.addEventListener('click', function (e) {
+      var t = e.target.closest('button'); if (!t) return;
+      if (t.hasAttribute('data-x')) { bar.remove(); document.querySelectorAll('.dtt-cele').forEach(function (x) { x.remove(); }); return; }
+      if (t.dataset.n) { i = (i + Number(t.dataset.n) + list.length) % list.length; draw(); play(); }
+      if (t.hasAttribute('data-r')) play();
+      if (t.hasAttribute('data-use')) { if (p.settings.scenes.indexOf(list[i]) < 0) { p.settings.scenes.push(list[i]); ui.touchProgram(); ui.render(); } draw(); }
+    });
+    draw(); document.body.appendChild(bar);
+  };
+  ACT.tryGame = function (b) { D.games.preview(b.dataset.v, ui.ctx().settings, previewCtx().st.themes); };
+  ACT.sceneTog = function (b) { var s = ui.ctx().settings, k = b.dataset.k, i = s.scenes.indexOf(k); if (i >= 0) s.scenes.splice(i, 1); else s.scenes.push(k); ui.touchProgram(); ui.render(); };
+  ACT.gameTog = function (b) { var s = ui.ctx().settings, k = b.dataset.k; s.games[k] = s.games[k] === false; ui.touchProgram(); ui.render(); };
+
+  /* ---------- Mastery (4a, 4b, 4c): the rule as one sentence with editable parts ---------- */
+  function pick(key, cur, opts, label) {
+    return '<label class="dtt-chipsel"><span class="dtt-sr">' + esc(label) + '</span><select data-in="selSet" data-on="change" data-k="' + key + '">' + opts.map(function (o) {
+      return '<option value="' + esc(o[0]) + '"' + (String(o[0]) === String(cur) ? ' selected' : '') + '>' + esc(o[1]) + '</option>';
+    }).join('') + '</select></label>';
+  }
+  function nums(a, b, step, suffix) { var o = []; for (var n = a; n <= b; n += (step || 1)) o.push([n, n + (suffix || '')]); return o; }
+  function tabMastery(p, set, s) {
+    var roll = s.mRule === 'rolling', word = pick('mCount', s.mCount, [['ind', T('independent', 'independent')], ['any', T('correct', 'benar')]], T('What counts', 'Yang dihitung'));
+    var sentence = roll
+      ? esc(T('Mastered when', '%mastered% jika')) + ' ' + pick('mNeed', s.mNeed, nums(1, s.mWin), T('Needed', 'Diperlukan')) + ' ' + esc(T('of the last', 'dari')) + ' ' + pick('mWin', s.mWin, nums(3, 20), T('Trials looked at', 'Trial yang dilihat')) + ' ' + esc(T('trials are', 'trial terakhir')) + ' ' + word
+      : esc(T('Mastered at', '%mastered% pada')) + ' ' + pick('mPct', s.mPct, nums(50, 100, 5, '%'), T('Percentage', 'Persentase')) + ' ' + word + ' ' + esc(T('for', 'selama')) + ' ' + pick('mSess', s.mSess, nums(1, 10), T('Sessions', 'Session')) + ' ' + esc(T('sessions in a row', '%sessions% berturut-turut'));
+    return block(T('Mastery Rule', 'Aturan %mastery%'), seg('mRule', s.mRule, [['classic', T('Consecutive Sessions', '%sessions% Berturut-turut')], ['rolling', T('Recent Trials', 'Trial Terakhir')]])) +
+      '<div class="dtt-sentence">' + D.i18n.fill(sentence) + '</div>' +
+      block(T('What Counts', 'Yang Dihitung'), seg('mCount', s.mCount, [['ind', T('Independent Only', 'Independent Saja')], ['any', T('Independent + Prompted', 'Independent + Prompted')]])) +
+      (roll ? '<p class="dtt-hint">' + esc(T('Counted across sessions. Error correction trials never count.', 'Dihitung lintas %sessions%. Trial Error correction tidak pernah dihitung.')) + '</p>'
+        : row(T('Min. Trials per Session', 'Trial Minimum per %session%'), T('Sessions with fewer don\'t count', '%sessions% dengan trial lebih sedikit tidak dihitung'), stepper('mMin', s.mMin)) +
+          row(T('A Missed Session', '%session% yang Gagal'), T('Below ' + s.mPct + '% breaks the streak', 'Di bawah ' + s.mPct + '% memutus rangkaian'), '<div class="dtt-segw">' + seg('mMiss', s.mMiss, [['reset', T('Resets', 'Mulai Lagi')], ['pause', T('Pauses', 'Ditahan')]]) + '</div>')) +
+      div() + row(T('Recheck After', 'Periksa Ulang Setelah'), T('Comes back once in maintenance', 'Muncul sekali lagi di %maintenance%'), stepper('retDays', s.retDays, T('days', 'hari')));
+  }
+  ui.masteryText = function (s) {
+    var w = s.mCount === 'any' ? T('correct', 'benar') : T('independent', 'independent');
+    return s.mRule === 'rolling' ? T(s.mNeed + ' of last ' + s.mWin + ' ' + w, s.mNeed + ' dari ' + s.mWin + ' terakhir ' + w) : T(s.mPct + '% ' + w + ', ' + s.mSess + (s.mSess > 1 ? ' sessions' : ' session') + ' in a row', s.mPct + '% ' + w + ', ' + s.mSess + ' %sessions% berturut-turut');
+  };
+
+  /* ---------- Target Order (3d): drag to reorder, pin, remove ---------- */
+  function swatchOf(it) { return it ? '<span class="dtt-qimg">' + ui.img(it.images[0], '') + '</span>' : '<span class="dtt-qimg"></span>'; }
+  function tabOrder(p, set, s) {
+    if (!set) return '<p class="dtt-hint">' + esc(T('Choose a stimulus set first.', 'Pilih stimulus set dulu.')) + '</p>';
+    var h = row(T('Active at Once', 'Aktif Sekaligus'), '', stepper('activeCount', p.activeCount));
+    if (p.type === 'sorting') h += categories(p, set);
+    if (p.type === 'pattern') h += patterns(p, set);
+    h += '<ol class="dtt-order" data-order>' + p.queue.map(function (id, n) {
+      var it = p.type === 'pattern' ? null : P.itemById(set, id), pinned = p.pinned.indexOf(id) >= 0, st = ui.targetStatus(p, id, DEF.OPS[p.type][0]), a = 'data-v="' + id + '"';
+      return '<li class="dtt-orow" data-id="' + id + '"><span class="dtt-drag" tabindex="0" role="button" aria-label="' + esc(T('Move ' + (targetName(p, set, id) || '') + '. Use the arrow keys.', 'Pindahkan. Pakai tombol panah.')) + '" data-drag="' + id + '">⋮⋮</span><span class="dtt-on">' + (n + 1) + '</span>' + swatchOf(it) +
+        '<b>' + esc(targetName(p, set, id) || T('No label', 'Tanpa label')) + '</b><span class="dtt-chip ' + st + '">' + esc(ui.statusName(st)) + '</span>' +
+        '<button type="button" class="dtt-qbtn' + (pinned ? ' on' : '') + '" data-a="qPin" ' + a + ' aria-pressed="' + pinned + '" aria-label="' + esc(T('Pin as always active', 'Sematkan agar selalu aktif')) + '">' + (pinned ? '★' : '☆') + '</button>' +
+        '<button type="button" class="dtt-qbtn" data-a="qRemove" ' + a + ' aria-label="' + esc(T('Remove from this program', 'Hapus dari program ini')) + '">✕</button></li>';
+    }).join('') + '</ol><p class="dtt-hint dtt-orderhint"><span>⋮⋮ ' + esc(T('Drag to reorder', 'Seret untuk mengurutkan')) + '</span><span>★ ' + esc(T('Pinned = always active', 'Disematkan = selalu aktif')) + '</span></p>';
+    var out = p.excluded || [];
+    if (out.length) h += '<div class="dtt-chips">' + out.map(function (id) { return '<button type="button" class="dtt-chip add" data-a="qAdd" data-v="' + id + '">+ ' + esc(targetName(p, set, id) || '?') + '</button>'; }).join('') + '</div>';
+    h += '<div class="dtt-rowbtns"><button type="button" class="dtt-btn sec" data-a="editSet" data-id="' + set.id + '">+ ' + esc(T('Add From ' + (set.name || 'the set'), 'Tambah dari ' + (set.name || 'set'))) + '</button></div>';
+    return h;
   }
   ACT.qPin = function (b) { P.togglePin(ui.ctx(), b.dataset.v); ui.touchProgram(); ui.render(); };
-  ACT.qUp = function (b) { P.moveTarget(ui.ctx(), b.dataset.v, -1); ui.touchProgram(); ui.render(); };
-  ACT.qDown = function (b) { P.moveTarget(ui.ctx(), b.dataset.v, 1); ui.touchProgram(); ui.render(); };
   ACT.qRemove = function (b) { P.removeTarget(ui.ctx(), b.dataset.v); ui.touchProgram(); ui.render(); };
   ACT.qAdd = function (b) { P.addTarget(ui.ctx(), b.dataset.v); ui.touchProgram(); ui.render(); };
-  ACT.editSet = function (b) { if (ui.drawerOpen && ui.drawerOpen()) ACT.drClose(); U.setId = b.dataset.id; U.view = 'set'; ui.render(); window.scrollTo(0, 0); };
+  ACT.editSet = function (b) { if (ui.drawerOpen && ui.drawerOpen()) ACT.drClose(); U.setId = b.dataset.id; U.view = 'set'; U.item = null; ui.render(); window.scrollTo(0, 0); };
+  function moveTo(p, id, to) { var q = p.queue, from = q.indexOf(id); if (from < 0 || to === from) return; q.splice(from, 1); q.splice(Math.max(0, Math.min(q.length, to)), 0, id); ui.touchProgram(); ui.render(); }
+  // dragging works with a mouse, a finger or a pen; on a keyboard, the arrow keys move the focused row
+  function wireDrag(root) {
+    if (root.dataset.dragWired) return; root.dataset.dragWired = '1';
+    root.addEventListener('pointerdown', function (e) {
+      var hnd = e.target.closest('[data-drag]'); if (!hnd) return;
+      e.preventDefault();
+      var li = hnd.closest('li'), list = li.parentNode, rows = Array.prototype.slice.call(list.children), y0 = e.clientY, idx = rows.indexOf(li), to = idx;
+      li.classList.add('dragging'); try { hnd.setPointerCapture(e.pointerId); } catch (er) { }
+      function move(ev) {
+        var dy = ev.clientY - y0; li.style.transform = 'translateY(' + dy + 'px)';
+        var mid = li.getBoundingClientRect().top + li.offsetHeight / 2; to = 0;
+        rows.forEach(function (r, i) { if (r === li) return; var rr = r.getBoundingClientRect(); if (mid > rr.top + rr.height / 2) to = i < idx ? i + 1 : i; });
+        if (to > idx) to = Math.min(to, rows.length - 1);
+      }
+      function up() { hnd.removeEventListener('pointermove', move); hnd.removeEventListener('pointerup', up); hnd.removeEventListener('pointercancel', up); li.classList.remove('dragging'); li.style.transform = ''; if (to !== idx) moveTo(ui.ctx(), hnd.dataset.drag, to); }
+      hnd.addEventListener('pointermove', move); hnd.addEventListener('pointerup', up); hnd.addEventListener('pointercancel', up);
+    });
+    root.addEventListener('keydown', function (e) {
+      var hnd = e.target.closest('[data-drag]'); if (!hnd || (e.key !== 'ArrowUp' && e.key !== 'ArrowDown')) return;
+      e.preventDefault(); var p = ui.ctx(), id = hnd.dataset.drag, at = p.queue.indexOf(id);
+      moveTo(p, id, at + (e.key === 'ArrowUp' ? -1 : 1));
+      var again = document.querySelector('[data-drag="' + id + '"]'); if (again) again.focus();
+    });
+  }
 
   function categories(p, set) {
     var tags = P.tagsOf(set);
-    return opt(T('Categories for the bins', 'Kategori untuk wadah'), T('Choose from the categories on your items. Each item in the queue must belong to exactly one of them.', 'Pilih dari kategori pada item. Setiap item dalam antrean harus masuk ke tepat satu kategori.'),
-      tags.length ? '<div class="tl-chips">' + tags.map(function (t) {
-        var on = p.categories.indexOf(t) >= 0;
-        return '<button type="button" class="tl-chip' + (on ? ' on' : '') + '" aria-pressed="' + on + '" data-a="catTog" data-v="' + esc(t) + '">' + esc(t) + '</button>';
-      }).join('') + '</div>' : ui.tip(T('No categories yet. Add them to the items in your set.', 'Belum ada kategori. Tambahkan pada item di set.')));
+    return block(T('Bins', 'Wadah'), tags.length ? '<div class="dtt-chips">' + tags.map(function (t) {
+      var on = p.categories.indexOf(t) >= 0;
+      return '<button type="button" class="dtt-chip' + (on ? ' on' : '') + '" aria-pressed="' + on + '" data-a="catTog" data-v="' + esc(t) + '">' + esc(t) + '</button>';
+    }).join('') + '</div>' : '<p class="dtt-hint">' + esc(T('Add categories to the stimuli in the set first.', 'Tambahkan kategori pada stimulus di set dulu.')) + '</p>');
   }
   ACT.catTog = function (b) { var p = ui.ctx(), v = b.dataset.v, i = p.categories.indexOf(v); if (i >= 0) p.categories.splice(i, 1); else p.categories.push(v); ui.touchProgram(); ui.render(); };
-
   function patterns(p, set) {
     var items = (set && set.items) || [];
-    var rows = (p.patterns || []).map(function (pt, n) {
-      return '<div class="dtt-pattern tl-panel col"><div class="dtt-head"><b>' + esc(T('Pattern ' + (n + 1), 'Pola ' + (n + 1))) + '</b><button type="button" class="tl-link dtt-danger" data-a="patDel" data-v="' + pt.id + '" data-confirm="' + esc(T('Tap again to remove', 'Ketuk lagi untuk menghapus')) + '">' + esc(T('Remove', 'Hapus')) + '</button></div>' +
+    return block(T('Patterns', 'Pola'), (p.patterns || []).map(function (pt, n) {
+      return '<div class="dtt-patcard"><div class="dtt-crow"><b>' + esc(T('Pattern ' + (n + 1), 'Pola ' + (n + 1))) + '</b><button type="button" class="dtt-qbtn" data-a="patDel" data-v="' + pt.id + '" aria-label="' + esc(T('Remove', 'Hapus')) + '">✕</button></div>' +
         '<div class="tl-seg dtt-seg" role="group">' + DEF.PATTERN_UNITS.map(function (u) { return '<button type="button" class="' + (pt.unit === u ? 'on' : '') + '" aria-pressed="' + (pt.unit === u) + '" data-a="patUnit" data-v="' + pt.id + '" data-k="' + u + '">' + u + '</button>'; }).join('') + '</div>' +
         '<div class="dtt-patfill">' + P.unitLetters(pt.unit).map(function (l) {
-          return '<label class="tl-field"><span>' + l + '</span><select data-in="patFill" data-on="change" data-v="' + pt.id + '" data-k="' + l + '"><option value="">' + esc(T('Choose an item', 'Pilih item')) + '</option>' + items.map(function (i) { return '<option value="' + i.id + '"' + (pt.fill[l] === i.id ? ' selected' : '') + '>' + esc(P.labelOf(p, i) || '?') + '</option>'; }).join('') + '</select></label>';
+          return '<label class="dtt-input"><span>' + l + '</span><select data-in="patFill" data-on="change" data-v="' + pt.id + '" data-k="' + l + '"><option value="">' + esc(T('Choose', 'Pilih')) + '</option>' + items.map(function (i) { return '<option value="' + i.id + '"' + (pt.fill[l] === i.id ? ' selected' : '') + '>' + esc(P.labelOf(p, i) || '?') + '</option>'; }).join('') + '</select></label>';
         }).join('') + '</div></div>';
-    }).join('');
-    return opt(T('Patterns', 'Pola'), T('Choose the repeating unit and the items that fill it. Each pattern is one target. The student touches the card that continues it.', 'Pilih unit yang berulang dan item pengisinya. Setiap pola adalah satu %target%. Anak menyentuh kartu yang melanjutkan pola.'),
-      rows + '<div class="dtt-rowbtns"><button type="button" class="tl-btn outline sm" data-a="patAdd"' + (items.length ? '' : ' disabled') + '>' + esc(T('Add a pattern', 'Tambah pola')) + '</button></div>');
+    }).join('') + '<button type="button" class="dtt-btn sec sm" data-a="patAdd"' + (items.length ? '' : ' disabled') + '>+ ' + esc(T('Add a Pattern', 'Tambah Pola')) + '</button>');
   }
   function findPat(p, id) { return p.patterns.filter(function (x) { return x.id === id; })[0]; }
   function patChanged(p) { P.syncQueue(p, D.store.set(p.setId)); ui.touchProgram(); }
@@ -86,239 +265,60 @@
   ACT.patUnit = function (b) { var p = ui.ctx(), pt = findPat(p, b.dataset.v); pt.unit = b.dataset.k; var keep = {}; P.unitLetters(pt.unit).forEach(function (l) { if (pt.fill[l]) keep[l] = pt.fill[l]; }); pt.fill = keep; patChanged(p); ui.render(); };
   INP.patFill = function (el) { var p = ui.ctx(), pt = findPat(p, el.dataset.v); if (el.value) pt.fill[el.dataset.k] = el.value; else delete pt.fill[el.dataset.k]; patChanged(p); };
 
-  /* 2 trial type ---------------------------------------------------------------------------------------------- */
-  function hintField(key, s, label) { return ui.field(label, s[key], 'data-in="txt" data-k="' + key + '"'); }
-  function secType(p, set, s) {
-    var h = '<header><h2 class="tl-h2">' + esc(T('Trial type', 'Jenis trial')) + '</h2><p class="tl-p">' + esc(T('You give the instruction yourself as the cards appear. The app never speaks.', 'Kamu sendiri yang memberi instruksi saat kartu muncul. Aplikasi tidak pernah berbicara.')) + '</p></header>';
-    if (isLT(p)) h += opt(T('Response type', 'Jenis respons'), '', seg('type', p.type, [
-      ['listener', 'Listener Responding', T('You say "Touch cat" and the student taps the card. Scored automatically.', 'Kamu berkata "Sentuh kucing" dan anak mengetuk kartunya. Dinilai otomatis.')],
-      ['tact', 'Tact', T('The student sees one picture and names it. You score it.', 'Anak melihat satu gambar dan menyebutkan namanya. Kamu yang menilai.')],
-      ['mixed', 'Mixed', T('Listener and tact trials mixed at random on the same targets.', 'Trial listener dan tact diacak pada %targets% yang sama.')]], true));
-    else h += opt(T('Response type', 'Jenis respons'), T('Touch and drag responses are scored automatically.', 'Respons sentuh dan seret dinilai otomatis.'), '<p class="tl-p"><b>' + esc(ui.typeName(p.type)) + '</b></p>');
-    var say = T('Shown in your panel so you know what to say. {label} is replaced with the target.', 'Ditampilkan di panelmu sebagai pengingat. {label} diganti dengan %target%.');
-    var f = '';
-    if (hasListener(p)) f += hintField('sdHint', s, T('Listener trials', 'Trial listener'));
-    if (hasTact(p)) f += hintField('tHint', s, T('Tact trials', 'Trial tact'));
-    if (p.type === 'matching') f += hintField('mHint', s, 'Matching');
-    if (p.type === 'sorting') f += hintField('sHint', s, T('Sorting', 'Mengelompokkan'));
-    if (p.type === 'pattern') f += hintField('patHint', s, T('Pattern', 'Pola'));
-    return h + opt(T('Instruction reminder', 'Pengingat instruksi'), say, f);
-  }
-
-  /* 3 array and layout ---------------------------------------------------------------------------------------- */
-  function disOptions() {
-    return [['random', T('Random', 'Acak'), T('Any other item from the set', 'Item lain dari set')],
-      ['different', T('Very different', 'Sangat berbeda'), T('Easier: items that share no category', 'Lebih mudah: item tanpa kategori yang sama')],
-      ['similar', T('Similar', 'Mirip'), T('Harder: items that share a category', 'Lebih sulit: item dengan kategori yang sama')],
-      ['avoid', T('Avoid confusable pairs', 'Hindari pasangan yang membingungkan'), T('Keeps apart items in the same category. Items you marked as not to be paired never appear together under any option.', 'Memisahkan item dalam kategori yang sama. Item yang ditandai tidak boleh berpasangan tidak pernah tampil bersama di pilihan mana pun.')]];
-  }
-  var sizes = [[1, '1'], [2, '2'], [3, '3'], [4, '4'], [6, '6']];
-  function secArray(p, set, s) {
-    var h = '<header><h2 class="tl-h2">' + esc(T('Array and layout', 'Susunan kartu')) + '</h2></header>';
-    if (p.type === 'sorting') h += opt(T('Number of bins', 'Jumlah wadah'), T('Start with one bin and add more as the student improves.', 'Mulai dengan satu wadah dan tambah saat anak makin mahir.'), seg('bins', s.bins, [[1, '1'], [2, '2'], [3, '3']]));
-    else h += opt(p.type === 'matching' ? T('Field size', 'Jumlah kartu pilihan') : T('Number of cards', 'Jumlah kartu'), T('A field of 1 is errorless teaching. Larger arrays make the discrimination harder.', 'Satu kartu berarti pengajaran tanpa salah. Makin banyak kartu makin sulit.'), seg('array', s.array, sizes));
-    if (p.type === 'matching') {
-      h += opt(T('Match kind', 'Jenis pencocokan'), '', seg('matchKind', s.matchKind, [['identical', T('Identical', 'Sama persis'), T('The same image', 'Gambar yang sama')], ['nonidentical', T('Non-identical', 'Tidak sama persis'), T('A different image of the same item. Needs two images per item.', 'Gambar lain dari item yang sama. Perlu dua gambar per item.')], ['both', T('Both mixed', 'Campuran'), '']], true));
-      h += opt(T('Sample position', 'Posisi contoh'), '', seg('samplePos', s.samplePos, [['centre', T('Centre', 'Tengah')], ['top', T('Top', 'Atas')], ['side', T('Side', 'Samping')]]));
-    }
-    if (p.type !== 'sorting') h += opt(T('Distractors', 'Distraktor'), '', seg('dis', s.dis, disOptions(), true));
-    h += opt(T('Card positions', 'Posisi kartu'), '', sw('rpos', s.rpos, T('Shuffle card positions every trial', 'Acak posisi kartu di setiap trial'), T('Recommended, so the correct card is not always in the same place.', 'Disarankan, agar kartu yang benar tidak selalu di tempat yang sama.')));
-    return h;
-  }
-
-  /* 4 order and timing ---------------------------------------------------------------------------------------- */
-  function secOrder(p, set, s) {
-    return '<header><h2 class="tl-h2">' + esc(T('Order and timing', 'Urutan dan waktu')) + '</h2></header>' +
-      opt(T('Trials per session', 'Trial per %session%'), T('Includes maintenance trials. Error correction trials are added on top and not counted in the data.', 'Termasuk trial %maintenance%. Trial Error correction ditambahkan di luar itu dan tidak dihitung dalam data.'), stepper('trials', s.trials)) +
-      opt(T('Trial order', 'Urutan trial'), '', seg('order', s.order, [['random', T('Random rotation', 'Rotasi acak'), T('Targets rotate without repeating back to back', '%targets% bergiliran tanpa berulang berturut-turut')], ['block', T('Massed', 'Mass trial'), T('Each target 3 times in a row before the next', 'Setiap %target% 3 kali berturut-turut sebelum berikutnya')]], true)) +
-      opt(T('Maintenance trials', 'Trial %maintenance%'), T('Mastered targets from this program, mixed in between targets.', '%targets% %mastered% dari program ini, diselipkan di antara %targets%.'), seg('maint', s.maint, [[0, T('Off', 'Mati')], [4, T('Every 4', 'Tiap 4')], [3, T('Every 3', 'Tiap 3')], [2, T('Every 2', 'Tiap 2')]])) +
-      opt('Inter-trial interval', '', stepper('iti', s.iti, secondsWord())) +
-      (isTouch(p) ? opt(T('Response window', 'Batas waktu respons'), T('Counted from when the cards appear. If the student does not respond in this time, the trial counts as no response, or the next prompt is given when using least-to-most.', 'Dihitung sejak kartu muncul. Jika anak tidak merespons dalam waktu ini, trial dihitung tidak ada respons, atau Prompt berikutnya diberikan saat memakai Least-to-most.'), stepper('resp', s.resp, secondsWord())) : '');
-  }
-
-  /* 5 prompting ----------------------------------------------------------------------------------------------- */
-  function styles(title, key, cur, list) { return '<div class="dtt-sublabel">' + esc(title) + '</div>' + seg(key, cur, list, true); }
-  function secPrompt(p, set, s) {
-    var desc = {
-      manual: T('Every trial starts without a prompt. Use the Partial or Full buttons (keys P and F) whenever you want the app to show a prompt.', 'Setiap trial dimulai tanpa Prompt. Gunakan tombol Partial atau Full (tombol P dan F) kapan pun kamu ingin aplikasi menampilkan Prompt.'),
-      mtl: T('New targets start at the highest prompt you allow. After ' + s.fade + ' correct in a row the prompt fades one level, and an error moves it back up one level.', '%targets% baru dimulai dari Prompt tertinggi yang diizinkan. Setelah ' + s.fade + ' benar berturut-turut Prompt turun satu tingkat, dan kesalahan menaikkannya satu tingkat.'),
-      ltm: T('Every trial starts without a prompt. If there is no response within the response window, the app moves up to the next prompt level you allow.', 'Setiap trial dimulai tanpa Prompt. Jika tidak ada respons dalam batas waktu, aplikasi naik ke tingkat Prompt berikutnya.'),
-      td: T('New targets start at 0 seconds delay, with the prompt shown straight away. After the set number of correct responses the app waits before prompting, so the student can answer independently first.', '%targets% baru dimulai dengan jeda 0 detik, Prompt langsung ditampilkan. Setelah jumlah benar yang ditentukan, aplikasi menunggu sebelum memberi Prompt, agar anak bisa menjawab Independent lebih dulu.')
-    }[s.prompt];
-    var part = s.levels !== 'full', full = s.levels !== 'partial', st = '';
-    if (hasListener(p)) {
-      if (part) st += styles(T('Listener: Partial prompt', 'Listener: Prompt Partial'), 'lPart', s.lPart, [['pulse', T('Card pulses', 'Kartu berdenyut')], ['point', T('Pointing arrow', 'Panah menunjuk')], ['bigger', T('Card grows', 'Kartu membesar')]]);
-      if (full) st += styles(T('Listener: Full prompt', 'Listener: Prompt Full'), 'lFull', s.lFull, [['glow', T('Glow and fade others', 'Menyala, yang lain memudar')], ['only', T('Show correct card only', 'Hanya kartu yang benar')]]);
-    }
-    if (hasTact(p)) {
-      if (part) st += styles(T('Tact: Partial prompt', 'Tact: Prompt Partial'), 'tPart', s.tPart, [['first', T('First-sound cue', 'Isyarat bunyi awal'), T('Your panel shows the first sound to say.', 'Panelmu menampilkan bunyi awal untuk diucapkan.')], ['fill', T('Fill-in cue', 'Isyarat melengkapi'), T('Your panel shows a sentence to finish.', 'Panelmu menampilkan kalimat untuk dilengkapi.')], ['label', T('Written label', 'Label tertulis'), T('The label appears under the picture.', 'Label muncul di bawah gambar.')]]);
-      if (part && s.tPart === 'fill') st += ui.field(T('Fill-in script', 'Naskah melengkapi'), s.tFill, 'data-in="txt" data-k="tFill"');
-      if (full) st += '<p class="tl-p"><b>' + esc(T('Tact: Full prompt.', 'Tact: Prompt Full.')) + '</b> ' + esc(T('Echoic model. Your panel reminds you to say the whole word.', 'Model echoic. Panelmu mengingatkan untuk mengucapkan seluruh kata.')) + '</p>';
-    }
-    if (p.type === 'matching') {
-      if (part) st += styles(T('Matching: Partial prompt', 'Matching: Prompt Partial'), 'mPart', s.mPart, [['position', T('Position', 'Posisi'), T('The correct card sits closer and slightly larger.', 'Kartu yang benar lebih dekat dan sedikit lebih besar.')], ['pulse', T('Pulse', 'Berdenyut')], ['point', T('Pointing arrow', 'Panah menunjuk')]]) + sw('mFade', s.mFade, T('Use stimulus fading', 'Pakai stimulus fading'), T('The wrong cards shrink or dim step by step as the prompt fades.', 'Kartu yang salah mengecil atau meredup bertahap saat Prompt memudar.'));
-      if (full) st += '<p class="tl-p"><b>' + esc(T('Matching: Full prompt.', 'Matching: Prompt Full.')) + '</b> ' + esc(T('The sample slides most of the way to the correct card and the student finishes the move.', 'Contoh bergeser hampir sampai ke kartu yang benar dan anak menyelesaikannya.')) + '</p>';
-    }
-    if (p.type === 'sorting') {
-      if (part) st += styles(T('Sorting: Partial prompt', 'Mengelompokkan: Prompt Partial'), 'sPart', s.sPart, [['pulse', T('Correct bin pulses', 'Wadah yang benar berdenyut')], ['point', T('Pointing arrow', 'Panah menunjuk')]]);
-      if (full) st += styles(T('Sorting: Full prompt', 'Mengelompokkan: Prompt Full'), 'sFull', s.sFull, [['slide', T('Card slides halfway', 'Kartu bergeser setengah jalan')], ['only', T('Only the correct bin remains', 'Hanya wadah yang benar')]]);
-    }
-    if (p.type === 'pattern') {
-      if (part) st += styles(T('Pattern: Partial prompt', 'Pola: Prompt Partial'), 'patPart', s.patPart, [['flash', T('Unit flashes in order', 'Unit menyala berurutan')], ['pulse', T('Correct card pulses', 'Kartu yang benar berdenyut')]]);
-      if (full) st += styles(T('Pattern: Full prompt', 'Pola: Prompt Full'), 'patFull', s.patFull, [['glow', T('Pattern animates, correct card glows', 'Pola bergerak, kartu benar menyala')], ['only', T('Show correct card only', 'Hanya kartu yang benar')]]);
-    }
-    return '<header><h2 class="tl-h2">Prompt</h2><p class="tl-p">' + esc(T('Spoken prompts and models come from you. A correct response after any prompt is recorded as prompted.', 'Prompt lisan dan model berasal darimu. Respons benar setelah Prompt apa pun dicatat sebagai Prompted.')) + '</p></header>' +
-      opt(T('Prompt levels', 'Tingkat Prompt'), T('Controls which prompt buttons appear during the session and which levels the automatic methods step through.', 'Menentukan tombol Prompt yang muncul saat %session% dan tingkat yang dilalui metode otomatis.'), seg('levels', s.levels, [['both', T('Partial and full', 'Partial dan Full'), T('Two-step hierarchy', 'Dua tingkat')], ['full', T('Full only', 'Full saja'), T('Full prompt or nothing', 'Prompt Full atau tidak sama sekali')], ['partial', T('Partial only', 'Partial saja'), T('Lighter help only', 'Bantuan ringan saja')]], true)) +
-      opt(T('Prompt method', 'Metode Prompt'), desc, seg('prompt', s.prompt, [['manual', 'Manual'], ['mtl', 'Most-to-least'], ['ltm', 'Least-to-most'], ['td', 'Time delay']])) +
-      (s.prompt === 'mtl' || s.prompt === 'td' ? opt(T('Fade after', 'Pudar setelah'), T('Correct responses in a row before the prompt fades.', 'Jumlah benar berturut-turut sebelum Prompt memudar.'), stepper('fade', s.fade, T('correct', 'benar'))) : '') +
-      (s.prompt === 'td' ? opt(T('Delay length', 'Lama jeda'), '', stepper('tdDelay', s.tdDelay, secondsWord())) : '') +
-      opt(T('Prompt styles', 'Bentuk Prompt'), '', st);
-  }
-
-  /* 6 error correction ---------------------------------------------------------------------------------------- */
-  function secEC(p, set, s) {
-    return '<header><h2 class="tl-h2">Error correction</h2><p class="tl-p">' + esc(T('An error is followed by a short neutral pause with no sound.', 'Setelah kesalahan ada jeda netral singkat tanpa suara.')) + '</p></header>' +
-      opt('', '', sw('ec', s.ec, T('Use error correction', 'Pakai Error correction'), T('Recommended. Correction trials are kept out of the session percentage.', 'Disarankan. Trial koreksi tidak masuk persentase %session%.'))) +
-      (s.ec ? opt(T('Sequence after an error', 'Urutan setelah kesalahan'), '', sw('ecD', s.ecD, T('Include a distractor trial', 'Sertakan trial distraktor'), T('A different, easier or mastered target between the correction and the retry.', '%target% lain yang lebih mudah atau sudah %mastered% di antara koreksi dan percobaan ulang.')) +
-        '<ol class="dtt-steps"><li>' + esc(T('Correction trial: same target with a ' + (s.levels === 'partial' ? 'partial' : 'full') + ' prompt', 'Trial koreksi: %target% yang sama dengan Prompt ' + (s.levels === 'partial' ? 'Partial' : 'Full'))) + '</li>' + (s.ecD ? '<li>' + esc(T('Distractor trial: a different, easier target', 'Trial distraktor: %target% lain yang lebih mudah')) + '</li>' : '') + '<li>' + esc(T('Transfer trial: same target again with no prompt', 'Trial transfer: %target% yang sama tanpa Prompt')) + '</li></ol>') : '');
-  }
-
-  /* 7 reinforcement ------------------------------------------------------------------------------------------- */
-  var SCENE_NAMES = {
-    center: ['Bouncing and waving', 'Melompat dan melambai'], walk: ['Parade', 'Parade'], race: ['Running race', 'Lomba lari'], hop: ['Hopping', 'Melompat-lompat'], skate: ['Skateboarding', 'Bermain skateboard'], balloons: ['Balloon float', 'Terbang dengan balon'], popup: ['Pop-up peekaboo', 'Cilukba'], dance: ['Dance party', 'Pesta menari'], slide: ['Rainbow slide', 'Perosotan pelangi'], rocket: ['Rocket launch', 'Peluncuran roket'], fireworks: ['Fireworks show', 'Pertunjukan kembang api'], train: ['Train ride', 'Naik kereta'], surf: ['Surf and splash', 'Berselancar']
-  };
-  var GAME_NAMES = {
-    shadow: ['Shadow guess', 'Tebak bayangan', 'A dark silhouette fills with colour when tapped.', 'Bayangan gelap berubah berwarna saat diketuk.'],
-    peek: ['Peekaboo', 'Cilukba', 'Part of a character shows from behind something. A tap makes it jump out.', 'Sebagian karakter terlihat dari balik benda. Ketukan membuatnya melompat keluar.'],
-    closeup: ['Close-up guess', 'Tebak dari dekat', 'A zoomed-in part. A tap reveals the whole.', 'Bagian yang diperbesar. Ketukan menampilkan seluruhnya.'],
-    silly: ['Silly mix', 'Campuran lucu', 'One wrong part flies away when tapped.', 'Satu bagian yang salah terbang saat diketuk.'],
-    open: ['Tap to open', 'Ketuk untuk membuka', 'Three taps open an egg, chest or garage door, or launch a rocket.', 'Tiga ketukan membuka telur, peti, atau pintu garasi, atau meluncurkan roket.'],
-    feed: ['Feed or give', 'Beri makan', 'Drag an item to the character, or tap it.', 'Seret benda ke karakter, atau ketuk.'],
-    match: ['Find the match', 'Cari pasangan', 'A baby finds its parent, or a small thing finds its big partner.', 'Bayi menemukan induknya, atau benda kecil menemukan pasangan besarnya.'],
-    pop: ['Pop and splash', 'Pecahkan', 'Tap to pop bubbles, balloons or stars.', 'Ketuk untuk memecahkan gelembung, balon, atau bintang.']
-  };
-  function pair(a) { return T(a[0], a[1]); }
-  function secReinf(p, set, s) {
-    var kid = ui.student(), name = kid ? kid.name : T('the student', 'anak');
-    return '<header><h2 class="tl-h2">Reinforcement</h2></header>' +
-      opt(T('Schedule', 'Jadwal'), T('How often a correct response earns the full celebration. Other correct responses get a short "Yes!" bubble and a soft ding.', 'Seberapa sering respons benar mendapat perayaan penuh. Respons benar lainnya mendapat gelembung "Ya!" singkat dan bunyi lembut.'), seg('sched', s.sched, [['crf', 'CRF', T('Every correct', 'Setiap benar')], ['fr2', 'FR 2', T('Every 2nd', 'Setiap ke-2')], ['fr3', 'FR 3', T('Every 3rd', 'Setiap ke-3')], ['vr2', 'VR 2', T('About every 2nd', 'Sekitar setiap ke-2')], ['vr3', 'VR 3', T('About every 3rd', 'Sekitar setiap ke-3')]], true)) +
-      opt('Differential reinforcement', '', sw('diff', s.diff, T('Full celebration only for independent responses', 'Perayaan penuh hanya untuk respons Independent'), T('Prompted correct responses get brief praise and do not count toward the schedule.', 'Respons Prompted yang benar mendapat pujian singkat dan tidak dihitung dalam jadwal.'))) +
-      opt(T('Celebration length', 'Lama perayaan'), T('Allow at least 3 seconds so the sounds have time to play.', 'Beri setidaknya 3 detik agar suaranya sempat terputar.'), stepper('dur', s.dur, secondsWord())) +
-      opt(T('Celebration styles', 'Gaya perayaan'), T(s.scenes.length + ' of ' + DEF.SCENES.length + ' on. A different style is picked each time.', s.scenes.length + ' dari ' + DEF.SCENES.length + ' aktif. Gaya berbeda dipilih setiap kali.'), '<div class="dtt-grid">' + DEF.SCENES.map(function (k) {
-        return '<div class="dtt-gamecard">' + ui.sw(k, s.scenes.indexOf(k) >= 0, pair(SCENE_NAMES[k]), '', 'sceneTog') + '<button type="button" class="tl-btn quiet sm" data-a="previewScene" data-v="' + k + '">' + esc(T('Preview', 'Coba')) + '</button></div>';
-      }).join('') + '</div>') +
-      opt(T('Photos', 'Foto'), '', sw('photos', s.photos, T('Show ' + name + '\'s photo', 'Tampilkan foto ' + name), T('The photo comes from the child\'s Little Us profile on this device.', 'Foto berasal dari profil Little Us anak di perangkat ini.')) +
-        sw('ownPhotos', s.ownPhotos, T('Use own reinforcer photos', 'Pakai foto reinforcer sendiri'), T('Add them in Settings, under Reward Photos.', 'Tambahkan di Pengaturan, bagian Foto Reward.'))) +
-      opt('Token board', '', sw('tokenOn', s.tokenOn, T('Use a token board', 'Pakai Token board'), T('Tokens are earned by the reinforcement schedule. A full board shows the reward and offers a break.', 'Token didapat sesuai jadwal Reinforcement. Papan penuh menampilkan hadiah dan menawarkan istirahat.')) +
-        (s.tokenOn ? seg('tokens', s.tokens, [[3, '3'], [5, '5'], [10, '10']]) + tokenReward(s) : '')) +
-      opt(T('Praise phrases on screen', 'Kalimat pujian di layar'), T('One phrase per line. {name} is replaced with the student\'s name. A phrase is picked at random and shown in big letters.', 'Satu kalimat per baris. {name} diganti dengan nama anak. Kalimat dipilih acak dan ditampilkan dengan huruf besar.'), ui.area(T('Phrases', 'Kalimat'), s.praise, 'data-in="txt" data-k="praise"', 6) + sw('cheer', s.cheer, T('Start with a cheer word', 'Mulai dengan kata sorakan'), T('Adds "Yay!", "Woohoo!" or "Hooray!" before the praise.', 'Menambahkan "Yay!", "Asyik!", atau "Hore!" sebelum pujian.'))) +
-      opt(T('Brief praise', 'Pujian singkat'), T('Shown for prompted responses and when the schedule has not been met yet. One per line.', 'Ditampilkan untuk respons Prompted dan saat jadwal belum terpenuhi. Satu per baris.'), ui.area(T('Phrases', 'Kalimat'), s.brief, 'data-in="txt" data-k="brief"', 3)) +
-      opt(T('Fun breaks', 'Istirahat seru'), T('A short game between trials. Fun breaks never count as trials, are not saved in the data, wait until any error correction is finished, and can always be skipped.', 'Permainan singkat di antara trial. Tidak dihitung sebagai trial, tidak disimpan dalam data, menunggu Error correction selesai, dan selalu bisa dilewati.'), seg('inter', s.inter, [[0, T('Off', 'Mati')], [3, T('Every 3 trials', 'Tiap 3 trial')], [5, T('Every 5 trials', 'Tiap 5 trial')]]) +
-        (s.inter ? '<div class="dtt-grid">' + DEF.GAMES.map(function (k) { var g = GAME_NAMES[k]; return '<div class="dtt-gamecard">' + ui.sw(k, s.games[k] !== false, T(g[0], g[1]), T(g[2], g[3]), 'gameTog') + '<button type="button" class="tl-btn quiet sm" data-a="tryGame" data-v="' + k + '">' + esc(T('Try it', 'Coba')) + '</button></div>'; }).join('') + '</div>' : ''));
-  }
-  function tokenReward(s) {
-    var kid = ui.student(), photos = kid ? D.store.student(kid.id).photos : [];
-    return '<div class="dtt-sublabel">' + esc(T('Reward when the board is full', 'Hadiah saat papan penuh')) + '</div><div class="dtt-imgs"><button type="button" class="dtt-card' + (s.tokenReward === 'celebration' ? ' on' : '') + '" aria-pressed="' + (s.tokenReward === 'celebration') + '" data-a="tokenReward" data-v="celebration"><b>' + esc(T('A celebration', 'Perayaan')) + '</b></button>' + photos.map(function (m) {
-      var on = s.tokenReward === m.id; return '<button type="button" class="dtt-rewardpic' + (on ? ' on' : '') + '" aria-pressed="' + on + '" aria-label="' + esc(T('Use this photo as the reward', 'Pakai foto ini sebagai hadiah')) + '" data-a="tokenReward" data-v="' + m.id + '">' + ui.img(m, '') + '</button>';
-    }).join('') + '</div>' + (photos.length ? '' : '<p class="tl-note2">' + esc(T('To use a photo, add one in Settings, under Reward Photos.', 'Untuk memakai foto, tambahkan di Pengaturan, bagian Foto Reward.')) + '</p>');
-  }
-  ACT.tokenReward = function (b) { ui.ctx().settings.tokenReward = b.dataset.v; ui.touchProgram(); ui.render(); };
-  function previewCtx() { var kid = ui.student(), st = kid ? D.store.student(kid.id) : { themes: [], photos: [] }; return { kid: kid, st: st }; }
-  ACT.previewScene = function (b) { var c = previewCtx(); D.reinforce.preview(b.dataset.v, ui.ctx().settings, c.kid, c.st.themes, c.st.photos); };
-  ACT.tryGame = function (b) { D.games.preview(b.dataset.v, ui.ctx().settings, previewCtx().st.themes); };
-  ACT.sceneTog = function (b) { var s = ui.ctx().settings, k = b.dataset.k, i = s.scenes.indexOf(k); if (i >= 0) s.scenes.splice(i, 1); else s.scenes.push(k); ui.touchProgram(); ui.render(); };
-  ACT.gameTog = function (b) { var s = ui.ctx().settings, k = b.dataset.k; s.games[k] = s.games[k] === false; ui.touchProgram(); ui.render(); };
-
-  /* 8 mastery ------------------------------------------------------------------------------------------------- */
-  // two rules: Consecutive Sessions (classic) and Recent Trials (rolling). What counts: independent only, or independent + prompted.
-  function secMastery(p, set, s) {
-    var roll = s.mRule === 'rolling', word = s.mCount === 'any' ? T('correct', 'benar') : T('independent', 'independent');
-    var counts = opt(T('What Counts', 'Yang Dihitung'), '', seg('mCount', s.mCount, [['ind', T('Independent Only', 'Independent Saja'), T('No prompt needed', 'Tanpa Prompt')], ['any', T('Independent + Prompted', 'Independent + Prompted'), T('Any correct response', 'Semua respons benar')]], true));
-    var recheck = opt(T('Recheck After', 'Periksa Ulang Setelah'), T('Comes back once in maintenance', 'Muncul sekali lagi di %maintenance%'), stepper('retDays', s.retDays, T('days', 'hari')));
-    return opt(T('Mastery Rule', 'Aturan %mastery%'), '', seg('mRule', s.mRule, [['classic', T('Consecutive Sessions', '%sessions% Berturut-turut')], ['rolling', T('Recent Trials', 'Trial Terakhir')]])) +
-      (roll ? '<div class="dtt-sentence">' + esc(T('Mastered when', '%mastered% jika')) + ' ' + stepper('mNeed', s.mNeed, '', s.mWin) + ' ' + esc(T('of the last', 'dari')) + ' ' + stepper('mWin', s.mWin, '') + ' ' + esc(T('trials are ' + word, 'trial terakhir ' + word)) + '</div>' +
-          counts + '<p class="dtt-hint">' + esc(T('Counted across sessions. Error correction trials never count.', 'Dihitung lintas %sessions%. Trial Error correction tidak pernah dihitung.')) + '</p>' + recheck
-        : '<div class="dtt-sentence">' + esc(T('Mastered at', '%mastered% pada')) + ' ' + seg('mPct', s.mPct, [[70, '70%'], [80, '80%'], [90, '90%'], [100, '100%']]) + ' ' + esc(word) + ' ' + esc(T('for', 'selama')) + ' ' + seg('mSess', s.mSess, [[1, '1'], [2, '2'], [3, '3']]) + ' ' + esc(T('sessions in a row', '%sessions% berturut-turut')) + '</div>' +
-          counts +
-          opt(T('Min. Trials per Session', 'Trial Minimum per %session%'), T('Sessions with fewer don\'t count', '%sessions% dengan trial lebih sedikit tidak dihitung'), stepper('mMin', s.mMin, '')) +
-          opt(T('A Missed Session', '%session% yang Gagal'), T('Below ' + s.mPct + '% breaks the streak, or leaves it as it was', 'Di bawah ' + s.mPct + '% memutus rangkaian, atau membiarkannya'), seg('mMiss', s.mMiss, [['reset', T('Resets', 'Mulai Lagi')], ['pause', T('Pauses', 'Ditahan')]])));
-  }
-  ui.masteryText = function (s) {
-    var w = s.mCount === 'any' ? T('correct', 'benar') : T('independent', 'independent');
-    return s.mRule === 'rolling' ? T(s.mNeed + ' of last ' + s.mWin + ' ' + w, s.mNeed + ' dari ' + s.mWin + ' terakhir ' + w) : T(s.mPct + '% ' + w + ' · ' + s.mSess + (s.mSess > 1 ? ' sessions' : ' session') + ' in a row', s.mPct + '% ' + w + ' · ' + s.mSess + ' %sessions% berturut-turut');
-  };
-
-  var SEC = {
-    targets: { name: function () { return T('Targets', '%targets%'); }, tint: 'sky', draw: secTargets, on: function () { return true; } },
-    type: { name: function () { return T('Trial type', 'Jenis trial'); }, tint: 'rose', draw: secType, on: function () { return true; } },
-    array: { name: function () { return T('Array and layout', 'Susunan kartu'); }, tint: 'peach', draw: secArray, on: function (p) { return p.type !== 'tact'; } },
-    order: { name: function () { return T('Order and timing', 'Urutan dan waktu'); }, tint: 'mint', draw: secOrder, on: function () { return true; } },
-    prompt: { name: function () { return 'Prompt'; }, tint: 'lilac', draw: secPrompt, on: function () { return true; } },
-    ec: { name: function () { return 'Error correction'; }, tint: 'rose', draw: secEC, on: function () { return true; } },
-    reinf: { name: function () { return 'Reinforcement'; }, tint: 'butter', draw: secReinf, on: function () { return true; } },
-    mastery: { name: function () { return T('Mastery', '%mastery%'); }, tint: 'mint', draw: secMastery, on: function () { return true; } }
-  };
-  ui.SEC = SEC;
-  var ORDER = ['targets', 'type', 'array', 'order', 'prompt', 'ec', 'reinf', 'mastery'];
-
-  ui.settingsList = function (p) { return ORDER.filter(function (k) { return SEC[k].on(p); }); };
-
-  /* ---------- the drawer: five tabs that open from the summary cards on the program page; every change saves itself ---------- */
+  /* ---------- the tabs and the summaries ---------- */
   var TABS = {
-    trials: { name: function () { return T('Trials', 'Trial'); }, secs: ['type', 'array', 'order'] },
-    prompts: { name: function () { return T('Prompts', 'Prompt'); }, secs: ['prompt'] },
-    correction: { name: function () { return T('Error Correction', 'Error Correction'); }, secs: ['ec'] },
-    rewards: { name: function () { return T('Rewards', 'Reward'); }, secs: ['reinf'] },
-    mastery: { name: function () { return T('Mastery', '%mastery%'); }, secs: ['mastery'] }
+    trials: { name: function () { return T('Trials', 'Trial'); }, draw: tabTrials },
+    prompts: { name: function () { return T('Prompts', 'Prompt'); }, draw: tabPrompts },
+    correction: { name: function () { return T('Error Correction', 'Error Correction'); }, draw: tabEC },
+    rewards: { name: function () { return T('Rewards', 'Reward'); }, draw: tabRewards },
+    mastery: { name: function () { return T('Mastery', '%mastery%'); }, draw: tabMastery }
   };
   ui.TABS = TABS;
   ui.TAB_ORDER = ['trials', 'prompts', 'correction', 'rewards', 'mastery'];
-  ui.tabBody = function (k, p, set) { return TABS[k].secs.filter(function (s) { return SEC[s].on(p); }).map(function (s) { return '<section class="dtt-dsec">' + SEC[s].draw(p, set, p.settings) + '</section>'; }).join(''); };
-  // one line per card on the program page
   ui.summary = function (k, p) {
-    var s = p.settings, sec = secondsWord();
-    if (k === 'trials') return [p.type === 'tact' ? T('1 picture', '1 gambar') : T(s.array + (s.array === 1 ? ' card' : ' cards') + (s.rpos ? ' · shuffled' : ''), s.array + ' kartu' + (s.rpos ? ' · diacak' : '')), T(s.trials + ' per session · ' + (s.order === 'block' ? 'massed' : 'random'), s.trials + ' per %session% · ' + (s.order === 'block' ? 'massed' : 'acak')), isTouch(p) ? T(s.resp + ' s to respond', s.resp + ' dtk untuk merespons') : ''];
-    if (k === 'prompts') return [{ manual: 'Manual', mtl: T('Most-to-least', 'Most-to-least'), ltm: T('Least-to-most', 'Least-to-most'), td: T('Time delay', 'Time delay') }[s.prompt], s.prompt === 'mtl' || s.prompt === 'td' ? T('Fade after ' + s.fade + ' correct', 'Pudar setelah ' + s.fade + ' benar') : '', { both: T('Partial + Full', 'Partial + Full'), full: T('Full only', 'Full saja'), partial: T('Partial only', 'Partial saja') }[s.levels]];
+    var s = p.settings;
+    if (k === 'trials') return [p.type === 'tact' ? T('1 picture', '1 gambar') : p.type === 'sorting' ? T(s.bins + (s.bins === 1 ? ' bin' : ' bins'), s.bins + ' wadah') : T(s.array + (s.array === 1 ? ' card' : ' cards') + (s.rpos ? ' · shuffled' : ''), s.array + ' kartu' + (s.rpos ? ' · diacak' : '')), T(s.trials + ' per session · ' + (s.order === 'block' ? 'massed' : 'random'), s.trials + ' per %session% · ' + (s.order === 'block' ? 'massed' : 'acak')), isTouch(p) ? T(s.resp + ' s to respond', s.resp + ' dtk untuk merespons') : ''];
+    if (k === 'prompts') {
+      var st = { pulse: 'Pulse', point: 'Arrow', bigger: 'Grow', glow: 'Glow', only: T('Correct only', 'Hanya benar'), first: T('First sound', 'Bunyi awal'), fill: 'Fill-in', label: T('Written word', 'Kata tertulis'), position: T('Closer', 'Lebih dekat'), slide: T('Slide', 'Geser'), flash: T('Flash', 'Menyala') };
+      var pk = hasListener(p) ? ['lPart', 'lFull'] : p.type === 'tact' ? ['tPart'] : p.type === 'matching' ? ['mPart'] : p.type === 'sorting' ? ['sPart', 'sFull'] : ['patPart', 'patFull'];
+      return [{ manual: 'Manual', mtl: 'Most-to-least', ltm: 'Least-to-most', td: T('Time delay', 'Time delay') }[s.prompt], s.prompt === 'mtl' || s.prompt === 'td' ? T('Fade after ' + s.fade + ' correct', 'Pudar setelah ' + s.fade + ' benar') : '', pk.map(function (x) { return st[s[x]] || s[x]; }).join(' · ')];
+    }
     if (k === 'correction') return s.ec ? [T('On', 'Aktif'), s.ecD ? T('Correct → distractor → retry', 'Koreksi → distraktor → ulang') : T('Correct → retry', 'Koreksi → ulang')] : [T('Off', 'Mati')];
-    if (k === 'rewards') return [{ crf: T('Every correct (CRF)', 'Setiap benar (CRF)'), fr2: T('Every 2nd (FR 2)', 'Setiap ke-2 (FR 2)'), fr3: T('Every 3rd (FR 3)', 'Setiap ke-3 (FR 3)'), vr2: T('About every 2nd (VR 2)', 'Sekitar ke-2 (VR 2)'), vr3: T('About every 3rd (VR 3)', 'Sekitar ke-3 (VR 3)') }[s.sched], s.dur + ' ' + sec + ' · ' + T(s.scenes.length + ' celebrations', s.scenes.length + ' perayaan'), s.tokenOn ? T('Token board: ' + s.tokens, 'Token board: ' + s.tokens) : ''];
-    if (k === 'mastery') return [ui.masteryText(s), s.mRule === 'rolling' ? T('Recheck after ' + s.retDays + ' days', 'Periksa ulang setelah ' + s.retDays + ' hari') : T('Min. ' + s.mMin + ' trials', 'Min. ' + s.mMin + ' trial')];
+    if (k === 'rewards') return [{ crf: T('Every correct (CRF)', 'Setiap benar (CRF)'), fr2: T('Every 2nd (FR 2)', 'Setiap ke-2 (FR 2)'), fr3: T('Every 3rd (FR 3)', 'Setiap ke-3 (FR 3)'), vr2: T('About every 2nd (VR 2)', 'Sekitar ke-2 (VR 2)'), vr3: T('About every 3rd (VR 3)', 'Sekitar ke-3 (VR 3)') }[s.sched], s.dur + ' ' + sec() + ' · ' + T(s.scenes.length + ' celebrations', s.scenes.length + ' perayaan'), s.tokenOn ? T('Token board: ' + s.tokens, 'Token board: ' + s.tokens) : ''];
+    if (k === 'mastery') return [ui.masteryText(s), T('Recheck after ' + s.retDays + ' days', 'Periksa ulang setelah ' + s.retDays + ' hari')];
     return [];
   };
 
+  /* ---------- the drawer ---------- */
   var DR = null; // { sh, tab, kind: 'settings' | 'order' }
   function drawerHTML() {
     var p = ui.ctx(); if (!p) return '';
-    var set = D.store.set(p.setId), body, head;
-    if (DR.kind === 'order') {
-      head = '<h2 class="dtt-drtitle">' + esc(T('Target Order', 'Urutan %targets%')) + '</h2>';
-      body = '<section class="dtt-dsec">' + SEC.targets.draw(p, set, p.settings) + '</section>';
-    } else {
-      head = '<div class="dtt-drtabs" role="tablist">' + ui.TAB_ORDER.map(function (k) {
-        var on = DR.tab === k; return '<button type="button" role="tab" aria-selected="' + on + '" class="' + (on ? 'on' : '') + '" data-a="drTab" data-v="' + k + '">' + esc(D.i18n.fill(TABS[k].name())) + '</button>';
-      }).join('') + '</div>';
-      body = ui.tabBody(DR.tab, p, set);
-    }
+    var set = D.store.set(p.setId), head = DR.kind === 'order' ? '<h2 class="dtt-drtitle">' + esc(T('Target Order', 'Urutan %targets%')) + '</h2>'
+      : '<div class="dtt-drtabs tl-seg" role="tablist">' + ui.TAB_ORDER.map(function (k) { var on = DR.tab === k; return '<button type="button" role="tab" aria-selected="' + on + '" class="' + (on ? 'on' : '') + '" data-a="drTab" data-v="' + k + '">' + esc(D.i18n.fill(TABS[k].name())) + '</button>'; }).join('') + '</div>';
+    var body = DR.kind === 'order' ? tabOrder(p, set, p.settings) : TABS[DR.tab].draw(p, set, p.settings);
     return '<div class="dtt-drawer"><div class="dtt-drhead">' + head + '<button type="button" class="dtt-x" data-a="drClose" aria-label="' + esc(T('Close', 'Tutup')) + '">✕</button></div>' +
-      '<div class="dtt-drbody">' + body + '</div>' +
-      '<div class="dtt-drfoot"><span class="dtt-saved show" role="status">✓ ' + esc(T('Saved', 'Tersimpan')) + '</span><button type="button" class="dtt-btn primary" data-a="drClose">' + esc(T('Done', 'Selesai')) + '</button></div></div>';
+      '<div class="dtt-drbody">' + D.i18n.fill(body) + '</div>' +
+      '<div class="dtt-drfoot"><span class="dtt-ok">✓ ' + esc(T('Saved', 'Tersimpan')) + '</span><button type="button" class="dtt-btn primary" data-a="drClose">' + esc(T('Done', 'Selesai')) + '</button></div></div>';
   }
   function redraw() {
     if (!DR || !DR.sh.wrap.isConnected) return;
     var b = DR.sh.el.querySelector('.dtt-drbody'), y = b ? b.scrollTop : 0, fk = document.activeElement && DR.sh.el.contains(document.activeElement) ? document.activeElement : null;
-    var sel = fk && fk.dataset ? ['a', 'in', 'k', 'v'].map(function (n) { return fk.dataset[n] != null ? '[data-' + n + '="' + String(fk.dataset[n]).replace(/["\\]/g, '\\$&') + '"]' : ''; }).join('') : '';
+    var sel = fk && fk.dataset ? ['a', 'in', 'k', 'v', 'drag'].map(function (n) { return fk.dataset[n] != null ? '[data-' + n + '="' + String(fk.dataset[n]).replace(/["\\]/g, '\\$&') + '"]' : ''; }).join('') : '';
     DR.sh.set(drawerHTML()); ui.hydrate(DR.sh.el);
     var nb = DR.sh.el.querySelector('.dtt-drbody'); if (nb) nb.scrollTop = y;
+    var fold = DR.fold && DR.sh.el.querySelector('.dtt-fold'); if (fold) fold.open = true;
     if (sel) { var again = DR.sh.el.querySelector(sel); if (again && again.focus) again.focus({ preventScroll: true }); }
   }
   ui.openDrawer = function (kind, tab) {
     if (DR && DR.sh.wrap.isConnected) DR.sh.close();
     DR = { kind: kind, tab: tab || 'trials' };
     DR.sh = X.sheet('', { drawer: true, onClose: function () { DR = null; ui.render(); } });
-    ui.bindIn(DR.sh.el);
+    ui.bindIn(DR.sh.el); wireDrag(DR.sh.el);
+    DR.sh.el.addEventListener('toggle', function (e) { if (e.target.classList && e.target.classList.contains('dtt-fold')) DR.fold = e.target.open; }, true);
     redraw();
   };
   ui.drawerOpen = function () { return !!DR; };
   ui.afterRender.push(function () { redraw(); });
-  ACT.drTab = function (b) { DR.tab = b.dataset.v; redraw(); var bd = DR.sh.el.querySelector('.dtt-drbody'); if (bd) bd.scrollTop = 0; };
+  ACT.drTab = function (b) { DR.tab = b.dataset.v; DR.fold = false; redraw(); var bd = DR.sh.el.querySelector('.dtt-drbody'); if (bd) bd.scrollTop = 0; };
   ACT.drClose = function () { if (DR) DR.sh.close(); };
 })();

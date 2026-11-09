@@ -31,9 +31,11 @@
   }
   function enabledGames(s, all) { return all.filter(function (g) { return !s.games || s.games[g] !== false; }); }
 
-  // tokens are earned by the schedule: one for each full celebration. Returns true when the board has just filled.
-  function earnToken(st, s) {
+  // one token per correct response (prompted correct only when tokenPrompted is on). Returns true when the board has just filled.
+  function earnToken(st, s, result, kind) {
     if (!s.tokenOn) return false;
+    if (kind === 'ec-correction' || kind === 'ec-distractor') return false;
+    if (result === 'prompted' && !s.tokenPrompted) return false;
     st.tokens = (st.tokens || 0) + 1;
     return st.tokens >= s.tokens;
   }

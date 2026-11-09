@@ -13,6 +13,7 @@
       return acc()._http('/rest/v1/' + table + '?on_conflict=' + (conflict || 'id'), { method: 'POST', headers: { Prefer: 'resolution=merge-duplicates,return=minimal' }, body: [row] });
     },
     remove: function (table, filter) { return acc()._http('/rest/v1/' + table + '?' + filter, { method: 'DELETE', headers: { Prefer: 'return=minimal' } }); },
+    patch: function (table, filter, fields) { return acc()._http('/rest/v1/' + table + '?' + filter, { method: 'PATCH', headers: { Prefer: 'return=minimal' }, body: fields }); },
     file: function (path, opts) {
       var a = acc();
       return a._token().then(function (tk) {
@@ -206,7 +207,21 @@
       var id = P.uuid(), path = B.userId() + '/' + folder + '/' + id + '.jpg';
       return B.upload(path, blob).then(function () { urls[path] = Promise.resolve(URL.createObjectURL(blob)); return { id: id, path: path }; });
     },
-    dropImages: function (images) { (images || []).forEach(function (m) { if (m.path) { B.removeFile(m.path); delete urls[m.path]; } }); },
+    // a photo can be shared (a set made from several sets, a duplicated set), so it is only deleted once nothing uses it
+    dropImages: function (images) {
+      var used = {};
+      DB.sets.forEach(function (s) { (s.items || []).forEach(function (i) { (i.images || []).forEach(function (m) { if (m.path) used[m.path] = 1; }); }); });
+      Object.keys(DB.students).forEach(function (k) { (DB.students[k].photos || []).forEach(function (m) { if (m.path) used[m.path] = 1; }); });
+      (images || []).forEach(function (m) { if (m && m.path && !used[m.path]) { B.removeFile(m.path); delete urls[m.path]; } });
+    },
+    // the teacher's note on a finished session: on the waiting copy if it has not uploaded yet, otherwise on the saved session
+    saveNote: function (sessionId, note) {
+      return offline().queued(B.userId()).catch(function () { return []; }).then(function (q) {
+        var e = q.filter(function (x) { return x.id === sessionId; })[0];
+        if (e) { e.session.note = note; return offline().enqueue(e); }
+        return B.patch('dtt_sessions', 'id=eq.' + sessionId, { note: note });
+      });
+    },
     imageUrl: function (m) {
       if (m.lib) return Promise.resolve(D.library.src(m.lib));
       if (!m.path) return Promise.resolve('');

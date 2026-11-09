@@ -154,14 +154,21 @@
     // the board is full: the reward, then the teacher chooses to go on or take a break
     boardReward: function (host, c, done) {
       var reward = c.s.tokenReward !== 'celebration' && (c.photos || []).filter(function (m) { return m.id === c.s.tokenReward; })[0];
+      // 5e: after the celebration, the reward stays on screen and a break timer runs on the teacher's bar
       return D.reinforce.full(host, c, function () {
-        var wrap = document.createElement('div'), canBreak = RF.enabledGames(c.s, DEF.GAMES).length > 0 && !!c.s.inter;
-        wrap.className = 'dtt-paused'; wrap.id = 'dttBoard';
-        wrap.innerHTML = '<div class="tl-panel pad" role="dialog" aria-modal="true"><h2 class="tl-h2">' + esc(T('The token board is full', 'Token board sudah penuh')) + '</h2><p class="tl-p">' + esc(T('Would you like to keep going, or take a break first?', 'Mau lanjut, atau istirahat dulu?')) + '</p>' +
-          '<button type="button" class="tl-btn primary lg" data-go="on">' + esc(T('Keep going', 'Lanjut')) + '</button>' + (canBreak ? '<button type="button" class="tl-btn outline" data-go="break">' + esc(T('Take a fun break', 'Istirahat seru')) + '</button>' : '') + '</div>';
-        host.appendChild(wrap);
-        wrap.addEventListener('click', function (e) { var b = e.target.closest('[data-go]'); if (!b) return; wrap.remove(); done(b.dataset.go === 'break'); });
-        var first = wrap.querySelector('[data-go]'); if (first) first.focus();
+        var wrap = document.createElement('div'), canBreak = RF.enabledGames(c.s, DEF.GAMES).length > 0 && !!c.s.inter, left = Math.max(1, c.s.breakMin || 1) * 60, tick = null;
+        var stars = ''; for (var i = 0; i < c.s.tokens; i++) stars += '<span class="dtt-token on">★</span>';
+        wrap.className = 'dtt-boardfull'; wrap.id = 'dttBoard';
+        wrap.innerHTML = '<div class="dtt-bfstage"><div class="dtt-tokens big">' + stars + '<span class="dtt-tokar">→</span><span class="dtt-tokrw">' + (reward ? D.ui.img(reward, '') : '★') + '</span></div>' +
+          '<div class="dtt-bfreward">' + (reward ? D.ui.img(reward, '') : '<span class="dtt-bfstar">★</span>') + '</div><h1>' + esc(reward && reward.name ? T(reward.name + ' time!', 'Waktunya ' + reward.name + '!') : T('Break time!', 'Waktunya istirahat!')) + '</h1></div>' +
+          '<div class="dtt-teacher"><div class="dtt-tinfo"><span class="dtt-saylab">' + esc(T('Break timer', 'Waktu istirahat')) + '</span><b class="dtt-tlabel" data-time></b></div>' +
+          '<div class="dtt-tbtns">' + (canBreak ? '<button type="button" class="dtt-tbtn" data-go="break">' + esc(T('Fun Break', 'Istirahat Seru')) + '</button>' : '') + '<button type="button" class="dtt-tbtn go" data-go="on">' + esc(T('Back to Trials', 'Kembali ke Trial')) + '</button></div></div>';
+        host.appendChild(wrap); D.ui.hydrate(wrap);
+        var tEl = wrap.querySelector('[data-time]');
+        function show() { tEl.textContent = left > 0 ? Math.floor(left / 60) + ':' + String(left % 60).padStart(2, '0') : T('Time is up', 'Waktu habis'); }
+        show(); tick = setInterval(function () { left--; show(); if (left <= 0) clearInterval(tick); }, 1000);
+        wrap.addEventListener('click', function (e) { var b = e.target.closest('[data-go]'); if (!b) return; clearInterval(tick); wrap.remove(); done(b.dataset.go === 'break'); });
+        var first = wrap.querySelector('[data-go="on"]'); if (first) first.focus();
       }, { text: T('You did it! The board is full!', 'Kamu berhasil! Papannya penuh!'), big: true, rewardImg: reward ? '<span class="dtt-celephoto big f-soft">' + D.ui.img(reward, '') + '</span>' : null });
     },
     // for the settings screen: runs one style on its own, with the sounds on this device
