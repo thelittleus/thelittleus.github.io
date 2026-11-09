@@ -537,6 +537,10 @@ body:has(.dtt-session) .dtt-toasts{top:16px;bottom:auto}
 .dtt-teacher .dtt-tbtn.cur,.dtt-teacher .dtt-tbtn.go{background:var(--sunny);color:var(--ink);opacity:1}
 .dtt-tbtn.cur kbd,.dtt-tbtn.go kbd{border-color:var(--ink)}
 .dtt-teacher .dtt-tbtn.ok{background:var(--greenl);color:var(--ink);border:0}.dtt-teacher .dtt-tbtn.bad{background:#C44A5E;color:#fff;border:0}
+/* time delay: when the wait is over, the prompt button gets a white ring (the app does not prompt by itself) */
+.dtt-teacher .dtt-tbtn.due{box-shadow:0 0 0 3px #fff;animation:dttHint 1.2s ease-in-out infinite}
+@keyframes dttHint{50%{box-shadow:0 0 0 6px rgba(255,255,255,.55)}}
+.dtt-session.calm .dtt-tbtn.due{animation:none}
 .dtt-tbtn.go{padding:14px 28px;font-size:16px;box-shadow:0 3px 0 var(--sunnysh)}
 .dtt-tbtn:disabled{opacity:.4}
 .dtt-keysbtn{display:inline-flex;align-items:center;gap:8px;border:0;background:none;color:rgba(255,255,255,.75);font-weight:700;font-size:13px}

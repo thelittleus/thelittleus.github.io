@@ -44,8 +44,9 @@
     if (p.type !== 'tact') h += sw('rpos', s.rpos, T('Shuffle Card Positions', 'Acak Posisi Kartu'), '');
     h += div() + block(T('Trial Order', 'Urutan Trial'), seg('order', s.order, [['random', T('Random', 'Acak')], ['block', T('Massed', 'Massed')]])) +
       block(T('Maintenance Trials', 'Trial %maintenance%'), seg('maint', s.maint, [[0, T('Off', 'Mati')], [4, T('Every 4', 'Tiap 4')], [3, T('Every 3', 'Tiap 3')], [2, T('Every 2', 'Tiap 2')]])) +
-      '<div class="dtt-steps3">' + block(T('Trials', 'Trial'), stepper('trials', s.trials)) + block(T('Time Between', 'Jeda'), stepper('iti', s.iti, sec())) +
-      (isTouch(p) ? block(T('Time to Respond', 'Waktu Respons'), stepper('resp', s.resp, sec())) : '') + '</div>';
+      '<div class="dtt-steps3">' + block(T('Trials', 'Trial'), stepper('trials', s.trials)) + block(T('Time Between', 'Jeda'), stepper('iti', s.iti, sec())) + '</div>' +
+      // there is no response timer: a trial waits until the student answers or the teacher presses a button
+      '<p class="dtt-hint">' + esc(T('Each trial waits for an answer. The student can touch a card, or you can score it with the buttons at the bottom (Correct, Incorrect, No Response). Nothing is answered by itself.', 'Setiap trial menunggu jawaban. Anak bisa menyentuh kartu, atau kamu menilai dengan tombol di bawah (Benar, Salah, Tidak Ada Respons). Tidak ada yang terjawab otomatis.')) + '</p>';
     return h;
   }
 
@@ -278,7 +279,7 @@
   ui.TAB_ORDER = ['trials', 'prompts', 'correction', 'rewards', 'mastery'];
   ui.summary = function (k, p) {
     var s = p.settings;
-    if (k === 'trials') return [p.type === 'tact' ? T('1 picture', '1 gambar') : p.type === 'sorting' ? T(s.bins + (s.bins === 1 ? ' bin' : ' bins'), s.bins + ' wadah') : T(s.array + (s.array === 1 ? ' card' : ' cards') + (s.rpos ? ' · shuffled' : ''), s.array + ' kartu' + (s.rpos ? ' · diacak' : '')), T(s.trials + ' per session · ' + (s.order === 'block' ? 'massed' : 'random'), s.trials + ' per %session% · ' + (s.order === 'block' ? 'massed' : 'acak')), isTouch(p) ? T(s.resp + ' s to respond', s.resp + ' dtk untuk merespons') : ''];
+    if (k === 'trials') return [p.type === 'tact' ? T('1 picture', '1 gambar') : p.type === 'sorting' ? T(s.bins + (s.bins === 1 ? ' bin' : ' bins'), s.bins + ' wadah') : T(s.array + (s.array === 1 ? ' card' : ' cards') + (s.rpos ? ' · shuffled' : ''), s.array + ' kartu' + (s.rpos ? ' · diacak' : '')), T(s.trials + ' per session · ' + (s.order === 'block' ? 'massed' : 'random'), s.trials + ' per %session% · ' + (s.order === 'block' ? 'massed' : 'acak')), T(s.iti + ' s between trials', 'Jeda ' + s.iti + ' dtk antar trial')];
     if (k === 'prompts') {
       var st = { pulse: 'Pulse', point: 'Arrow', bigger: 'Grow', glow: 'Glow', only: T('Correct only', 'Hanya benar'), first: T('First sound', 'Bunyi awal'), fill: 'Fill-in', label: T('Written word', 'Kata tertulis'), position: T('Closer', 'Lebih dekat'), slide: T('Slide', 'Geser'), flash: T('Flash', 'Menyala') };
       var pk = hasListener(p) ? ['lPart', 'lFull'] : p.type === 'tact' ? ['tPart'] : p.type === 'matching' ? ['mPart'] : p.type === 'sorting' ? ['sPart', 'sFull'] : ['patPart', 'patFull'];

@@ -109,21 +109,14 @@
     var c = EN.next(S.st, S.program, S.set, Date.now());
     if (!c) return finish(false);
     var stage = $('dttStage'), st = stageFor(c.spec.op);
-    S.peek = false; S.flash = false;
+    S.peek = false; S.flash = false; S.promptDue = 0;
     $('dttSession').style.setProperty('--dtt-cardc', 'var(--dtt-c' + (1 + c.no % COLORS) + ')');
     st.draw(stage, c, S); st.layout(stage); dots();
     if (S.prefs.labelView === 'flash') { S.flash = true; curLater(2000, function () { S.flash = false; refreshLabel(); }); }
     teacher(); snapshot();
     if (c.startLevel > 0) curLater(350, function () { prompt(c.startLevel); });
-    if (c.delay) curLater(c.delay * 1000, function () { prompt(PR.top(S.program.settings)); });
-    if (st.touch) armWindow(c);
-  }
-  function armWindow(c) {
-    curLater(S.program.settings.resp * 1000, function () {
-      if (!S || S.st.cur !== c || c.locked || S.paused) return;
-      var r = EN.onTimeout(S.st, S.program);
-      if (r.prompt != null) { prompt(r.prompt); armWindow(c); } else if (r.noResponse) answer({ noResponse: true });
-    });
+    // time delay: when the wait is over, the prompt button lights up for the teacher. Nothing is prompted or scored by itself.
+    if (c.delay) curLater(c.delay * 1000, function () { if (S && S.st.cur === c && !c.locked) { S.promptDue = PR.top(S.program.settings); teacher(); } });
   }
   function prompt(level) {
     if (!S || !EN.applyPrompt(S.st, S.program, level)) return;
@@ -137,6 +130,7 @@
     var drag = e.target.closest('.dtt-drag');
     if (drag) return startDrag(e, drag, st);
     var b = st.tapped(e); if (!b) return;
+    // the student's own touch answers the trial. Nothing answers by itself: with no touch, the trial waits for the student or the teacher's buttons.
     answer({ correct: st.isCorrect(b, S.st.cur) });
   }
   // dropped on a card it counts as an answer; dropped anywhere else the card goes back and the trial carries on
@@ -244,9 +238,13 @@
       '<span class="dtt-sayrow">' + (sp.text ? '<span class="dtt-say" id="dttSay">' + esc(sp.text) + '</span>' : '') + '<b class="dtt-tlabel' + (vis ? '' : ' masked') + '" id="dttLabel">' + esc(vis ? label(c.spec.target) : '•••') + '</b>' +
       ((mode === 'hold' || mode === 'flash') && !lk ? '<button type="button" class="dtt-peek" id="dttPeek" aria-label="' + esc(T('Hold to see the label', 'Tahan untuk melihat label')) + '">' + ICON.eye + '</button>' : '') + '</span></div>' +
       '<span class="dtt-tbadge ' + bcls + '">' + esc((mixed ? (c.spec.op === 'tact' ? 'Tact · ' : 'Listener · ') : '') + badge) + '</span>' +
-      '<div class="dtt-tbtns">' + (stageFor(c.spec.op).touch ? '' : btn('ok', T('Correct', 'Benar'), 'C', lk) + btn('bad', T('Incorrect', 'Salah'), 'X', lk)) +
-      (chain.indexOf(1) >= 0 ? btn('partial' + (c.level === 1 ? ' cur' : ''), 'Partial', 'P', lk || c.level >= 1) : '') + (chain.indexOf(2) >= 0 ? btn('full' + (c.level === 2 ? ' cur' : ''), 'Full', 'F', lk || c.level >= 2) : '') +
-      (stageFor(c.spec.op).touch ? btn('nr', T('No Response', 'Tidak Ada Respons'), 'N', lk) : '') + '</div>';
+      // the student's touch scores a trial; the teacher can also score it here (e.g. when the student points instead of touching)
+      '<div class="dtt-tbtns">' +
+      (chain.indexOf(1) >= 0 ? btn('partial' + (c.level === 1 ? ' cur' : S.promptDue === 1 && c.level < 1 ? ' due' : ''), 'Partial', 'P', lk || c.level >= 1) : '') +
+      (chain.indexOf(2) >= 0 ? btn('full' + (c.level === 2 ? ' cur' : S.promptDue === 2 && c.level < 2 ? ' due' : ''), 'Full', 'F', lk || c.level >= 2) : '') +
+      btn('nr', T('No Response', 'Tidak Ada Respons'), 'N', lk) +
+      btn('bad', T('Incorrect', 'Salah'), 'X', lk) +
+      btn('ok', T('Correct', 'Benar'), 'C', lk) + '</div>';
     Array.prototype.forEach.call(el.querySelectorAll('.dtt-tbtn'), function (b) {
       if (S.prefs.hold) holdable(b, HOLD_PRESS, function () { command(b.dataset.cmd); }); else b.addEventListener('click', function () { command(b.dataset.cmd); });
     });
@@ -264,8 +262,8 @@
     if (cmd === 'full') prompt(2);
     var touch = stageFor(S.st.cur.spec.op).touch;
     if (cmd === 'nr') answer(touch ? { noResponse: true } : { correct: false });
-    if (cmd === 'ok' && !touch) answer({ correct: true });
-    if (cmd === 'bad' && !touch) answer({ correct: false });
+    if (cmd === 'ok') answer({ correct: true });
+    if (cmd === 'bad') answer({ correct: false });
   }
   // a hold fires after ms; on a keyboard, Enter or Space does the same straight away
   function holdable(b, ms, fn) {
