@@ -16,7 +16,7 @@
     return '<span class="dtt-setprev' + (its.length === 1 ? ' one' : '') + '" aria-hidden="true">' + (its.length ? its.map(function (i) { return '<span>' + (i.images[0] ? ui.img(i.images[0], '') : '') + '</span>'; }).join('') : '') + '</span>';
   }
   function libItemsAsSet(l) { return l.items.map(function (it) { return { images: it.images.map(function (r) { return { lib: r }; }) }; }); }
-  function libKind(l) { return l.kind === 'text' ? T('Text', 'Teks') : T('Swatches', 'Warna'); }
+  function libKind(l) { return l.kind === 'text' ? T('Text', 'Teks') : l.kind === 'shape' ? T('Shapes', 'Bentuk') : T('Swatches', 'Warna'); }
   function photoMeter() { return '<p class="dtt-hint">' + esc(T('Photos uploaded: ' + D.store.photoCount() + ' of ' + D.store.photoLimit(), 'Foto terunggah: ' + D.store.photoCount() + ' dari ' + D.store.photoLimit())) + '</p>'; }
   function usedText(n) { return n ? T(n + (n === 1 ? ' program' : ' programs'), n + ' program') : T('Not used', 'Belum dipakai'); }
   function closeOn(sh) { sh.el.addEventListener('click', function (e) { if (e.target.closest('[data-x]')) sh.close(); }); }
@@ -29,7 +29,7 @@
       '<div class="tl-seg dtt-seg" role="tablist"><button type="button" role="tab" aria-selected="' + (tab === 'mine') + '" class="' + (tab === 'mine' ? 'on' : '') + '" data-a="setTab" data-v="mine">' + esc(T('My Sets', 'Set Saya')) + '</button><button type="button" role="tab" aria-selected="' + (tab === 'lu') + '" class="' + (tab === 'lu' ? 'on' : '') + '" data-a="setTab" data-v="lu">' + esc(T('Little Us Library', 'Pustaka Little Us')) + '</button></div></div>';
     if (tab === 'lu') {
       var f = U.libF || 'all', libs = LIB.sets.filter(function (l) { return (f === 'all' || l.kind === f) && (!q || l.name[L()].toLowerCase().indexOf(q) >= 0); });
-      return head + '<div class="dtt-chips">' + [['all', T('All', 'Semua')], ['text', T('Text', 'Teks')], ['swatch', T('Swatches', 'Warna')]].map(function (o) { return '<button type="button" class="dtt-fchip' + (f === o[0] ? ' on' : '') + '" aria-pressed="' + (f === o[0]) + '" data-a="libF" data-v="' + o[0] + '">' + esc(o[1]) + '</button>'; }).join('') + '</div>' +
+      return head + '<div class="dtt-chips">' + [['all', T('All', 'Semua')], ['text', T('Text', 'Teks')], ['swatch', T('Swatches', 'Warna')], ['shape', T('Shapes', 'Bentuk')]].map(function (o) { return '<button type="button" class="dtt-fchip' + (f === o[0] ? ' on' : '') + '" aria-pressed="' + (f === o[0]) + '" data-a="libF" data-v="' + o[0] + '">' + esc(o[1]) + '</button>'; }).join('') + '</div>' +
         '<div class="dtt-setgrid">' + libs.map(function (l) {
           return '<button type="button" class="dtt-setcard" data-a="libPreview" data-v="' + l.id + '">' + preview(libItemsAsSet(l)) + '<span class="dtt-setmeta"><b>' + esc(l.name[L()]) + '</b><small>' + esc(l.items.length + ' · ' + libKind(l)) + '</small></span><span class="dtt-kindpill">' + esc(libKind(l)) + '</span></button>';
         }).join('') + '</div><p class="dtt-hint">' + esc(T('More ready-made sets are on the way.', 'Set siap pakai lainnya segera hadir.')) + '</p>';
@@ -40,7 +40,7 @@
         '<span class="dtt-setmeta"><b>' + esc(s.name || T('Untitled Set', 'Set Tanpa Nama')) + '</b><small>' + esc(s.items.length + ' · ' + kindOf(s.items) + ' · ' + usedText(D.store.programsUsingSet(s.id).length)) + '</small></span>' +
         '<button type="button" class="dtt-more" data-a="setMenu" data-id="' + s.id + '" aria-label="' + esc(T('More', 'Lainnya')) + '">•••</button></div>';
     }).join('') + '<button type="button" class="dtt-setcard add" data-a="newSet"><i aria-hidden="true">+</i><b>' + esc(T('New Set', 'Set Baru')) + '</b></button></div>' +
-      '<div class="dtt-libpromo"><div><b>' + esc(T('Need more? Little Us has ready-made sets.', 'Butuh lagi? Little Us punya set siap pakai.')) + '</b><small>' + esc(T('Colours, numbers 1–10 and letters A–Z.', 'Warna, angka 1–10, dan huruf A–Z.')) + '</small></div><button type="button" class="dtt-btn sec" data-a="setTab" data-v="lu">' + esc(T('Browse Library', 'Lihat Pustaka')) + '</button></div>' + photoMeter();
+      '<div class="dtt-libpromo"><div><b>' + esc(T('Need more? Little Us has ready-made sets.', 'Butuh lagi? Little Us punya set siap pakai.')) + '</b><small>' + esc(T('Colours, shapes, numbers 0–20 and letters A–Z and a–z.', 'Warna, bentuk, angka 0–20, dan huruf A–Z serta a–z.')) + '</small></div><button type="button" class="dtt-btn sec" data-a="setTab" data-v="lu">' + esc(T('Browse Library', 'Lihat Pustaka')) + '</button></div>' + photoMeter();
   }
   INP.setQ = function (el) { U.setQ = el.value; var pos = el.selectionStart; ui.render(); var n = document.querySelector('[data-in="setQ"]'); if (n) { n.focus(); try { n.setSelectionRange(pos, pos); } catch (e) { } } };
   ACT.setTab = function (b) { U.setTab = b.dataset.v; U.view = 'sets'; ui.render(); };
@@ -158,7 +158,7 @@
   // 5k: a new set's name, then straight into Add Stimulus. done(set) once something is in it.
   ui.newSetFlow = function (name, done) {
     var sh = X.sheet(ui.dlg({ title: T('New Set', 'Set Baru'), sub: U.wizard ? esc(T('New Program › New Set', 'Program Baru › Set Baru')) : '',
-      body: '<label class="dtt-field"><span>' + esc(T('Set Name', 'Nama Set')) + '</span><input type="text" maxlength="60" value="' + esc(name || '') + '" placeholder="' + esc(T('Animals', 'Hewan')) + '" autofocus></label>' +
+      body: '<label class="dtt-field"><span>' + esc(T('Set Name', 'Nama Set')) + '</span><input type="text" maxlength="60" value="' + esc(name || '') + '" placeholder="' + esc(T('e.g. Animals', 'mis. Hewan')) + '" autofocus></label>' +
         '<div class="dtt-field"><span>' + esc(T('Add Stimulus', 'Tambah Stimulus')) + '</span>' + addOptions() + '</div>' }));
     closeOn(sh);
     sh.el.addEventListener('click', function (e) {
@@ -204,7 +204,7 @@
       (isText ? '<div class="dtt-blk">' + ui.lab(T('Card Style', 'Gaya Kartu')) + '<div class="tl-seg dtt-seg" role="group">' + [['plain', T('Plain', 'Biasa')], ['large', T('Large', 'Besar')], ['coloured', T('Coloured', 'Berwarna')]].map(function (o) { var on = LIB.styleOf(m.lib) === o[0]; return '<button type="button" class="' + (on ? 'on' : '') + '" aria-pressed="' + on + '" data-a="textStyle" data-v="' + o[0] + '" ' + a + '>' + esc(o[1]) + '</button>'; }).join('') + '</div></div>' : '') +
       '<label class="dtt-field"><span>' + esc(T('Label', 'Label')) + '</span><input type="text" value="' + esc(i.labels.primary) + '" data-in="itemLabel" data-k="primary" ' + a + '></label>' +
       (others.length ? '<div class="dtt-blk">' + ui.lab(T('Never Show With', 'Jangan Tampil Bersama')) + '<div class="dtt-chips">' + never + '<button type="button" class="dtt-fchip add" data-a="pairAdd" ' + a + '>+ ' + esc(T('Add', 'Tambah')) + '</button></div></div>' : '') +
-      '<label class="dtt-field"><span>' + esc(T('Categories', 'Kategori')) + '</span><input type="text" value="' + esc((i.tags || []).join(', ')) + '" data-in="itemTags" ' + a + ' placeholder="' + esc(T('animal, pet', 'hewan, peliharaan')) + '"></label>' +
+      '<label class="dtt-field"><span>' + esc(T('Categories', 'Kategori')) + '</span><input type="text" value="' + esc((i.tags || []).join(', ')) + '" data-in="itemTags" ' + a + ' placeholder="' + esc(T('e.g. animal, pet', 'mis. hewan, peliharaan')) + '"></label>' +
       (m && m.path ? ui.sw('people', !!m.people, T('Shows a Person', 'Menampilkan Orang'), m.people ? '' : T('Turn on to note who it may be used with', 'Nyalakan untuk mencatat izin pemakaiannya'), 'peopleTog').replace('data-k="people"', 'data-k="people" data-v="' + m.id + '" ' + a) +
         (m.people ? ui.seg('consent', m.consent, [['one', T('One Student', 'Satu Anak')], ['all', T('All My Students', 'Semua Anakku')]]).replace(/data-a="set" data-k="consent" data-v="(\w+)"/g, 'data-a="consent" data-k="$1" data-v="' + m.id + '" ' + a) : '') : '') +
       '<button type="button" class="dtt-linkbtn danger" data-a="delItem" ' + a + ' data-confirm="' + esc(T('Tap again to delete', 'Ketuk lagi untuk menghapus')) + '">🗑 ' + esc(T('Delete Stimulus', 'Hapus Stimulus')) + '</button></aside>';
@@ -261,7 +261,7 @@
     function draw(focusLast) {
       var n = count(), body;
       if (st.how === 'text') body = '<div class="dtt-textrows">' + st.texts.map(function (t, i) {
-        return '<div class="dtt-textrow"><span class="dtt-stimimg sm">' + (t.trim() ? '<img alt="" src="' + esc(LIB.src(LIB.textRef(st.style, t))) + '">' : '') + '</span><input type="text" maxlength="40" value="' + esc(t) + '" data-i="' + i + '" placeholder="' + esc(i ? '' : T('Mum', 'Ibu')) + '" aria-label="' + esc(T('Stimulus ' + (i + 1), 'Stimulus ' + (i + 1))) + '">' + (st.texts.length > 1 ? '<button type="button" class="dtt-x sm" data-rm="' + i + '" aria-label="' + esc(T('Remove', 'Hapus')) + '">✕</button>' : '') + '</div>';
+        return '<div class="dtt-textrow"><span class="dtt-stimimg sm">' + (t.trim() ? '<img alt="" src="' + esc(LIB.src(LIB.textRef(st.style, t))) + '">' : '') + '</span><input type="text" maxlength="40" value="' + esc(t) + '" data-i="' + i + '" placeholder="' + esc(i ? '' : T('e.g. Mum', 'mis. Ibu')) + '" aria-label="' + esc(T('Stimulus ' + (i + 1), 'Stimulus ' + (i + 1))) + '">' + (st.texts.length > 1 ? '<button type="button" class="dtt-x sm" data-rm="' + i + '" aria-label="' + esc(T('Remove', 'Hapus')) + '">✕</button>' : '') + '</div>';
       }).join('') + '</div><p class="dtt-hint">' + esc(T('Press Enter for the next one, or paste a list.', 'Tekan Enter untuk yang berikutnya, atau tempel daftar.')) + '</p>' +
         '<div class="dtt-blk">' + ui.lab(T('Card Style', 'Gaya Kartu')) + '<div class="tl-seg dtt-seg" role="group">' + [['plain', T('Plain', 'Biasa')], ['large', T('Large', 'Besar')], ['coloured', T('Coloured', 'Berwarna')]].map(function (o) { return '<button type="button" class="' + (st.style === o[0] ? 'on' : '') + '" aria-pressed="' + (st.style === o[0]) + '" data-style="' + o[0] + '">' + esc(o[1]) + '</button>'; }).join('') + '</div></div>';
       else if (st.how === 'photos') {

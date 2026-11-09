@@ -20,8 +20,27 @@
   function account() {
     var a = window.LUAcc, on = a && a.signedIn && a.signedIn(), me = on && a.me ? a.me() : null;
     if (!on) return '<button type="button" class="dtt-acct" data-a="signIn"><span class="dtt-dot off" aria-hidden="true"></span>' + esc(T('Not signed in', 'Belum masuk')) + '<u>' + esc(T('Sign in', 'Masuk')) + '</u></button>';
-    return '<a class="dtt-acct" href="/#/account"><span class="dtt-dot" aria-hidden="true"></span>' + esc((me && (me.name || me.email)) || T('Signed in', 'Sudah masuk')) + (a.isPlus && a.isPlus() ? ' <span class="dtt-plus sm">Plus</span>' : '') + '</a>';
+    // the same grown-up character the Little Us site uses for the account, then the name. A tap opens a small menu, not the settings page.
+    var name = (me && (me.name || me.email)) || T('Signed in', 'Sudah masuk');
+    return '<button type="button" class="dtt-acct me" data-a="acctMenu" aria-haspopup="menu" aria-expanded="false"><span class="dtt-acctava" aria-hidden="true">' + (a.face ? a.face('adult', name.charAt(0).toUpperCase()) : esc(name.charAt(0))) + '</span>' +
+      '<span class="dtt-acctname">' + esc(name) + '</span>' + (a.isPlus && a.isPlus() ? '<span class="dtt-plus sm">Plus</span>' : '') + '<span class="dtt-acctchev" aria-hidden="true">▴</span></button>';
   }
+  ACT.acctMenu = function (b) {
+    var old = document.querySelector('.dtt-pop'); if (old) { old.remove(); if (old.dataset.for === 'acct') return; }
+    var a = window.LUAcc, me = a && a.me ? a.me() : null;
+    var pop = document.createElement('div'); pop.className = 'dtt-pop dtt-acctpop'; pop.dataset.for = 'acct'; pop.setAttribute('role', 'menu');
+    pop.innerHTML = (me && me.email ? '<div class="dtt-pophead"><b>' + esc(me.name || me.email) + '</b>' + (me.name ? '<small>' + esc(me.email) + '</small>' : '') + '</div>' : '') +
+      '<button type="button" role="menuitem" data-do="acct">⚙ ' + esc(T('Open account settings', 'Buka pengaturan akun')) + '</button>';
+    document.body.appendChild(pop); b.setAttribute('aria-expanded', 'true');
+    var r = b.getBoundingClientRect(); pop.style.left = Math.max(8, r.left) + 'px'; pop.style.width = Math.max(220, r.width) + 'px';
+    pop.style.top = Math.max(8, r.top - pop.offsetHeight - 6) + 'px';
+    pop.querySelector('button').focus();
+    function close() { pop.remove(); b.setAttribute('aria-expanded', 'false'); document.removeEventListener('pointerdown', outside, true); document.removeEventListener('keydown', key, true); }
+    function outside(e) { if (!pop.contains(e.target) && !b.contains(e.target)) close(); }
+    function key(e) { if (e.key === 'Escape') { e.stopPropagation(); close(); b.focus(); } }
+    document.addEventListener('pointerdown', outside, true); document.addEventListener('keydown', key, true);
+    pop.addEventListener('click', function (e) { if (e.target.closest('[data-do="acct"]')) { close(); location.href = '/#/account'; } });
+  };
 
   ui.sidebar = function () {
     var cur = place();

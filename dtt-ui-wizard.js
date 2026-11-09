@@ -36,7 +36,7 @@
     var tint = function (t) { return ui.TYPE_TINT[t === 'visual' ? 'matching' : t]; };
     var name = SH.el.querySelector('[data-k="name"]'), first = !name;
     SH.set(ui.dlg({ title: T('New Program', 'Program Baru'), cls: 'dtt-newprog',
-      body: '<label class="dtt-field"><span>' + esc(T('Name', 'Nama')) + '</span><input type="text" maxlength="60" data-k="name" value="' + esc(p.name) + '" placeholder="' + esc(T('Receptive animals', 'Mengenal hewan')) + '"' + (first ? ' autofocus' : '') + '></label>' +
+      body: '<label class="dtt-field"><span>' + esc(T('Name', 'Nama')) + '</span><input type="text" maxlength="60" data-k="name" value="' + esc(p.name) + '" placeholder="' + esc(T('e.g. Receptive animals', 'mis. Mengenal hewan')) + '"' + (first ? ' autofocus' : '') + '></label>' +
         '<div class="dtt-field"><span>' + esc(T('Type', 'Jenis')) + '</span><div class="dtt-typegrid">' + TYPES.map(function (t) {
           var on = t[0] === 'visual' ? fam === 'visual' : p.type === t[0];
           return '<button type="button" class="dtt-typecard' + (on ? ' on' : '') + '" style="' + (on ? 'background:' + tint(t[0]) : '') + '" aria-pressed="' + on + '" data-type="' + t[0] + '"><b>' + esc(t[1]) + '</b><small>' + esc(t[2]) + '</small></button>';

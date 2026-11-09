@@ -9,8 +9,9 @@
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body.dtt-body{margin:0;min-height:100vh;background:var(--paper);color:var(--ink);font:16px/1.4 Figtree,system-ui,sans-serif}
-.dtt-body button,.dtt-body input,.dtt-body select,.dtt-body textarea{font:inherit;color:inherit}
-.dtt-body button{cursor:pointer}
+/* :where() keeps this reset at zero weight, so each button's own font (e.g. 700 14px on .dtt-btn) wins as in the reference */
+:where(.dtt-body) :where(button,input,select,textarea){font:inherit;color:inherit}
+:where(.dtt-body) :where(button){cursor:pointer}
 .dtt-skip{position:absolute;left:-999px;top:8px;z-index:2000;background:var(--ink);color:#fff;padding:8px 14px;border-radius:10px}
 .dtt-skip:focus{left:8px}
 .dtt-body :focus-visible{outline:3px solid var(--sunny);outline-offset:2px}
@@ -25,7 +26,7 @@ body.dtt-body{margin:0;min-height:100vh;background:var(--paper);color:var(--ink)
 .dtt-p{margin:0;color:var(--body)}
 .dtt-hint{margin:0;font-size:13px;color:var(--muted);line-height:1.4}
 .dtt-lab{font:700 14px Figtree,sans-serif;display:flex;justify-content:space-between;gap:10px;align-items:baseline}
-.dtt-lab span{font-weight:600;font-size:12.5px;color:var(--muted)}
+.dtt-lab span{font-weight:700;font-size:13px;color:var(--muted)}
 .dtt-lab.plain{font-weight:600;font-size:14.5px}
 .dtt-ok{font-size:13px;font-weight:700;color:var(--ok)}
 
@@ -34,7 +35,10 @@ body.dtt-body{margin:0;min-height:100vh;background:var(--paper);color:var(--ink)
 .dtt-btn.primary,.tl-btn.primary{background:var(--sunny);border-color:var(--sunny);box-shadow:0 3px 0 var(--sunnysh)}
 .dtt-btn.primary:active{transform:translateY(2px);box-shadow:0 1px 0 var(--sunnysh)}
 .dtt-btn.sec,.dtt-btn:not(.primary):not(.quiet):not(.danger),.tl-btn.outline{background:#fff;border-color:var(--edge);box-shadow:0 2px 0 var(--line)}
-.dtt-btn.danger{background:#fff;border-color:var(--dangerline);color:var(--danger);box-shadow:0 2px 0 var(--line)}
+/* reference: confirm-delete buttons are solid red with a darker ledge; "End Without Saving" in the pause card is plain red text */
+.dtt-btn.danger{background:var(--danger);border-color:var(--danger);color:#fff;box-shadow:0 3px 0 #8E2A3C}
+.dtt-btn.danger:active{transform:translateY(2px);box-shadow:0 1px 0 #8E2A3C}
+.dtt-btn.sec.danger{background:none;border-color:transparent;box-shadow:none;color:var(--danger);padding:8px}
 .dtt-btn.quiet{background:transparent;box-shadow:none}
 .dtt-btn.lg{padding:12px 24px;font-size:16px;min-height:48px}
 .dtt-btn.sm{min-height:38px;padding:7px 14px;font-size:14px;border-radius:12px}
@@ -73,7 +77,7 @@ body.dtt-body{margin:0;min-height:100vh;background:var(--paper);color:var(--ink)
 .dtt-stepper{display:inline-flex;align-items:center;flex:none;background:#fff;border:1.5px solid var(--input);border-radius:12px;font-weight:700}
 .dtt-stepper button{border:0;background:none;padding:7px 13px;font:700 16px Figtree,sans-serif;color:var(--ink);min-height:38px}
 .dtt-stepper button:disabled{opacity:.3;cursor:default}
-.dtt-stepper output{min-width:56px;text-align:center;white-space:nowrap;font-size:15px}
+.dtt-stepper output{min-width:56px;text-align:center;white-space:nowrap;font-size:16px}
 .dtt-blk{display:flex;flex-direction:column;gap:9px;min-width:0}
 .dtt-div{height:1.5px;background:var(--line2);flex:none}
 .dtt-input{display:flex;flex-direction:column;gap:6px}
@@ -131,6 +135,15 @@ body.dtt-body{margin:0;min-height:100vh;background:var(--paper);color:var(--ink)
 .dtt-home:hover,.dtt-acct:hover{background:var(--sand)}
 .dtt-acct{font-size:13px;flex-wrap:wrap}
 .dtt-acct u{margin-left:auto;font-weight:700;color:var(--ink)}
+.dtt-acct.me{flex-wrap:nowrap;gap:10px;padding:8px 10px;font-size:14px;font-weight:700;color:var(--ink);cursor:pointer}
+.dtt-acctava{width:34px;height:34px;flex:none;border-radius:50%;overflow:hidden;background:var(--lilac);display:flex;align-items:center;justify-content:center;font:600 15px Fredoka,sans-serif}
+.dtt-acctava .lu-face,.dtt-acctava svg{display:block;width:100%;height:100%}
+.dtt-acctname{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:left}
+.dtt-acctchev{color:var(--muted);font-size:11px}
+.dtt-acct.me[aria-expanded="true"]{background:var(--sand)}
+.dtt-pophead{display:flex;flex-direction:column;gap:1px;padding:8px 12px 10px;border-bottom:1.5px solid var(--line2);margin-bottom:4px;min-width:0}
+.dtt-pophead b{font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dtt-pophead small{font-size:12.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .dtt-dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex:none}
 .dtt-dot.off{background:#D9A23B}
 .dtt-mainc{flex:1;min-width:0;padding:32px 44px 60px;display:flex;flex-direction:column;gap:20px;max-width:1200px}
@@ -162,7 +175,8 @@ body.dtt-body{margin:0;min-height:100vh;background:var(--paper);color:var(--ink)
 .dtt-legend i{display:inline-block;width:10px;height:10px;border-radius:3px}
 .dtt-legend i.m{background:var(--greenl)}.dtt-legend i.l{background:var(--sunny)}.dtt-legend i.w{background:var(--line2);border:1px solid var(--input)}
 .dtt-legend2{display:flex;gap:16px;flex-wrap:wrap}
-.dtt-empty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;padding:48px 20px;background:#fff;border:1.5px solid var(--line);border-radius:22px}
+.dtt-empty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;padding:48px 20px;background:none;border:2px dashed var(--edge);border-radius:22px}
+.dtt-empty .dtt-p{font-size:14.5px;color:var(--muted)}
 .dtt-empty.sm{padding:24px 12px;border:0;background:none}
 .dtt-firstart{display:flex;gap:8px;justify-content:center}
 .dtt-firstart .dtt-char{width:72px;height:72px}
@@ -187,7 +201,16 @@ body.dtt-body{margin:0;min-height:100vh;background:var(--paper);color:var(--ink)
 
 /* ---------- one program (1b) ---------- */
 .dtt-ptabs{width:auto;flex:none}
-.dtt-ptabs button{padding:8px 16px}
+.dtt-ptabs button{padding:8px 16px;font-size:16px}
+/* reference sizes: list pages use a 32px title, a single program, set or Settings uses 30px */
+.dtt-titlewrap .dtt-h1,.dtt-pagehead:has(+ .dtt-setcols) .dtt-h1{font-size:30px}
+.dtt-setcard.add b{font-size:14px}
+/* Settings page (1g): slightly smaller type than the drawers, as in the reference */
+.dtt-setcols .dtt-h2{font-size:18px}
+.dtt-setcols .dtt-lab{font-size:13px}
+.dtt-setcols .dtt-hint{font-size:12.5px}
+.dtt-setcols .dtt-swtx b{font-weight:600}
+.dtt-setcols .tl-seg button{font-size:13.5px}
 .dtt-tchips{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .dtt-tchip{display:inline-flex;align-items:center;gap:7px;padding:7px 12px 7px 8px;border-radius:999px;border:0;background:var(--sand);font-weight:600;font-size:14px;color:var(--body)}
 .dtt-tchip.learning,.dtt-tchip.attention{background:var(--butter);font-weight:700;color:var(--ink)}
@@ -213,6 +236,18 @@ body.dtt-body{margin:0;min-height:100vh;background:var(--paper);color:var(--ink)
 .dtt-setcols .dtt-panel{gap:16px}
 .dtt-theme{padding:8px 13px;border-radius:999px;border:0;background:var(--sand);font-size:13.5px;font-weight:600;color:var(--body)}
 .dtt-theme.on{padding:7px 12px;border:2px solid var(--ink);font-weight:700;color:var(--ink)}
+/* theme picture cards: the theme chips from the reference (sand when off; theme colour + 2px ink outline when on), with that theme's characters drawn above the name */
+.dtt-themecards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.dtt-themecard{display:flex;flex-direction:column;align-items:stretch;gap:6px;padding:8px 8px 10px;border-radius:16px;border:2px solid transparent;background:var(--sand);text-align:center;min-width:0}
+.dtt-themecard:hover{border-color:var(--input)}
+.dtt-themecard.on{background:var(--th);border-color:var(--ink)}
+.dtt-themeart{position:relative;display:flex;align-items:flex-end;justify-content:center;gap:2px;height:58px;padding:6px 4px 4px;border-radius:11px;background:rgba(255,255,255,.65)}
+.dtt-themecard.on .dtt-themeart{background:rgba(255,255,255,.55)}
+.dtt-themeart .dtt-char{width:auto;height:44px;flex:0 1 auto;min-width:0}
+.dtt-themetick{position:absolute;top:-4px;right:-4px;width:22px;height:22px;border-radius:50%;background:var(--ink);color:#fff;font:800 11px/22px Figtree,sans-serif;text-align:center}
+.dtt-themename{font-size:13.5px;font-weight:600;color:var(--body);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dtt-themecard.on .dtt-themename{font-weight:700;color:var(--ink)}
+@media (max-width:420px){.dtt-themecards{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .dtt-imgs{display:flex;flex-wrap:wrap;gap:8px}
 .dtt-imgwrap{position:relative;width:64px;height:64px;border-radius:12px;background:var(--sand)}
 .dtt-imgwrap img{width:100%;height:100%;object-fit:cover;display:block;border-radius:12px}
@@ -246,7 +281,7 @@ body.dtt-body{margin:0;min-height:100vh;background:var(--paper);color:var(--ink)
 .dtt-ecstep.dashed{border-style:dashed;border-color:var(--edge)}
 .dtt-ecstep .dtt-swtx{flex:1}
 .dtt-ecn{width:28px;height:28px;flex:none;border-radius:50%;background:var(--butter);display:flex;align-items:center;justify-content:center;font:600 14px Fredoka,sans-serif}
-.dtt-schip{display:inline-flex;align-items:center;gap:6px;padding:4px 6px 4px 12px;border-radius:999px;background:#fff;border:1.5px solid var(--line);opacity:.55}
+.dtt-schip{display:inline-flex;align-items:center;gap:6px;padding:6px 8px 6px 12px;border-radius:999px;background:#fff;border:1.5px solid var(--line);opacity:.55}
 .dtt-schip.on{opacity:1}
 .dtt-schipt{border:0;background:none;padding:2px 0;font-size:13px;font-weight:700}
 .dtt-play{width:24px;height:24px;border-radius:50%;border:0;background:var(--sand);font-size:9px;display:flex;align-items:center;justify-content:center}
@@ -389,7 +424,7 @@ body.dtt-body{margin:0;min-height:100vh;background:var(--paper);color:var(--ink)
 .dtt-itemimg{width:56px;height:56px;flex:none;border-radius:12px;overflow:hidden;background:var(--sand)}
 .dtt-itemimg img{width:100%;height:100%;object-fit:cover;display:block}
 .dtt-addopts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;max-width:640px}
-.dtt-addopt{display:flex;flex-direction:column;align-items:center;gap:4px;padding:18px 10px;border-radius:16px;border:1.5px solid var(--line);background:#fff;text-align:center}
+.dtt-addopt{display:flex;flex-direction:column;align-items:center;gap:4px;padding:16px;border-radius:14px;border:1.5px solid var(--edge);background:#fff;box-shadow:0 2px 0 var(--line);text-align:center}
 .dtt-addopt:hover{border-color:var(--ink)}
 .dtt-addopt small{font-size:12.5px;color:var(--muted)}
 .dtt-addico{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:12px;background:var(--butter);font:600 18px Fredoka,sans-serif;font-style:normal;margin-bottom:4px}
@@ -462,13 +497,13 @@ body:has(.dtt-session) .dtt-toasts{top:16px;bottom:auto}
 .dtt-stop{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;padding:20px 24px}
 .dtt-stopl{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .dtt-stopm{display:flex;align-items:center;justify-content:center;gap:16px}
-.dtt-pausebtn{position:relative;overflow:hidden;min-height:44px;padding:9px 18px;border-radius:999px;border:0;background:var(--sand);font:700 14px Figtree,sans-serif;color:var(--ink);touch-action:none}
+.dtt-pausebtn{position:relative;overflow:hidden;min-height:36px;padding:8px 14px;border-radius:999px;border:0;background:var(--sand);font:700 13px Figtree,sans-serif;color:var(--body);touch-action:none}
 .dtt-pausebtn[hidden]{display:none}
 .dtt-count{justify-self:end;font:600 18px Fredoka,sans-serif;color:var(--muted);min-width:116px;text-align:right}
-.dtt-practag{padding:6px 12px;border-radius:999px;background:var(--lilac);font-weight:700;font-size:13px}
+.dtt-practag{padding:6px 12px;border-radius:999px;background:var(--lilac);font-weight:700;font-size:13.5px}
 .dtt-practag.real{background:var(--mint)}
 .dtt-practag[hidden]{display:none}
-.dtt-endprac{border:0;background:none;font-weight:700;text-decoration:underline;color:var(--ink)}
+.dtt-endprac{padding:4px 12px;border-radius:999px;border:1.5px solid var(--ink);background:#fff;font-size:12.5px;font-weight:700;color:var(--ink)}
 .dtt-sdots{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;max-width:none}
 .dtt-sdots i{width:28px;height:6px;border-radius:3px;background:var(--line)}
 .dtt-sdots i.i{background:var(--greenl)}.dtt-sdots i.p{background:var(--sunny)}.dtt-sdots i.e{background:#F7A6C0}.dtt-sdots i.now{background:var(--ink)}
@@ -496,18 +531,18 @@ body:has(.dtt-session) .dtt-toasts{top:16px;bottom:auto}
 .dtt-tbadge{flex:none;padding:5px 12px;border-radius:999px;background:var(--butter);color:var(--ink);font:700 12.5px Figtree,sans-serif;white-space:nowrap}
 .dtt-tbadge.rose{background:var(--rose)}.dtt-tbadge.mint{background:var(--mint)}.dtt-tbadge.lilac{background:var(--lilac)}
 .dtt-teacher .dtt-tbtns{flex:none;display:flex;gap:8px;flex-wrap:nowrap}
-.dtt-tbtn{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:10px;min-height:54px;padding:8px 16px;border-radius:14px;border:0;background:var(--bar2);color:#fff;font:700 15px Figtree,sans-serif}
+.dtt-tbtn{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:12px 18px;border-radius:14px;border:0;background:var(--bar2);color:#fff;font:700 16px Figtree,sans-serif;white-space:nowrap}
 .dtt-tbtn kbd{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;padding:0 5px;border-radius:5px;border:1px solid var(--muted);background:none;font:700 12px Figtree,sans-serif;color:inherit}
 .dtt-teacher .dtt-tbtn.partial,.dtt-teacher .dtt-tbtn.full,.dtt-teacher .dtt-tbtn.nr{background:var(--bar2);color:#fff;border:0}
 .dtt-teacher .dtt-tbtn.cur,.dtt-teacher .dtt-tbtn.go{background:var(--sunny);color:var(--ink);opacity:1}
 .dtt-tbtn.cur kbd,.dtt-tbtn.go kbd{border-color:var(--ink)}
-.dtt-teacher .dtt-tbtn.ok{background:#3FA66A;color:#fff;border:0}.dtt-teacher .dtt-tbtn.bad{background:#C44A5E;color:#fff;border:0}
-.dtt-tbtn.go{padding:8px 24px;font-size:16px}
+.dtt-teacher .dtt-tbtn.ok{background:var(--greenl);color:var(--ink);border:0}.dtt-teacher .dtt-tbtn.bad{background:#C44A5E;color:#fff;border:0}
+.dtt-tbtn.go{padding:14px 28px;font-size:16px;box-shadow:0 3px 0 var(--sunnysh)}
 .dtt-tbtn:disabled{opacity:.4}
-.dtt-keysbtn{display:inline-flex;align-items:center;gap:8px;border:0;background:none;color:rgba(255,255,255,.75);font-weight:600;font-size:14px}
+.dtt-keysbtn{display:inline-flex;align-items:center;gap:8px;border:0;background:none;color:rgba(255,255,255,.75);font-weight:700;font-size:13px}
 .dtt-keysbtn kbd{min-width:22px;height:22px;border-radius:5px;border:1px solid var(--muted);display:inline-flex;align-items:center;justify-content:center;font:700 12px Figtree,sans-serif;color:#fff}
 .dtt-ready{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;text-align:center}
-.dtt-ready h1{font:600 clamp(34px,6vw,60px) Fredoka,sans-serif;margin:0}
+.dtt-ready h1{font:600 clamp(34px,5vw,52px) Fredoka,sans-serif;margin:0}
 .dtt-readyart .dtt-char{width:clamp(140px,22vw,240px);height:clamp(140px,22vw,240px)}
 .dtt-paused{background:rgba(255,253,248,.7);backdrop-filter:blur(3px)}
 .dtt-pausecard{width:min(320px,90vw);display:flex;flex-direction:column;gap:8px;padding:14px;border-radius:20px;background:#fff;border:1.5px solid var(--line);box-shadow:var(--shadow)}
@@ -535,6 +570,82 @@ body:has(.dtt-session) .dtt-toasts{top:16px;bottom:auto}
 .dtt-pvbar>button:not(.dtt-btn):not(.dtt-x){width:36px;height:36px;border-radius:50%;border:0;background:var(--sand);font-size:18px;font-weight:700}
 .dtt-pvbar span{display:flex;flex-direction:column;align-items:center;min-width:120px}
 .dtt-pvbar small{font-size:12px;color:var(--muted)}
+
+/* ---------- fun breaks: a themed scene, the instruction in large text at the top, and a hand that shows where to tap ---------- */
+.dtt-game{position:absolute;inset:0;z-index:7;display:flex;flex-direction:column;align-items:center;padding:16px 16px 24px;overflow:hidden}
+.dtt-gdeco{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.dtt-gdeco g{transform-box:fill-box;transform-origin:center}
+.gd-twinkle{animation:gdTwinkle 2s ease-in-out infinite}
+.gd-rise{animation:gdRise 7s linear infinite}
+.gd-drift{animation:gdDrift 24s linear infinite}
+.gd-sway{transform-origin:bottom center!important;animation:gdSway 2.4s ease-in-out infinite alternate}
+.gd-spin{animation:gdSpin 18s linear infinite}
+.gd-float{animation:gdFloat 4s ease-in-out infinite}
+.gd-road{animation:gdRoad 1.2s linear infinite}
+@keyframes gdTwinkle{50%{opacity:.25;transform:scale(.6)}}
+@keyframes gdRise{from{transform:translateY(0)}to{transform:translateY(-330px)}}
+@keyframes gdDrift{from{transform:translateX(-60px)}to{transform:translateX(460px)}}
+@keyframes gdSway{from{transform:rotate(-6deg)}to{transform:rotate(6deg)}}
+@keyframes gdSpin{to{transform:rotate(360deg)}}
+@keyframes gdFloat{50%{transform:translateY(-8px)}}
+@keyframes gdRoad{to{transform:translateX(-56px)}}
+.dtt-gametop{position:relative;z-index:3;width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.dtt-gamebadge{padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.85);font:700 13px Figtree,sans-serif;color:var(--ink)}
+.dtt-game .dtt-gameskip{position:static;display:inline-flex;align-items:center;gap:8px;min-height:36px;padding:8px 14px;border-radius:999px;border:0;background:rgba(255,255,255,.85);font:700 13px Figtree,sans-serif;color:var(--body)}
+.dtt-gameskip kbd{min-width:20px;height:20px;padding:0 5px;border-radius:5px;border:1px solid var(--edge);font:700 11px Figtree,sans-serif;display:inline-flex;align-items:center;justify-content:center}
+.dtt-gamecue{position:relative;z-index:3;margin-top:10px;max-width:min(680px,94%);display:flex;flex-direction:column;align-items:center;gap:4px;padding:14px 26px 16px;border-radius:24px;background:#fff;border:3px solid var(--ink);box-shadow:0 5px 0 var(--ink);text-align:center;animation:gdCueIn .45s cubic-bezier(.3,1.5,.6,1) both}
+.dtt-gamecue b{font:600 clamp(24px,4.4vw,40px)/1.15 Fredoka,sans-serif;color:var(--ink);text-wrap:balance}
+.dtt-gamecue span{font:700 clamp(15px,2.2vw,20px)/1.3 Figtree,sans-serif;color:var(--body)}
+.dtt-gamecue span:empty{display:none}
+.dtt-gamecue.win{background:var(--sunny);animation:gdCueWin .5s ease-out}
+@keyframes gdCueIn{from{transform:translateY(-30px) scale(.8);opacity:0}}
+@keyframes gdCueWin{40%{transform:scale(1.12) rotate(-2deg)}}
+.dtt-gamearea{position:relative;z-index:2;flex:1;min-height:0;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+.dtt-gamebtn{background:none;border:0;padding:6px;border-radius:24px;cursor:pointer;touch-action:none;min-width:64px;min-height:64px}
+.dtt-gin{animation:gdIn .55s cubic-bezier(.3,1.6,.6,1) both}
+@keyframes gdIn{from{transform:scale(.3) translateY(40px);opacity:0}}
+.dtt-game .dtt-char.big{width:clamp(170px,36vmin,330px)}
+.dtt-game .dtt-char{filter:drop-shadow(0 6px 0 rgba(43,42,53,.15))}
+.dtt-game .dtt-char.dark{filter:brightness(0) drop-shadow(0 6px 0 rgba(43,42,53,.15))}
+.dtt-game.dark .dtt-char.dark{filter:brightness(0) drop-shadow(0 0 10px rgba(255,255,255,.9))}
+.dtt-char.shake{animation:gdShake .35s ease-in-out}
+@keyframes gdShake{25%{transform:rotate(-8deg)}75%{transform:rotate(8deg)}}
+.dtt-game .dtt-peekwrap{position:relative;width:clamp(220px,46vmin,400px);height:clamp(220px,46vmin,400px);overflow:hidden;border-radius:0 0 30px 30px}
+.dtt-game .dtt-peekwrap .dtt-char{position:absolute;left:14%;top:0;width:72%;transform:translateY(34%);transition:transform .45s cubic-bezier(.3,1.6,.6,1);animation:gdPeek 1.6s ease-in-out infinite}
+.dtt-game .dtt-peekwrap .dtt-char.jumped{transform:translateY(-4%);animation:dttBounce .6s ease-in-out .45s infinite}
+.dtt-game .dtt-cover{position:absolute;left:0;top:46%;width:100%;height:auto}
+@keyframes gdPeek{0%,100%{transform:translateY(34%) rotate(0)}30%{transform:translateY(26%) rotate(-6deg)}60%{transform:translateY(30%) rotate(6deg)}}
+.dtt-game .dtt-zoom{border-radius:50%;overflow:hidden;background:#fff;border:6px solid var(--ink);box-shadow:0 0 0 10px rgba(255,255,255,.6);transition:border-radius .4s,box-shadow .4s}
+.dtt-game .dtt-zoom.open{border-color:transparent;background:none;box-shadow:none}
+.dtt-game .dtt-silly{position:relative}
+.dtt-game .dtt-sillypart{position:absolute;left:6px;top:6px;animation:gdWiggle .8s ease-in-out infinite alternate}
+.dtt-game .dtt-sillypart.fly{animation:none;transform:translate(50vw,-60vh) rotate(220deg);opacity:0;transition:transform .8s ease-in,opacity .8s ease-in}
+@keyframes gdWiggle{from{transform:rotate(-4deg)}to{transform:rotate(4deg)}}
+.dtt-gametaps{display:flex;gap:12px}
+.dtt-gametaps i{width:34px;height:34px;border-radius:50%;background:#fff;border:3px solid var(--ink);font:600 16px/28px Fredoka,sans-serif;font-style:normal;text-align:center;color:var(--muted)}
+.dtt-gametaps i.on{background:var(--sunny);color:var(--ink);animation:gdCueWin .4s ease-out}
+.dtt-game .dtt-feed{display:flex;align-items:center;justify-content:center;gap:clamp(30px,12vw,140px);flex-wrap:wrap}
+.dtt-game .dtt-treat{background:rgba(255,255,255,.7);border-radius:50%;padding:14px;animation:gdIn .55s cubic-bezier(.3,1.6,.6,1) .2s both,gdFloat 1.6s ease-in-out .8s infinite}
+.dtt-game .dtt-treatart{width:clamp(70px,14vmin,120px);display:block;pointer-events:none}
+.dtt-game .dtt-matchgame{display:flex;flex-direction:column;align-items:center;gap:22px}
+.dtt-game .dtt-matchgame .dtt-row{display:flex;gap:clamp(10px,4vw,40px);height:auto;align-items:flex-end}
+.dtt-game .dtt-char.small{width:clamp(70px,13vmin,120px)}
+.dtt-game .dtt-char.mid{width:clamp(100px,20vmin,190px)}
+.dtt-game .dtt-popfield{display:grid;grid-template-columns:repeat(4,auto);gap:clamp(10px,3vw,30px)}
+.dtt-game .dtt-popit{animation:gdIn .5s cubic-bezier(.3,1.6,.6,1) both,gdFloat 2s ease-in-out infinite;transition:transform .2s,opacity .2s}
+.dtt-game .dtt-popit.gone{visibility:visible;transform:scale(1.5);opacity:0;pointer-events:none}
+.dtt-game .dtt-popart{width:clamp(64px,13vmin,120px);display:block;pointer-events:none}
+.dtt-ghandw{position:absolute;z-index:4;width:clamp(54px,8vmin,76px);translate:-44% 0;pointer-events:none;animation:gdTap 1s ease-in-out infinite}
+.dtt-ghandw.drag{animation:gdDrag 1.8s ease-in-out infinite}
+.dtt-ghand{display:block;width:100%;height:auto;filter:drop-shadow(0 4px 0 rgba(43,42,53,.2))}
+@keyframes gdTap{0%,100%{transform:translateY(14px)}50%{transform:translateY(0) scale(.92)}}
+@keyframes gdDrag{0%{transform:translateX(0);opacity:0}15%{opacity:1}75%{transform:translateX(var(--dx,0));opacity:1}100%{transform:translateX(var(--dx,0));opacity:0}}
+.dtt-burst{position:absolute;z-index:5;width:0;height:0;pointer-events:none}
+.dtt-burst i{position:absolute;left:-14px;top:-14px;width:28px;height:28px;animation:gdBurst .8s ease-out forwards}
+.dtt-burst i svg{width:100%;height:100%}
+@keyframes gdBurst{from{transform:rotate(var(--a)) translateY(0) scale(.4);opacity:1}to{transform:rotate(var(--a)) translateY(calc(var(--d) * -1)) scale(1);opacity:0}}
+.dtt-game.still *,.dtt-game.still *::after{animation:none!important;transition:none!important}
+@media (max-width:699px){.dtt-gamecue{padding:10px 16px 12px;border-radius:18px}.dtt-game .dtt-popfield{grid-template-columns:repeat(4,auto);gap:8px}}
 
 /* ---------- tablets: the same layout, tighter ---------- */
 @media (max-width:1180px){

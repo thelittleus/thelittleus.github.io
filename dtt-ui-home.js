@@ -158,9 +158,11 @@
     function pseg(k, opts) { return ui.seg(k, pf[k], opts).replace(/data-a="set"/g, 'data-a="prefSet"'); }
     return '<div class="dtt-pagehead"><h1 class="dtt-h1">' + esc(T('Settings', 'Pengaturan')) + '</h1></div><div class="dtt-setcols"><div class="dtt-col">' +
       '<section class="dtt-panel"><h2 class="dtt-h2">' + esc(T(kid.name + '\'s Celebrations', 'Perayaan ' + kid.name)) + '</h2>' +
-      '<div class="dtt-blk">' + ui.lab(T('Themes', 'Tema'), st.themes.length ? '' : T('None chosen = all six', 'Tidak dipilih = keenamnya')) + '<div class="dtt-chips">' + DEF.THEMES.map(function (k) {
-        var on = st.themes.indexOf(k) >= 0;
-        return '<button type="button" class="dtt-theme' + (on ? ' on' : '') + '" style="' + (on ? 'background:' + THEMES[k][2] : '') + '" aria-pressed="' + on + '" data-a="themeTog" data-v="' + k + '">' + esc(T(THEMES[k][0], THEMES[k][1])) + '</button>';
+      '<div class="dtt-blk">' + ui.lab(T('Themes', 'Tema'), st.themes.length ? '' : T('None chosen = all six', 'Tidak dipilih = keenamnya')) + '<div class="dtt-themecards">' + DEF.THEMES.map(function (k) {
+        var on = st.themes.indexOf(k) >= 0, chars = D.themes ? D.themes.chosen([k])[0].characters.slice(0, 3) : [];
+        return '<button type="button" class="dtt-themecard' + (on ? ' on' : '') + '" style="--th:' + THEMES[k][2] + '" aria-pressed="' + on + '" data-a="themeTog" data-v="' + k + '">' +
+          '<span class="dtt-themeart" aria-hidden="true">' + chars.map(function (c) { return D.themes.svg(c, 'dtt-char'); }).join('') + (on ? '<span class="dtt-themetick">✓</span>' : '') + '</span>' +
+          '<span class="dtt-themename">' + esc(T(THEMES[k][0], THEMES[k][1])) + '</span></button>';
       }).join('') + '</div></div>' +
       '<div class="dtt-blk">' + ui.lab(T('Reward Photos', 'Foto Reward')) + '<div class="dtt-imgs">' + st.photos.map(function (m) {
         return '<span class="dtt-imgwrap">' + ui.img(m, '') + '<button type="button" class="dtt-imgx" data-a="delReinf" data-v="' + m.id + '" data-confirm="?" aria-label="' + esc(T('Remove this photo', 'Hapus foto ini')) + '">✕</button></span>';

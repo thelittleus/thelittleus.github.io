@@ -49,7 +49,7 @@
       sched: 'crf', diff: true, dur: 3, scenes: arr(SCENES), photos: true, ownPhotos: false,
       // token board: one token per correct response; a full board shows the reward and starts a break of breakMin minutes
       tokenOn: false, tokens: 5, tokenReward: 'celebration', tokenPrompted: true, breakMin: 1,
-      praise: PRAISE[l], brief: BRIEF[l], cheer: true, inter: 3, games: gamesOn(),
+      praise: PRAISE[l], brief: BRIEF[l], cheer: true, inter: 0, games: gamesOn(),
       // 8 mastery
       mRule: 'rolling', mWin: 5, mNeed: 4, retDays: 7, mPct: 80, mSess: 3, mMin: 2,
       // what counts toward mastery (ind: independent only, any: independent or prompted correct), and what a session below the rule does to the streak
