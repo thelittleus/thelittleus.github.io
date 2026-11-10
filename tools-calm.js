@@ -384,14 +384,16 @@
     mMenu: ['Calm-down menu', 'Menu tenang'], mMenuD: ['Choose what helps', 'Pilih yang membantu'],
     steps: ['Steps', 'Langkah'], sBoth: ['Feeling + size', 'Perasaan + ukuran'], sFace: ['Feeling only', 'Perasaan saja'], sSize: ['Size only', 'Ukuran saja'],
     sizeOnlyD: ['Size only works well for children who can’t name the feeling yet.', 'Ukuran saja cocok untuk anak yang belum bisa menyebut perasaannya.'],
-    feelShow: ['Feelings to show', 'Perasaan yang ditampilkan'], upTo6: [function (n) { return n + ' chosen · up to 6'; }, function (n) { return n + ' dipilih · maks. 6'; }],
+    feelShow: ['Feelings to show', 'Perasaan yang ditampilkan'], upTo6: [function (n) { return n + ' chosen'; }, function (n) { return n + ' dipilih'; }],
     levels: ['How big is it? · levels', 'Seberapa besar? · tingkat'],
     askHelp: ['Then show “What can help?”', 'Lalu tampilkan “Apa yang bisa membantu?”'], askHelpD: ['Uses the cards in your calm-down menu', 'Memakai kartu di menu tenangmu'],
     sayQ: ['Say the question out loud', 'Ucapkan pertanyaannya'], sayQD: ['Also says each choice when tapped', 'Juga mengucapkan pilihan yang diketuk'],
     sensCards: ['Sensation cards', 'Kartu rasa'], askSens: ['Ask what it feels like', 'Tanyakan rasanya seperti apa'], askSensD: ['Off: just tap the body', 'Mati: cukup ketuk tubuh'],
     sayParts: ['Say body parts out loud', 'Ucapkan bagian tubuh'], glowCol: ['Glow colour', 'Warna cahaya'],
-    menuH: ['Calm-down menu', 'Menu tenang'], menuSub: [function (n) { return n + ' of 6 · tap to change'; }, function (n) { return n + ' dari 6 · ketuk untuk mengubah'; }],
-    addHelp: ['+ Add from library or photo', '+ Tambah dari perpustakaan atau foto'], whenChosen: ['When this card is chosen', 'Saat kartu ini dipilih'],
+    menuH: ['Calm-down menu', 'Menu tenang'], menuSub: [function (n) { return n + ' chosen · tap a card to swap it'; }, function (n) { return n + ' dipilih · ketuk kartu untuk mengganti'; }],
+    helpNote: ['Search or tap cards to add them. Tap a chosen card again to take it out.', 'Cari atau ketuk kartu untuk menambah. Ketuk kartu yang sudah dipilih untuk menghapusnya.'],
+    addNHelp: [function (n) { return 'Use ' + n + (n === 1 ? ' card' : ' cards'); }, function (n) { return 'Pakai ' + n + ' kartu'; }], swapCard: ['Swap card', 'Ganti kartu'],
+    addHelp: ['+ Add or search cards', '+ Tambah atau cari kartu'], whenChosen: ['When this card is chosen', 'Saat kartu ini dipilih'],
     actNone: ['Just show it', 'Tampilkan saja'], actTimer: [function (m) { return 'Timer · ' + m + ' min'; }, function (m) { return 'Timer · ' + m + ' menit'; }], actBreathe: ['Open Breathing Buddy', 'Buka Teman Napas'],
     removeCard: ['Remove from menu', 'Hapus dari menu'], moveUp: ['Move up', 'Naikkan'],
     comeBack: ['Come back to', 'Kembali ke'], showNext: ['Show what comes next', 'Tampilkan kegiatan berikutnya'], showNextD: ['After calming, a First–Then ending: “Then: …”', 'Setelah tenang, penutup Pertama–Lalu: “Lalu: …”'],
@@ -458,6 +460,9 @@
     function fill(k, def) { if (!c[k] || typeof c[k] !== 'object') c[k] = {}; for (var x in def) if (c[k][x] === undefined) c[k][x] = def[x]; }
     fill('bb', { style: 'balloon', pace: 'kids', inS: 4, outS: 4, hold: 4, n: 5, say: true, count: false, tone: true, vib: false, mic: false, words: true });
     fill('fe', { mode: 'check', steps: 'both', show: ['happy', 'sad', 'angry', 'scared', 'tired', 'calm'], levels: 4, help: true, sayQ: true, sens: true, sensShow: ['tight', 'hot', 'shaky', 'butterflies', 'heavy', 'heart'], sayParts: true, bodyHelp: true, glow: '#F0694F', menu: MENU_DEFAULT.map(function (m) { return { ref: m.ref, act: m.act }; }), back: false, backRef: null });
+    // fixed now: both steps, 5 levels, voice on, and calming cards just show (no actions)
+    c.fe.steps = 'both'; c.fe.levels = 5; c.fe.sayQ = true; c.fe.sayParts = true;
+    if (Array.isArray(c.fe.menu)) c.fe.menu.forEach(function (m) { if (m) m.act = 'none'; });
     fill('wj', { draw: true, type: true, later: false, laterMin: 20, at: null, items: [] });
     return c;
   }
@@ -754,15 +759,11 @@
         return '<button type="button" class="tl-opt lc-mode' + (c.mode === m[0] ? ' on' : '') + '" data-lc="fmode" data-v="' + m[0] + '"><span class="tl-optvis">' + m[3] + '</span><b>' + esc(w(m[1])) + '</b><small>' + esc(w(m[2])) + '</small></button>';
       }).join('') + '</div>';
     if (c.mode === 'check') {
-      h += '<div class="tl-lab2">' + esc(w('steps')) + '</div>' + X.seg('lcsteps', [['both', esc(w('sBoth'))], ['face', esc(w('sFace'))], ['size', esc(w('sSize'))]], c.steps) +
-        (c.steps === 'size' ? '<p class="lc-hint">' + esc(w('sizeOnlyD')) + '</p>' : '');
-      if (c.steps !== 'size') h += '<div class="tl-lab2 between"><span>' + esc(w('feelShow')) + '</span><small>' + esc(w('upTo6', c.show.length)) + '</small></div><div class="lc-feelgrid setup">' +
+      h +='<div class="tl-lab2 between"><span>' + esc(w('feelShow')) + '</span><small>' + esc(w('upTo6', c.show.length)) + '</small></div><div class="lc-feelgrid setup">' +
         FEEL_ORDER.map(function (k) { return feelTile(k, { on: c.show.indexOf(k) >= 0, attr: 'fshow', check: true }); }).join('') + '</div>';
-      if (c.steps !== 'face') h += '<div class="tl-lab2">' + esc(w('levels')) + '</div>' + X.seg('lclevels', [['3', '3'], ['4', '4'], ['5', '5']], String(c.levels)) +
-        '<div class="lc-lvbar">' + LV_COL[c.levels].map(function (col, i) { return '<span style="background:' + col + '"><small>' + esc(levelsFor(c.levels)[i]) + '</small></span>'; }).join('') + '</div>';
-      h += '<div class="tl-panel">' + X.row(esc(w('askHelp')), esc(w('askHelpD')), X.toggle('help', c.help)) + X.row(esc(w('sayQ')), esc(w('sayQD')), X.toggle('sayQ', c.sayQ)) + '</div>';
+      h += '<div class="tl-panel">' + X.row(esc(w('askHelp')), esc(w('askHelpD')), X.toggle('help', c.help)) + '</div>';
     } else if (c.mode === 'body') {
-      h += '<div class="tl-panel">' + X.row(esc(w('askSens')), esc(w('askSensD')), X.toggle('sens', c.sens)) + X.row(esc(w('sayParts')), '', X.toggle('sayParts', c.sayParts)) +
+      h += '<div class="tl-panel">' + X.row(esc(w('askSens')), esc(w('askSensD')), X.toggle('sens', c.sens)) +
         X.row(esc(w('askHelp')), esc(w('askHelpD')), X.toggle('bodyHelp', c.bodyHelp)) + '</div>';
       if (c.sens) h += '<div class="tl-lab2 between"><span>' + esc(w('sensCards')) + '</span><small>' + esc(w('upTo6', c.sensShow.length)) + '</small></div><div class="lc-feelgrid setup">' +
         SENS_ORDER.map(function (k) { return sensTile(k, { on: c.sensShow.indexOf(k) >= 0, attr: 'fsens', check: true }); }).join('') + '</div>';
@@ -776,10 +777,10 @@
       var items = menuItems();
       h += '<div class="tl-lab2 between"><span>' + esc(c.mode === 'menu' ? (p ? w('calmI') : w('menuH')) : w('whatHelp')) + '</span><small>' + esc(w('menuSub', items.length)) + '</small></div><div class="tl-panel lc-menulist">' +
         items.map(function (m, i) {
-          return '<div class="tl-row lc-mrow">' + card(m.ref, { size: 'xs', labels: 'none' }) + '<div><b>' + esc(X.cardLabel(m.ref)) + '</b><button type="button" class="lc-actchip' + (m.act !== 'none' ? ' on' : '') + '" data-lc="mact" data-i="' + i + '">' + esc(actLabel(m.act)) + ' ▾</button></div>' +
+          return '<div class="tl-row lc-mrow"><button type="button" class="lc-mswap" data-lc="mswap" data-i="' + i + '" aria-label="' + esc(w('swapCard')) + '">' + card(m.ref, { size: 'xs', labels: 'none' }) + '</button><div><b>' + esc(X.cardLabel(m.ref)) + '</b></div>' +
             (i ? '<button type="button" class="tl-iconbtn round" data-lc="mup" data-i="' + i + '" aria-label="' + esc(w('moveUp')) + '">↑</button>' : '') +
             '<button type="button" class="tl-iconbtn round" data-lc="mdel" data-i="' + i + '" aria-label="' + esc(w('removeCard')) + '">✕</button></div>';
-        }).join('') + (items.length < 6 ? '<button type="button" class="tl-row act lc-addrow" data-lc="madd"><div><b>' + esc(w('addHelp')) + '</b></div></button>' : '') + '</div>';
+        }).join('') + '<button type="button" class="tl-row act lc-addrow" data-lc="madd"><div><b>' + esc(w('addHelp')) + '</b></div></button></div>';
       if (c.mode === 'menu') {
         h += '<div class="tl-lab2">' + esc(w('comeBack')) + '</div><div class="tl-panel">' + X.row(esc(w('showNext')), esc(w('showNextD')), X.toggle('back', c.back)) +
           (c.back ? '<div class="tl-row lc-mrow">' + (c.backRef && X.cardInfo(c.backRef) ? card(c.backRef, { size: 'xs', labels: 'none' }) : '<span class="tl-card tl-xs tl-addcard"><span>+</span></span>') +
@@ -803,30 +804,33 @@
     var c = CFG().fe, ds = b.dataset, lc = ds.lc;
     if (ds.act === 'download') { openDl('feelings'); return true; }
     if (lc === 'fmode') { c.mode = ds.v; keep(); return true; }
-    if (ds.seg === 'lcsteps') { c.steps = ds.v; keep(); return true; }
-    if (ds.seg === 'lclevels') { c.levels = Number(ds.v); keep(); return true; }
     if (ds.fshow) {
       var i = c.show.indexOf(ds.fshow);
       if (i >= 0) { if (c.show.length > 1) c.show.splice(i, 1); }
-      else if (c.show.length < 6) c.show.push(ds.fshow); else X.toast(w('upTo6', 6));
+      else c.show.push(ds.fshow);
       c.show = FEEL_ORDER.filter(function (k) { return c.show.indexOf(k) >= 0; });
       keep(); return true;
     }
     if (ds.fsens) {
       var j = c.sensShow.indexOf(ds.fsens);
       if (j >= 0) { if (c.sensShow.length > 1) c.sensShow.splice(j, 1); }
-      else if (c.sensShow.length < 6) c.sensShow.push(ds.fsens); else X.toast(w('upTo6', 6));
+      else c.sensShow.push(ds.fsens);
       c.sensShow = SENS_ORDER.filter(function (k) { return c.sensShow.indexOf(k) >= 0; });
       keep(); return true;
     }
     if (lc === 'fglow') { c.glow = ds.v; keep(); return true; }
     if (ds.tog) { c[ds.tog] = b.getAttribute('aria-checked') !== 'true'; if (ds.tog === 'back' && c.back && !c.backRef) { keep(); X.openPicker({ title: w('chooseNext'), onPick: function (r) { c.backRef = r; keep(); } }); return true; } keep(); return true; }
     var items = c.menu;
-    if (lc === 'mact') { c.menu = menuItems(); chooseAct(Number(ds.i)); return true; }
+    if (lc === 'mswap') {
+      c.menu = menuItems(); var si = Number(ds.i);
+      X.openPicker({ title: w('swapCard'), current: c.menu[si] && c.menu[si].ref, onPick: function (r) { c.menu = menuItems(); if (!c.menu.some(function (m, j) { return j !== si && m.ref === r; })) c.menu[si] = { ref: r, act: 'none' }; keep(); } });
+      return true;
+    }
     if (lc === 'mdel') { c.menu = menuItems(); c.menu.splice(Number(ds.i), 1); keep(); return true; }
     if (lc === 'mup') { c.menu = menuItems(); var k = Number(ds.i), t = c.menu[k]; c.menu[k] = c.menu[k - 1]; c.menu[k - 1] = t; keep(); return true; }
     if (lc === 'madd') {
-      X.openPicker({ title: w('addHelp').replace(/^\+\s*/, ''), onPick: function (r) { c.menu = menuItems(); if (c.menu.length < 6 && !c.menu.some(function (m) { return m.ref === r; })) c.menu.push({ ref: r, act: r === 'tarik-napas' ? 'breathe' : 'none' }); keep(); } });
+      c.menu = menuItems();
+      X.openPicker({ title: w('addHelp').replace(/^\+\s*/, ''), multi: true, currentMany: c.menu.map(function (m) { return m.ref; }), note: w('helpNote'), addN: function (n) { return w('addNHelp', n); }, onPickMany: function (refs) { c.menu = refs.map(function (r) { return { ref: r, act: 'none' }; }); keep(); } });
       return true;
     }
     if (lc === 'mback') { X.openPicker({ title: w('chooseNext'), current: c.backRef, onPick: function (r) { c.backRef = r; keep(); } }); return true; }
@@ -865,7 +869,7 @@
         X.childClear();
         var r;
         if (st.step === 'face') {
-          r = shell(el, 'lc-fe lc-checkin', head(w('howFeel'), '', { spk: true }) + '<div class="lc-feelgrid n' + c.show.length + '">' + c.show.map(function (k) { return feelTile(k, { on: st.feel === k }); }).join('') + '</div>');
+          r = shell(el, 'lc-fe lc-checkin', head(w('howFeel'), '', { spk: true }) + '<div class="lc-feelgrid n' + c.show.length + (c.show.length > 6 ? ' many' : '') + '">' + c.show.map(function (k) { return feelTile(k, { on: st.feel === k }); }).join('') + '</div>');
           if (c.sayQ) speak(w('howFeel'));
           r.onclick = function (e) {
             if (e.target.closest('[data-spk]')) return speak(w('howFeel'));
@@ -889,7 +893,7 @@
           };
         } else if (st.step === 'help') {
           var items = menuItems();
-          r = shell(el, 'lc-fe lc-help', summaryChip() + head(w('whatHelp'), '', { spk: true }) + '<div class="lc-cardgrid n' + items.length + '">' + items.map(function (m, i) { return '<button type="button" class="lc-cardbtn" data-hi="' + i + '">' + card(m.ref, { size: 'l' }) + (m.act !== 'none' ? '<span class="lc-actdot">' + (m.act === 'breathe' ? '🎈' : '⏱') + '</span>' : '') + '</button>'; }).join('') + '</div>');
+          r = shell(el, 'lc-fe lc-help', summaryChip() + head(w('whatHelp'), '', { spk: true }) + '<div class="lc-cardgrid n' + items.length + (items.length > 6 ? ' many' : '') + '">' + items.map(function (m, i) { return '<button type="button" class="lc-cardbtn" data-hi="' + i + '">' + card(m.ref, { size: 'l' }) + (m.act !== 'none' ? '<span class="lc-actdot">' + (m.act === 'breathe' ? '🎈' : '⏱') + '</span>' : '') + '</button>'; }).join('') + '</div>');
           if (c.sayQ) speak(w('whatHelp'));
           r.onclick = function (e) {
             if (e.target.closest('[data-spk]')) return speak(w('whatHelp'));
@@ -954,7 +958,7 @@
             if (e.target.closest('[data-next]')) go(c.sens ? 'like' : 'end');
           };
         } else if (st.step === 'like') {
-          r = shell(el, 'lc-fe lc-like', head(w('feelLike'), '', { spk: true }) + '<div class="lc-feelgrid n' + c.sensShow.length + '">' + c.sensShow.map(function (k) { return sensTile(k, { on: st.sens.indexOf(k) >= 0, check: true }); }).join('') + '</div>' +
+          r = shell(el, 'lc-fe lc-like', head(w('feelLike'), '', { spk: true }) + '<div class="lc-feelgrid n' + c.sensShow.length + (c.sensShow.length > 6 ? ' many' : '') + '">' + c.sensShow.map(function (k) { return sensTile(k, { on: st.sens.indexOf(k) >= 0, check: true }); }).join('') + '</div>' +
             '<div class="lc-endbtns one"><button type="button" class="lc-bigbtn yellow" data-next>' + esc(w('next')) + ' →</button></div>');
           if (c.sayParts) speak(w('feelLike'));
           r.onclick = function (e) {
@@ -994,7 +998,7 @@
         X.childClear();
         var items = menuItems(), r;
         if (st.step === 'menu') {
-          r = shell(el, 'lc-fe lc-menu', head(w('calmI'), '', { spk: true }) + (items.length ? '<div class="lc-cardgrid n' + items.length + '">' + items.map(function (m, i) { return '<button type="button" class="lc-cardbtn" data-mi="' + i + '">' + card(m.ref, { size: 'l' }) + '</button>'; }).join('') + '</div>' : '<p class="lc-qsub">' + esc(w('emptyMenu')) + '</p>'));
+          r = shell(el, 'lc-fe lc-menu', head(w('calmI'), '', { spk: true }) + (items.length ? '<div class="lc-cardgrid n' + items.length + (items.length > 6 ? ' many' : '') + '">' + items.map(function (m, i) { return '<button type="button" class="lc-cardbtn" data-mi="' + i + '">' + card(m.ref, { size: 'l' }) + '</button>'; }).join('') + '</div>' : '<p class="lc-qsub">' + esc(w('emptyMenu')) + '</p>'));
           if (c.sayQ) speak(w('calmI'));
           r.onclick = function (e) {
             if (e.target.closest('[data-spk]')) return speak(w('calmI'));

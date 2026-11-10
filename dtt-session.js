@@ -237,7 +237,7 @@
     el.innerHTML = '<div class="dtt-tinfo' + (mode === 'small' ? ' tiny' : '') + '"><span class="dtt-saylab">' + esc(sp.head) + '</span>' +
       '<span class="dtt-sayrow">' + (sp.text ? '<span class="dtt-say" id="dttSay">' + esc(sp.text) + '</span>' : '') + '<b class="dtt-tlabel' + (vis ? '' : ' masked') + '" id="dttLabel">' + esc(vis ? label(c.spec.target) : '•••') + '</b>' +
       ((mode === 'hold' || mode === 'flash') && !lk ? '<button type="button" class="dtt-peek" id="dttPeek" aria-label="' + esc(T('Hold to see the label', 'Tahan untuk melihat label')) + '">' + ICON.eye + '</button>' : '') + '</span></div>' +
-      '<span class="dtt-tbadge ' + bcls + '">' + esc((mixed ? (c.spec.op === 'tact' ? 'Tact · ' : 'Listener · ') : '') + badge) + '</span>' +
+      '<span class="dtt-tbadge ' + bcls + '">' + esc((mixed ? (c.spec.op === 'tact' ? T('Labeling · ', 'Menamai · ') : T('Identifying · ', 'Mengenali · ')) : '') + badge) + '</span>' +
       // the student's touch scores a trial; the teacher can also score it here (e.g. when the student points instead of touching)
       '<div class="dtt-tbtns">' +
       (chain.indexOf(1) >= 0 ? btn('partial' + (c.level === 1 ? ' cur' : S.promptDue === 1 && c.level < 1 ? ' due' : ''), 'Partial', 'P', lk || c.level >= 1) : '') +

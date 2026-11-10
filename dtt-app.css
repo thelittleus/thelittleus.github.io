@@ -417,6 +417,10 @@ body.dtt-body{margin:0;min-height:100vh;background:var(--paper);color:var(--ink)
 .dtt-stim.on{border:2px solid var(--ink);padding:9.5px 9.5px 11.5px}
 .dtt-stimimg{display:block;width:100%;aspect-ratio:1;border-radius:10px;overflow:hidden;background:var(--sand)}
 .dtt-stimimg img{width:100%;height:100%;object-fit:cover;display:block}
+.dtt-dlgbody>*{flex-shrink:0}
+.dtt-illgrid .dtt-stim{cursor:pointer}
+.dtt-illgrid .dtt-stimimg{position:relative}
+.dtt-illgrid .dtt-stim:disabled{opacity:.5;cursor:default}
 .dtt-stimimg.sm{width:48px;height:48px;flex:none}
 .dtt-itempanel{position:sticky;top:20px;display:flex;flex-direction:column;gap:14px;padding:18px;background:#fff;border:1.5px solid var(--line);border-radius:18px}
 .dtt-itemhead{display:flex;align-items:center;gap:12px}
@@ -756,3 +760,54 @@ body:has(.dtt-session) .dtt-toasts{top:16px;bottom:auto}
   .dtt-summary{padding:20px 16px}
 }
 @media (prefers-reduced-motion:reduce){.tl-sheet,.tl-scrim,.dtt-toast,.tl-tog:after{transition:none}}
+
+/* program page, as in the Program Setup reference: a card grid with Targets first, and a ⋯ menu (also on each program row) */
+.dtt-cardsgrid{grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr))!important;gap:14px!important}
+.dtt-scard{min-height:150px;border-width:1px;border-radius:16px;padding:18px 20px!important;gap:12px}
+.dtt-scardh h3{font:800 16px Figtree,sans-serif;white-space:nowrap}
+.dtt-scard .dtt-slines{font-size:14px;line-height:1.7;gap:0;color:var(--body)}
+.dtt-tfaces{display:flex;align-items:center;min-height:34px}
+.dtt-tface{width:34px;height:34px;flex:none;border-radius:50%;border:3px solid #F2C94C;background:var(--sand);overflow:hidden;display:flex;align-items:center;justify-content:center;margin-left:-8px;box-sizing:border-box}
+.dtt-tface:first-child{margin-left:0}
+.dtt-tface img,.dtt-tface svg{width:100%;height:100%;object-fit:cover;display:block}
+.dtt-tface b{font:800 11px Figtree,sans-serif;color:var(--muted);text-transform:lowercase}
+.dtt-tface.wait{border-color:#fff;opacity:.7}
+.dtt-tgap{width:14px;flex:none}
+.dtt-tgap:first-child{display:none}
+.dtt-tgap+.dtt-tface{margin-left:0}
+.dtt-tmore{height:28px;border-radius:999px;background:#F2ECE3;margin-left:4px;padding:0 10px;display:flex;align-items:center;font:700 12px Figtree,sans-serif;color:var(--muted)}
+.dtt-pmore{display:inline-flex;align-items:center;justify-content:center;flex:none;width:40px;height:40px;padding:0;border-radius:12px;background:#ECE5DA;border:1px solid #DDD5C9;font:800 18px/1 Figtree,sans-serif;color:var(--ink);cursor:pointer}
+.dtt-pmore.big{width:44px;height:44px}
+.dtt-pmore:hover{background:#E4DBCD}
+.dtt-pop .dtt-popsep{height:1px;background:#EEE7DC;margin:4px 6px}
+.dtt-pop button{padding:10px 12px}
+@media (max-width:699px){
+  .dtt-prow .dtt-pmore{position:absolute;top:12px;right:12px}
+  .dtt-pagehead.prog .dtt-headr .dtt-pmore{flex:none}
+}
+
+/* Settings: one column of grouped cards, each with a small coloured icon */
+.dtt-settings{display:flex;flex-direction:column;gap:16px;max-width:760px}
+.dtt-sgroup{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px 22px;display:flex;flex-direction:column;gap:16px}
+.dtt-sghead{display:flex;align-items:center;gap:14px}
+.dtt-sgico{width:40px;height:40px;flex:none;border-radius:12px;display:flex;align-items:center;justify-content:center}
+.dtt-sghead>div{display:flex;flex-direction:column;gap:2px;min-width:0}
+.dtt-sghead .dtt-h2{font-size:18px}
+.dtt-sghead small{font-size:13px;color:var(--muted)}
+.dtt-srows{display:flex;flex-direction:column;border-top:1px solid var(--line2)}
+.dtt-srow{padding:12px 0;border-bottom:1px solid var(--line2)}
+.dtt-srow:last-child{border-bottom:0;padding-bottom:0}
+.dtt-srow.split{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.dtt-srow .dtt-switch{min-height:44px}
+.dtt-srow .tl-seg{width:auto;min-width:min(100%,300px)}
+.dtt-sgroup.danger .dtt-srows{border-top:0}
+.dtt-sgroup.danger .dtt-srow:first-child{padding-top:0}
+.dtt-btn.danger.sm{min-height:40px;padding:6px 16px;font-size:14px}
+.dtt-imgs.big{gap:10px}
+.dtt-imgs.big .dtt-imgwrap,.dtt-imgs.big .dtt-addimg{width:88px;height:88px;border-radius:16px}
+.dtt-imgs.big .dtt-imgwrap img{border-radius:16px}
+.dtt-imgs.big .dtt-addimg{flex-direction:column;gap:2px;background:var(--paper)}
+.dtt-imgs.big .dtt-addimg small{font-size:11.5px;font-weight:700}
+.dtt-imgs.big .dtt-addimg:hover{border-color:var(--ink);color:var(--ink)}
+@media (max-width:699px){.dtt-sgroup{padding:16px}.dtt-srow .tl-seg{min-width:100%}}
+.dtt-sgroup .dtt-btn.danger{background:#fff;color:var(--danger);border-color:var(--dangerline);box-shadow:0 2px 0 var(--line)}

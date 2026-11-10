@@ -16,7 +16,7 @@
       trials.forEach(function (t) { var k = t.op + '|' + t.target; if (!by[k]) { by[k] = []; order.push(t); } by[k].push(t.result); });
       var rows = order.map(function (t) {
         var k = t.op + '|' + t.target, it = p.type === 'pattern' ? null : P.itemById(set, t.target);
-        return '<div class="dtt-sumrow">' + ui.dot(it) + '<b>' + esc(name(p, set, t.target)) + (mixed ? ' <small>' + esc(t.op === 'tact' ? 'Tact' : 'Listener') + '</small>' : '') + '</b>' +
+        return '<div class="dtt-sumrow">' + ui.dot(it) + '<b>' + esc(name(p, set, t.target)) + (mixed ? ' <small>' + esc(t.op === 'tact' ? T('Labeling', 'Menamai') : T('Identifying', 'Mengenali')) + '</small>' : '') + '</b>' +
           (newly[k] ? '<span class="dtt-chip mastered">★ ' + esc(T('Mastered!', '%mastered%!')) + '</span>' : back[k] ? '<span class="dtt-chip learning">' + esc(T('Back to learning', 'Kembali dipelajari')) + '</span>' : '') +
           '<span class="dtt-sqs">' + by[k].map(sq).join('') + '</span></div>';
       }).join('');

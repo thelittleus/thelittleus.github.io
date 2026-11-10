@@ -709,18 +709,21 @@ html.ud-home .closing{grid-template-columns:minmax(0,1fr)!important}
 }
 
 /* signed-in Tools: one sliding row, with a round button on each side. --ud-cols is how many cards fit in view */
-html.ud-in{--ud-cols:8}
+html.ud-in{--ud-cols:7}
 @media (max-width:1099px){html.ud-in{--ud-cols:4}}
 @media (max-width:759px){html.ud-in{--ud-cols:3}}
 @media (max-width:479px){html.ud-in{--ud-cols:2}}
 html.ud-in section[aria-labelledby="hTools"] .h2-head>a{display:none}
 .ud-rail{position:relative}
-html.ud-in .ud-rail .h2-groups{display:grid;grid-template-columns:none!important;grid-auto-flow:column;grid-auto-columns:calc((100% - (var(--ud-cols) - 1)*12px)/var(--ud-cols));overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:8px;scrollbar-width:none;padding:10px 8px 24px;margin:-10px -8px -24px}
+html.ud-in .ud-rail .h2-groups{display:grid;grid-template-columns:none!important;grid-auto-flow:column;grid-auto-columns:calc((100% - (var(--ud-cols) - 1)*12px)/var(--ud-cols));overflow:hidden;scrollbar-width:none;padding:10px 8px 24px;margin:-10px -8px -24px;touch-action:pan-y}
+/* the round buttons sit in their own space beside the tools, never on top of them */
+html.ud-in .ud-rail.ud-rail-on{padding:0 56px}
+@media (max-width:479px){html.ud-in .ud-rail.ud-rail-on{padding:0 46px}}
 html.ud-in .ud-rail .h2-groups::-webkit-scrollbar{display:none}
 html.ud-in .ud-rail .h2-tool{scroll-snap-align:start}
 .ud-railbtn{display:none}
 html.ud-in .ud-rail-on .ud-railbtn{display:flex;position:absolute;top:50%;z-index:3;width:44px;height:44px;margin-top:-22px;padding:0;align-items:center;justify-content:center;border:0;border-radius:50%;background:#fff;box-shadow:0 2px 10px rgba(43,42,53,.2);cursor:pointer}
-html.ud-in .ud-railbtn.prev{left:-22px}
-html.ud-in .ud-railbtn.next{right:-22px}
+html.ud-in .ud-railbtn.prev{left:0}
+html.ud-in .ud-railbtn.next{right:0}
 html.ud-in .ud-railbtn:focus-visible{outline:3px solid var(--sunny);outline-offset:2px}
 html.ud-in .ud-railbtn:disabled{opacity:.4;box-shadow:none;cursor:default}

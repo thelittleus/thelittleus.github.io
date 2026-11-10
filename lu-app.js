@@ -138,8 +138,8 @@
   function accStatus() { var a = acc(); try { return a ? a.status() : 'none'; } catch (e) { return 'none'; } }
   function load() {
     if (!window.luLoad) return Promise.resolve();
-    return luLoad('/tools.css?v=20').then(function () { return luLoad('/tools-art.js?v=28'); }).then(function () { return luLoad('/tools.js?v=28'); })
-      .then(function () { return luLoad('/tools-calm.js?v=18'); }).then(function () { var a = api(); return a && a.photosLoad ? a.photosLoad() : null; }).catch(function () { });
+    return luLoad('/tools.css?v=21').then(function () { return luLoad('/tools-art.js?v=28'); }).then(function () { return luLoad('/tools.js?v=30'); })
+      .then(function () { return luLoad('/tools-calm.js?v=19'); }).then(function () { var a = api(); return a && a.photosLoad ? a.photosLoad() : null; }).catch(function () { });
   }
   function photo(p) { var a = api(); return p && p.photo && a && a.PH && a.PH[p.photo] ? a.PH[p.photo] : ''; }
   function ava(p, size, cls) {
@@ -743,12 +743,19 @@
         return '<button type="button" class="ud-railbtn ' + (b[0] < 0 ? 'prev' : 'next') + '" data-dir="' + b[0] + '">' + svgI('<path d="' + b[1] + '"/>', 22, '#2B2A35', 2.6) + '</button>';
       }).join(''));
       var sync = function () { railState(rail, row); };
+      // endless: the buttons move the row one tool at a time and the tools wrap round, so both buttons always work
       rail.addEventListener('click', function (e) {
         var b = e.target.closest('.ud-railbtn'); if (!b) return;
-        var reduce = false; try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (er) { }
-        row.scrollBy({ left: Number(b.dataset.dir) * row.clientWidth, behavior: reduce ? 'auto' : 'smooth' });
+        closeInfo(); railStep(row, Number(b.dataset.dir));
       });
-      row.addEventListener('scroll', function () { closeInfo(); sync(); }, { passive: true });
+      // touch screens: a sideways swipe does the same
+      var sx = null, sy = 0;
+      row.addEventListener('pointerdown', function (e) { if (e.pointerType !== 'mouse') { sx = e.clientX; sy = e.clientY; } }, { passive: true });
+      row.addEventListener('pointerup', function (e) {
+        if (sx === null) return; var dx = e.clientX - sx, dy = e.clientY - sy; sx = null;
+        if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) { closeInfo(); railStep(row, dx < 0 ? 1 : -1); }
+      }, { passive: true });
+      row.addEventListener('pointercancel', function () { sx = null; });
       window.addEventListener('resize', sync);
     }
     var btns = rail.querySelectorAll('.ud-railbtn');
@@ -756,11 +763,35 @@
     btns[1].setAttribute('aria-label', isId() ? 'Alat berikutnya' : 'More tools');
     railState(rail, row);
   }
+  function railTools(row) { return [].slice.call(row.querySelectorAll('.h2-tool:not(.soon)')); }
+  function railCols() { return parseInt(getComputedStyle(DOC).getPropertyValue('--ud-cols'), 10) || 7; }
+  // which tool comes first is kept as an offset; CSS order puts them round in a circle from there
+  function railOrder(row) {
+    var t = railTools(row), n = t.length; if (!n) return;
+    var off = (((row._udOff || 0) % n) + n) % n;
+    t.forEach(function (el, i) { el.style.order = String((i - off + n) % n); });
+  }
+  function railStep(row, dir) {
+    var t = railTools(row), n = t.length; if (!n || n <= railCols() || row._udBusy) return;
+    var reduce = false; try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (er) { }
+    if (reduce) { row._udOff = (row._udOff || 0) + dir; railOrder(row); return; }
+    var w = t[0].getBoundingClientRect().width + (parseFloat(getComputedStyle(row).columnGap) || 12);
+    var move = function (x, anim) { t.forEach(function (el) { el.style.transition = anim ? 'transform .38s cubic-bezier(.3,.7,.3,1)' : 'none'; el.style.transform = x ? 'translateX(' + x + 'px)' : ''; }); };
+    row._udBusy = true;
+    if (dir > 0) {
+      move(-w, true);
+      setTimeout(function () { row._udOff = (row._udOff || 0) + 1; railOrder(row); move(0, false); void row.offsetWidth; t.forEach(function (el) { el.style.transition = ''; }); row._udBusy = false; }, 400);
+    } else {
+      row._udOff = (row._udOff || 0) - 1; railOrder(row); move(-w, false); void row.offsetWidth;
+      move(0, true);
+      setTimeout(function () { t.forEach(function (el) { el.style.transition = ''; }); row._udBusy = false; }, 400);
+    }
+  }
   function railState(rail, row) {
-    var room = row.scrollWidth - row.clientWidth, btns = rail.querySelectorAll('.ud-railbtn');
-    rail.classList.toggle('ud-rail-on', room > 1);
-    btns[0].disabled = row.scrollLeft <= 1;
-    btns[1].disabled = row.scrollLeft >= room - 1;
+    var on = railTools(row).length > railCols(), btns = rail.querySelectorAll('.ud-railbtn');
+    rail.classList.toggle('ud-rail-on', on);
+    btns[0].disabled = btns[1].disabled = false;
+    railOrder(row);
   }
   // signed-in Tools row: a "?" on each preview that shows what the tool is for
   var QCOL = { timer: '#3F6FA8', tokens: '#9A6A00', 'first-then': '#2F7A4D', schedule: '#6B55C8', breathe: '#3F6FA8', feelings: '#6B55C8', worry: '#C2456A', 'conversation-starters': '#9A6A00', 'safe-people': '#2F7A4D', dtt: '#9A6A00' };

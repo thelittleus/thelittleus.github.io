@@ -106,7 +106,7 @@
     board: ['Board', 'Papan'], boardPick: ['Create or choose a board', 'Buat atau pilih papan'], myBoards: ['My boards', 'Papan saya'], newBoard: ['+ New board', '+ Papan baru'],
     newBoardTx: ['Choose your own pictures', 'Pilih gambar sendiri'], newSchedTx: ['Add your own steps', 'Tambahkan langkah sendiri'],
     emptyBoardPick: ['Make a new board with your own pictures, or start from a ready-made one.', 'Buat papan baru dengan gambar sendiri, atau mulai dari yang siap pakai.'],
-    yourBoard: ['Your board', 'Papanmu'], firstHelp: ['What needs to happen first', 'Yang harus dilakukan dulu'], thenHelp: ['What comes after, something they enjoy', 'Yang datang sesudahnya, hal yang disukai'],
+    yourBoard: ['Your board', 'Papanmu'], firstHelp: ['What needs to happen first', 'Yang harus dilakukan dulu'], thenHelp: ['What comes after', 'Yang datang sesudahnya'],
     thenHelp2: ['Two things to choose from', 'Dua pilihan untuk anak'], choosePic: ['Choose picture', 'Pilih gambar'], untitledBoard: ['New board', 'Papan baru'],
     delBoard: ['Delete this board', 'Hapus papan ini'], delSched: ['Delete this schedule', 'Hapus jadwal ini'],
     tokenBack: ['Token taken back', 'Token diambil kembali'], takeBack: ['Take back the last token?', 'Ambil kembali token terakhir?'],
@@ -118,9 +118,9 @@
     // first then
     readyMade: ['Ready-made', 'Siap pakai'], first: ['First', 'Pertama'], then: ['Then', 'Lalu'], childPicks: ['Child picks one', 'Anak memilih satu'],
     offerChoice: ['Offer a choice of two in “Then”', 'Beri dua pilihan di “Lalu”'], offerChoiceD: ['Good for building choice-making', 'Baik untuk melatih memilih'],
-    timerBtn: ['Timer button on the board', 'Tombol timer di papan'], timerBtnD: [function (m) { return 'Starts the Visual Timer · ' + m + ' min'; }, function (m) { return 'Memulai Timer Visual · ' + m + ' menit'; }],
+    timerBtn: ['Timer button on the board', 'Tombol timer di papan'], timerBtnD: [function (t) { return 'Starts the Visual Timer · ' + t; }, function (t) { return 'Memulai Timer Visual · ' + t; }],
     whenFirst: ['When “First” is done', 'Saat “Pertama” selesai'], whenFirstD: ['Highlight “Then” in yellow', 'Sorot “Lalu” dengan kuning'], auto: ['Auto', 'Otomatis'],
-    pickOne: ['Pick one', 'Pilih satu'], timerN: [function (m) { return 'Timer ' + m + ' min'; }, function (m) { return 'Timer ' + m + ' menit'; }],
+    pickOne: ['Pick one', 'Pilih satu'], timerN: [function (t) { return 'Timer ' + t; }, function (t) { return 'Timer ' + t; }],
     // schedule
     steps: ['Steps', 'Langkah'], addStep: ['+ Add step from library', '+ Tambah langkah dari perpustakaan'],
     layout: ['Layout', 'Tata letak'], vertical: ['Vertical', 'Vertikal'], horizontal: ['Horizontal', 'Horizontal'],
@@ -444,7 +444,7 @@
     opts = opts || {};
     return '<div class="tl-top">' + (opts.backAct ? '<button type="button" class="tl-iconbtn" data-act="' + opts.backAct + '" aria-label="' + esc(tr('back')) + '">' + ICO.back + '</button>' : '<a class="tl-iconbtn" href="' + (opts.back || '#/tools') + '" aria-label="' + esc(tr('back')) + '">' + ICO.back + '</a>') +
       '<div class="tl-toptx"><h1>' + esc(title) + '</h1>' + (sub ? '<small>' + esc(sub === tr('parentSetup') && prof() ? tr('forName', prof().name) : sub) + '</small>' : '') + '</div>' +
-      (opts.dl ? '<button type="button" class="tl-iconbtn" data-act="download" aria-label="' + esc(tr('download')) + '">' + ICO.dl + '</button>' : '') +
+      (opts.dl ? '<button type="button" class="tl-btn primary sm tl-dlbtn" data-act="download">' + ICO.dl + '<span>' + esc(tr('download')) + '</span></button>' : '') +
       (opts.noProf ? '' : '<button type="button" class="tl-profbtn" data-act="profiles" aria-label="' + esc(tr('whoHelp')) + '">' + avatar(prof(), 30) + '<span aria-hidden="true">▾</span></button>') + '</div>';
   }
 
@@ -479,7 +479,8 @@
   function openPicker(o) {
     o = o || {};
     // o.multi: pick several cards in one go (they come back in the order they were tapped, through o.onPickMany)
-    var st = { tab: o.tab || 'lu', cat: 'all', q: '', sel: o.current || null, sels: [] };
+    // o.currentMany: cards already chosen (multi), so tapping one again takes it out; o.note / o.addN replace the step wording
+    var st = { tab: o.tab || 'lu', cat: 'all', q: '', sel: o.current || null, sels: (o.currentMany || []).slice() };
     function stateOf(r) { return o.multi ? (st.sels.indexOf(r) >= 0 ? 'selected' : '') : (st.sel === r ? 'selected' : ''); }
     function numAttr(r) { var i = st.sels.indexOf(r); return o.multi && i >= 0 ? ' data-n="' + (i + 1) + '"' : ''; }
     var sh = sheet('', { full: false });
@@ -509,14 +510,14 @@
       } else {
         h += '<p class="tl-note2">' + tr('matches', res.length, st.q) + '</p>';
       }
-      if (o.multi && !st.q) h += '<p class="tl-note2 tl-multinote">' + esc(tr('pickSeveral')) + '</p>';
+      if (o.multi && !st.q && o.note !== '') h += '<p class="tl-note2 tl-multinote">' + esc(o.note || tr('pickSeveral')) + '</p>';
       if (res.length) h += '<div class="tl-grid tl-pickgrid">' + res.map(function (r) { return cardHTML(r, { state: stateOf(r), attrs: ' data-pick="' + r + '"' + numAttr(r) }); }).join('') + '</div>';
       else if (st.tab === 'photos' && !st.q) h += '<div class="tl-empty"><b>' + esc(tr('noPhotos')) + '</b><p>' + esc(tr('noPhotosP')) + '</p></div>';
       else if (st.tab === 'text' && !st.q) h += '<div class="tl-empty"><p>' + esc(tr('textOnlyD')) + '</p></div>';
       if (st.q) h += '<div class="tl-tip">' + A.heart(22) + '<span>' + tr('cantFind') + '</span></div>';
       var sel = st.sel && cardInfo(st.sel);
       h += '<div class="tl-sheetfoot"><button type="button" class="tl-btn outline" data-addphoto>' + esc(st.tab === 'text' ? tr('textCard') : tr('photo')) + '</button>' +
-        (o.multi ? '<button type="button" class="tl-btn primary" data-use' + (st.sels.length ? '' : ' disabled') + '>' + esc(st.sels.length ? tr('addNSteps', st.sels.length) : tr('pickCards')) + '</button></div>'
+        (o.multi ? '<button type="button" class="tl-btn primary" data-use' + (st.sels.length ? '' : ' disabled') + '>' + esc(st.sels.length ? (o.addN ? o.addN(st.sels.length) : tr('addNSteps', st.sels.length)) : tr('pickCards')) + '</button></div>'
           : '<button type="button" class="tl-btn primary" data-use' + (sel ? '' : ' disabled') + '>' + esc(sel ? tr('useX', L() === 'id' ? sel.idn : sel.en) : tr('use')) + '</button></div>');
       sh.set(h);
       var inp = sh.el.querySelector('[data-q]');
@@ -913,7 +914,6 @@
     opts = opts || {};
     var total = Math.max(5, Math.round(cfg.minutes * 60 + (Number(cfg.seconds) || 0))) * 1000;
     var endAt = Date.now() + total;
-    var warned = {};
     var nextRef = opts.next !== undefined ? opts.next : cfg.next;
     childOpen(function (el) {
       var fun = isFun(cfg.style), hasNext = !!(nextRef && cardInfo(nextRef));
@@ -921,27 +921,18 @@
         (cfg.style === 'sand' ? '<div class="tl-bigword">' + dual(T.wait[1], T.wait[0]) + '</div>' : '') + '<div class="tl-time"></div></div>' +
         (hasNext ? '<div class="tl-tnext' + (fun ? ' funnext' : '') + '"><div class="tl-eyebrow">' + dual(T.nextL[1], T.nextL[0]) + '</div>' + cardHTML(nextRef, { size: 'l' }) + '</div>' : '') + '</div>';
       wireExit(el);
-      var vis = el.querySelector('.tl-tvis'), tm = el.querySelector('.tl-time'), wn = el.querySelector('.tl-warn');
+      var vis = el.querySelector('.tl-tvis'), tm = el.querySelector('.tl-time');
       vis.innerHTML = timerSVG(cfg.style, 1, { info: { left: total, total: total } }) + (fun && hasNext ? jcard(nextRef) : '');
       function tick() {
         var left = endAt - Date.now();
         if (left <= 0) { childClear(); return finished(); }
         timerSet(vis.firstChild, cfg.style, left / total, { left: left, total: total });
         tm.textContent = fmt(left);
-        [[2, 'w2'], [1, 'w1']].forEach(function (w) {
-          if (cfg[w[1]] && total > w[0] * 60000 + 2000 && left <= w[0] * 60000 && !warned[w[0]]) {
-            warned[w[0]] = true;
-            var d = dualKey('left', w[0]);
-            wn.hidden = false; wn.innerHTML = dual(d.id, d.en);
-            chime('pop'); if (cfg.speak) say(speakLang() === 'id' ? d.id : d.en);
-          }
-        });
       }
       tick();
       CH.timers.push(setInterval(tick, 250));
       function finished() {
-        if (cfg.end === 'chime') chime('done'); else if (cfg.end === 'vibrate') buzz([200, 120, 200]);
-        if (cfg.speak) say(speakLang() === 'id' ? T.timeFinish[1] : T.timeFinish[0]);
+        chime('done');
         el.innerHTML = '<div class="tl-cwrap done' + (fun ? ' fun' : '') + '">' + exitPill() + '<div class="tl-fin">' + (fun ? '<div class="tl-tvis">' + timerSVG(cfg.style, 0, { arrived: true }) + (hasNext ? jcard(nextRef) : '') + '</div>' : A.heart(64)) + '<h2>' + dual(T.timeFinish[1], T.timeFinish[0], 'big') + '</h2>' +
           (cfg.style === 'bar' ? timerSVG('bar', 1) : '') + '</div>' +
           (nextRef && cardInfo(nextRef) ? '<div class="tl-tnext"><div class="tl-eyebrow">' + dual(T.nowL[1], T.nowL[0]) + '</div>' + cardHTML(nextRef, { size: 'l', state: 'selected' }) + '</div>' : '') +
@@ -979,7 +970,7 @@
         var b = e.target.closest('[data-tok]');
         if (b && !b.dataset.earned) {
           cfg.earned = Math.min(cfg.count, cfg.earned + 1); save(); chime('pop'); buzz(30);
-          if (cfg.earned >= cfg.count) { if (cfg.full === 'chime') chime('done'); }
+          if (cfg.earned >= cfg.count) chime('done');
           return render();
         }
         if (e.target.closest('[data-again]')) { cfg.earned = 0; save(); render(); }
@@ -1014,7 +1005,7 @@
           '<div class="tl-ftbox then' + (st.done ? ' active' : '') + '"><div class="tl-fthead">' + dual(T.then[1], T.then[0], 'big') + '</div><div class="tl-ftthens">' +
           thens.map(function (r) { return cardHTML(r, { size: thens.length > 1 ? 'm' : 'l', state: st.pick === r ? 'selected' : '', attrs: ' data-then="' + r + '"' }); }).join('') + '</div>' +
           (thens.length > 1 && st.done ? '<div class="tl-pickone">' + dual(T.pickOne[1], T.pickOne[0]) + '</div>' : '') + '</div>' +
-          (cfg.timerBtn ? '<button type="button" class="tl-btn outline lg tl-timerbtn" data-timer><span class="tl-dot"></span>' + dual(T.timerN[1](cfg.timerMin), T.timerN[0](cfg.timerMin)) + '</button>' : '') + '</div>';
+          (cfg.timerBtn ? '<button type="button" class="tl-btn outline lg tl-timerbtn" data-timer><span class="tl-dot"></span>' + dual(T.timerN[1](fmt(timerSecs(ftTime(cfg)) * 1000)), T.timerN[0](fmt(timerSecs(ftTime(cfg)) * 1000))) + '</button>' : '') + '</div>';
         wireExit(el);
       }
       el.addEventListener('click', function (e) {
@@ -1023,7 +1014,7 @@
         var t = e.target.closest('[data-then]');
         if (t && st.done) { st.pick = t.dataset.then; chime('pop'); return render(); }
         if (e.target.closest('[data-timer]')) {
-          var tc = Object.assign({}, D().timer, { minutes: cfg.timerMin, seconds: 0 });
+          var tc = Object.assign({}, D().timer, ftTime(cfg));
           runTimer(tc, { next: st.done ? (st.pick || cfg.then[0]) : cfg.first, backLabel: tr('backBoard'), onBack: function () { runFT(st); }, onExit: function () { rerender(); } });
         }
       });
@@ -1041,7 +1032,7 @@
   function syncFT() { var d = D(), b = activeBoard(); d.ft.first = b ? b.first : null; d.ft.then = b ? b.then.slice() : []; }
   function boardName(b) { if (!b || !b.first) return tr('untitledBoard'); return cardLabel(b.first) + ' → ' + (b.then[0] ? cardLabel(b.then[0]) : '…'); }
   function runSched(resume) {
-    var s = activeSched(), cfg = D().sched;
+    var s = activeSched(), cfg = Object.assign({}, D().sched, { done: 'check' }); // done steps are always ticked off like a checklist
     var st = resume || { done: [], change: null };
     if (!st.steps) st.steps = s.steps.map(function (x) { return { card: x.card, min: x.min }; });
     s.used = Date.now(); save();
@@ -1180,7 +1171,7 @@
       return '<div class="tl-page narrow setup done"><div class="tl-allset"><i class="d1"></i><i class="d2"></i><i class="d3"></i><i class="d4"></i>' +
         '<div class="tl-allheart">' + A.heart(170, '#FFC94A') + '<span class="tl-allini" style="background:' + st.color + '">' + (st.photo && PH[st.photo] ? '<img src="' + PH[st.photo] + '" alt="">' : ini) + '</span></div>' +
         '<h1 class="tl-h1">' + esc(tr('allSet')) + '</h1><p class="tl-lead">' + esc(tr('allSetP', st.name.trim() || nm)) + '</p></div>' +
-        '<div class="tl-foot"><button type="button" class="tl-btn dark lg block" data-act="setupDone">' + esc(tr('openTools')) + '</button></div></div>';
+        '<div class="tl-foot"><button type="button" class="tl-btn dark lg block" data-act="setupDone">' + esc(setupBackTo() ? (L() === 'id' ? 'Kembali ke DTT' : 'Back to DTT') : tr('openTools')) + '</button></div></div>';
     }
     var h = '<div class="tl-page narrow setup s' + st.step + '"><div class="tl-sethead"><div class="tl-bars">' + [1, 2, 3, 4].map(function (n) { return '<i class="' + (n <= st.step ? 'on' : '') + '"></i>'; }).join('') + '</div>' +
       '<button type="button" class="tl-iconbtn tl-setupx" data-act="setupClose" aria-label="' + esc(tr('close')) + '">' + ICO.x + '</button></div>' +
@@ -1236,9 +1227,12 @@
     if (!skip) { SETUP = { done: true, name: name, color: st.color, photo: st.photo }; if (SETUPSH) SETUPSH.el.scrollTop = 0; window.scrollTo(0, 0); return setupRender(true); }
     var modal = !!SETUPSH;
     SETUP = null;
-    if (modal) { SETUPSH.close(); refreshAll(); } else go('#/tools');
+    if (modal) { SETUPSH.close(); refreshAll(); } else if (!setupBack()) go('#/tools');
   }
   var SETUPSH = null, MOUNTING = false;
+  // DTT sends "Add Student" here (#/tools/setup?new=1&back=dtt): when setup ends, go back to the DTT page
+  function setupBackTo() { try { return window.LU && LU.qs && LU.qs.get('back') === 'dtt' ? '/dtt' : ''; } catch (e) { return ''; } }
+  function setupBack() { var to = setupBackTo(); if (to) { location.href = to; return true; } return false; }
   function useDefaults() { try { return localStorage.getItem('lu_defaults_ok') === '1'; } catch (e) { return false; } }
   function appMode() { return document.documentElement.classList.contains('lu-app'); }
   function needSetup() { return !S.profiles.length && !useDefaults() && /^tools\/(timer|tokens|first-then|schedule|library|breathe|feelings|worry)$/.test(ROUTE); }
@@ -1247,6 +1241,7 @@
     SETUP = null;
     SETUPSH = sheet('', { full: false, noScrimClose: true, onClose: function () {
       SETUPSH = null; SETUP = null;
+      if (!MOUNTING && setupBack()) return;
       // without a child set up, the tools can't open, so leaving setup goes back to the tools list
       if (!MOUNTING && (ROUTE === 'tools/setup' || needSetup())) go('#/tools');
     } });
@@ -1267,10 +1262,12 @@
 
   /* digital time picker: tens and ones of the minutes and the seconds, like a digital clock (deltas are in seconds) */
   function timerSecs(c) { return clamp(Math.round((Number(c.minutes) || 0) * 60 + (Number(c.seconds) || 0)), 5, 99 * 60 + 59); }
-  function digitalTime(c) {
+  function ftTime(ft) { return { minutes: ft.timerMin, seconds: ft.timerSec || 0 }; }
+  function digitalTime(c, act) {
     var s = timerSecs(c), m = Math.floor(s / 60), sec = s % 60;
+    act = act || 'tdig';
     function col(label, up, val, more, less) {
-      return '<div class="tl-dcol"><button type="button" class="tl-dbtn" data-act="tdig" data-delta="' + up + '" aria-label="' + esc(more + ' ' + label) + '">▲</button><span class="tl-ddig">' + val + '</span><button type="button" class="tl-dbtn" data-act="tdig" data-delta="' + (-up) + '" aria-label="' + esc(less + ' ' + label) + '">▼</button></div>';
+      return '<div class="tl-dcol"><button type="button" class="tl-dbtn" data-act="' + act + '" data-delta="' + up + '" aria-label="' + esc(more + ' ' + label) + '">▲</button><span class="tl-ddig">' + val + '</span><button type="button" class="tl-dbtn" data-act="' + act + '" data-delta="' + (-up) + '" aria-label="' + esc(less + ' ' + label) + '">▼</button></div>';
     }
     var mm = [tr('moreMin'), tr('lessMin')], ss = [tr('moreSec'), tr('lessSec')];
     return '<div class="tl-digital" role="group" aria-label="' + esc(tr('time')) + '">' + col('10', 600, Math.floor(m / 10), mm[0], mm[1]) + col('1', 60, m % 10, mm[0], mm[1]) +
@@ -1290,10 +1287,8 @@
         return '<button type="button" class="tl-opt' + (c.style === s[0] ? ' on' : '') + '" data-tstyle="' + s[0] + '"><span class="tl-optvis wide">' + timerSVG(s[0], 0.55) + '</span><b>' + esc(tr(s[1])) + '</b></button>';
       }).join('') + '</div>' +
       '<div class="tl-lab2">' + esc(tr('time')) + '</div>' + digitalTime(c) +
-      '<div class="tl-lab2">' + esc(tr('warns')) + '</div><div class="tl-panel">' + row(esc(tr('w2')), esc(tr('w2d')), toggle('w2', c.w2)) + row(esc(tr('w1')), esc(tr('w1d')), toggle('w1', c.w1)) + row(esc(tr('speak')), esc(tr('speakD')), toggle('speak', c.speak)) + '</div>' +
       '<div class="tl-lab2">' + esc(tr('whatsNext')) + '</div><div class="tl-panel">' + row(esc(tr('showNext')), esc(tr('showNextD')), toggle('showNext', c.showNext)) + '</div>' +
       (c.showNext ? '<div class="tl-panel pick">' + (c.next && cardInfo(c.next) ? cardHTML(c.next, { size: 'xs' }) : '<span class="tl-card tl-xs tl-addcard"><span>+</span></span>') + '<div><b>' + esc(c.next ? cardLabel(c.next) : '—') + '</b><small>' + esc(tr('fromLib')) + '</small></div><button type="button" class="tl-link" data-act="tnext">' + esc(tr('change')) + '</button></div>' : '') +
-      '<div class="tl-lab2">' + esc(tr('endSig')) + '</div>' + seg('tend', [['chime', tr('chime')], ['vibrate', tr('vibrate')], ['silent', tr('silent')]], c.end) +
       '<div class="tl-foot"><button type="button" class="tl-btn primary lg block" data-act="tstart">' + esc(tr('startChild')) + '</button></div></div>';
   }
 
@@ -1310,7 +1305,6 @@
       '<div class="tl-lab2">' + esc(tr('shape')) + '</div><div class="tl-shapes">' + A.tokenShapes.map(function (s) {
         return '<button type="button" class="tl-shape' + (c.shape === s ? ' on' : '') + '" data-shape="' + s + '">' + A.token(s, true) + '<small>' + esc(tr('star' + s[0].toUpperCase() + s.slice(1))) + '</small></button>';
       }).join('') + '</div>' +
-      '<div class="tl-lab2">' + esc(tr('whenFull')) + '</div>' + seg('kfull', [['stars', tr('calmStars')], ['chime', tr('chime')], ['quiet', tr('quiet')]], c.full) +
       '<div class="tl-board-preview">' + Array.from({ length: c.count }, function (_, i) { return '<span class="tl-tok' + (i < c.earned ? ' on' : '') + '">' + A.token(c.shape, i < c.earned) + '</span>'; }).join('') + '</div>' +
       '<div class="tl-foot"><button type="button" class="tl-btn primary lg block" data-act="kstart">' + esc(tr('startChild')) + '</button></div></div>';
   }
@@ -1355,8 +1349,8 @@
       (c.choice ? [0, 1] : [0]).map(function (i) { return slot(b.then[i], 'fthen', i); }).join('') + '</div>' +
       (b.then[0] && !c.choice ? '<button type="button" class="tl-link" data-act="fthen" data-thenidx="0">' + esc(tr('change')) + '</button>' : '') + '</div></div>' +
       '<p class="tl-autosave">✓ ' + esc(tr('autoSaved')) + '</p>' +
-      '<div class="tl-panel">' + row(esc(tr('offerChoice')), esc(tr('offerChoiceD')), toggle('choice', c.choice)) + row(esc(tr('timerBtn')), esc(tr('timerBtnD', c.timerMin)), toggle('timerBtn', c.timerBtn)) +
-      (c.timerBtn ? '<div class="tl-row"><div><b>' + esc(tr('time')) + '</b></div><div class="tl-chips">' + [2, 5, 10].map(function (m) { return '<button type="button" class="tl-chip' + (c.timerMin === m ? ' on yellow' : '') + '" data-ftmin="' + m + '">' + m + ' ' + esc(tr('min')) + '</button>'; }).join('') + '</div></div>' : '') + '</div>' +
+      '<div class="tl-panel">' + row(esc(tr('offerChoice')), esc(tr('offerChoiceD')), toggle('choice', c.choice)) + row(esc(tr('timerBtn')), esc(tr('timerBtnD', fmt(timerSecs(ftTime(c)) * 1000))), toggle('timerBtn', c.timerBtn)) + '</div>' +
+      (c.timerBtn ? '<div class="tl-lab2">' + esc(tr('time')) + '</div>' + digitalTime(ftTime(c), 'ftdig') : '') +
       '<div class="tl-foot"><button type="button" class="tl-btn primary lg block" data-act="fstart"' + (ready ? '' : ' disabled') + '>' + esc(tr('startChild')) + '</button></div></div>';
     return h;
   }
@@ -1393,7 +1387,6 @@
       '<button type="button" class="tl-addstep" data-act="sadd">' + esc(tr('addStep')) + '</button>' +
       '<div class="tl-lab2">' + esc(tr('layout')) + '</div>' + seg('slayout', [['vertical', tr('vertical')], ['horizontal', tr('horizontal')]], c.layout) +
       '<div class="tl-lab2">' + esc(tr('show')) + '</div>' + seg('sshow', [['all', tr('wholeDay')], ['next3', tr('next3')]], c.show) +
-      '<div class="tl-lab2">' + esc(tr('whenDone')) + '</div>' + seg('sdone', [['cross', tr('crossOut')], ['move', tr('moveDone')], ['check', tr('checklist')]], c.done === 'fade' ? 'check' : c.done) +
       '<div class="tl-foot"><button type="button" class="tl-btn primary lg block" data-act="sstart"' + (s.steps.length ? '' : ' disabled') + '>' + esc(tr('startChild')) + '</button></div></div>';
     return h;
   }
@@ -1671,8 +1664,8 @@
     // setup
     if (act === 'startSetup') return openSetupModal();
     if (ROUTE === 'tools/setup' || scope !== ROOT) {
-      if (act === 'setupClose') { if (SETUPSH) SETUPSH.close(); else { SETUP = null; go('#/tools'); } return; }
-      if (act === 'setupDone') { SETUP = null; if (SETUPSH) { SETUPSH.close(); refreshAll(); } else go('#/tools'); return; }
+      if (act === 'setupClose') { if (SETUPSH) SETUPSH.close(); else { SETUP = null; if (!setupBack()) go('#/tools'); } return; }
+      if (act === 'setupDone') { SETUP = null; if (SETUPSH) { SETUPSH.close(); refreshAll(); } else if (!setupBack()) go('#/tools'); return; }
       if (act === 'setupBack') { if (SETUP.step > 1) { SETUP.step--; window.scrollTo(0, 0); return setupRender(true); } if (scope !== ROOT) return; SETUP = null; return go('#/tools'); }
       if (act === 'setupNext' && SETUP.step === 1 && !(SETUP.name || '').trim()) {
         toast(tr('needName'));
@@ -1733,7 +1726,7 @@
       var idx = Number(ds.thenidx || 0);
       return openPicker({ title: tr('chooseReward'), rewards: true, current: fb.then[idx], onPick: function (x) { fb.then[idx] = x; for (var q = 0; q < fb.then.length; q++) if (!fb.then[q]) fb.then[q] = x; syncFT(); keep(); } });
     }
-    if (ds.ftmin) { d.ft.timerMin = Number(ds.ftmin); return keep(); }
+    if (act === 'ftdig') { var fs = clamp(timerSecs(ftTime(d.ft)) + Number(ds.delta), 5, 99 * 60 + 59); d.ft.timerMin = Math.floor(fs / 60); d.ft.timerSec = fs % 60; return keep(); }
     if (act === 'fstart') { syncFT(); setLast('ft'); return runFT(); }
     // schedule
     var s = ROUTE === 'tools/schedule' ? activeSched() : null;
@@ -1807,7 +1800,7 @@
   }
 
   /* ===================== mount ===================== */
-  var VERSION = '13';
+  var VERSION = '14';
   var READY = null;
   var API = {
     S: function () { return S; }, D: D, activeBoard: activeBoard, prof: prof, cardInfo: cardInfo, labelsFor: labelsFor, artHTML: artHTML, cardHTML: cardHTML, kidFor: kidFor,

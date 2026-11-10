@@ -13,7 +13,7 @@
   function block(title, html, extra) { return '<div class="dtt-blk">' + lab(title, extra) + html + '</div>'; }
 
   ui.typeName = function (t) {
-    return { listener: 'Listener', tact: 'Tact', mixed: T('Mixed', 'Mixed'), matching: 'Matching', sorting: T('Sorting', 'Mengelompokkan'), pattern: T('Pattern', 'Pola') }[t] || t;
+    return { listener: T('Identifying', 'Mengenali'), tact: T('Labeling', 'Menamai'), mixed: T('Mixed', 'Mixed'), matching: 'Matching', sorting: T('Sorting', 'Mengelompokkan'), pattern: T('Pattern', 'Pola') }[t] || t;
   };
   ui.schedName = function (v) { return { crf: 'CRF', fr2: 'FR 2', fr3: 'FR 3', vr2: 'VR 2', vr3: 'VR 3' }[v] || v; };
   function targetName(p, set, id) {
@@ -32,10 +32,10 @@
   }
   function tabTrials(p, set, s) {
     var h = '';
-    if (isLT(p)) h += block(T('Response Type', 'Jenis Respons'), seg('type', p.type, [['listener', 'Listener'], ['tact', 'Tact'], ['mixed', T('Mixed', 'Mixed')]]));
+    if (isLT(p)) h += block(T('Response Type', 'Jenis Respons'), seg('type', p.type, [['listener', T('Identifying', 'Mengenali')], ['tact', T('Labeling', 'Menamai')]]));
     else h += block(T('Activity', 'Aktivitas'), '<div class="dtt-static">' + esc(ui.typeName(p.type)) + '</div>');
     h += sayField(hintKey(p), s, hasTact(p) && !hasListener(p) ? T('What You Ask', 'Yang Kamu Tanyakan') : T('What You Say', 'Yang Kamu Ucapkan'));
-    if (p.type === 'mixed') h += sayField('tHint', s, T('What You Ask (Tact)', 'Yang Kamu Tanyakan (Tact)'));
+    if (p.type === 'mixed') h += sayField('tHint', s, T('What You Ask (Labeling)', 'Yang Kamu Tanyakan (Menamai)'));
     if (p.type === 'sorting') h += block(T('Number of Bins', 'Jumlah Wadah'), seg('bins', s.bins, [[1, '1'], [2, '2'], [3, '3']]));
     else if (p.type !== 'tact') h += block(p.type === 'matching' ? T('Cards to Choose From', 'Kartu Pilihan') : T('Number of Cards', 'Jumlah Kartu'), seg('array', s.array, [[1, '1'], [2, '2'], [3, '3'], [4, '4'], [6, '6']]));
     if (p.type === 'matching') h += block(T('Match', 'Cocokkan'), seg('matchKind', s.matchKind, [['identical', T('Same Picture', 'Gambar Sama')], ['nonidentical', T('Another Picture', 'Gambar Lain')], ['both', T('Both', 'Keduanya')]])) +
@@ -66,20 +66,12 @@
     }).join('') + '</div>');
   }
   function tabPrompts(p, set, s) {
-    var desc = { manual: T('No prompt until you press Partial or Full.', 'Tanpa Prompt sampai kamu menekan Partial atau Full.'), mtl: T('Starts at full prompt, fades after a correct streak, steps back on error.', 'Mulai dari Prompt penuh, memudar setelah benar berturut-turut, naik lagi saat salah.'), ltm: T('Starts with no prompt, steps up when there is no response.', 'Mulai tanpa Prompt, naik saat tidak ada respons.'), td: T('Prompts straight away at first, then waits a little longer before prompting.', 'Awalnya langsung memberi Prompt, lalu menunggu sebelum memberi Prompt.') }[s.prompt];
     var part = s.levels !== 'full', full = s.levels !== 'partial', h = '';
-    h += block(T('Prompt Levels', 'Tingkat Prompt'), seg('levels', s.levels, [['both', T('Partial + Full', 'Partial + Full')], ['full', T('Full Only', 'Full Saja')], ['partial', T('Partial Only', 'Partial Saja')]]));
-    h += block(T('Method', 'Metode'), seg('prompt', s.prompt, [['manual', 'Manual'], ['mtl', 'Most → Least'], ['ltm', 'Least → Most'], ['td', T('Delay', 'Jeda')]]) + '<p class="dtt-hint">' + esc(desc) + '</p>');
     if (s.prompt === 'mtl' || s.prompt === 'td') h += row(T('Fade After', 'Pudar Setelah'), '', stepper('fade', s.fade, T('correct', 'benar')));
     if (s.prompt === 'td') h += row(T('Delay', 'Jeda'), '', stepper('tdDelay', s.tdDelay, sec()));
     if (hasListener(p)) {
       if (part) h += styles(T('Partial Prompt Style', 'Gaya Prompt Partial'), 'lPart', s.lPart, [['pulse', T('Pulse', 'Berdenyut')], ['point', T('Arrow', 'Panah')], ['bigger', T('Grow', 'Membesar')]]);
       if (full) h += styles(T('Full Prompt Style', 'Gaya Prompt Full'), 'lFull', s.lFull, [['glow', T('Glow, Fade Others', 'Menyala, Lain Pudar')], ['only', T('Correct Card Only', 'Hanya Kartu Benar')]]);
-    }
-    if (hasTact(p)) {
-      if (part) h += styles(T('Tact: Partial Prompt', 'Tact: Prompt Partial'), 'tPart', s.tPart, [['first', T('First Sound', 'Bunyi Awal')], ['fill', T('Fill-in', 'Melengkapi')], ['label', T('Written Word', 'Kata Tertulis')]]);
-      if (part && s.tPart === 'fill') h += block(T('Fill-in Script', 'Naskah Melengkapi'), '<label class="dtt-input"><input type="text" value="' + esc(s.tFill) + '" data-in="txt" data-k="tFill"></label>');
-      if (full) h += '<p class="dtt-hint">' + esc(T('Full prompt for Tact: you say the whole word (your bar reminds you).', 'Prompt Full untuk Tact: kamu ucapkan seluruh kata (panelmu mengingatkan).')) + '</p>';
     }
     if (p.type === 'matching') {
       if (part) h += styles(T('Partial Prompt Style', 'Gaya Prompt Partial'), 'mPart', s.mPart, [['position', T('Closer', 'Lebih Dekat')], ['pulse', T('Pulse', 'Berdenyut')], ['point', T('Arrow', 'Panah')]]) + sw('mFade', s.mFade, T('Fade the Other Cards', 'Pudarkan Kartu Lain'), T('They shrink step by step as the prompt fades', 'Mengecil bertahap saat Prompt memudar'));
@@ -117,13 +109,17 @@
     var kid = ui.student(), name = kid ? kid.name : T('the student', 'anak'), photos = kid ? D.store.student(kid.id).photos : [];
     var h = block(T('Full Celebration Every', 'Perayaan Penuh Setiap'), seg('sched', s.sched, [['crf', T('Correct', 'Benar')], ['fr2', T('2nd', 'Ke-2')], ['fr3', T('3rd', 'Ke-3')], ['vr2', '~' + T('2nd', 'ke-2')], ['vr3', '~' + T('3rd', 'ke-3')]])) +
       sw('diff', s.diff, T('Only for Independent', 'Hanya untuk Independent'), T('Prompted gets a quick "Yes!"', 'Prompted mendapat "Ya!" singkat')) +
-      row(T('Celebration Length', 'Lama Perayaan'), '', stepper('dur', s.dur, sec())) + div() +
+      row(T('Celebration Length', 'Lama Perayaan'), '', stepper('dur', s.dur, sec())) + div() + ui.themeCards() +
       block(T('Celebrations', 'Perayaan'), '<div class="dtt-chips">' + DEF.SCENES.map(function (k) {
         var on = s.scenes.indexOf(k) >= 0;
         return '<span class="dtt-schip' + (on ? ' on' : '') + '"><button type="button" class="dtt-schipt" role="switch" aria-checked="' + on + '" data-a="sceneTog" data-k="' + k + '">' + esc(pair(SCENE_NAMES[k])) + '</button><button type="button" class="dtt-play" data-a="previewScene" data-v="' + k + '" aria-label="' + esc(T('Preview', 'Coba')) + '">▶</button></span>';
       }).join('') + '</div>', T(s.scenes.length + ' of ' + DEF.SCENES.length + ' On', s.scenes.length + ' dari ' + DEF.SCENES.length + ' Aktif')) +
       sw('photos', s.photos, T('Show ' + name + '\'s Photo', 'Tampilkan Foto ' + name), T('Their Little Us profile picture', 'Foto profil Little Us-nya')) +
-      sw('ownPhotos', s.ownPhotos, T('Show Reward Photos', 'Tampilkan Foto Reward'), T('From Reward Photos in Settings', 'Dari Foto Reward di Pengaturan')) + div() +
+      sw('ownPhotos', s.ownPhotos, T('Show Reward Photos', 'Tampilkan Foto Reward'), T('The photos below', 'Foto di bawah ini')) +
+      // the student's own reward photos (shared by all of their programs) live here, beside the celebrations
+      block(T(name + '\'s Reward Photos', 'Foto Reward ' + name), '<div class="dtt-imgs big">' + photos.map(function (m) {
+        return '<span class="dtt-imgwrap">' + ui.img(m, '') + '<button type="button" class="dtt-imgx" data-a="delReinf" data-v="' + m.id + '" data-confirm="?" aria-label="' + esc(T('Remove this photo', 'Hapus foto ini')) + '">✕</button></span>';
+      }).join('') + (kid ? '<label class="dtt-addimg"><span aria-hidden="true">+</span><small>' + esc(T('Add Photos', 'Tambah Foto')) + '</small><input type="file" accept="image/*,.heic,.heif" multiple data-in="reinfPhoto" data-on="change"></label>' : '') + '</div>', T('All of ' + name + '\'s programs', 'Semua program ' + name)) + div() +
       sw('tokenOn', s.tokenOn, T('Token Board', 'Token Board'), T('One token per correct response', 'Satu token per respons benar'));
     if (s.tokenOn) h += row(T('Tokens to Earn', 'Token yang Dikumpulkan'), '', stepper('tokens', s.tokens)) +
       block(T('Reward', 'Hadiah'), '<div class="dtt-rewards"><button type="button" class="dtt-reward' + (s.tokenReward === 'celebration' ? ' on' : '') + '" aria-pressed="' + (s.tokenReward === 'celebration') + '" data-a="tokenReward" data-v="celebration"><span class="dtt-rewardimg">★</span><span>' + esc(T('Celebration', 'Perayaan')) + '</span></button>' +
@@ -141,7 +137,8 @@
     return h;
   }
   ACT.tokenReward = function (b) { ui.ctx().settings.tokenReward = b.dataset.v; ui.touchProgram(); ui.render(); };
-  ACT.goRewardPhotos = function () { if (ui.drawerOpen()) ACT.drClose(); U.view = 'settings'; ui.render(); window.scrollTo(0, 0); };
+  // "+ Add" beside the token rewards opens the photo picker of the Reward Photos block just above
+  ACT.goRewardPhotos = function (b) { var box = b.closest('.tl-sheet, .dtt-drawer') || document, inp = box.querySelector('[data-in="reinfPhoto"]'); if (inp) inp.click(); };
   function previewCtx() { var kid = ui.student(), st = kid ? D.store.student(kid.id) : { themes: [], photos: [] }; return { kid: kid, st: st }; }
   ACT.previewScene = function (b) { ui.celebrationPreview(b.dataset.v); };
   // 5i: a celebration plays for real, with ‹ › to step through and "Use This" to switch it on

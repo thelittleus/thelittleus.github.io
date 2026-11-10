@@ -35,6 +35,8 @@
 
 /* top bar inside tool pages */
 .tl-top{display:flex;align-items:center;gap:12px;padding:2px 0 4px}
+.tl-dlbtn{flex:none;min-height:44px;gap:6px;white-space:nowrap}
+.tl-dlbtn svg{flex:none}
 .tl-toptx{flex:1;min-width:0;display:flex;flex-direction:column}
 .tl-toptx h1{font:600 22px/1.15 Fredoka,sans-serif;margin:0}
 .tl-toptx small{font-size:13px;color:var(--muted)}
@@ -800,6 +802,15 @@ body.tl-childon{overflow:hidden}
 .lc-actdot{position:absolute;top:8px;right:calc(50% - min(120px,50%) + 8px);width:34px;height:34px;border-radius:50%;background:#fff;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:17px}
 @media (min-width:760px){.lc-cardgrid.n3,.lc-cardgrid.n5,.lc-cardgrid.n6{grid-template-columns:repeat(3,minmax(0,1fr));max-width:820px}}
 .lc-menu.picking .lc-cardbtn:not(.pick){opacity:0}
+/* more than 6 feelings, sensations or calming cards: smaller tiles, 4 across, the page scrolls if needed */
+.lc-feelgrid.many,.lc-cardgrid.many{display:flex;flex-wrap:wrap;justify-content:center;align-content:center;gap:10px}
+.lc-feelgrid.many>*,.lc-cardgrid.many>*{width:calc((100% - 20px) / 3)}
+.lc-feelgrid.many .lc-feelart{width:min(96px,22vw,13vh)}
+.lc-feelgrid.many .lc-feel b{font-size:18px}
+.lc-cardgrid.many .tl-card.tl-l{max-width:170px}
+@media (min-width:760px){.lc-feelgrid.many,.lc-cardgrid.many{max-width:860px}.lc-feelgrid.many>*,.lc-cardgrid.many>*{width:calc((100% - 30px) / 4)}}
+.lc-mswap{border:0;background:none;padding:0;cursor:pointer;flex:none;border-radius:14px}
+.lc-mswap:focus-visible{outline:3px solid var(--sunny);outline-offset:2px}
 .lc-menu.picking .lc-cardbtn.pick{transform:scale(1.08)}
 .lc-chosen .tl-card.tl-l{width:min(260px,60vw)}
 .lc-chosen.big .tl-card.tl-l{width:min(300px,70vw)}

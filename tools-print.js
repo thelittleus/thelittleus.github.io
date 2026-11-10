@@ -350,7 +350,7 @@
     X = api;
     var S = X.S();
     var prev = OPT || {};
-    OPT = { format: prev.format || 'pdf', paper: prev.paper || 'a4', color: prev.color || 'colour', labels: S.settings.labels, size: prev.size || 'm', cut: prev.cut !== undefined ? prev.cut : true, velcro: ctx && ctx.build ? !!ctx.velcro : kind !== 'cards' && kind !== 'timer', instr: false };
+    OPT = { format: prev.format || 'pdf', paper: prev.paper || 'a4', color: 'colour', labels: S.settings.labels, size: prev.size || 'm', cut: prev.cut !== undefined ? prev.cut : true, velcro: ctx && ctx.build ? !!ctx.velcro : kind !== 'cards' && kind !== 'timer', instr: false };
     var sh = X.sheet('', { full: true });
     var toolName = ctx && ctx.title ? ctx.title : { tokens: X.tr('tokens'), ft: X.tr('ft'), sched: X.tr('sched'), timer: X.tr('timer'), cards: X.tr('printCards') }[kind];
     function opts() { return { format: OPT.format, paper: OPT.paper, ink: OPT.color === 'ink', labels: OPT.labels, size: OPT.size, cut: OPT.cut, velcro: OPT.velcro, instr: OPT.instr }; }
@@ -365,7 +365,6 @@
         }).join('') + '</div><span class="tl-dlcount">' + esc(w('pages', pages.length)) + '</span></div>' +
         '<div class="tl-lab2">' + esc(w('format')) + '</div>' + segH('format', [['pdf', w('pdf')], ['png', w('png')]], OPT.format) +
         (OPT.format === 'pdf' || kind !== 'sched' ? '<div class="tl-lab2">' + esc(w('paper')) + '</div>' + segH('paper', [['a4', 'A4'], ['f4', 'F4 / Folio'], ['letter', 'Letter']], OPT.paper) : '') +
-        '<div class="tl-lab2">' + esc(w('colour')) + '</div>' + segH('color', [['colour', w('colourOn')], ['ink', w('ink')]], OPT.color) +
         '<div class="tl-lab2">' + esc(w('labels')) + '</div>' + segH('labels', [['id', 'ID'], ['en', 'EN'], ['both', w('both')], ['none', w('none')]], OPT.labels) +
         '<div class="tl-lab2">' + esc(w('size')) + '</div>' + segH('size', [['s', w('s')], ['m', w('m')], ['l', w('l')]], OPT.size) +
         '<div class="tl-panel">' +

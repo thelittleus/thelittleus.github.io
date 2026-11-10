@@ -32,7 +32,7 @@
   function draw() {
     if (!SH || !U.wizard) return;
     var w = U.wizard, p = w.p, fam = D.defaults.FAMILY[p.type], sets = w.sets.map(D.store.set).filter(Boolean), n = sets.reduce(function (a, s) { return a + s.items.length; }, 0);
-    var TYPES = [['listener', 'Listener', T('Touches what you say', 'Menyentuh yang kamu sebut')], ['tact', 'Tact', T('Names the picture', 'Menyebut nama gambar')], ['mixed', T('Mixed', 'Mixed'), T('Both, random', 'Keduanya, acak')], ['visual', 'Matching', T('Match, sort, pattern', 'Cocokkan, kelompokkan, pola')]];
+    var TYPES = [['listener', T('Identifying', 'Mengenali'), T('Touches what you say', 'Menyentuh yang kamu sebut')], ['tact', T('Labeling', 'Menamai'), T('Names the picture', 'Menyebut nama gambar')], ['visual', 'Matching', T('Match, sort, pattern', 'Cocokkan, kelompokkan, pola')]];
     var tint = function (t) { return ui.TYPE_TINT[t === 'visual' ? 'matching' : t]; };
     var name = SH.el.querySelector('[data-k="name"]'), first = !name;
     SH.set(ui.dlg({ title: T('New Program', 'Program Baru'), cls: 'dtt-newprog',
@@ -43,10 +43,7 @@
         }).join('') + '</div>' +
         (fam === 'visual' ? ui.seg('vtype', p.type, [['matching', 'Matching'], ['sorting', T('Sorting', 'Mengelompokkan')], ['pattern', T('Pattern', 'Pola')]]).replace(/data-a="set" data-k="vtype"/g, 'data-sub="1"') : '') + '</div>' +
         '<div class="dtt-field"><span>' + esc(T('Stimulus Sets', 'Stimulus Set')) + '</span><div class="dtt-setbtns"><button type="button" class="dtt-pickbtn" data-newset><i style="background:#FFF1C7">+</i>' + esc(T('Create New Set', 'Buat Set Baru')) + '</button><button type="button" class="dtt-pickbtn" data-choose><i style="background:#DCEBFA">▦</i>' + esc(T('Choose Existing Sets', 'Pilih Set yang Ada')) + '</button></div>' +
-        (sets.length ? '<div class="dtt-chips">' + sets.map(function (s) { return '<span class="dtt-setchip">' + esc((s.name || T('Untitled Set', 'Set Tanpa Nama')) + ' · ' + s.items.length) + '<button type="button" data-unset="' + s.id + '" aria-label="' + esc(T('Remove ', 'Hapus ') + (s.name || '')) + '">✕</button></span>'; }).join('') + '</div>' : '') + '</div>' +
-        '<div class="dtt-field"><span>' + esc(T('Start With', 'Mulai Dengan')) + '</span><div class="tl-seg dtt-seg two-line" role="group">' + [['errorless', T('Errorless', 'Tanpa Salah'), T('1 card', '1 kartu')], ['acquisition', T('Acquisition', 'Akuisisi'), T('3 cards', '3 kartu')], ['maintenance', T('Maintenance', '%maintenance%'), T('4 cards', '4 kartu')]].map(function (s) {
-          var on = p.preset === s[0]; return '<button type="button" class="' + (on ? 'on' : '') + '" aria-pressed="' + on + '" data-preset="' + s[0] + '">' + esc(D.i18n.fill(s[1])) + '<small>' + esc(s[2]) + '</small></button>';
-        }).join('') + '</div></div>',
+        (sets.length ? '<div class="dtt-chips">' + sets.map(function (s) { return '<span class="dtt-setchip">' + esc((s.name || T('Untitled Set', 'Set Tanpa Nama')) + ' · ' + s.items.length) + '<button type="button" data-unset="' + s.id + '" aria-label="' + esc(T('Remove ', 'Hapus ') + (s.name || '')) + '">✕</button></span>'; }).join('') + '</div>' : '') + '</div>',
       note: esc(sets.length > 1 ? T(sets.length + ' sets · ' + n + ' stimuli, joined into one set', sets.length + ' set · ' + n + ' stimulus, digabung jadi satu set') : T('Fine-tune anything later.', 'Bisa diatur lagi nanti.')),
       foot: '<button type="button" class="dtt-btn primary" data-create' + (sets.length ? '' : ' disabled') + '>' + esc(T('Create Program', 'Buat Program')) + '</button>' }));
     ui.hydrate(SH.el);
@@ -67,7 +64,6 @@
     if (t.hasAttribute('data-x')) return SH.close();
     if (t.dataset.type) { var v = t.dataset.type; p.type = v === 'visual' ? (D.defaults.FAMILY[p.type] === 'visual' ? p.type : 'matching') : v; return draw(); }
     if (t.dataset.sub) { p.type = t.dataset.v; return draw(); }
-    if (t.dataset.preset) { P.applyPreset(p, t.dataset.preset); return draw(); }
     if (t.dataset.unset) { w.sets = w.sets.filter(function (id) { return id !== t.dataset.unset; }); return draw(); }
     if (t.hasAttribute('data-choose')) return ui.chooseSet(addSets, w.sets);
     if (t.hasAttribute('data-newset')) return ui.newSetFlow(p.name, function (s) { addSets([s]); });

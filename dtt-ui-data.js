@@ -64,7 +64,7 @@
       ops.forEach(function (op) {
         var st = ui.targetStatus(p, id, op), ps = pr[D.targets.key(id, op)], recent = ((ps && ps.recent) || []).slice(-5);
         var streak = s.mRule === 'classic' && ps && ps.series ? ps.series.slice().reverse().filter(function (x, i, a) { return a.slice(0, i + 1).every(function (y) { return y.n >= s.mMin && Math.round(100 * (y.ind + (s.mCount === 'any' ? (y.pr || 0) : 0)) / y.n) >= s.mPct; }); }).length : null;
-        rows += '<div class="dtt-trow">' + ui.dot(it) + '<b>' + esc(name || '?') + (ops.length > 1 ? ' <small>' + esc(op === 'tact' ? 'Tact' : 'Listener') + '</small>' : '') + '</b><span class="dtt-chip ' + st + '">' + esc(ui.statusName(st)) + '</span>' +
+        rows += '<div class="dtt-trow">' + ui.dot(it) + '<b>' + esc(name || '?') + (ops.length > 1 ? ' <small>' + esc(op === 'tact' ? T('Labeling', 'Menamai') : T('Identifying', 'Mengenali')) + '</small>' : '') + '</b><span class="dtt-chip ' + st + '">' + esc(ui.statusName(st)) + '</span>' +
           (streak != null && !(ps && ps.masteredAt) ? '<span class="dtt-hint">' + esc(T(streak + ' of ' + s.mSess + ' sessions', streak + ' dari ' + s.mSess + ' %sessions%')) + '</span>' : '') +
           '<span class="dtt-sqs">' + (recent.length ? recent.map(sq).join('') : '<span class="dtt-hint">' + esc(T('No trials yet', 'Belum ada trial')) + '</span>') + '</span>' +
           (ps && ps.masteredAt ? '<button type="button" class="dtt-linkbtn" data-a="askUndo" data-id="' + esc(id) + '" data-k="' + op + '">' + esc(T('Undo Mastery', 'Batalkan %mastery%')) + '</button>' : '') + '</div>';

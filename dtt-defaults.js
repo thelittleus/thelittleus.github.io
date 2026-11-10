@@ -51,7 +51,8 @@
       tokenOn: false, tokens: 5, tokenReward: 'celebration', tokenPrompted: true, breakMin: 1,
       praise: PRAISE[l], brief: BRIEF[l], cheer: true, inter: 0, games: gamesOn(),
       // 8 mastery
-      mRule: 'rolling', mWin: 5, mNeed: 4, retDays: 7, mPct: 80, mSess: 3, mMin: 2,
+      // default rule: 80% independent for 3 sessions in a row (classic); still editable per program
+      mRule: 'classic', mWin: 5, mNeed: 4, retDays: 7, mPct: 80, mSess: 3, mMin: 2,
       // what counts toward mastery (ind: independent only, any: independent or prompted correct), and what a session below the rule does to the streak
       mCount: 'ind', mMiss: 'reset'
     };

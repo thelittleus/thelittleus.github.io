@@ -75,33 +75,15 @@
       if (t.hasAttribute('data-add')) { sh.close(); ACT.addStudent(); }
     });
   };
+  // Adding a student is the same "set up a child profile" as on the Little Us homepage, since profiles belong to the account.
+  // Free accounts hold one profile: a second one takes them to Little Us Plus. Plus at its limit sees the usual note.
   ACT.addStudent = function () {
-    if (PF.list().length && window.LUAcc && LUAcc.canAddChild && !LUAcc.canAddChild()) { if (LUAcc.childLockSheet) LUAcc.childLockSheet(); return; }
-    var st = { kid: 'boy' }, sh = X.sheet('');
-    function pick(k, label) {
-      var on = st.kid === k;
-      return '<button type="button" class="dtt-kidpick' + (on ? ' on' : '') + '" aria-pressed="' + on + '" data-kid="' + k + '">' + (window.LUAcc && LUAcc.face ? '<span class="dtt-kidface">' + LUAcc.face(k) + '</span>' : '') + '<b>' + esc(label) + '</b></button>';
+    var A = window.LUAcc;
+    if (PF.list().length && A && A.canAddChild && !A.canAddChild()) {
+      if (A.isPlus && A.isPlus()) { if (A.childLockSheet) A.childLockSheet(); return; }
+      location.href = '/#/plus'; return;
     }
-    function draw() {
-      var name = sh.el.querySelector('input') ? sh.el.querySelector('input').value : '';
-      sh.set(ui.dlg({ title: T('Add Student', 'Tambah Anak'),
-        body: '<label class="dtt-field"><span>' + esc(T('First Name or Nickname', 'Nama Depan atau Panggilan')) + '</span><input type="text" maxlength="30" autocomplete="off" value="' + esc(name) + '" autofocus></label>' +
-          '<div class="dtt-field"><span>' + esc(T('Profile Picture', 'Gambar Profil')) + '</span><div class="dtt-kidpicks">' + pick('girl', T('Girl', 'Perempuan')) + pick('boy', T('Boy', 'Laki-laki')) + '</div></div>' +
-          '<p class="dtt-hint">' + esc(T('Also added to your Little Us profile.', 'Juga ditambahkan ke profil Little Us-mu.')) + '</p>',
-        foot: '<button type="button" class="dtt-btn sec" data-x>' + esc(T('Cancel', 'Batal')) + '</button><button type="button" class="dtt-btn primary" data-go>' + esc(T('Add Student', 'Tambah Anak')) + '</button>' }));
-    }
-    draw();
-    sh.el.addEventListener('click', function (e) {
-      var t = e.target.closest('button'); if (!t) return;
-      if (t.hasAttribute('data-x')) return sh.close();
-      if (t.dataset.kid) { st.kid = t.dataset.kid; return draw(); }
-      if (t.hasAttribute('data-go')) {
-        var v = sh.el.querySelector('input').value.trim();
-        if (!v) { sh.el.querySelector('input').focus(); return; }
-        PF.add(v, st.kid); sh.close(); U.view = 'programs'; ui.render();
-      }
-    });
-    sh.el.addEventListener('keydown', function (e) { if (e.key === 'Enter' && e.target.tagName === 'INPUT') { e.preventDefault(); var g = sh.el.querySelector('[data-go]'); if (g) g.click(); } });
+    location.href = '/#/tools/setup?new=1&back=dtt';
   };
   INP.noop = function () { };
 })();

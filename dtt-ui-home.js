@@ -39,13 +39,25 @@
         '<div class="dtt-pinfo"><b class="dtt-pname">' + esc(p.name || T('Unnamed program', 'Program tanpa nama')) + '</b><span class="dtt-pmeta">' + pill(p.type) + '<span>' + esc((set ? (set.name || T('Unnamed set', 'Set tanpa nama')) + ' · ' : '') + T(c.learning + ' learning · ' + c.mastered + ' mastered', c.learning + ' dipelajari · ' + c.mastered + ' %mastered%')) + '</span></span></div>' + bar(c) +
         (ready ? '<button type="button" class="dtt-btn sec sm" data-a="practice" data-id="' + p.id + '">' + esc(T('Practice', 'Latihan')) + '</button><button type="button" class="dtt-btn primary sm" data-a="startSession" data-id="' + p.id + '">▶ ' + esc(T('Start Session', 'Mulai Session')) + '</button>'
           : '<span class="dtt-chip attention">' + esc(T('Needs setup', 'Perlu dilengkapi')) + '</span>') +
-        '<span class="dtt-chev" aria-hidden="true">›</span></div>';
+        moreBtn(p) + '</div>';
     }).join('') + '</div>' +
       '<div class="dtt-legend"><span><i class="m"></i>' + esc(T('Mastered', '%mastered%')) + '</span><span><i class="l"></i>' + esc(T('Learning', 'Dipelajari')) + '</span><span><i class="w"></i>' + esc(T('Waiting', 'Menunggu')) + '</span></div>';
   }
   ACT.openProgram = function (b) { U.programId = b.dataset.id; U.view = 'program'; U.ptab = 'setup'; ui.render(); window.scrollTo(0, 0); };
-  ACT.startSession = function (b) { D.session.start(D.store.program(b.dataset.id)); };
-  ACT.practice = function (b) { D.session.start(D.store.program(b.dataset.id), { practice: true }); };
+  ACT.startSession = function (b) { beforeStart(b.dataset.id, false); };
+  ACT.practice = function (b) { beforeStart(b.dataset.id, true); };
+  // a last check before a session: have the settings and the targets been set up? "Check Settings" opens them instead.
+  function beforeStart(id, practice) {
+    var p = D.store.program(id);
+    var sh = X.sheet(ui.dlg({ title: practice ? T('Ready to Practice?', 'Siap Latihan?') : T('Ready to Start?', 'Siap Mulai?'),
+      body: '<p class="dtt-dlgp">' + esc(D.i18n.fill(T('Make sure the settings (trials, prompts, error correction, rewards and mastery) and the target order are how you want them for this ' + (practice ? 'practice.' : 'session.'), 'Pastikan pengaturan (trial, prompt, error correction, reward, dan %mastery%) serta urutan %targets% sudah sesuai untuk ' + (practice ? 'latihan ini.' : '%session% ini.')))) + '</p>',
+      foot: '<button type="button" class="dtt-btn sec" data-check>' + esc(T('Check Settings', 'Cek Pengaturan')) + '</button><button type="button" class="dtt-btn primary" data-go>▶ ' + esc(practice ? T('Start Practice', 'Mulai Latihan') : T('Start Session', 'Mulai Session')) + '</button>' }));
+    closeOn(sh);
+    sh.el.addEventListener('click', function (e) {
+      if (e.target.closest('[data-go]')) { sh.close(); D.session.start(p, practice ? { practice: true } : undefined); }
+      else if (e.target.closest('[data-check]')) { sh.close(); U.programId = id; U.view = 'program'; U.ptab = 'setup'; ui.render(); window.scrollTo(0, 0); ui.openDrawer('settings', 'trials'); }
+    });
+  }
 
   /* ---------- one program (1b) ---------- */
   ui.targetStatus = function (p, id, op) {
@@ -57,7 +69,7 @@
   ui.statusName = function (st) { return { mastered: T('Mastered', '%mastered%'), maintenance: T('Maintenance', '%maintenance%'), attention: T('Needs attention', 'Perlu perhatian'), learning: T('Learning', 'Dipelajari'), waiting: T('Waiting', 'Menunggu') }[st]; };
   ui.statusChips = function (p, id) {
     var ops = DEF.OPS[p.type];
-    return ops.map(function (op) { var st = ui.targetStatus(p, id, op), pre = ops.length > 1 ? (op === 'listener' ? 'Listener: ' : 'Tact: ') : ''; return '<span class="dtt-chip ' + st + '">' + esc(pre + ui.statusName(st)) + '</span>'; }).join(' ');
+    return ops.map(function (op) { var st = ui.targetStatus(p, id, op), pre = ops.length > 1 ? (op === 'listener' ? T('Identifying: ', 'Mengenali: ') : T('Labeling: ', 'Menamai: ')) : ''; return '<span class="dtt-chip ' + st + '">' + esc(pre + ui.statusName(st)) + '</span>'; }).join(' ');
   };
   // a small round picture of the target; typed words and numbers already say themselves, so they get none
   ui.dot = function (it) { var m = it && it.images[0]; if (m && m.lib && D.library.isText(m.lib)) return ''; return '<span class="dtt-dot16">' + (m ? ui.img(m, '') : '') + '</span>'; };
@@ -69,29 +81,56 @@
       '<div class="dtt-pagehead prog"><div class="dtt-titlewrap"><h1 class="dtt-h1">' + esc(p.name || T('Unnamed program', 'Program tanpa nama')) + '</h1><span class="dtt-pmeta">' + pill(p.type) + (set ? '<span>' + esc(set.name || T('Unnamed set', 'Set tanpa nama')) + '</span>' : '') + '</span></div>' +
       '<div class="tl-seg dtt-seg dtt-ptabs" role="tablist"><button type="button" role="tab" aria-selected="' + (U.ptab === 'setup') + '" class="' + (U.ptab === 'setup' ? 'on' : '') + '" data-a="ptab" data-v="setup">' + esc(T('Setup', 'Atur')) + '</button><button type="button" role="tab" aria-selected="' + (U.ptab === 'data') + '" class="' + (U.ptab === 'data' ? 'on' : '') + '" data-a="ptab" data-v="data">Data</button></div>' +
       '<div class="dtt-headr"><button type="button" class="dtt-btn sec two" data-a="practice" data-id="' + p.id + '"' + (ready ? '' : ' disabled') + '>' + esc(T('Practice', 'Latihan')) + '<small>' + esc(T('Not recorded', 'Tidak dicatat')) + '</small></button>' +
-      '<button type="button" class="dtt-btn primary lg" data-a="startSession" data-id="' + p.id + '"' + (ready ? '' : ' disabled') + '>▶ ' + esc(T('Start Real Session', 'Mulai Session')) + '</button></div></div>' +
+      '<button type="button" class="dtt-btn primary lg" data-a="startSession" data-id="' + p.id + '"' + (ready ? '' : ' disabled') + '>▶ ' + esc(T('Start Real Session', 'Mulai Session')) + '</button>' + moreBtn(p, true) + '</div></div>' +
       (U.ptab === 'data' ? ui.dataTab(p, set) : setup(p, set, probs));
   }
   ACT.ptab = function (b) { U.ptab = b.dataset.v; ui.render(); };
   function setup(p, set, probs) {
     var op = DEF.OPS[p.type][0], groups = { learning: [], mastered: [], waiting: [] };
     p.queue.forEach(function (id) { var st = ui.targetStatus(p, id, op); groups[st === 'mastered' || st === 'maintenance' ? 'mastered' : st === 'waiting' ? 'waiting' : 'learning'].push(id); });
-    function chip(id, cls) { var it = p.type === 'pattern' ? null : P.itemById(set, id); return '<span class="dtt-tchip ' + cls + '">' + (it ? ui.dot(it) : '') + esc(ui.targetName(p, set, id) || '?') + (p.pinned.indexOf(id) >= 0 ? ' ★' : '') + '</span>'; }
-    var chips = groups.learning.map(function (id) { return chip(id, 'learning'); }).join('') + (groups.learning.length && (groups.waiting.length || groups.mastered.length) ? '<span class="dtt-tsep" aria-hidden="true"></span>' : '') +
-      groups.waiting.map(function (id) { return chip(id, 'waiting'); }).join('') + groups.mastered.map(function (id) { return chip(id, 'mastered'); }).join('');
+    // the Targets card: round pictures of the targets being learned (yellow ring), the next few waiting, then "+N"
+    function face(id, cls) {
+      var it = p.type === 'pattern' ? null : P.itemById(set, id), m = it && it.images[0], nm = ui.targetName(p, set, id) || '?';
+      var pic = m && !(m.lib && D.library.isText(m.lib)) ? ui.img(m, '') : '<b>' + esc(nm.slice(0, 2)) + '</b>';
+      return '<span class="dtt-tface ' + cls + '" title="' + esc(nm) + '">' + pic + '</span>';
+    }
+    var shownWait = groups.waiting.slice(0, 2), more = p.queue.length - groups.learning.length - shownWait.length;
+    var names = groups.learning.map(function (id) { return ui.targetName(p, set, id); }).filter(Boolean);
+    var faces = groups.learning.map(function (id) { return face(id, 'on'); }).join('') + '<span class="dtt-tgap"></span>' + shownWait.map(function (id) { return face(id, 'wait'); }).join('') +
+      (more > 0 ? '<span class="dtt-tmore">+' + more + '</span>' : '');
+    var tcard = '<div class="dtt-scard targets"><div class="dtt-scardh"><h3>' + esc(D.i18n.fill(T('Targets', '%targets%'))) + '</h3><button type="button" class="dtt-edit" data-a="editOrder">✎ ' + esc(T('Edit', 'Ubah')) + '</button></div>' +
+      (p.queue.length ? '<div class="dtt-tfaces">' + faces + '</div>' : '') +
+      '<div class="dtt-slines">' + (names.length ? '<span>' + esc(T('Learning ', 'Mempelajari ')) + esc(names.join(', ')) + '</span>' : '') +
+      '<span>' + esc(T(p.activeCount + ' active at once · ' + groups.waiting.length + ' waiting', p.activeCount + ' aktif sekaligus · ' + groups.waiting.length + ' menunggu')) + (groups.mastered.length ? esc(D.i18n.fill(T(' · ' + groups.mastered.length + ' mastered', ' · ' + groups.mastered.length + ' %mastered%'))) : '') + '</span></div></div>';
     return ui.syncBadge() +
       (probs.length ? '<div class="dtt-tip warn"><b>' + esc(T('To finish before the first session', 'Lengkapi sebelum %session% pertama')) + '</b><ul>' + probs.map(function (x) { return '<li>' + esc(ui.issueText(x)) + (set ? ' <button type="button" class="tl-link" data-a="' + (/patterns|patternFill|categories/.test(x.code) ? 'editOrder' : 'editSet') + '" data-id="' + set.id + '">' + esc(T('Fix', 'Perbaiki')) + '</button>' : '') + '</li>'; }).join('') + '</ul></div>' : '') +
       attention(p, set) +
-      '<section class="dtt-panel"><div class="dtt-panelhead"><h2 class="dtt-h2">' + esc(T('Targets', '%targets%')) + '</h2><div class="dtt-inline"><span>' + esc(T('Active at Once', 'Aktif Sekaligus')) + '</span>' + ui.stepper('activeCount', p.activeCount) + '</div></div>' +
-      '<div class="dtt-tchips">' + chips + '<button type="button" class="dtt-tchip edit" data-a="editOrder">' + esc(T('Edit Order', 'Ubah Urutan')) + '</button></div>' +
-      '<p class="dtt-hint dtt-legend2"><span>' + esc(T('Yellow = Learning now', 'Kuning = Sedang dipelajari')) + '</span><span>' + esc(T('Grey = Waiting, enters in order', 'Abu-abu = Menunggu, masuk berurutan')) + '</span>' + (groups.mastered.length ? '<span>' + esc(T('Green = Mastered', 'Hijau = %mastered%')) + '</span>' : '') + '</p></section>' +
-      '<div class="dtt-cardsgrid">' + ui.TAB_ORDER.map(function (k) {
+      '<div class="dtt-cardsgrid">' + tcard + ui.TAB_ORDER.map(function (k) {
         return '<div class="dtt-scard"><div class="dtt-scardh"><h3>' + esc(D.i18n.fill(ui.TABS[k].name())) + '</h3><button type="button" class="dtt-edit" data-a="openTab" data-v="' + k + '">✎ ' + esc(T('Edit', 'Ubah')) + '</button></div>' +
           '<div class="dtt-slines">' + ui.summary(k, p).filter(Boolean).map(function (l) { return '<span>' + esc(D.i18n.fill(l)) + '</span>'; }).join('') + '</div></div>';
-      }).join('') +
-      '<div class="dtt-scard acts"><button type="button" class="dtt-act" data-a="renameProgram">✎ ' + esc(T('Rename', 'Ganti Nama')) + '</button><button type="button" class="dtt-act" data-a="transfer" data-id="' + p.id + '">⧉ ' + esc(T('Copy as Another Type', 'Salin sebagai Jenis Lain')) + '</button>' +
-      '<button type="button" class="dtt-act danger" data-a="askDelProgram" data-id="' + p.id + '">🗑 ' + esc(T('Delete Program', 'Hapus Program')) + '</button></div></div>';
+      }).join('') + '</div>';
   }
+  // the ⋯ button on a program (its page and its row in the list): Rename, Copy as Another Type, Delete
+  function moreBtn(p, big) { return '<button type="button" class="dtt-pmore' + (big ? ' big' : '') + '" data-a="progMenu" data-id="' + p.id + '" aria-haspopup="menu" aria-label="' + esc(T('More for ', 'Lainnya untuk ') + (p.name || '')) + '">⋯</button>'; }
+  ACT.progMenu = function (b) {
+    var id = b.dataset.id, old = document.querySelector('.dtt-pop'); if (old) { old.remove(); if (old.dataset.for === id) return; }
+    var pop = document.createElement('div'); pop.className = 'dtt-pop'; pop.dataset.for = id; pop.setAttribute('role', 'menu');
+    pop.innerHTML = '<button type="button" role="menuitem" data-do="rename">✎ ' + esc(T('Rename', 'Ganti Nama')) + '</button><button type="button" role="menuitem" data-do="copy">⧉ ' + esc(T('Copy as Another Type', 'Salin sebagai Jenis Lain')) + '</button>' +
+      '<span class="dtt-popsep" aria-hidden="true"></span><button type="button" role="menuitem" class="danger" data-do="del">🗑 ' + esc(T('Delete Program', 'Hapus Program')) + '</button>';
+    document.body.appendChild(pop);
+    var r = b.getBoundingClientRect(); pop.style.minWidth = '220px'; pop.style.top = Math.min(window.innerHeight - pop.offsetHeight - 8, r.bottom + 8) + 'px'; pop.style.left = Math.max(8, Math.min(window.innerWidth - pop.offsetWidth - 8, r.right - pop.offsetWidth)) + 'px';
+    pop.querySelector('button').focus();
+    function close() { pop.remove(); document.removeEventListener('pointerdown', outside, true); document.removeEventListener('keydown', key, true); window.removeEventListener('scroll', close, true); }
+    function outside(e) { if (!pop.contains(e.target) && e.target !== b) close(); }
+    function key(e) { if (e.key === 'Escape') { e.stopPropagation(); close(); b.focus(); } }
+    setTimeout(function () { document.addEventListener('pointerdown', outside, true); document.addEventListener('keydown', key, true); window.addEventListener('scroll', close, true); }, 0);
+    pop.addEventListener('click', function (e) {
+      var t = e.target.closest('button'); if (!t) return; var d = t.dataset.do; close();
+      if (d === 'rename') { U.programId = id; ACT.renameProgram(); }
+      if (d === 'copy') ACT.transfer({ dataset: { id: id } });
+      if (d === 'del') ACT.askDelProgram({ dataset: { id: id } });
+    });
+  };
   ACT.openTab = function (b) { ui.openDrawer('settings', b.dataset.v); };
   ACT.editOrder = function () { ui.openDrawer('order'); };
   function attention(p, set) {
@@ -148,6 +187,16 @@
 
   /* ---------- Settings (1g) ---------- */
   var THEMES = { space: ['Space', 'Luar Angkasa', '#E9E1F7'], sea: ['Under the Sea', 'Bawah Laut', '#DCEBFA'], garden: ['Garden', 'Kebun', '#DDF2E4'], fantasy: ['Fantasy', 'Dunia Dongeng', '#FBE0E6'], vehicles: ['Vehicles', 'Kendaraan', '#FFE9DA'], weather: ['Weather', 'Cuaca', '#FFF1C7'] };
+  // celebration themes belong to the student (all their programs); drawn in the Rewards tab of a program's settings
+  ui.themeCards = function () {
+    var kid = ui.student(), st = D.store.student(kid.id);
+    return '<div class="dtt-blk">' + ui.lab(T('Celebration Themes', 'Tema Perayaan'), st.themes.length ? T('All of ' + kid.name + '\'s programs', 'Semua program ' + kid.name) : T('None chosen = all six', 'Tidak dipilih = keenamnya')) + '<div class="dtt-themecards">' + DEF.THEMES.map(function (k) {
+      var on = st.themes.indexOf(k) >= 0, chars = D.themes ? D.themes.chosen([k])[0].characters.slice(0, 3) : [];
+      return '<button type="button" class="dtt-themecard' + (on ? ' on' : '') + '" style="--th:' + THEMES[k][2] + '" aria-pressed="' + on + '" data-a="themeTog" data-v="' + k + '">' +
+        '<span class="dtt-themeart" aria-hidden="true">' + chars.map(function (c) { return D.themes.svg(c, 'dtt-char'); }).join('') + (on ? '<span class="dtt-themetick">✓</span>' : '') + '</span>' +
+        '<span class="dtt-themename">' + esc(T(THEMES[k][0], THEMES[k][1])) + '</span></button>';
+    }).join('') + '</div></div>';
+  };
   var PKEY = 'lu_dtt_prefs';
   ui.prefs = function () { var v = null; try { v = JSON.parse(localStorage.getItem(PKEY)); } catch (e) { } return Object.assign({}, DEF.DEF_PREFS, v || {}); };
   function savePrefs(p) { try { localStorage.setItem(PKEY, JSON.stringify(p)); } catch (e) { } }
@@ -156,24 +205,22 @@
     var ids = X.S().profiles.map(function (x) { return x.id; }), orphans = D.store.orphanIds(ids);
     function psw(k, title, desc) { return ui.sw(k, pf[k], title, desc, 'prefTog'); }
     function pseg(k, opts) { return ui.seg(k, pf[k], opts).replace(/data-a="set"/g, 'data-a="prefSet"'); }
-    return '<div class="dtt-pagehead"><h1 class="dtt-h1">' + esc(T('Settings', 'Pengaturan')) + '</h1></div><div class="dtt-setcols"><div class="dtt-col">' +
-      '<section class="dtt-panel"><h2 class="dtt-h2">' + esc(T(kid.name + '\'s Celebrations', 'Perayaan ' + kid.name)) + '</h2>' +
-      '<div class="dtt-blk">' + ui.lab(T('Themes', 'Tema'), st.themes.length ? '' : T('None chosen = all six', 'Tidak dipilih = keenamnya')) + '<div class="dtt-themecards">' + DEF.THEMES.map(function (k) {
-        var on = st.themes.indexOf(k) >= 0, chars = D.themes ? D.themes.chosen([k])[0].characters.slice(0, 3) : [];
-        return '<button type="button" class="dtt-themecard' + (on ? ' on' : '') + '" style="--th:' + THEMES[k][2] + '" aria-pressed="' + on + '" data-a="themeTog" data-v="' + k + '">' +
-          '<span class="dtt-themeart" aria-hidden="true">' + chars.map(function (c) { return D.themes.svg(c, 'dtt-char'); }).join('') + (on ? '<span class="dtt-themetick">✓</span>' : '') + '</span>' +
-          '<span class="dtt-themename">' + esc(T(THEMES[k][0], THEMES[k][1])) + '</span></button>';
-      }).join('') + '</div></div>' +
-      '<div class="dtt-blk">' + ui.lab(T('Reward Photos', 'Foto Reward')) + '<div class="dtt-imgs">' + st.photos.map(function (m) {
-        return '<span class="dtt-imgwrap">' + ui.img(m, '') + '<button type="button" class="dtt-imgx" data-a="delReinf" data-v="' + m.id + '" data-confirm="?" aria-label="' + esc(T('Remove this photo', 'Hapus foto ini')) + '">✕</button></span>';
-      }).join('') + '<label class="dtt-addimg" aria-label="' + esc(T('Add Reward Photos', 'Tambah Foto Reward')) + '">+<input type="file" accept="image/*,.heic,.heif" multiple data-in="reinfPhoto" data-on="change"></label></div></div></section>' +
-      '<section class="dtt-panel row"><b>' + esc(T('Delete ' + kid.name + '\'s DTT Data', 'Hapus Data DTT ' + kid.name)) + '</b><button type="button" class="dtt-linkbtn danger" data-a="askWipe" data-v="' + esc(kid.id) + '">' + esc(T('Delete…', 'Hapus…')) + '</button></section>' +
-      (orphans.length ? '<section class="dtt-panel row"><span><b>' + esc(T('Data from removed profiles', 'Data dari profil yang dihapus')) + '</b><small class="dtt-hint">' + esc(T(orphans.length + ' child profile(s) no longer exist.', orphans.length + ' profil anak sudah tidak ada.')) + '</small></span>' +
-        orphans.map(function (id) { return '<button type="button" class="dtt-linkbtn danger" data-a="askWipe" data-v="' + esc(id) + '">' + esc(T('Delete…', 'Hapus…')) + '</button>'; }).join(' ') + '</section>' : '') + '</div>' +
-      '<section class="dtt-panel"><div class="dtt-panelhead base"><h2 class="dtt-h2">' + esc(T('This Device', 'Perangkat Ini')) + '</h2><span class="dtt-hint">' + esc(T('Applies to all students', 'Berlaku untuk semua anak')) + '</span></div>' +
-      psw('sfx', T('Sounds', 'Suara'), '') + (pf.sfx ? pseg('vol', [['soft', T('Soft', 'Pelan')], ['medium', T('Medium', 'Sedang')], ['loud', T('Loud', 'Keras')]]) : '') + ui.divider() +
-      '<div class="dtt-blk"><div class="dtt-lab plain">' + esc(T('Target Word on My Panel', 'Kata Target di Panelku')) + '</div>' + pseg('labelView', [['hold', T('Hold to See', 'Tahan untuk Lihat')], ['flash', T('2 s', '2 dtk')], ['small', T('Faded', 'Pudar')], ['always', T('Always', 'Selalu')]]) + '</div>' + ui.divider() +
-      psw('hold', T('Hold to Press Teacher Buttons', 'Tahan untuk Menekan Tombol Guru'), '') + psw('reduce', T('Reduce Motion', 'Kurangi Gerakan'), '') + '</section></div>';
+    // one tidy column: this device, then deleting data on its own at the bottom (reward photos are in each program's Rewards settings)
+    function grp(icon, tint, title, sub, inner, cls) {
+      return '<section class="dtt-sgroup' + (cls ? ' ' + cls : '') + '"><div class="dtt-sghead"><span class="dtt-sgico" style="background:' + tint + '" aria-hidden="true">' + icon + '</span><div><h2 class="dtt-h2">' + esc(title) + '</h2>' + (sub ? '<small>' + esc(D.i18n.fill(sub)) + '</small>' : '') + '</div></div>' + inner + '</section>';
+    }
+    var device = '<div class="dtt-srows">' +
+      '<div class="dtt-srow">' + psw('sfx', T('Sounds', 'Suara'), T('Chimes for correct answers and rewards', 'Bunyi untuk jawaban benar dan reward')) + '</div>' +
+      (pf.sfx ? '<div class="dtt-srow split"><span class="dtt-swtx"><b>' + esc(T('Volume', 'Volume')) + '</b></span>' + pseg('vol', [['soft', T('Soft', 'Pelan')], ['medium', T('Medium', 'Sedang')], ['loud', T('Loud', 'Keras')]]) + '</div>' : '') +
+      '<div class="dtt-srow">' + psw('hold', T('Hold to Press Teacher Buttons', 'Tahan untuk Menekan Tombol Guru'), T('Stops a student scoring by tapping', 'Mencegah anak menekan tombol nilai')) + '</div>' +
+      '<div class="dtt-srow">' + psw('reduce', T('Reduce Motion', 'Kurangi Gerakan'), T('Calmer animations', 'Animasi lebih tenang')) + '</div></div>';
+    var del = '<div class="dtt-srows"><div class="dtt-srow split"><span class="dtt-swtx"><b>' + esc(T('Delete ' + kid.name + '\'s DTT Data', 'Hapus Data DTT ' + kid.name)) + '</b><small>' + esc(T('Programs, progress and reward photos', 'Program, kemajuan, dan foto reward')) + '</small></span><button type="button" class="dtt-btn danger sm" data-a="askWipe" data-v="' + esc(kid.id) + '">' + esc(T('Delete…', 'Hapus…')) + '</button></div>' +
+      orphans.map(function (id) { return '<div class="dtt-srow split"><span class="dtt-swtx"><b>' + esc(T('Data from a removed profile', 'Data dari profil yang dihapus')) + '</b></span><button type="button" class="dtt-btn danger sm" data-a="askWipe" data-v="' + esc(id) + '">' + esc(T('Delete…', 'Hapus…')) + '</button></div>'; }).join('') + '</div>';
+    var ICD = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2B2A35" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M11 18h2"/></svg>';
+    var ICX = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B23A4E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13"/></svg>';
+    return '<div class="dtt-pagehead"><h1 class="dtt-h1">' + esc(T('Settings', 'Pengaturan')) + '</h1></div><div class="dtt-settings">' +
+      grp(ICD, '#DCEBFA', T('This Device', 'Perangkat Ini'), T('Applies to all students', 'Berlaku untuk semua anak'), device) +
+      grp(ICX, '#FBE0E6', T('Delete Data', 'Hapus Data'), '', del, 'danger') + '</div>';
   }
   ACT.themeTog = function (b) { var sid = ui.student().id, st = D.store.student(sid), i = st.themes.indexOf(b.dataset.v); if (i >= 0) st.themes.splice(i, 1); else st.themes.push(b.dataset.v); ui.touchStudent(sid); ui.render(); };
   INP.reinfPhoto = function (el) {

@@ -1,14 +1,14 @@
 /* Little Us · DTT · stimulus sets: the library (My Sets and Little Us sets, 2a 2b 2c), one set as a grid with its editor
-   beside it (1f), and Add Stimulus (typed text, uploaded photos; illustrations are coming soon, 2d 2e 2g). */
+   beside it (1f), and Add Stimulus (typed text, uploaded photos, or Little Us picture cards from tools-art.js picked one by one, 2d 2e 2g). */
 (function () {
   'use strict';
   var D = window.LUDtt, X = LUTools.api, P = D.programs, T = D.i18n.T, esc = X.esc, ui = D.ui, U = ui.U, ACT = ui.ACT, INP = ui.INP, LIB = D.library;
   function L() { return D.i18n.lang() === 'id' ? 1 : 0; }
   function kindOf(items) {
-    var ph = 0, tx = 0, sw = 0;
-    (items || []).forEach(function (i) { var m = i.images[0]; if (!m) return; if (m.path) ph++; else if (m.lib && LIB.isText(m.lib)) tx++; else sw++; });
+    var ph = 0, tx = 0, sw = 0, il = 0;
+    (items || []).forEach(function (i) { var m = i.images[0]; if (!m) return; if (m.path || (m.lib && LIB.isPhoto(m.lib))) ph++; else if (m.lib && LIB.isText(m.lib)) tx++; else if (m.lib && LIB.isArt(m.lib)) il++; else sw++; });
     var k = [];
-    if (ph) k.push(T('Photos', 'Foto')); if (tx) k.push(T('Text', 'Teks')); if (sw) k.push(T('Swatches', 'Warna'));
+    if (ph) k.push(T('Photos', 'Foto')); if (il) k.push(T('Illustrations', 'Ilustrasi')); if (tx) k.push(T('Text', 'Teks')); if (sw) k.push(T('Swatches', 'Warna'));
     return k.join(' + ') || T('Empty', 'Kosong');
   }
   function preview(items) {
@@ -16,7 +16,7 @@
     return '<span class="dtt-setprev' + (its.length === 1 ? ' one' : '') + '" aria-hidden="true">' + (its.length ? its.map(function (i) { return '<span>' + (i.images[0] ? ui.img(i.images[0], '') : '') + '</span>'; }).join('') : '') + '</span>';
   }
   function libItemsAsSet(l) { return l.items.map(function (it) { return { images: it.images.map(function (r) { return { lib: r }; }) }; }); }
-  function libKind(l) { return l.kind === 'text' ? T('Text', 'Teks') : l.kind === 'shape' ? T('Shapes', 'Bentuk') : T('Swatches', 'Warna'); }
+  function libKind(l) { return l.kind === 'text' ? T('Text', 'Teks') : l.kind === 'shape' ? T('Shapes', 'Bentuk') : l.kind === 'photo' ? T('Photos', 'Foto') : T('Swatches', 'Warna'); }
   function photoMeter() { return '<p class="dtt-hint">' + esc(T('Photos uploaded: ' + D.store.photoCount() + ' of ' + D.store.photoLimit(), 'Foto terunggah: ' + D.store.photoCount() + ' dari ' + D.store.photoLimit())) + '</p>'; }
   function usedText(n) { return n ? T(n + (n === 1 ? ' program' : ' programs'), n + ' program') : T('Not used', 'Belum dipakai'); }
   function closeOn(sh) { sh.el.addEventListener('click', function (e) { if (e.target.closest('[data-x]')) sh.close(); }); }
@@ -29,7 +29,7 @@
       '<div class="tl-seg dtt-seg" role="tablist"><button type="button" role="tab" aria-selected="' + (tab === 'mine') + '" class="' + (tab === 'mine' ? 'on' : '') + '" data-a="setTab" data-v="mine">' + esc(T('My Sets', 'Set Saya')) + '</button><button type="button" role="tab" aria-selected="' + (tab === 'lu') + '" class="' + (tab === 'lu' ? 'on' : '') + '" data-a="setTab" data-v="lu">' + esc(T('Little Us Library', 'Pustaka Little Us')) + '</button></div></div>';
     if (tab === 'lu') {
       var f = U.libF || 'all', libs = LIB.sets.filter(function (l) { return (f === 'all' || l.kind === f) && (!q || l.name[L()].toLowerCase().indexOf(q) >= 0); });
-      return head + '<div class="dtt-chips">' + [['all', T('All', 'Semua')], ['text', T('Text', 'Teks')], ['swatch', T('Swatches', 'Warna')], ['shape', T('Shapes', 'Bentuk')]].map(function (o) { return '<button type="button" class="dtt-fchip' + (f === o[0] ? ' on' : '') + '" aria-pressed="' + (f === o[0]) + '" data-a="libF" data-v="' + o[0] + '">' + esc(o[1]) + '</button>'; }).join('') + '</div>' +
+      return head + '<div class="dtt-chips">' + [['all', T('All', 'Semua')], ['photo', T('Photos', 'Foto')], ['text', T('Text', 'Teks')], ['swatch', T('Swatches', 'Warna')], ['shape', T('Shapes', 'Bentuk')]].map(function (o) { return '<button type="button" class="dtt-fchip' + (f === o[0] ? ' on' : '') + '" aria-pressed="' + (f === o[0]) + '" data-a="libF" data-v="' + o[0] + '">' + esc(o[1]) + '</button>'; }).join('') + '</div>' +
         '<div class="dtt-setgrid">' + libs.map(function (l) {
           return '<button type="button" class="dtt-setcard" data-a="libPreview" data-v="' + l.id + '">' + preview(libItemsAsSet(l)) + '<span class="dtt-setmeta"><b>' + esc(l.name[L()]) + '</b><small>' + esc(l.items.length + ' · ' + libKind(l)) + '</small></span><span class="dtt-kindpill">' + esc(libKind(l)) + '</span></button>';
         }).join('') + '</div><p class="dtt-hint">' + esc(T('More ready-made sets are on the way.', 'Set siap pakai lainnya segera hadir.')) + '</p>';
@@ -40,7 +40,7 @@
         '<span class="dtt-setmeta"><b>' + esc(s.name || T('Untitled Set', 'Set Tanpa Nama')) + '</b><small>' + esc(s.items.length + ' · ' + kindOf(s.items) + ' · ' + usedText(D.store.programsUsingSet(s.id).length)) + '</small></span>' +
         '<button type="button" class="dtt-more" data-a="setMenu" data-id="' + s.id + '" aria-label="' + esc(T('More', 'Lainnya')) + '">•••</button></div>';
     }).join('') + '<button type="button" class="dtt-setcard add" data-a="newSet"><i aria-hidden="true">+</i><b>' + esc(T('New Set', 'Set Baru')) + '</b></button></div>' +
-      '<div class="dtt-libpromo"><div><b>' + esc(T('Need more? Little Us has ready-made sets.', 'Butuh lagi? Little Us punya set siap pakai.')) + '</b><small>' + esc(T('Colours, shapes, numbers 0–20 and letters A–Z and a–z.', 'Warna, bentuk, angka 0–20, dan huruf A–Z serta a–z.')) + '</small></div><button type="button" class="dtt-btn sec" data-a="setTab" data-v="lu">' + esc(T('Browse Library', 'Lihat Pustaka')) + '</button></div>' + photoMeter();
+      '<div class="dtt-libpromo"><div><b>' + esc(T('Need more? Little Us has ready-made sets.', 'Butuh lagi? Little Us punya set siap pakai.')) + '</b><small>' + esc(T('Animals, emotions, colours, shapes, numbers 0–20 and letters A–Z and a–z.', 'Hewan, emosi, warna, bentuk, angka 0–20, dan huruf A–Z serta a–z.')) + '</small></div><button type="button" class="dtt-btn sec" data-a="setTab" data-v="lu">' + esc(T('Browse Library', 'Lihat Pustaka')) + '</button></div>' + photoMeter();
   }
   INP.setQ = function (el) { U.setQ = el.value; var pos = el.selectionStart; ui.render(); var n = document.querySelector('[data-in="setQ"]'); if (n) { n.focus(); try { n.setSelectionRange(pos, pos); } catch (e) { } } };
   ACT.setTab = function (b) { U.setTab = b.dataset.v; U.view = 'sets'; ui.render(); };
@@ -129,11 +129,11 @@
       var q = st.q.toLowerCase(), mine = D.store.sets().filter(function (s) { return (already || []).indexOf(s.id) < 0 && (!q || (s.name || '').toLowerCase().indexOf(q) >= 0); }), libs = LIB.sets.filter(function (l) { return !q || l.name[L()].toLowerCase().indexOf(q) >= 0; });
       function card(key, name, meta, items) { var on = st.pick.indexOf(key) >= 0; return '<button type="button" class="dtt-setcard pick' + (on ? ' on' : '') + '" aria-pressed="' + on + '" data-pick="' + esc(key) + '">' + preview(items) + '<span class="dtt-setmeta"><b>' + esc(name) + '</b><small>' + esc(meta) + '</small></span>' + (on ? '<i class="dtt-tick" aria-hidden="true">✓</i>' : '') + '</button>'; }
       var list = (st.f !== 'lu' && mine.length ? '<div class="dtt-sub">' + esc(T('My Sets', 'Set Saya')) + '</div><div class="dtt-setgrid sm">' + mine.map(function (s) { return card('s:' + s.id, s.name || T('Untitled Set', 'Set Tanpa Nama'), s.items.length + ' · ' + kindOf(s.items), s.items); }).join('') + '</div>' : '') +
-        (st.f !== 'mine' && libs.length ? '<div class="dtt-sub">' + esc(T('From Little Us', 'Dari Little Us')) + '</div><div class="dtt-setgrid sm">' + libs.map(function (l) { return card('l:' + l.id, l.name[L()], l.items.length + ' · ' + libKind(l), libItemsAsSet(l)); }).join('') + '</div>' : '');
+        (st.f !== 'mine' && libs.length ? '<div class="dtt-sub">' + esc(T('From Little Us Library', 'Dari Pustaka Little Us')) + '</div><div class="dtt-setgrid sm">' + libs.map(function (l) { return card('l:' + l.id, l.name[L()], l.items.length + ' · ' + libKind(l), libItemsAsSet(l)); }).join('') + '</div>' : '');
       var has = sh.el.querySelector('input'), pos = has ? has.selectionStart : null, n = st.pick.length;
       sh.set(ui.dlg({ title: T('Choose Existing Sets', 'Pilih Set yang Ada'), back: true,
         body: '<div class="dtt-libbar"><label class="dtt-search"><span aria-hidden="true">⌕</span><input type="search" value="' + esc(st.q) + '" placeholder="' + esc(T('Search sets', 'Cari set')) + '"></label><div class="tl-seg dtt-seg" role="group">' +
-          [['all', T('All', 'Semua')], ['mine', T('My Sets', 'Set Saya')], ['lu', 'Little Us']].map(function (o) { return '<button type="button" class="' + (st.f === o[0] ? 'on' : '') + '" aria-pressed="' + (st.f === o[0]) + '" data-f="' + o[0] + '">' + esc(o[1]) + '</button>'; }).join('') + '</div></div>' +
+          [['all', T('All', 'Semua')], ['mine', T('My Sets', 'Set Saya')], ['lu', T('Little Us Library', 'Pustaka Little Us')]].map(function (o) { return '<button type="button" class="' + (st.f === o[0] ? 'on' : '') + '" aria-pressed="' + (st.f === o[0]) + '" data-f="' + o[0] + '">' + esc(o[1]) + '</button>'; }).join('') + '</div></div>' +
           (list || '<p class="dtt-hint">' + esc(T('No sets match.', 'Tidak ada set yang cocok.')) + '</p>'),
         note: esc(T(n + ' Selected · ' + count() + ' Stimuli', n + ' Dipilih · ' + count() + ' Stimulus')),
         foot: '<button type="button" class="dtt-btn primary" data-go' + (n ? '' : ' disabled') + '>' + esc(T('Add ' + n + (n === 1 ? ' Set' : ' Sets'), 'Tambah ' + n + ' Set')) + '</button>' }));
@@ -172,7 +172,7 @@
   function addOptions(a) {
     return '<div class="dtt-addopts"><button type="button" class="dtt-addopt" ' + (a || '') + ' data-how="text"><i class="dtt-addico">Aa</i><b>' + esc(T('Type Text', 'Ketik Teks')) + '</b><small>' + esc(T('Words, numbers, letters', 'Kata, angka, huruf')) + '</small></button>' +
       '<button type="button" class="dtt-addopt" ' + (a || '') + ' data-how="photos"><i class="dtt-addico" style="background:#DCEBFA">▣</i><b>' + esc(T('Upload Photos', 'Unggah Foto')) + '</b><small>' + esc(T('From your device', 'Dari perangkatmu')) + '</small></button>' +
-      '<button type="button" class="dtt-addopt" ' + (a || '') + ' data-how="illus"><i class="dtt-addico" style="background:#E9E1F7">★</i><b>' + esc(T('Illustrations', 'Ilustrasi')) + '</b><small>' + esc(T('Coming soon', 'Segera hadir')) + '</small></button></div>';
+      '<button type="button" class="dtt-addopt" ' + (a || '') + ' data-how="illus"><i class="dtt-addico" style="background:#E9E1F7">★</i><b>' + esc(T('Illustrations', 'Ilustrasi')) + '</b><small>' + esc(T('Pick from Little Us', 'Pilih dari Little Us')) + '</small></button></div>';
   }
 
   /* ---------- one set (1f, 2f) ---------- */
@@ -254,10 +254,15 @@
   }
   // how: 'text' | 'photos' | 'illus'. Nothing joins the set until "Add N to Set"; photos already uploaded are removed if the dialog closes first.
   ui.addStimulus = function (s, how, done) {
-    var st = { how: how || 'text', texts: [''], style: 'plain', photos: [], busy: 0, added: false };
+    var st = { how: how || 'text', texts: [''], style: 'plain', photos: [], busy: 0, added: false, ill: 'all', illq: '', kid: 'boy', pick: [] };
+    // the Little Us picture cards (the same ones as the home page and the other tools), by category
+    var PICS = LIB.artSets(), CARD = {};
+    PICS.forEach(function (l) { l.items.forEach(function (it) { CARD[it.id] = it; }); });
+    function artRef(id) { return 'art/' + id + (CARD[id] && CARD[id].kid && st.kid === 'girl' ? '/girl' : ''); }
+    function inSet(ref) { return s.items.some(function (i) { return i.from === ref; }); }
     var sh = X.sheet('', { wide: true, onClose: function () { if (!st.added) D.store.dropImages(st.photos.map(function (p) { return p.m; })); if (st.added && done) done(); } });
-    function count() { return st.how === 'text' ? st.texts.filter(function (t) { return t.trim(); }).length : st.how === 'photos' ? st.photos.length : 0; }
-    function countText(n) { return st.how === 'photos' ? T(n + (n === 1 ? ' Photo' : ' Photos'), n + ' Foto') : T(n + (n === 1 ? ' Stimulus' : ' Stimuli'), n + ' Stimulus'); }
+    function count() { return st.how === 'text' ? st.texts.filter(function (t) { return t.trim(); }).length : st.how === 'photos' ? st.photos.length : st.pick.length; }
+    function countText(n) { return st.how === 'photos' ? T(n + (n === 1 ? ' Photo' : ' Photos'), n + ' Foto') : st.how === 'illus' ? T(n + ' Selected', n + ' Dipilih') : T(n + (n === 1 ? ' Stimulus' : ' Stimuli'), n + ' Stimulus'); }
     function draw(focusLast) {
       var n = count(), body;
       if (st.how === 'text') body = '<div class="dtt-textrows">' + st.texts.map(function (t, i) {
@@ -271,13 +276,28 @@
           '<div class="dtt-textrows">' + st.photos.map(function (p, i) { return '<div class="dtt-textrow"><span class="dtt-stimimg sm"><img alt="" src="' + p.url + '"></span><input type="text" maxlength="40" value="' + esc(p.label) + '" data-p="' + i + '" placeholder="' + esc(T('Label', 'Label')) + '"><button type="button" class="dtt-x sm" data-prm="' + i + '" aria-label="' + esc(T('Remove', 'Hapus')) + '">✕</button></div>'; }).join('') +
           (st.busy ? '<div class="dtt-textrow busy"><span class="dtt-stimimg sm"></span><span>' + esc(T(st.busy + ' uploading…', st.busy + ' sedang diunggah…')) + '</span></div>' : '') + '</div>' +
           '<p class="dtt-hint">' + esc(T('Made small before upload. Only add photos you have permission to use.', 'Diperkecil sebelum diunggah. Hanya tambahkan foto yang boleh kamu pakai.')) + '</p>';
-      } else body = '<div class="dtt-empty sm"><i class="dtt-addico big" aria-hidden="true">★</i><h3 class="dtt-h2">' + esc(T('Illustrations are coming soon', 'Ilustrasi segera hadir')) + '</h3><p class="dtt-p">' + esc(T('A bank of Little Us pictures to pick from. For now, type text or upload photos.', 'Kumpulan gambar Little Us untuk dipilih. Untuk sekarang, ketik teks atau unggah foto.')) + '</p>' +
-        '<div class="dtt-rowbtns center"><button type="button" class="dtt-btn sec sm" data-how="photos">' + esc(T('Upload a Photo', 'Unggah Foto')) + '</button><button type="button" class="dtt-btn sec sm" data-how="text">' + esc(T('Type as Text', 'Ketik Teks')) + '</button></div></div>';
+      } else {
+        // illustrations: the Little Us picture cards, picked one by one; cards with a child come as a boy or a girl
+        var q = st.illq.trim().toLowerCase(), groups = PICS.filter(function (l) { return st.ill === 'all' || st.ill === l.id; }).map(function (l) {
+          return { l: l, items: l.items.filter(function (it) { return !q || it.words.indexOf(q) >= 0; }) };
+        }).filter(function (g) { return g.items.length; });
+        body = '<div class="dtt-libbar"><label class="dtt-search"><span aria-hidden="true">⌕</span><input type="search" data-illq value="' + esc(st.illq) + '" placeholder="' + esc(T('Search pictures', 'Cari gambar')) + '" aria-label="' + esc(T('Search pictures', 'Cari gambar')) + '"></label>' +
+          '<div class="tl-seg dtt-seg" role="group" aria-label="' + esc(T('Child in the pictures', 'Anak di gambar')) + '">' + [['boy', T('Boy', 'Laki-laki')], ['girl', T('Girl', 'Perempuan')]].map(function (o) { return '<button type="button" class="' + (st.kid === o[0] ? 'on' : '') + '" aria-pressed="' + (st.kid === o[0]) + '" data-kid="' + o[0] + '">' + esc(o[1]) + '</button>'; }).join('') + '</div></div>' +
+          '<div class="dtt-chips">' + [['all', T('All', 'Semua')]].concat(PICS.map(function (l) { return [l.id, l.name[L()]]; })).map(function (o) { return '<button type="button" class="dtt-fchip' + (st.ill === o[0] ? ' on' : '') + '" aria-pressed="' + (st.ill === o[0]) + '" data-ill="' + o[0] + '">' + esc(o[1]) + '</button>'; }).join('') + '</div>' +
+          (groups.length ? groups.map(function (g) {
+            return (st.ill === 'all' ? '<div class="dtt-sub">' + esc(g.l.name[L()]) + '</div>' : '') + '<div class="dtt-stimgrid sm dtt-illgrid">' + g.items.map(function (it) {
+              var has = inSet(artRef(it.id)), on = st.pick.indexOf(it.id) >= 0;
+              return '<button type="button" class="dtt-stim' + (on ? ' on' : '') + '" aria-pressed="' + on + '" data-ip="' + esc(it.id) + '"' + (has ? ' disabled title="' + esc(T('Already in this set', 'Sudah ada di set ini')) + '"' : '') + '><span class="dtt-stimimg"><img alt="" loading="lazy" src="' + esc(LIB.src(artRef(it.id))) + '">' + (on ? '<i class="dtt-tick" aria-hidden="true">✓</i>' : '') + '</span><b>' + esc(it.labels[L()]) + (has ? ' ✓' : '') + '</b></button>';
+            }).join('') + '</div>';
+          }).join('') : '<p class="dtt-hint">' + esc(T('No pictures match.', 'Tidak ada gambar yang cocok.')) + '</p>');
+      }
       sh.set(ui.dlg({ title: T('Add Stimulus', 'Tambah Stimulus'), sub: esc(s.name || T('Untitled Set', 'Set Tanpa Nama')),
-        body: '<div class="tl-seg dtt-seg" role="tablist">' + [['text', 'Aa ' + T('Type Text', 'Ketik Teks')], ['photos', '▣ ' + T('Upload Photos', 'Unggah Foto')], ['illus', '★ ' + T('Illustrations', 'Ilustrasi')]].map(function (o) { var on = st.how === o[0]; return '<button type="button" role="tab" aria-selected="' + on + '" class="' + (on ? 'on' : '') + '" data-how="' + o[0] + '">' + esc(o[1]) + (o[0] === 'illus' ? ' <span class="dtt-soon">' + esc(T('Soon', 'Segera')) + '</span>' : '') + '</button>'; }).join('') + '</div>' + body,
+        body: '<div class="tl-seg dtt-seg" role="tablist">' + [['text', 'Aa ' + T('Type Text', 'Ketik Teks')], ['photos', '▣ ' + T('Upload Photos', 'Unggah Foto')], ['illus', '★ ' + T('Illustrations', 'Ilustrasi')]].map(function (o) { var on = st.how === o[0]; return '<button type="button" role="tab" aria-selected="' + on + '" class="' + (on ? 'on' : '') + '" data-how="' + o[0] + '">' + esc(o[1]) + '</button>'; }).join('') + '</div>' + body,
         note: esc(countText(n)), foot: '<button type="button" class="dtt-btn primary" data-add' + (n && !st.busy ? '' : ' disabled') + '>' + esc(T('Add ' + n + ' to Set', 'Tambah ' + n + ' ke Set')) + '</button>' }));
       if (focusLast) { var ins = sh.el.querySelectorAll('[data-i]'); var li = ins[typeof focusLast === 'number' ? focusLast : ins.length - 1]; if (li) { li.focus(); var v = li.value.length; try { li.setSelectionRange(v, v); } catch (e) { } } }
     }
+    // redraw without jumping the picture list back to the top
+    function keepScroll() { var b = sh.el.querySelector('.dtt-dlgbody'), y = b ? b.scrollTop : 0; draw(); var n = sh.el.querySelector('.dtt-dlgbody'); if (n) n.scrollTop = y; }
     function addFiles(files) {
       files = Array.prototype.slice.call(files || []).filter(function (f) { return /^image\//.test(f.type) || /\.(heic|heif)$/i.test(f.name); });
       if (!files.length) return;
@@ -296,11 +316,15 @@
       if (t.hasAttribute('data-x')) return sh.close();
       if (t.dataset.how) { st.how = t.dataset.how; return draw(st.how === 'text'); }
       if (t.dataset.style) { st.style = t.dataset.style; return draw(); }
+      if (t.dataset.ill) { st.ill = t.dataset.ill; return draw(); }
+      if (t.dataset.kid) { st.kid = t.dataset.kid; return keepScroll(); }
+      if (t.dataset.ip) { var k = st.pick.indexOf(t.dataset.ip); if (k >= 0) st.pick.splice(k, 1); else st.pick.push(t.dataset.ip); return keepScroll(); }
       if (t.dataset.rm) { st.texts.splice(Number(t.dataset.rm), 1); return draw(); }
       if (t.dataset.prm) { var gone = st.photos.splice(Number(t.dataset.prm), 1)[0]; D.store.dropImages([gone.m]); return draw(); }
       if (t.hasAttribute('data-add')) {
         if (st.how === 'text') st.texts.filter(function (z) { return z.trim(); }).forEach(function (z) { var it = P.newItem(z.trim()); it.images = [{ id: P.uuid(), lib: LIB.textRef(st.style, z.trim()) }]; s.items.push(it); });
-        else st.photos.forEach(function (p) { var it = P.newItem(p.label.trim()); it.images = [p.m]; s.items.push(it); });
+        else if (st.how === 'photos') st.photos.forEach(function (p) { var it = P.newItem(p.label.trim()); it.images = [p.m]; s.items.push(it); });
+        else st.pick.forEach(function (id) { var c = CARD[id], ref = artRef(id); if (!c || inSet(ref)) return; var it = P.newItem(c.labels[L()]); it.images = [{ id: P.uuid(), lib: ref }]; it.tags = c.tags.slice(); it.from = ref; s.items.push(it); });
         st.added = true; syncDraft(s); ui.touchSet(s); sh.close(); U.item = null; ui.render();
         X.toast(T('Added to ' + (s.name || 'the set') + '.', 'Ditambahkan ke ' + (s.name || 'set') + '.'));
       }
@@ -319,6 +343,7 @@
         updateCount();
       }
       if (t.dataset.p != null) st.photos[Number(t.dataset.p)].label = t.value;
+      if (t.hasAttribute('data-illq')) { st.illq = t.value; var pos = t.selectionStart; draw(); var ni = sh.el.querySelector('[data-illq]'); if (ni) { ni.focus(); try { ni.setSelectionRange(pos, pos); } catch (er) { } } }
     });
     sh.el.addEventListener('paste', function (e) {
       var t = e.target; if (t.dataset.i == null) return;

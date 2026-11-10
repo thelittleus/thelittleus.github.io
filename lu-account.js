@@ -1450,7 +1450,7 @@
     }
     if (window.LUTools && LUTools.api && LUTools.api.openProfiles) return show();
     if (!window.luLoad) return show();
-    luLoad('/tools.css?v=20').then(function () { return luLoad('/tools-art.js?v=28'); }).then(function () { return luLoad('/tools.js?v=28'); })
+    luLoad('/tools.css?v=21').then(function () { return luLoad('/tools-art.js?v=28'); }).then(function () { return luLoad('/tools.js?v=30'); })
       .then(function () { var a = window.LUTools && LUTools.api; return a && a.photosLoad ? a.photosLoad() : null; }).then(show, show);
   }
   function homeRender() {
