@@ -131,7 +131,9 @@ body.tl-childon .tabbar{display:none}
 .h2-head p{font-size:14.5px;color:var(--body)}
 .h2-head .link-strong{white-space:nowrap}
 /* Free Tools hook: group chat on the left, headline on the right (the h2 stays for screen readers) */
-.h2-hook{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:clamp(20px,3.5vw,40px);align-items:center;background:#FFF4D6;border:2px solid #F5DFA6;border-radius:24px;padding:clamp(22px,2.8vw,34px) clamp(18px,3vw,36px);overflow:hidden}
+.h2-hook{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:clamp(20px,3.5vw,40px);align-items:center;position:relative;isolation:isolate;background:#FFF1D4;border:1px solid #F5E6D2;border-radius:24px;padding:clamp(22px,2.8vw,34px) clamp(18px,3vw,36px);overflow:hidden}
+.h2-hook::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(circle,rgba(239,140,100,.35) 1.3px,transparent 1.8px) 0 0/18px 18px,#FDE6DA;clip-path:polygon(0 0,51% 0,43% 100%,0 100%)}
+@media (max-width:780px){.h2-hook::before{clip-path:polygon(0 0,100% 0,100% 58%,0 66%)}}
 .h2-chat{background:#fff;border:2px solid #EBE4DB;border-radius:24px;padding:14px 14px 16px;display:flex;flex-direction:column;gap:7px;min-height:300px;box-sizing:border-box;box-shadow:0 10px 24px rgba(120,80,40,.08);max-width:310px;width:100%;justify-self:center}
 .h2-chathead{display:flex;align-items:center;gap:8px;padding-bottom:9px;border-bottom:1px solid #F0EBE4;font:700 13px Figtree,sans-serif}
 .h2-chatava{width:26px;height:26px;flex:none;border-radius:50%;background:repeating-linear-gradient(135deg,#F3E3D3 0 4px,#F8ECE0 4px 8px)}
