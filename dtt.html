@@ -3,16 +3,21 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>/* room at the top and bottom of the phone screen (notch, status bar, home bar); a little extra in the installed app */
+:root{--sa-t:env(safe-area-inset-top,0px);--sa-b:env(safe-area-inset-bottom,0px)}
+@media (display-mode:standalone),(display-mode:fullscreen){:root{--sa-t:max(calc(env(safe-area-inset-top,0px) + 8px),18px);--sa-b:max(calc(env(safe-area-inset-bottom,0px) + 6px),14px)}}</style>
 <title>Little Us DTT</title>
 <meta name="description" content="Discrete Trial Teaching by Little Us: create teaching programs for a child, run teacher-led sessions with picture cards, and follow the progress.">
 <meta name="theme-color" content="#FBF8F3">
+<link rel="manifest" href="/manifest.json">
+<meta name="apple-mobile-web-app-title" content="Little Us">
 <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAASFBMVEVZWGHi4uOgoKU7OkQgHir///////////97e4FAP0m+vsGAf4bAv8L+/v4oJzIcGycAAAD///8yMTuIh41mZW3X19m2trrn5+jjbcUHAAAAGHRSTlP/5////5k7R////////v//AAT////////sFkwxAAACyklEQVR42s2X2aKjIAxAI2hrOwMo6///6SRqERCXW+/D5KELmGMSkgAwoIzjMDy6RlyWpnvMWsMApD8Mzx9oL4znpEiAcRg78YV0IxGA9BvxlTREgHH8Vp8I4wjj0ImvpRtGGJ7ihjzRhcyB4I0FFBbKRwOjcWt8yJ2AR/rXaqUkSqs0uPRB12vV0oxqtU1f+YAkAr2cnpk/lTTrjNEqTuBnn0QBIi6AoklOhr4mxMcIB5M6kHN8nol+NBBZoLSUdnHRWym11J5+v/EHzSxBohmVqEUrUZ/71TbPCYgDjBTyGRwwJaBBy3gWt8kl6T2ZbLPQO/KjKQAWA/QuVs5MrqO+KTMQg2VzgKPIbNJkJmz0UauNJixaTK1GJfIHh1VfKQIcZhkAQwu1VLVK2do44LJkgFfN0Mk0Vh1G53gKcKtJ14RcdgmgkdUQHHQC+T8C/E8A7wJwO4jJuhamAtW751B0qL5YRqxlqcNuIoEqswRi4i1fvtVVH+xkGT6eA9wmlQWv5/IHUFiwhiACsJ/UTNgBrB5EQNBVEz6ANgP45G1pS6vU0xLEwgI0gIcSQKPbbPRLW8y6HVOVnkgLUXMihPXzM8QTAxIA9fWdplC6lcYbcvKFiqAlTF9blJh2J/pOxjraAKbNBU4AIPOEgY17cBqArOzyxwMk+56BUGmmaGPYBwin477HlOJlQHqVB2ALmAI5+4jpsmzPa3NQ22SDSu5JyeJ+nxxUmG71dp2hus4zwdLGpsHjO4Nj1HMqeQLigGDolIH/XngwIXUF2yyB+r61EBpYzkXTLq1rPQvEIQHPOvhyEgkmiKuAlCDCX2aMYXspvpN3KeEktcU+4dJeA0dVe4UAh3V/ocEc1B6T1ZNXCWgOCbp+RErr4+i60Wh51ia77Li/JfD2xIkHHN+YHNhwfGv6hSvP3UvX7Wvf7Yvn/avv/cv3vev/PyqfzvKHqj5iAAAAAElFTkSuQmCC">
 <link rel="apple-touch-icon" href="data:image/png;base64,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">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Fredoka:wght@500;600;700&display=swap">
-<link rel="stylesheet" href="/dtt.css?v=3">
-<link rel="stylesheet" href="/dtt-app.css?v=10">
+<link rel="stylesheet" href="/dtt.css?v=4">
+<link rel="stylesheet" href="/dtt-app.css?v=11">
 <script>
 window.LU_CONFIG = {
   SUPABASE_URL: 'https://bqiicazulzjtthvduear.supabase.co',
@@ -30,8 +35,8 @@ window.LU_CONFIG = {
 <div id="dttApp" class="dtt-page"><div class="dtt-loading" role="status">Opening…</div></div>
 <noscript><p style="padding:24px;font-family:sans-serif">Discrete Trial Teaching needs JavaScript. <a href="/">Back to Little Us</a></p></noscript>
 <!-- the small part of the main site this page needs, then the account, then the tool -->
-<script src="/dtt-shell.js?v=2"></script>
-<script src="/lu-account.js?v=19"></script>
+<script src="/dtt-shell.js?v=3"></script>
+<script src="/lu-account.js?v=26"></script>
 <script src="/dtt-defaults.js?v=6"></script>
 <script src="/dtt-programs.js?v=2"></script>
 <script src="/dtt-compress.js?v=2"></script>
@@ -48,15 +53,15 @@ window.LU_CONFIG = {
 <script src="/dtt-offline.js?v=2"></script>
 <script src="/dtt-store.js?v=4"></script>
 <script src="/dtt-photo.js?v=2"></script>
-<script src="/tools-art.js?v=28"></script>
+<script src="/tools-art.js?v=31"></script>
 <script src="/dtt-library.js?v=8"></script>
-<script src="/dtt-ui-common.js?v=4"></script>
-<script src="/dtt-ui-sets.js?v=9"></script>
+<script src="/dtt-ui-common.js?v=5"></script>
+<script src="/dtt-ui-sets.js?v=10"></script>
 <script src="/dtt-ui-settings.js?v=9"></script>
-<script src="/dtt-ui-wizard.js?v=7"></script>
-<script src="/dtt-ui-home.js?v=7"></script>
+<script src="/dtt-ui-wizard.js?v=8"></script>
+<script src="/dtt-ui-home.js?v=8"></script>
 <script src="/dtt-ui-nav.js?v=7"></script>
-<script src="/dtt-ui-data.js?v=5"></script>
+<script src="/dtt-ui-data.js?v=6"></script>
 <script src="/dtt-themes.js?v=2"></script>
 <script src="/dtt-reinforce.js?v=3"></script>
 <script src="/dtt-games.js?v=4"></script>
@@ -64,9 +69,9 @@ window.LU_CONFIG = {
 <script src="/dtt-stage-tact.js?v=2"></script>
 <script src="/dtt-stage-visual.js?v=2"></script>
 <script src="/dtt-summary.js?v=5"></script>
-<script src="/dtt-session.js?v=7"></script>
-<script src="/dtt-guest.js?v=2"></script>
-<script src="/dtt-main.js?v=3"></script>
+<script src="/dtt-session.js?v=8"></script>
+<script src="/dtt-guest.js?v=3"></script>
+<script src="/dtt-main.js?v=4"></script>
 <script>document.documentElement.lang = (window.LU && LU.lang) || 'en';</script>
 </body>
 </html>
