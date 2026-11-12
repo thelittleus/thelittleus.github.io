@@ -33,7 +33,7 @@
     X.toast(T('Getting the pictures ready...', 'Menyiapkan gambar...'));
     var student = JSON.parse(JSON.stringify(D.store.student(program.studentId)));
     D.store.cacheImages(set, student.photos).then(function (failed) {
-      if (failed) { X.toast(T('Some pictures could not load. Check your connection and try again.', 'Beberapa gambar belum bisa dimuat. Periksa koneksi lalu coba lagi.')); return; }
+      if (failed) { X.toast(T('Some pictures could not load. Check your connection and try again.', 'Beberapa gambar belum bisa dimuat. Cek koneksi internetmu, lalu coba lagi.')); return; }
       open(st, JSON.parse(JSON.stringify(program)), JSON.parse(JSON.stringify(set)), JSON.parse(JSON.stringify(saved)), student, startOpts && startOpts.practice);
     });
   }
@@ -44,7 +44,7 @@
     // 1e: hold to pause on the left, the token board and progress in the middle, the count on the right
     el.innerHTML = '<div class="dtt-stop"><div class="dtt-stopl"><button type="button" class="dtt-pausebtn" id="dttPause"><span class="fill"></span><span>❚❚ ' + esc(T('Hold to Pause', 'Tahan untuk Jeda')) + '</span></button>' +
       '<button type="button" class="dtt-pausebtn" id="dttExit" hidden>✕ ' + esc(T('Exit', 'Keluar')) + '</button>' +
-      (S.practice ? '<span class="dtt-practag">' + esc(T('Practice · Not Recorded', 'Latihan · Tidak Dicatat')) + '</span><button type="button" class="dtt-endprac" id="dttEndPrac">' + esc(T('End Practice', 'Akhiri Latihan')) + '</button>' : '<span class="dtt-practag real" id="dttRealTag" hidden>' + esc(T('Real Session · Saved to Data', 'Session Nyata · Tersimpan di Data')) + '</span>') + '</div>' +
+      (S.practice ? '<span class="dtt-practag">' + esc(T('Practice · Not Recorded', 'Latihan · Tidak Dicatat')) + '</span><button type="button" class="dtt-endprac" id="dttEndPrac">' + esc(T('End Practice', 'Akhiri Latihan')) + '</button>' : '<span class="dtt-practag real" id="dttRealTag" hidden>' + esc(T('Real Session · Saved to Data', 'Sesi Asli · Tersimpan di Data')) + '</span>') + '</div>' +
       '<div class="dtt-stopm"><div class="dtt-tokens" id="dttTokens" aria-hidden="true"></div><div class="dtt-sdots" id="dttDots" aria-hidden="true"></div></div><span class="dtt-count" id="dttCount"></span></div>' +
       '<div class="dtt-stage" id="dttStage"></div><div class="dtt-teacher" id="dttTeacher"></div>';
     document.body.appendChild(el); document.body.style.overflow = 'hidden';

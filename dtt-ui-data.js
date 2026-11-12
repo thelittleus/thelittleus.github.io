@@ -23,7 +23,7 @@
       if (!c || !c.sessions) return '<div class="dtt-loading" role="status">' + esc(T('Opening the data...', 'Membuka data...')) + '</div>';
       c = cache[p.id];
     }
-    if (c.failed) return '<div class="dtt-empty"><p class="dtt-p">' + esc(T('The data could not open. Check your connection and try again.', 'Data belum bisa dibuka. Periksa koneksi lalu coba lagi.')) + '</p><button type="button" class="dtt-btn sec" data-a="dataRetry" data-id="' + p.id + '">' + esc(T('Try again', 'Coba lagi')) + '</button></div>';
+    if (c.failed) return '<div class="dtt-empty"><p class="dtt-p">' + esc(T('The data could not open. Check your connection and try again.', 'Data belum bisa dibuka. Cek koneksi internetmu, lalu coba lagi.')) + '</p><button type="button" class="dtt-btn sec" data-a="dataRetry" data-id="' + p.id + '">' + esc(T('Try again', 'Coba lagi')) + '</button></div>';
     var sessions = c.sessions || [];
     if (!sessions.length) return '<div class="dtt-empty"><h2 class="dtt-h2">' + esc(T('No Sessions Yet', 'Belum Ada %session%')) + '</h2><p class="dtt-p">' + esc(T('Results appear here after your first real session.', 'Hasil muncul di sini setelah %session% pertama.')) + '</p><button type="button" class="dtt-btn primary" data-a="startSession" data-id="' + p.id + '"' + (P.issues(p, set).length ? ' disabled' : '') + '>▶ ' + esc(T('Start Real Session', 'Mulai Session')) + '</button></div>';
     return ui.syncBadge() + (c.partial ? '<p class="dtt-tip">' + esc(T('You are offline, so this shows only the sessions saved on this device.', 'Kamu sedang offline, jadi hanya %sessions% di perangkat ini yang ditampilkan.')) + '</p>' : '') +
@@ -82,7 +82,7 @@
       if (e.target.closest('[data-x]')) return sh.close();
       if (!e.target.closest('[data-go]')) return;
       var pr = D.store.progressOf(p.id); MA.undo(pr, id, op, p.settings);
-      D.store.saveProgress(p.id, DA.toRows(pr, [D.targets.key(id, op)])).then(function () { sh.close(); ui.render(); }, function () { X.toast(T('This was not saved. Check your connection.', 'Belum tersimpan. Periksa koneksi.')); });
+      D.store.saveProgress(p.id, DA.toRows(pr, [D.targets.key(id, op)])).then(function () { sh.close(); ui.render(); }, function () { X.toast(T('This was not saved. Check your connection.', 'Belum tersimpan. Cek koneksi internetmu.')); });
     });
   };
 
@@ -105,7 +105,7 @@
     sh.set('<div class="dtt-drawer"><div class="dtt-drhead"><h2 class="dtt-drtitle">' + esc(dayName(s.started_at) + ' · ' + time(s.started_at)) + '</h2><button type="button" class="dtt-x" data-x aria-label="' + esc(T('Close', 'Tutup')) + '">✕</button></div><div class="dtt-drbody">' +
       '<div class="dtt-tiles3"><span><b>' + sum.pctInd + '%</b>Independent</span><span><b>' + sum.n + ' / ' + (s.trials || []).length + '</b>' + esc(T('Trials Scored', 'Trial Dinilai')) + '</span><span><b>' + mins + ' min</b>' + esc(T('Length', 'Durasi')) + '</span></div>' +
       '<div class="dtt-trials">' + list + '</div>' + key() + (s.note ? '<div class="dtt-blk">' + ui.lab(T('Note', 'Catatan')) + '<p class="dtt-p">' + esc(s.note) + '</p></div>' : '') +
-      '<button type="button" class="dtt-linkbtn danger" data-del data-confirm="1">🗑 ' + esc(T('Delete Session', 'Hapus Session')) + '</button></div>' +
+      '<button type="button" class="dtt-linkbtn danger" data-del data-confirm="1">🗑 ' + esc(T('Delete Session', 'Hapus Sesi')) + '</button></div>' +
       '<div class="dtt-drfoot"><span></span><button type="button" class="dtt-btn primary" data-x>' + esc(T('Done', 'Selesai')) + '</button></div></div>');
     ui.hydrate(sh.el);
     sh.el.addEventListener('click', function (e) {
@@ -113,7 +113,7 @@
       var d = e.target.closest('[data-del]'); if (!d) return;
       if (!d.dataset.sure) { d.dataset.sure = '1'; d.textContent = T('Tap again to delete this session', 'Ketuk lagi untuk menghapus session ini'); return; }
       var left = c.sessions.filter(function (x) { return x.id !== s.id; });
-      D.store.deleteSession(p.id, s.id, left).then(function () { cache[p.id] = { sessions: left }; sh.close(); ui.render(); }, function () { X.toast(T('It was not deleted. Check your connection.', 'Belum terhapus. Periksa koneksi.')); });
+      D.store.deleteSession(p.id, s.id, left).then(function () { cache[p.id] = { sessions: left }; sh.close(); ui.render(); }, function () { X.toast(T('It was not deleted. Check your connection.', 'Belum terhapus. Cek koneksi internetmu.')); });
     });
   };
 
@@ -141,7 +141,7 @@
       var progs = st.all ? D.store.programs(p.studentId) : [p];
       Promise.all(progs.map(function (q) { return cache[q.id] && cache[q.id].sessions ? Promise.resolve({ sessions: cache[q.id].sessions }) : D.store.sessions(q.id); })).then(function (res) {
         download(progs, res.map(function (r) { return r.sessions; }), st, st.all ? 'all-programs' : p.name); sh.close();
-      }, function () { t.disabled = false; X.toast(T('The data could not open. Check your connection.', 'Data belum bisa dibuka. Periksa koneksi.')); });
+      }, function () { t.disabled = false; X.toast(T('The data could not open. Check your connection.', 'Data belum bisa dibuka. Cek koneksi internetmu.')); });
     });
     draw();
   };

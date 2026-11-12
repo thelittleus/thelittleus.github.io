@@ -107,7 +107,7 @@
 
 /* session: the student's stage. The five border colours are art, so they live here as tokens. */
 :root{--dtt-c1:#8E6BD1;--dtt-c2:#E8598A;--dtt-c3:#3E8EDE;--dtt-c4:#2FAE7B;--dtt-c5:#F5873B;--dtt-hold:rgba(43,42,53,.14);--dtt-cardc:var(--dtt-c1)}
-.dtt-session{position:fixed;inset:0;z-index:1000;display:flex;flex-direction:column;background:var(--paper,#FBF8F3);user-select:none;-webkit-user-select:none;touch-action:manipulation;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+.dtt-session{position:fixed;inset:0;z-index:1000;display:flex;flex-direction:column;background:var(--paper,#FBF8F3);user-select:none;-webkit-user-select:none;touch-action:manipulation;padding:var(--sa-t) env(safe-area-inset-right) var(--sa-b) env(safe-area-inset-left)}
 .dtt-stop{display:flex;align-items:center;gap:12px;padding:8px 12px;flex:none}
 .dtt-pausebtn{position:relative;overflow:hidden;min-height:var(--dtt-tap);padding:6px 16px;border-radius:999px;border:1px solid var(--dtt-line);background:var(--dtt-card);font:700 13px Figtree,sans-serif;color:var(--dtt-muted);cursor:pointer;touch-action:none}
 .dtt-pausebtn span:last-child,.dtt-tbtn>span:not(.fill),.dtt-tbtn kbd{position:relative}

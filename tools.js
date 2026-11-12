@@ -31,13 +31,13 @@
     setUpFor: ['Setting up for', 'Untuk'],
     sw: ['Switch', 'Ganti'],
     open: ['Open', 'Buka'],
-    timer: ['Visual Timer', 'Timer Visual'], timerD: ['See how much time is left.', 'Lihat berapa lama waktu tersisa.'],
-    tokens: ['Token Board', 'Papan Token'], tokensD: ['Earn tokens towards a reward.', 'Kumpulkan token untuk hadiah.'],
-    ft: ['First–Then Board', 'Papan Pertama–Lalu'], ftD: ['First the task, then the fun part.', 'Tugas dulu, lalu bagian serunya.'],
-    sched: ['Visual Schedule', 'Jadwal Visual'], schedD: ['The day in pictures, step by step.', 'Hari ini dalam gambar, langkah demi langkah.'],
-    library: ['Card library', 'Perpustakaan kartu'], settings: ['Settings', 'Pengaturan'], allTools: ['All tools', 'Semua alat'],
+    timer: ['Visual Timer', 'Visual Timer'], timerD: ['See how much time is left.', 'Lihat sisa waktunya.'],
+    tokens: ['Token Board', 'Token Board'], tokensD: ['Earn tokens towards a reward.', 'Kumpulkan token untuk hadiah.'],
+    ft: ['First–Then Board', 'First–Then Board'], ftD: ['First the task, then the fun part.', 'Tugas dulu, baru yang seru.'],
+    sched: ['Visual Schedule', 'Visual Schedule'], schedD: ['The day in pictures, step by step.', 'Kegiatan hari ini dalam gambar, satu per satu.'],
+    library: ['Card library', 'Koleksi kartu'], settings: ['Settings', 'Pengaturan'], allTools: ['All tools', 'Semua alat'],
     cont: ['Continue', 'Lanjutkan'], addSteps: ['Add steps', 'Tambah langkah'], pickCards: ['Pick cards', 'Pilih kartu'],
-    pickSeveral: ['Tap all the steps you need. They are added in the order you tap them.', 'Ketuk semua langkah yang dibutuhkan. Langkah ditambahkan sesuai urutan ketukan.'],
+    pickSeveral: ['Tap all the steps you need. They are added in the order you tap them.', 'Ketuk semua langkah yang dibutuhkan. Urutannya mengikuti urutan kamu mengetuk.'],
     addNSteps: [function (n) { return 'Add ' + n + (n === 1 ? ' step' : ' steps'); }, function (n) { return 'Tambah ' + n + ' langkah'; }], lastUsed: ['Last used', 'Terakhir dipakai'],
     how: ['How it works', 'Cara pakainya'],
     how1: ['Pick a tool', 'Pilih alat'], how1d: ['Routines, tokens, breathing, feelings and more.', 'Rutinitas, token, napas, perasaan, dan lainnya.'],
@@ -48,7 +48,7 @@
     letsSetP: ['A nickname and a few favourite rewards. It takes under a minute, and every tool is then ready for your child.', 'Nama panggilan dan beberapa hadiah favorit. Kurang dari semenit, lalu semua alat siap dipakai anakmu.'],
     needName: ['Please add a nickname or initials first.', 'Isi nama panggilan atau inisial dulu ya.'],
     startSetup: ['Start setup', 'Mulai'],
-    orTry: ['What you’ll find here', 'Isi alat-alatnya'], orTryP: ['Set up your child first, then every tool is ready to use.', 'Atur profil anak dulu, lalu semua alat siap dipakai.'],
+    orTry: ['What you’ll find here', 'Yang ada di sini'], orTryP: ['Set up your child first, then every tool is ready to use.', 'Atur profil anak dulu, lalu semua alat siap dipakai.'],
     parentSetup: ['Parent setup', 'Pengaturan orang tua'],
     startChild: ['Show to Child', 'Tunjukkan ke Anak'], forName: [function (n) { return 'for ' + n; }, function (n) { return 'untuk ' + n; }],
     step4: [function (a) { return 'Step ' + a + ' of 4'; }, function (a) { return 'Langkah ' + a + ' dari 4'; }], callChild: ['What do you call your child?', 'Siapa nama panggilan anakmu?'],
@@ -87,80 +87,80 @@
     warns: ['Warnings before the end', 'Peringatan sebelum selesai'],
     w2: ['“2 minutes left”', '“2 menit lagi”'], w2d: ['Shown on screen', 'Tampil di layar'],
     w1: ['“1 minute left”', '“1 menit lagi”'], w1d: ['Shown on screen', 'Tampil di layar'],
-    speak: ['Say warnings out loud', 'Ucapkan peringatan'], speakD: ['Uses the language set for labels', 'Memakai bahasa label'],
-    whatsNext: ["What's next", 'Selanjutnya'], fromLib: ['From the card library', 'Dari perpustakaan kartu'], change: ['Change', 'Ganti'],
-    shownUnder: ['Shown under the timer', 'Tampil di bawah timer'], showNext: ['Show what comes next', 'Tampilkan yang selanjutnya'], showNextD: ['A picture card under the timer, so your child knows what happens after.', 'Kartu gambar di bawah timer, agar anak tahu apa yang terjadi sesudahnya.'],
-    endSig: ['End signal', 'Tanda selesai'], chime: ['Soft chime', 'Bunyi lembut'], vibrate: ['Vibrate', 'Getar'], silent: ['Silent', 'Senyap'],
-    alsoOpens: ['Also opens from First–Then and schedule steps', 'Juga bisa dibuka dari Pertama–Lalu dan langkah jadwal'],
+    speak: ['Say warnings out loud', 'Bacakan peringatan'], speakD: ['Uses the language set for labels', 'Pakai bahasa yang sama dengan label kartu'],
+    whatsNext: ["What's next", 'Selanjutnya'], fromLib: ['From the card library', 'Dari koleksi kartu'], change: ['Change', 'Ganti'],
+    shownUnder: ['Shown under the timer', 'Tampil di bawah timer'], showNext: ['Show what comes next', 'Tampilkan yang selanjutnya'], showNextD: ['A picture card under the timer, so your child knows what happens after.', 'Kartu bergambar di bawah timer, supaya anak tahu kegiatan setelahnya.'],
+    endSig: ['End signal', 'Tanda selesai'], chime: ['Soft chime', 'Bunyi lembut'], vibrate: ['Vibrate', 'Getar'], silent: ['Silent', 'Tanpa suara'],
+    alsoOpens: ['Also opens from First–Then and schedule steps', 'Juga bisa dibuka dari First–Then dan langkah jadwal'],
     customMin: ['How many minutes?', 'Berapa menit?'], moreMin: ['More minutes', 'Tambah menit'], lessMin: ['Fewer minutes', 'Kurangi menit'], moreSec: ['More seconds', 'Tambah detik'], lessSec: ['Fewer seconds', 'Kurangi detik'], secs: ['sec', 'detik'],
     // tokens
-    working: ["I'm working for…", 'Aku sedang bekerja untuk…'], favs: [function (n) { return n + "'s favourites"; }, function (n) { return 'Favorit ' + n; }],
+    working: ["I'm working for…", 'Aku mau dapat…'], favs: [function (n) { return n + "'s favourites"; }, function (n) { return 'Favorit ' + n; }],
     nTokens: ['Number of tokens', 'Jumlah token'], tokensRange: ['tokens · 1 to 10', 'token · 1 sampai 10'],
     shape: ['Token shape', 'Bentuk token'], whenFull: ['When the board is full', 'Saat papan penuh'], calmStars: ['Calm stars', 'Bintang tenang'], quiet: ['Quiet', 'Tenang'],
-    onlyAdd: ['<b>Tokens are earned, not taken away.</b> If you give one by accident in child mode, tap “Undo” under the board (or press and hold the token for 2 seconds), then pass the quick adult check.', '<b>Token didapat, bukan diambil.</b> Jika terlanjur memberi token di mode anak, ketuk “Batalkan” di bawah papan (atau tekan dan tahan token 2 detik), lalu lewati cek orang dewasa.'],
+    onlyAdd: ['<b>Tokens are earned, not taken away.</b> If you give one by accident in child mode, tap “Undo” under the board (or press and hold the token for 2 seconds), then pass the quick adult check.', '<b>Token itu didapat, bukan diambil.</b> Kalau nggak sengaja memberi token di mode anak, ketuk “Batalkan” di bawah papan (atau tekan dan tahan token 2 detik), lalu jawab cek orang dewasa.'],
     undoTok: ['Undo last token', 'Batalkan token terakhir'],
     schedule: ['Schedule', 'Jadwal'], schedPick: ['Create or choose a schedule', 'Buat atau pilih jadwal'], mySchedules: ['My schedules', 'Jadwal saya'],
-    untitled: ['Untitled schedule', 'Jadwal tanpa nama'], schedNamePh: ['e.g. Saturday morning', 'mis. Sabtu pagi'], autoSaved: ['Changes are saved automatically', 'Perubahan tersimpan otomatis'],
+    untitled: ['Untitled schedule', 'Jadwal tanpa nama'], schedNamePh: ['e.g. Saturday morning', 'contoh: Sabtu pagi'], autoSaved: ['Changes are saved automatically', 'Perubahan tersimpan otomatis'],
     emptySchedPick: ['Start a new schedule, or choose a ready-made example and change it to fit your child.', 'Mulai jadwal baru, atau pilih contoh siap pakai lalu sesuaikan dengan anakmu.'],
     chooseReady: ['Choose a ready-made one', 'Pilih yang siap pakai'],
     board: ['Board', 'Papan'], boardPick: ['Create or choose a board', 'Buat atau pilih papan'], myBoards: ['My boards', 'Papan saya'], newBoard: ['+ New board', '+ Papan baru'],
     newBoardTx: ['Choose your own pictures', 'Pilih gambar sendiri'], newSchedTx: ['Add your own steps', 'Tambahkan langkah sendiri'],
     emptyBoardPick: ['Make a new board with your own pictures, or start from a ready-made one.', 'Buat papan baru dengan gambar sendiri, atau mulai dari yang siap pakai.'],
-    yourBoard: ['Your board', 'Papanmu'], firstHelp: ['What needs to happen first', 'Yang harus dilakukan dulu'], thenHelp: ['What comes after', 'Yang datang sesudahnya'],
+    yourBoard: ['Your board', 'Papanmu'], firstHelp: ['What needs to happen first', 'Yang harus dilakukan dulu'], thenHelp: ['What comes after', 'Yang dilakukan sesudahnya'],
     thenHelp2: ['Two things to choose from', 'Dua pilihan untuk anak'], choosePic: ['Choose picture', 'Pilih gambar'], untitledBoard: ['New board', 'Papan baru'],
     delBoard: ['Delete this board', 'Hapus papan ini'], delSched: ['Delete this schedule', 'Hapus jadwal ini'],
     tokenBack: ['Token taken back', 'Token diambil kembali'], takeBack: ['Take back the last token?', 'Ambil kembali token terakhir?'],
     beforeStart: ['Before you start', 'Sebelum mulai'], setupWhy: ['Set this up once. The tools use it to show the right pictures, language and rewards.', 'Atur sekali saja. Alat memakainya untuk menampilkan gambar, bahasa, dan hadiah yang sesuai.'],
     tapToken: [function (a, b) { return a + ' of ' + b + ' · Tap an empty circle to give a token'; }, function (a, b) { return a + ' dari ' + b + ' · Ketuk lingkaran kosong untuk memberi token'; }],
     great: [function (r) { return 'Great work! Time for ' + r; }, function (r) { return 'Hebat! Waktunya ' + r; }],
-    again: ['Start again', 'Mulai lagi'], againNote: ['One tap clears the board. Celebration stays still, no flashing.', 'Satu ketukan mengosongkan papan. Perayaan tenang, tanpa kedip.'],
+    again: ['Start again', 'Mulai lagi'], againNote: ['One tap clears the board. Celebration stays still, no flashing.', 'Sekali ketuk, papan kosong lagi. Perayaannya tenang, tanpa efek berkedip.'],
     starStar: ['Star', 'Bintang'], starCar: ['Car', 'Mobil'], starFlower: ['Flower', 'Bunga'], starBall: ['Ball', 'Bola'], starDino: ['Dino', 'Dino'],
     // first then
-    readyMade: ['Ready-made', 'Siap pakai'], first: ['First', 'Pertama'], then: ['Then', 'Lalu'], childPicks: ['Child picks one', 'Anak memilih satu'],
-    offerChoice: ['Offer a choice of two in “Then”', 'Beri dua pilihan di “Lalu”'], offerChoiceD: ['Good for building choice-making', 'Baik untuk melatih memilih'],
-    timerBtn: ['Timer button on the board', 'Tombol timer di papan'], timerBtnD: [function (t) { return 'Starts the Visual Timer · ' + t; }, function (t) { return 'Memulai Timer Visual · ' + t; }],
-    whenFirst: ['When “First” is done', 'Saat “Pertama” selesai'], whenFirstD: ['Highlight “Then” in yellow', 'Sorot “Lalu” dengan kuning'], auto: ['Auto', 'Otomatis'],
+    readyMade: ['Ready-made', 'Siap pakai'], first: ['First', 'Pertama'], then: ['Then', 'Setelah itu'], childPicks: ['Child picks one', 'Anak memilih satu'],
+    offerChoice: ['Offer a choice of two in “Then”', 'Beri dua pilihan di “Setelah itu”'], offerChoiceD: ['Good for building choice-making', 'Bagus untuk melatih anak memilih'],
+    timerBtn: ['Timer button on the board', 'Tombol timer di papan'], timerBtnD: [function (t) { return 'Starts the Visual Timer · ' + t; }, function (t) { return 'Memulai Visual Timer · ' + t; }],
+    whenFirst: ['When “First” is done', 'Saat “Pertama” selesai'], whenFirstD: ['Highlight “Then” in yellow', 'Tandai “Setelah itu” dengan warna kuning'], auto: ['Auto', 'Otomatis'],
     pickOne: ['Pick one', 'Pilih satu'], timerN: [function (t) { return 'Timer ' + t; }, function (t) { return 'Timer ' + t; }],
     // schedule
-    steps: ['Steps', 'Langkah'], addStep: ['+ Add step from library', '+ Tambah langkah dari perpustakaan'],
+    steps: ['Steps', 'Langkah'], addStep: ['+ Add step from library', '+ Tambah langkah dari koleksi kartu'],
     layout: ['Layout', 'Tata letak'], vertical: ['Vertical', 'Vertikal'], horizontal: ['Horizontal', 'Horizontal'],
     show: ['Show', 'Tampilkan'], wholeDay: ['Whole day', 'Seharian'], next3: ['Next 3 steps', '3 langkah berikutnya'],
-    whenDone: ['When a step is done', 'Saat langkah selesai'], crossOut: ['Cross out', 'Coret'], moveDone: ['Move to Done', 'Pindah ke Selesai'], checklist: ['Checklist', 'Daftar centang'],
+    whenDone: ['When a step is done', 'Saat langkah selesai'], crossOut: ['Cross out', 'Coret'], moveDone: ['Move to Done', 'Pindah ke Selesai'], checklist: ['Checklist', 'Checklist'],
     save: ['Save', 'Simpan'], saved: ['Saved', 'Tersimpan'], savedScheds: ['Saved schedules', 'Jadwal tersimpan'], newSched: ['+ New schedule', '+ Jadwal baru'],
     readyEx: ['Ready-made examples', 'Contoh siap pakai'], use: ['Use', 'Pakai'], nSteps: [function (n) { return n + ' steps'; }, function (n) { return n + ' langkah'; }],
     rename: ['Rename', 'Ganti nama'], del: ['Delete', 'Hapus'], dup: ['Duplicate', 'Duplikat'], schedName: ['Schedule name', 'Nama jadwal'],
     now: ['Now', 'Sekarang'], done: ['Done', 'Selesai'], changePlan: ['Change of plan', 'Ganti rencana'], stepTimer: ['Timer for this step', 'Timer untuk langkah ini'],
     noTimer: ['No timer', 'Tanpa timer'], moveUp: ['Move up', 'Naikkan'], moveDown: ['Move down', 'Turunkan'], remove: ['Remove', 'Hapus'],
-    emptySched: ['No steps yet. Add a few from the library, or start from an example.', 'Belum ada langkah. Tambahkan dari perpustakaan, atau mulai dari contoh.'],
-    allDone: ['All done!', 'Semua selesai!'], newPlan: ['What happens instead?', 'Apa yang terjadi sebagai gantinya?'],
+    emptySched: ['No steps yet. Add a few from the library, or start from an example.', 'Belum ada langkah. Tambahkan dari koleksi kartu, atau mulai dari contoh.'],
+    allDone: ['All done!', 'Semua selesai!'], newPlan: ['What happens instead?', 'Gantinya apa?'],
     // child mode
     holdExit: ['Hold to exit', 'Tahan untuk keluar'], holding: ['Hold for 2 seconds to exit', 'Tahan 2 detik untuk keluar'], holdingD: ['Keep holding to return to parent setup', 'Terus tahan untuk kembali ke pengaturan'],
     adultCheck: ['Adult check', 'Cek orang dewasa'], tapNum: [function (n, w) { return 'Tap the number ' + w; }, function (n, w) { return 'Ketuk angka ' + w; }],
     stay: ['Stay in child mode', 'Tetap di mode anak'],
     wait: ['Wait', 'Tunggu'], timeFinish: ['Time to finish', 'Waktunya selesai'], left: [function (m) { return m + ' min left'; }, function (m) { return m + ' menit lagi'; }],
-    nextL: ['Next', 'Lalu'], nowL: ['Now', 'Sekarang'], backSched: ['Back to the schedule', 'Kembali ke jadwal'], backBoard: ['Back to the board', 'Kembali ke papan'],
+    nextL: ['Next', 'Setelah ini'], nowL: ['Now', 'Sekarang'], backSched: ['Back to the schedule', 'Kembali ke jadwal'], backBoard: ['Back to the board', 'Kembali ke papan'],
     // library
     searchCards: ['Search cards', 'Cari kartu'], tabLu: ['Little Us', 'Little Us'], tabPhotos: ['My photos', 'Foto saya'], tabText: ['Text', 'Teks'],
     favourites: ['Favourites', 'Favorit'], recent: ['Recently used', 'Terakhir dipakai'], all: ['All', 'Semua'],
     photo: ['+ Photo', '+ Foto'], textCard: ['Aa Text card', 'Aa Kartu teks'], useX: [function (x) { return 'Use “' + x + '”'; }, function (x) { return 'Pakai “' + x + '”'; }],
     chooseCard: ['Choose a card', 'Pilih kartu'], chooseReward: ['Choose a reward', 'Pilih hadiah'],
     matches: [function (n, q) { return n + ' cards match <b>' + esc(q) + '</b> in English or Indonesian'; }, function (n, q) { return n + ' kartu cocok dengan <b>' + esc(q) + '</b> dalam bahasa Indonesia atau Inggris'; }],
-    cantFind: ["Can't find it? <b>Add your own photo</b> or make a text card.", 'Tidak ketemu? <b>Tambah foto sendiri</b> atau buat kartu teks.'],
+    cantFind: ["Can't find it? <b>Add your own photo</b> or make a text card.", 'Nggak ketemu? <b>Tambah foto sendiri</b> atau buat kartu teks.'],
     noCardFor: [function (q) { return 'No card for “' + q + '”'; }, function (q) { return 'Belum ada kartu untuk “' + q + '”'; }],
     makeOne: ['Make one now with your own photo or words.', 'Buat sekarang dengan foto atau kata-katamu sendiri.'],
-    wantIllus: ['Want a Little Us illustration for this?', 'Mau ilustrasi Little Us untuk ini?'], wantIllusP: ["Request picture cards. They'll appear here in your library.", 'Minta kartu bergambar. Nanti muncul di perpustakaanmu.'],
+    wantIllus: ['Want a Little Us illustration for this?', 'Mau ilustrasi Little Us untuk ini?'], wantIllusP: ["Request picture cards. They'll appear here in your library.", 'Minta kartu bergambar. Nanti kartunya muncul di koleksi kartumu.'],
     reqCards: ['Request picture cards →', 'Minta kartu bergambar →'],
-    noPhotos: ['No photos yet', 'Belum ada foto'], noPhotosP: ['A photo of the real toothbrush, the real school gate. Children often recognise these fastest.', 'Foto sikat gigi asli, gerbang sekolah asli. Anak sering paling cepat mengenali ini.'],
-    photosNever: ['Photos never leave this device.', 'Foto tidak pernah keluar dari perangkat ini.'],
+    noPhotos: ['No photos yet', 'Belum ada foto'], noPhotosP: ['A photo of the real toothbrush, the real school gate. Children often recognise these fastest.', 'Misalnya foto sikat gigi atau gerbang sekolahnya sendiri. Anak biasanya paling cepat mengenali foto seperti ini.'],
+    photosNever: ['Photos never leave this device.', 'Foto tetap tersimpan di perangkat ini saja.'],
     editLabel: ['Edit label', 'Ubah label'], editLabelD: ['Rename in Indonesian or English', 'Ganti nama dalam bahasa Indonesia atau Inggris'],
     addFav: ['Add to favourites', 'Tambah ke favorit'], removeFav: ['Remove from favourites', 'Hapus dari favorit'], favD: ['Shows first in every tool', 'Muncul paling atas di setiap alat'],
     printCard: ['Print this card', 'Cetak kartu ini'], delCard: ['Delete this card', 'Hapus kartu ini'],
     showAs: ['Show the child as', 'Tampilkan anak sebagai'], thisCardOnly: ['This card only', 'Kartu ini saja'],
     printCards: ['Print cards', 'Cetak kartu'], noBoard: ['No board needed', 'Tanpa papan'], selected: [function (n) { return '<b>' + n + ' cards</b> selected'; }, function (n) { return '<b>' + n + ' kartu</b> dipilih'; }],
     selectAll: ['Select all', 'Pilih semua'], nextPrint: ['Next: print options →', 'Lanjut: opsi cetak →'],
-    addOwn: ['Add your own photo', 'Tambah foto sendiri'], addOwnP: ['Real objects and places from your child’s day. Photos stay on this device.', 'Benda dan tempat nyata dari hari anakmu. Foto tetap di perangkat ini.'],
+    addOwn: ['Add your own photo', 'Tambah foto sendiri'], addOwnP: ['Real objects and places from your child’s day. Photos stay on this device.', 'Benda dan tempat yang anakmu temui sehari-hari. Foto tetap tersimpan di perangkat ini.'],
     takePhoto: ['Take a photo', 'Ambil foto'], fromGallery: ['From gallery', 'Dari galeri'], textOnly: ['Text-only card', 'Kartu teks saja'], textOnlyD: ['No picture, just words', 'Tanpa gambar, hanya kata'],
-    crop: ['Crop', 'Potong'], cancel: ['Cancel', 'Batal'], rotate: ['↻ Rotate', '↻ Putar'], pinch: ['Drag to move. Cards are always square.', 'Geser untuk memindah. Kartu selalu persegi.'],
+    crop: ['Crop', 'Potong'], cancel: ['Cancel', 'Batal'], rotate: ['↻ Rotate', '↻ Putar'], pinch: ['Drag to move. Cards are always square.', 'Geser untuk mengatur posisi. Kartu selalu berbentuk persegi.'],
     nameCard: ['Name this card', 'Beri nama kartu'], labelId: ['Label in Indonesian', 'Label bahasa Indonesia'], labelEn: ['Label in English', 'Label bahasa Inggris'],
     category: ['Category', 'Kategori'], saveCard: ['Save card', 'Simpan kartu'], availEvery: ['Available in every tool', 'Tersedia di setiap alat'],
     indonesian: ['Indonesian', 'Bahasa Indonesia'], english: ['English', 'Bahasa Inggris'], optional: ['optional', 'opsional'],
@@ -172,7 +172,7 @@
     comfort: ['Comfort', 'Kenyamanan'], reduce: ['Reduce motion', 'Kurangi gerakan'], reduceD: ['', ''],
     leaving: ['Leaving child mode', 'Keluar dari mode anak'], longPress: ['Long press', 'Tekan lama'],
     childData: ['Children & data', 'Anak & data'], profiles: ['Profiles', 'Profil'], backup: ['Backup & restore', 'Cadangkan & pulihkan'],
-    lastSaved: [function (d) { return 'Last saved ' + d; }, function (d) { return 'Terakhir disimpan ' + d; }], never: ['Not saved yet', 'Belum pernah'],
+    lastSaved: [function (d) { return 'Last saved ' + d; }, function (d) { return 'Terakhir disimpan ' + d; }], never: ['Not saved yet', 'Belum disimpan'],
     storage: ['Storage on this device', 'Penyimpanan di perangkat ini'], ready: ['Ready', 'Siap'], worksOff: ['works offline', 'bisa offline'],
     // backup
     backupShare: ['Backup & share', 'Cadangan & berbagi'], backupP: ['Download your saved settings and send to another person.', 'Unduh pengaturan yang tersimpan dan kirim ke orang lain.'],
@@ -444,9 +444,119 @@
     opts = opts || {};
     return '<div class="tl-top">' + (opts.backAct ? '<button type="button" class="tl-iconbtn" data-act="' + opts.backAct + '" aria-label="' + esc(tr('back')) + '">' + ICO.back + '</button>' : '<a class="tl-iconbtn" href="' + (opts.back || '#/tools') + '" aria-label="' + esc(tr('back')) + '">' + ICO.back + '</a>') +
       '<div class="tl-toptx"><h1>' + esc(title) + '</h1>' + (sub ? '<small>' + esc(sub === tr('parentSetup') && prof() ? tr('forName', prof().name) : sub) + '</small>' : '') + '</div>' +
-      (opts.dl ? '<button type="button" class="tl-btn primary sm tl-dlbtn" data-act="download">' + ICO.dl + '<span>' + esc(tr('download')) + '</span></button>' : '') +
+      (opts.help ? helpBtn(opts.help) : '') +
       (opts.noProf ? '' : '<button type="button" class="tl-profbtn" data-act="profiles" aria-label="' + esc(tr('whoHelp')) + '">' + avatar(prof(), 30) + '<span aria-hidden="true">▾</span></button>') + '</div>';
   }
+
+  // the "Show to Child" button with Download beside it (70:30), for tools that make something to print
+  function startRow(startBtn, dl) {
+    if (!dl) return startBtn;
+    return '<div class="tl-startrow">' + startBtn + '<button type="button" class="tl-btn outline lg tl-dlside" data-act="download" aria-label="' + esc(tr('download')) + '">' + ICO.dl + '<span>' + esc(tr('download')) + '</span></button></div>';
+  }
+
+  /* ===================== "How to use" guides =====================
+     A "How to use" button sits top right on each tool. It opens a short sheet: 3–5 steps, each with a small
+     picture drawn from the tool's own art (no image files, so it stays light). */
+  function helpBtn(key, compact) {
+    var lab = L() === 'id' ? 'Cara pakai' : 'How to use';
+    return '<button type="button" class="tl-helpbtn' + (compact ? ' compact' : '') + '" data-help="' + esc(key) + '" aria-label="' + esc(lab) + '"><span class="tl-helpq" aria-hidden="true">?</span><span class="tl-helplab">' + esc(lab) + '</span></button>';
+  }
+  function hpFit(s) { return String(s || '').replace('<svg ', '<svg style="width:100%;height:100%;display:block" '); }
+  var HP = {
+    btn: function (en, id) { return '<span class="tl-hmini yellow">' + esc(L() === 'id' ? id : en) + '</span>'; },
+    exit: function () { return '<span class="tl-hmini exit"><i></i>' + esc(tr('holdExit')) + '</span>'; },
+    dl: function () { return '<span class="tl-hmini dlrow"><b>' + esc(tr('startChild')) + '</b><em>' + ICO.dl + '</em></span>'; },
+    cards: function (ids, arrow) { return '<span class="tl-hcards n' + ids.length + '">' + ids.map(function (r) { return cardInfo(r) ? cardHTML(r, { size: 'xs', labels: 'none' }) : ''; }).join(arrow ? '<b>→</b>' : '') + '</span>'; },
+    art: function (svg) { return '<span class="tl-hart">' + hpFit(svg) + '</span>'; },
+    toks: function (n, on) { var s = ''; for (var i = 0; i < n; i++) s += '<span class="tl-htok">' + A.token('star', i < on) + '</span>'; return '<span class="tl-htoks">' + s + '</span>'; },
+    calm: function (f) { var C = window.LUCalm && LUCalm.art; try { return C ? f(C) : ''; } catch (e) { return ''; } },
+    tool: function (k) { try { return A.toolArt ? HP.art(A.toolArt(k)) : ''; } catch (e) { return ''; } }
+  };
+  // each step: [picture, English, Indonesian]
+  var HELP = {
+    timer: function () { return [
+      [HP.art(timerSVG('circle', 0.72)), 'Pick a timer style.', 'Pilih gaya timer.'],
+      ['<span class="tl-hmini digits">05:00</span>', 'Set the time. Turn on “Show what comes next” to add a picture of the next activity.', 'Atur waktunya. Nyalakan “Tampilkan kegiatan berikutnya” untuk menambah gambar kegiatan setelahnya.'],
+      [HP.btn('Show to Child', 'Tunjukkan ke Anak'), 'Tap Show to Child and let your child watch the time run down.', 'Ketuk Tunjukkan ke Anak, lalu biarkan anak melihat waktunya berjalan.'],
+      [HP.exit(), 'To leave, press and hold the exit button.', 'Untuk keluar, tekan dan tahan tombol keluar.']
+    ]; },
+    tokens: function () { return [
+      [HP.cards(['lego']), 'Choose the reward your child is working for.', 'Pilih hadiah yang sedang dikejar anak.'],
+      [HP.toks(5, 2), 'Set how many tokens and pick a shape.', 'Atur jumlah token dan pilih bentuknya.'],
+      [HP.toks(5, 3), 'In child mode, tap an empty circle to give a token. A full board means reward time.', 'Di mode anak, ketuk lingkaran kosong untuk memberi token. Papan penuh berarti waktunya hadiah.'],
+      ['<span class="tl-hmini quiet">↶ ' + esc(tr('undoTok')) + '</span>', 'Gave one by mistake? Tap Undo under the board.', 'Nggak sengaja memberi token? Ketuk Batalkan di bawah papan.'],
+      [HP.dl(), 'Download gives you the board to print.', 'Unduh untuk mencetak papannya.']
+    ]; },
+    ft: function () { return [
+      [HP.cards(['mandi', 'main'], true), 'Pick a ready-made board, or make a new one.', 'Pilih papan siap pakai, atau buat yang baru.'],
+      [HP.cards(['mandi']), 'Tap First and choose the task.', 'Ketuk Pertama dan pilih tugasnya.'],
+      [HP.cards(['main']), 'Tap Then and choose the fun thing after. You can offer two choices or add a timer.', 'Ketuk Setelah itu dan pilih hal seru sesudahnya. Bisa juga kasih dua pilihan atau tambah timer.'],
+      [HP.btn('Show to Child', 'Tunjukkan ke Anak'), 'Tap Show to Child. Download gives you a copy to print.', 'Ketuk Tunjukkan ke Anak. Unduh untuk versi cetaknya.']
+    ]; },
+    sched: function () { return [
+      [HP.cards(['sarapan', 'pakai-baju', 'sekolah']), 'Pick a ready-made schedule, or make a new one.', 'Pilih jadwal siap pakai, atau buat yang baru.'],
+      ['<span class="tl-hmini quiet">+ ' + esc(L() === 'id' ? 'Langkah' : 'Step') + '  ↑ ↓  ⏱</span>', 'Add steps. Use ↑ ↓ to change the order and ⏱ to give a step its own timer.', 'Tambah langkah. Pakai ↑ ↓ untuk mengubah urutan, dan ⏱ untuk memberi timer di satu langkah.'],
+      [HP.btn('Show to Child', 'Tunjukkan ke Anak'), 'Tap Show to Child. Your child taps the next step when the current one is done.', 'Ketuk Tunjukkan ke Anak. Anak mengetuk langkah berikutnya setelah langkah sekarang selesai.'],
+      [HP.cards(['sarapan']), 'Tapped too soon? Tap the finished step to go back to it.', 'Kecepetan mengetuk? Ketuk langkah yang sudah selesai untuk kembali.']
+    ]; },
+    breathe: function () { return [
+      [HP.calm(function (C) { return HP.art(C.buddySVG('balloon')); }), 'Pick a buddy: balloon, star, flower, box or Belly Buddy.', 'Pilih gaya: balon, bintang, bunga, kotak, atau Belly Buddy.'],
+      ['<span class="tl-hmini digits">4s · 4s</span>', 'Set the pace and the number of breaths. Your child never sees a countdown.', 'Atur kecepatan dan jumlah napas. Anak tidak melihat hitung mundur.'],
+      ['<span class="tl-hmini quiet">♪</span>', 'Turn on the sounds you want: voice, counting, a soft tone or vibration.', 'Nyalakan suara yang kamu mau: suara, hitungan, nada lembut, atau getar.'],
+      [HP.btn('Show to Child', 'Tunjukkan ke Anak'), 'Tap Show to Child and breathe together: in as it grows, out as it shrinks.', 'Ketuk Tunjukkan ke Anak dan bernapas bareng: tarik saat membesar, buang saat mengecil.']
+    ]; },
+    feelings: function () { return [
+      [HP.calm(function (C) { return '<span class="tl-hcards n2">' + HP.art(C.feelFace('happy', 'boy')) + HP.art(C.feelFace('worried', 'girl')) + '</span>'; }), 'Choose what your child uses: How I feel, Body map, or Calm-down menu.', 'Pilih yang dipakai anak: Perasaanku, Peta tubuh, atau Menu tenang.'],
+      ['<span class="tl-hmini quiet">1 · 2 · 3</span>', 'Pick the feelings to show and how many size levels.', 'Pilih perasaan yang ditampilkan dan berapa tingkat besarnya.'],
+      [HP.cards(['main']), 'For the calm-down menu, add cards that help your child. Practise it on a calm day.', 'Untuk menu tenang, tambahkan kartu yang membantu anak. Latih saat anak sedang tenang.'],
+      [HP.btn('Start', 'Mulai'), 'Tap Start. Nothing is saved: each check-in starts fresh.', 'Ketuk Mulai. Tidak ada yang disimpan, setiap cek mulai dari awal.']
+    ]; },
+    worry: function () { return [
+      [HP.calm(function (C) { return HP.art(C.jarSVG({ n: 2 })); }), 'Choose how your child adds a worry: draw or type.', 'Pilih cara anak menambah kekhawatiran: gambar atau tulis.'],
+      ['<span class="tl-hmini digits">10:00</span>', 'Want to talk later? Turn on “Open the jar together later” and set the time.', 'Mau ngobrol nanti? Nyalakan “Buka toples bersama nanti” dan atur waktunya.'],
+      [HP.btn('Show to Child', 'Tunjukkan ke Anak'), 'Tap Show to Child. Your child draws or writes the worry and drops it in the jar.', 'Ketuk Tunjukkan ke Anak. Anak menggambar atau menulis kekhawatirannya, lalu memasukkannya ke toples.'],
+      [HP.calm(function (C) { return HP.art(C.jarSVG({ n: 3 })); }), 'At worry time, open the jar together and talk each one through.', 'Saat waktunya tiba, buka toples bersama dan bahas satu per satu.']
+    ]; },
+    talk: function () { return [
+      [HP.tool('talk'), 'Pick a game.', 'Pilih game.'],
+      ['<span class="tl-hmini quiet">♡ ☺ ★</span>', 'Choose the topics, or tap a ready-made mix.', 'Pilih topik, atau ketuk campuran yang sudah jadi.'],
+      ['<span class="tl-hmini quiet">+ ' + esc(L() === 'id' ? 'Pemain' : 'Player') + '</span>', 'Add the players.', 'Tambahkan pemain.'],
+      [HP.btn('Start game', 'Mulai game'), 'Take turns. Each question is a chance to chat, there are no wrong answers.', 'Main bergiliran. Setiap pertanyaan jadi bahan ngobrol, tidak ada jawaban yang salah.']
+    ]; },
+    safe: function () { return [
+      [HP.tool('safe'), 'Pick a map layout.', 'Pilih bentuk peta.'],
+      ['<span class="tl-hmini quiet">🎨</span>', 'Pick how it looks.', 'Pilih tampilannya.'],
+      ['<span class="tl-hmini quiet">+ 📷</span>', 'Add the people your child trusts, with a photo if you like, and when to go to each one.', 'Tambahkan orang yang dipercaya anak, boleh pakai foto, dan kapan anak bisa datang ke mereka.'],
+      [HP.dl(), 'Download it as a picture, or a PDF to print.', 'Unduh sebagai gambar, atau PDF untuk dicetak.']
+    ]; },
+    // Problem Sorter is English only for now
+    sorter: function () { return [
+      [HP.tool('sorter'), 'Pick an activity: Size of Problems, Size of Reactions, or both together.', 'Pick an activity: Size of Problems, Size of Reactions, or both together.'],
+      ['<span class="tl-hmini quiet">Small · Medium · Big</span>', 'Drag each card to a size, or tap a size.', 'Drag each card to a size, or tap a size.'],
+      ['<span class="tl-hmini quiet">→</span>', 'Read the message, then tap Next card.', 'Read the message, then tap Next card.'],
+      ['<span class="tl-hmini quiet">✓</span>', 'At the end, talk about the cards in “Cards to talk about”.', 'At the end, talk about the cards in “Cards to talk about”.']
+    ]; }
+  };
+  var HELP_NAME = { timer: 'timer', tokens: 'tokens', ft: 'ft', sched: 'sched' };
+  function openHelp(key) {
+    var f = HELP[key]; if (!f) return;
+    var steps = [];
+    try { steps = f(); } catch (e) { steps = []; }
+    var name = HELP_NAME[key] ? tr(HELP_NAME[key]) : ({ breathe: 'Breathing Buddy', feelings: 'Feelings Check-In', worry: 'Worry Jar', talk: 'Conversation Starters', safe: 'Safe People Map', sorter: 'Problem Sorter' })[key] || '';
+    var id = L() === 'id';
+    var h = '<div class="tl-sheethead"><h2 class="tl-h2">' + esc(id ? 'Cara pakai' : 'How to use') + '</h2><button type="button" class="tl-iconbtn" data-hclose aria-label="' + esc(tr('close')) + '">' + ICO.x + '</button></div>' +
+      '<p class="tl-note2 tl-hname">' + esc(name) + '</p><ol class="tl-hsteps">' + steps.map(function (s, i) {
+        return '<li><span class="tl-hpic">' + (s[0] || '') + '</span><span class="tl-htx"><b>' + (i + 1) + '</b>' + esc(id ? s[2] : s[1]) + '</span></li>';
+      }).join('') + '</ol>';
+    var sh = sheet(h);
+    sh.el.addEventListener('click', function (e) { if (e.target.closest('[data-hclose]')) sh.close(); });
+  }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('[data-help]');
+    if (!b || !HELP[b.dataset.help]) return;
+    e.preventDefault(); e.stopPropagation();
+    openHelp(b.dataset.help);
+  }, true);
 
   /* ===================== sheets (bottom sheets / dialogs) ===================== */
   var sheetStack = [];
@@ -1043,10 +1153,6 @@
         var cur = pending[0], nxt = pending[1];
         var visible = steps;
         if (cfg.done === 'move') visible = steps.filter(function (x) { return st.done.indexOf(x.i) < 0; });
-        if (cfg.show === 'next3') {
-          var ci = cur ? cur.i : steps.length;
-          visible = visible.filter(function (x) { return x.i >= ci - (cfg.done === 'move' ? 0 : 1) && x.i < ci + 3; });
-        }
         var h = '<div class="tl-cwrap sched ' + cfg.layout + '">' + exitPill() +
           '<div class="tl-schedbar"><div class="tl-eyebrow">' + esc(schedName(s)) + '</div>' +
           (cur ? '<button type="button" class="tl-replan" data-replan>' + ICO.replan + '<span>' + dual(T.changePlan[1], T.changePlan[0]) + '</span></button>' : '') + '</div><div class="tl-steps">';
@@ -1126,7 +1232,8 @@
         '<span class="tl-tcat ' + grp + '">' + esc(tr(GRP[grp] || 'grpRoutine')) + '</span>' +
         (soon ? '<span class="tl-soon">' + esc(tr('soon')) + '</span></div>' : '<span class="tl-topen">' + esc(tr('open')) + ' <span aria-hidden="true">→</span></span></a>');
     }
-    var ext = EXT_ORDER.map(function (r) { var e = EXT[r]; return e.card ? [r, '', e.card.tint, r, e.card.vis(), e.card.title(), e.card.desc(), e.card.grp || 'emo'] : null; }).filter(Boolean);
+    // card.order puts a tool later within its group (stable sort keeps everything else in registration order)
+    var ext = EXT_ORDER.slice().sort(function (a, b) { return ((EXT[a].card || {}).order || 0) - ((EXT[b].card || {}).order || 0); }).map(function (r) { var e = EXT[r]; return e.card ? [r, '', e.card.tint, r, e.card.vis(), e.card.title(), e.card.desc(), e.card.grp || 'emo'] : null; }).filter(Boolean);
     var soon = (A.soon || []).map(function (s) { return [s.k, '', s.tint, '', vis(s.k), L() === 'id' ? s.idn : s.en, L() === 'id' ? s.d[1] : s.d[0], s.grp, true]; });
     var all = t.map(function (x) { return x.concat(['', '', 'routine']); }).concat(ext, soon);
     return '<div class="tl-tlist">' + ['routine', 'emo', 'talk', 'teach'].map(function (g) {
@@ -1278,7 +1385,7 @@
   /* ---------- timer page ---------- */
   function pageTimer() {
     var c = D().timer;
-    return '<div class="tl-page narrow">' + topbar(tr('timer'), tr('parentSetup'), { dl: true }) +
+    return '<div class="tl-page narrow">' + topbar(tr('timer'), tr('parentSetup'), { help: 'timer' }) +
       '<div class="tl-previewbox" style="background:#DCEBFA"><div class="tl-pv' + (isFun(c.style) ? ' wide' : '') + '">' + timerSVG(c.style, c.style === 'bar' || isFun(c.style) ? 0.6 : 0.75) + '</div><div><div class="tl-pvtime">' + fmt(timerSecs(c) * 1000) + '</div><small>' + esc(tr('preview')) + '</small></div></div>' +
       '<div class="tl-lab2">' + esc(tr('style')) + '</div><div class="tl-grid three">' + [['circle', 'circle'], ['sand', 'sand'], ['bar', 'bar']].map(function (s) {
         return '<button type="button" class="tl-opt' + (c.style === s[0] ? ' on' : '') + '" data-tstyle="' + s[0] + '"><span class="tl-optvis">' + timerSVG(s[0], 0.6) + '</span><b>' + esc(tr(s[1])) + '</b></button>';
@@ -1296,7 +1403,7 @@
   function pageTokens() {
     var c = D().tokens, p = prof();
     var favs = ((p && p.rewards) || DEFAULT_REWARDS).filter(function (r) { return cardInfo(r); });
-    return '<div class="tl-page narrow">' + topbar(tr('tokens'), tr('parentSetup'), { dl: true }) +
+    return '<div class="tl-page narrow">' + topbar(tr('tokens'), tr('parentSetup'), { help: 'tokens' }) +
       '<div class="tl-lab2 between"><span>' + esc(tr('working')) + '</span><button type="button" class="tl-link" data-act="kreward">' + esc(tr('change')) + ' ›</button></div>' +
       '<div class="tl-panel col"><div class="tl-rewardrow">' + (cardInfo(c.reward) ? cardHTML(c.reward, { size: 'm', state: 'selected' }) : '') + '<div><small>' + esc(tr('favs', p ? p.name : (L() === 'id' ? 'anak' : 'Child'))) + '</small><div class="tl-strip">' +
       favs.filter(function (r) { return r !== c.reward; }).slice(0, 4).map(function (r) { return cardHTML(r, { size: 'xs', attrs: ' data-reward="' + r + '"', labels: 'none' }); }).join('') + '</div></div></div></div>' +
@@ -1306,7 +1413,7 @@
         return '<button type="button" class="tl-shape' + (c.shape === s ? ' on' : '') + '" data-shape="' + s + '">' + A.token(s, true) + '<small>' + esc(tr('star' + s[0].toUpperCase() + s.slice(1))) + '</small></button>';
       }).join('') + '</div>' +
       '<div class="tl-board-preview">' + Array.from({ length: c.count }, function (_, i) { return '<span class="tl-tok' + (i < c.earned ? ' on' : '') + '">' + A.token(c.shape, i < c.earned) + '</span>'; }).join('') + '</div>' +
-      '<div class="tl-foot"><button type="button" class="tl-btn primary lg block" data-act="kstart">' + esc(tr('startChild')) + '</button></div></div>';
+      '<div class="tl-foot">' + startRow('<button type="button" class="tl-btn primary lg block" data-act="kstart">' + esc(tr('startChild')) + '</button>', true) + '</div></div>';
   }
 
   /* ---------- dropdown (schedules and First–Then boards) ---------- */
@@ -1320,7 +1427,7 @@
   function pageFT() {
     var d = D(), c = d.ft, b = activeBoard();
     var ready = b && b.first && b.then[0];
-    var h = '<div class="tl-page narrow">' + topbar(tr('ft'), tr('parentSetup'), { dl: !!ready }) +
+    var h = '<div class="tl-page narrow">' + topbar(tr('ft'), tr('parentSetup'), { help: 'ft' }) +
       '<div class="tl-lab2">' + esc(tr('board')) + '</div><div class="tl-dd"><div class="tl-schedsel">' + ddButton('ft', b ? boardName(b) : tr('boardPick'), !b) +
       (b ? '<button type="button" class="tl-iconbtn" data-act="fmenu" aria-label="More">···</button>' : '') + '</div>';
     if (DD === 'ft') {
@@ -1351,14 +1458,14 @@
       '<p class="tl-autosave">✓ ' + esc(tr('autoSaved')) + '</p>' +
       '<div class="tl-panel">' + row(esc(tr('offerChoice')), esc(tr('offerChoiceD')), toggle('choice', c.choice)) + row(esc(tr('timerBtn')), esc(tr('timerBtnD', fmt(timerSecs(ftTime(c)) * 1000))), toggle('timerBtn', c.timerBtn)) + '</div>' +
       (c.timerBtn ? '<div class="tl-lab2">' + esc(tr('time')) + '</div>' + digitalTime(ftTime(c), 'ftdig') : '') +
-      '<div class="tl-foot"><button type="button" class="tl-btn primary lg block" data-act="fstart"' + (ready ? '' : ' disabled') + '>' + esc(tr('startChild')) + '</button></div></div>';
+      '<div class="tl-foot">' + startRow('<button type="button" class="tl-btn primary lg block" data-act="fstart"' + (ready ? '' : ' disabled') + '>' + esc(tr('startChild')) + '</button>', !!ready) + '</div></div>';
     return h;
   }
 
   /* ---------- schedule page ---------- */
   function pageSched() {
     var d = D(), s = activeSched(), c = d.sched;
-    var h = '<div class="tl-page narrow">' + topbar(tr('sched'), tr('parentSetup'), { dl: !!(s && s.steps.length) }) +
+    var h = '<div class="tl-page narrow">' + topbar(tr('sched'), tr('parentSetup'), { help: 'sched' }) +
       '<div class="tl-lab2">' + esc(tr('schedule')) + '</div><div class="tl-dd"><div class="tl-schedsel">' + ddButton('sched', s ? schedName(s) : tr('schedPick'), !s) +
       (s ? '<button type="button" class="tl-iconbtn" data-act="smenu" aria-label="More">···</button>' : '') + '</div>';
     if (DD === 'sched') {
@@ -1386,8 +1493,7 @@
       }).join('') + '</div>' : '<p class="tl-note2">' + esc(tr('emptySched')) + '</p>') +
       '<button type="button" class="tl-addstep" data-act="sadd">' + esc(tr('addStep')) + '</button>' +
       '<div class="tl-lab2">' + esc(tr('layout')) + '</div>' + seg('slayout', [['vertical', tr('vertical')], ['horizontal', tr('horizontal')]], c.layout) +
-      '<div class="tl-lab2">' + esc(tr('show')) + '</div>' + seg('sshow', [['all', tr('wholeDay')], ['next3', tr('next3')]], c.show) +
-      '<div class="tl-foot"><button type="button" class="tl-btn primary lg block" data-act="sstart"' + (s.steps.length ? '' : ' disabled') + '>' + esc(tr('startChild')) + '</button></div></div>';
+      '<div class="tl-foot">' + startRow('<button type="button" class="tl-btn primary lg block" data-act="sstart"' + (s.steps.length ? '' : ' disabled') + '>' + esc(tr('startChild')) + '</button>', !!s.steps.length) + '</div></div>';
     return h;
   }
 
@@ -1589,12 +1695,25 @@
   }
 
   /* ===================== downloads (lazy) ===================== */
+  var PRINT_JS = null;
+  function loadPrint() {
+    if (window.LUPrint) return Promise.resolve();
+    if (!PRINT_JS) PRINT_JS = new Promise(function (res, rej) {
+      var s = document.createElement('script'); s.src = '/tools-print.js?v=' + VERSION; s.onload = res;
+      s.onerror = function () { PRINT_JS = null; s.remove(); rej(); };
+      document.head.appendChild(s);
+    });
+    return PRINT_JS;
+  }
+  // a page with a Download button gets the download code and its fonts ready in the background
+  function prefetchPrint() {
+    var go = function () { loadPrint().then(function () { window.LUPrint.warm && window.LUPrint.warm(); }).catch(function () { }); };
+    if (window.requestIdleCallback) requestIdleCallback(go, { timeout: 3000 }); else setTimeout(go, 1200);
+  }
   function openDownload(kind, ctx) {
-    var go2 = function () { window.LUPrint.open(kind, ctx || {}, API); };
-    if (window.LUPrint) return go2();
-    var s = document.createElement('script'); s.src = '/tools-print.js?v=' + VERSION; s.onload = go2;
-    s.onerror = function () { toast(L() === 'id' ? 'Gagal memuat. Periksa koneksi.' : "Couldn't load. Check your connection."); };
-    document.head.appendChild(s);
+    loadPrint().then(function () { window.LUPrint.open(kind, ctx || {}, API); }, function () {
+      toast(L() === 'id' ? 'Gagal memuat. Cek koneksi internetmu.' : "Couldn't load. Check your connection.");
+    });
   }
 
   /* ===================== render + events ===================== */
@@ -1607,6 +1726,7 @@
     ROOT.innerHTML = html;
     if (PAGE.keepScroll) window.scrollTo(0, y);
     PAGE.keepScroll = false;
+    if (!window.LUPrint && ROOT.querySelector('[data-act="download"]')) prefetchPrint();
     document.documentElement.classList.toggle('tl-still', !!S.settings.reduce);
     var q = ROOT.querySelector('#tlLibQ');
     if (q) q.oninput = LU.debounce(function () { LIB.q = q.value; PAGE.keepScroll = true; render(); var n = ROOT.querySelector('#tlLibQ'); n.focus(); n.setSelectionRange(n.value.length, n.value.length); }, 180);
@@ -1800,11 +1920,11 @@
   }
 
   /* ===================== mount ===================== */
-  var VERSION = '14';
+  var VERSION = '16';
   var READY = null;
   var API = {
     S: function () { return S; }, D: D, activeBoard: activeBoard, prof: prof, cardInfo: cardInfo, labelsFor: labelsFor, artHTML: artHTML, cardHTML: cardHTML, kidFor: kidFor,
-    PH: PH, tr: tr, L: L, esc: esc, sheet: sheet, save: save, keep: keep, rerender: rerender, openPicker: openPicker, topbar: topbar, row: row, toggle: toggle, seg: seg,
+    PH: PH, tr: tr, L: L, esc: esc, sheet: sheet, save: save, keep: keep, rerender: rerender, openPicker: openPicker, topbar: topbar, startRow: startRow, helpBtn: helpBtn, openHelp: openHelp, row: row, toggle: toggle, seg: seg,
     childOpen: childOpen, childClose: childClose, childClear: childClear, addTimer: function (t) { CH.timers.push(t); }, childEl: function () { return CH.el; }, exitPill: exitPill, wireExit: wireExit,
     chime: chime, say: say, buzz: buzz, setLast: setLast, runTimer: runTimer, photoPut: photoPut, photoDel: photoDel, cardLabel: cardLabel, adultCheck: adultCheck, openDownload: openDownload,
     profName: profName, route: function () { return ROUTE; }, openProfiles: function () { return openProfiles(); }, deleteProfile: deleteProfile, delConfirm: delConfirm, delBtn: delBtn, photosLoad: function () { return READY = READY || photosLoad(); }, COLORS: COLORS, DEFAULT_REWARDS: DEFAULT_REWARDS, appMode: appMode, A: A, fmt: fmt, schedName: schedName, activeSched: activeSched, timerSVG: timerSVG, timerSet: timerSet, T: T, canUse: canUse, toast: toast, heart: A.heart
@@ -1843,12 +1963,17 @@
   // Conversation Starters is a large script that loads only when it is opened; until then the tools list shows this card
   window.LUTools.register('tools/conversation-starters', { card: { grp: 'talk', tint: '#FFF1C7',
     vis: function () { return '<div class="tl-mini-art">' + (A.toolArt ? A.toolArt('talk') : '') + '</div>'; },
-    title: function () { return L() === 'id' ? 'Pembuka Obrolan' : 'Conversation Starters'; },
+    title: function () { return L() === 'id' ? 'Conversation Starters' : 'Conversation Starters'; },
     desc: function () { return L() === 'id' ? 'Permainan papan dan permainan seru untuk dimainkan anak bersama orang dewasa. Setiap giliran membuka obrolan hangat tentang perasaan, teman, dan pilihan.' : 'Board and party games for a grown-up and child to play together. Each turn opens up a gentle chat about feelings, friends and choices.'; } } });
   window.LUTools.register('tools/safe-people', { card: { grp: 'talk', tint: '#DDF2E4',
     vis: function () { return '<div class="tl-mini-art">' + (A.toolArt ? A.toolArt('safe') : '') + '</div>'; },
-    title: function () { return L() === 'id' ? 'Peta Orang Aman' : 'Safe People Map'; },
+    title: function () { return L() === 'id' ? 'Safe People Map' : 'Safe People Map'; },
     desc: function () { return L() === 'id' ? 'Anak dan orang dewasa memetakan bersama orang-orang yang dipercaya anak, dan kapan harus menghampiri mereka.' : 'A child and a grown-up map out, together, the people the child trusts and when to go to each of them.'; } } });
+  // Problem Sorter (tools-sorter.js) loads only when it is opened; until then the tools list shows this card. English only for now.
+  window.LUTools.register('tools/problem-sorter', { card: { grp: 'emo', tint: '#FFE9DA', order: 1,
+    vis: function () { return '<div class="tl-mini-art">' + (A.toolArt ? A.toolArt('sorter') : '') + '</div>'; },
+    title: function () { return 'Problem Sorter'; },
+    desc: function () { return 'Learn to match the size of a reaction to the size of the problem.'; } } });
   // Discrete Trial Teaching opens as its own full-screen page (/dtt); #/tools/dtt redirects there
   window.LUTools.register('tools/dtt', { card: { grp: 'teach', tint: '#FFF1C7',
     vis: function () { return '<div class="tl-mini-art">' + (A.toolArt ? A.toolArt('dtt') : '') + '</div>'; },

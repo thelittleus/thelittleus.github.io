@@ -6,23 +6,25 @@
   var A = window.LUArt;
   var X = null; // tools api
   var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
-  var PAPER = { a4: [210, 297], f4: [215, 330], letter: [216, 279] };
+  var PAPER = { a4: [210, 297] }; // every download is A4
   var SIZE = { s: 38, m: 52, l: 66 };
   var INK = '#2B2A35', LINE = '#D8CFC0', MUTED = '#6B6875';
   var FONT = "Fredoka, 'Arial Rounded MT Bold', 'Trebuchet MS', Arial, sans-serif";
   var BODY = "Figtree, 'Segoe UI', Arial, sans-serif";
 
   var W = {
-    title: { en: 'Download', id: 'Unduh' }, format: { en: 'Format', id: 'Format' }, pdf: { en: 'PDF · for printing', id: 'PDF · untuk dicetak' }, png: { en: 'Picture · PNG', id: 'Gambar · PNG' },
-    paper: { en: 'Paper size', id: 'Ukuran kertas' }, colour: { en: 'Colour', id: 'Warna' }, colourOn: { en: 'Colour', id: 'Berwarna' }, ink: { en: 'Ink-saving outline', id: 'Garis hemat tinta' },
+    title: { en: 'Download', id: 'Unduh' }, format: { en: 'Format', id: 'Format' }, printAs: { en: 'Print as', id: 'Cetak sebagai' },
+    pdf: { en: 'PDF', id: 'PDF' }, png: { en: 'Picture · PNG', id: 'Gambar · PNG' },
+    poster: { en: 'Poster · PNG', id: 'Poster · PNG' }, cutting: { en: 'Cutting activity · PDF', id: 'Kartu gunting · PDF' },
+    posterD: { en: 'Ready to hang up. Nothing to cut, glue or stick.', id: 'Siap ditempel. Tidak perlu digunting, dilem, atau ditempel velcro.' },
+    cuttingD: { en: 'Picture cards to cut out.', id: 'Kartu bergambar untuk digunting.' },
     labels: { en: 'Labels', id: 'Label' }, both: { en: 'Both', id: 'Keduanya' }, none: { en: 'None', id: 'Tanpa' },
     size: { en: 'Card size', id: 'Ukuran kartu' }, s: { en: 'Small', id: 'Kecil' }, m: { en: 'Medium', id: 'Sedang' }, l: { en: 'Large', id: 'Besar' },
-    cut: { en: 'Dashed cut lines', id: 'Garis potong putus-putus' }, velcro: { en: 'Velcro dot markers', id: 'Tanda titik velcro' }, velcroD: { en: 'Shows where to stick the dots', id: 'Menunjukkan tempat menempel titik velcro' },
-    instr: { en: 'Instruction sheet for the adult', id: 'Lembar petunjuk untuk orang dewasa' }, instrD: { en: 'One extra page, how to use the board', id: 'Satu halaman tambahan, cara memakai papan' },
+    instr:{ en: 'Instruction sheet for the adult', id: 'Lembar petunjuk untuk orang dewasa' }, instrD: { en: 'One extra page, how to use the board', id: 'Satu halaman tambahan, cara memakai papan' },
     dlPdf: { en: '↓ Download PDF', id: '↓ Unduh PDF' }, dlPng: { en: '↓ Download picture', id: '↓ Unduh gambar' }, made: { en: 'Made on this device. Works offline.', id: 'Dibuat di perangkat ini. Bisa offline.' },
     pages: { en: function (n) { return n + (n === 1 ? ' page' : ' pages') + ' · live'; }, id: function (n) { return n + ' halaman · langsung'; } },
-    working: { en: "I'm working for…", id: 'Aku sedang bekerja untuk…' }, cutTok: { en: 'Cut-out tokens', id: 'Token untuk digunting' }, cutCards: { en: 'Cut-out cards', id: 'Kartu untuk digunting' },
-    first: { en: 'First', id: 'Pertama' }, then: { en: 'Then', id: 'Lalu' }, done: { en: 'Done', id: 'Selesai' }, wait: { en: 'Wait', id: 'Tunggu' }, finish: { en: 'Time to finish', id: 'Waktunya selesai' },
+    working: { en: "I'm working for…", id: 'Aku mau dapat…' }, cutTok: { en: 'Cut-out tokens', id: 'Token untuk digunting' }, cutCards: { en: 'Cut-out cards', id: 'Kartu untuk digunting' },
+    first: { en: 'First', id: 'Pertama' }, then: { en: 'Then', id: 'Setelah itu' }, done: { en: 'Done', id: 'Selesai' }, wait: { en: 'Wait', id: 'Tunggu' }, finish: { en: 'Time to finish', id: 'Waktunya selesai' },
     cover: { en: 'Cover a number each minute', id: 'Tutup satu angka setiap menit' }, making: { en: 'Making your file…', id: 'Sedang membuat file…' },
     cards: { en: 'Cards', id: 'Kartu' }, tokensN: { en: function (n) { return n + ' tokens'; }, id: function (n) { return n + ' token'; } },
     howTo: { en: 'How to use it', id: 'Cara memakainya' }, fail: { en: "Sorry, the file couldn't be made. Please try again.", id: 'Maaf, file belum berhasil dibuat. Coba lagi ya.' },
@@ -35,24 +37,24 @@
 
   var INSTR = {
     tokens: {
-      en: ['Choose the reward together before you start, and put its card at the top.', 'Give a token straight after the behaviour you want to see more of, and say what it was for ("You put your shoes on, here is a star").', 'Never take tokens away. What your child earns, they keep.', 'When the board is full, give the reward right away, then start a new board.', 'Start with few tokens so success comes quickly, then add more over time.'],
-      id: ['Pilih hadiah bersama sebelum mulai, lalu tempel kartunya di atas.', 'Beri token segera setelah perilaku yang ingin ditambah, dan sebutkan alasannya ("Kamu pakai sepatu sendiri, ini bintangnya").', 'Jangan pernah mengambil token. Yang sudah didapat anak, tetap miliknya.', 'Saat papan penuh, langsung berikan hadiahnya, lalu mulai papan baru.', 'Mulai dengan sedikit token agar anak cepat berhasil, lalu tambah perlahan.']
+      en: ['Before you start, show your child the reward at the top of the board.', 'Give a token straight after the behaviour you want to see more of, and say what it was for ("You put your shoes on, here is a star").', 'Never take tokens away. What your child earns, they keep.', 'When the board is full, give the reward right away, then start a new board.', 'Start with few tokens so success comes quickly, then add more over time.'],
+      id: ['Sebelum mulai, tunjukkan hadiah di bagian atas papan kepada anak.','Beri token segera setelah anak menunjukkan perilaku yang ingin dilatih, dan sebutkan alasannya (“Kamu pakai sepatu sendiri, ini bintangnya”).', 'Jangan pernah mengambil token. Yang sudah didapat anak, tetap miliknya.', 'Saat papan penuh, langsung berikan hadiahnya, lalu mulai papan baru.', 'Mulai dengan sedikit token agar anak cepat berhasil, lalu tambah perlahan.']
     },
     ft: {
       en: ['Put the task in "First" and something your child enjoys in "Then".', 'Point and say it simply: "First bath, then play."', 'When "First" is finished, move or tick it, and give "Then" straight away.', 'Keep the words the same each time so the board becomes familiar.'],
-      id: ['Taruh tugas di "Pertama" dan hal yang disukai anak di "Lalu".', 'Tunjuk sambil bilang singkat: "Pertama mandi, lalu main."', 'Saat "Pertama" selesai, pindahkan atau centang, lalu langsung berikan "Lalu".', 'Pakai kata yang sama setiap kali agar papan terasa akrab.']
+      id: ['Taruh tugas di “Pertama” dan hal yang disukai anak di “Setelah itu”.', 'Tunjuk sambil bilang singkat: "Pertama mandi, lalu main."', 'Saat “Pertama” selesai, pindahkan atau centang, lalu langsung berikan “Setelah itu”.', 'Pakai kata yang sama setiap kali agar papan terasa akrab.']
     },
     sched: {
-      en: ['Go through the schedule together before the routine starts.', 'Point to the current step and say it simply.', 'When a step is done, move its card to "Done" or cross it out.', 'If plans change, show the change on the schedule before it happens.', 'Keep the schedule where your child can see it.'],
-      id: ['Lihat jadwal bersama sebelum rutinitas dimulai.', 'Tunjuk langkah yang sedang berjalan dan sebutkan dengan singkat.', 'Saat langkah selesai, pindahkan kartunya ke "Selesai" atau coret.', 'Jika rencana berubah, tunjukkan perubahannya di jadwal sebelum terjadi.', 'Letakkan jadwal di tempat yang mudah dilihat anak.']
+      en: ['Go through the schedule together before the routine starts.', 'Point to the current step and say it simply.', 'When a step is done, tick it or cross it out together.', 'If plans change, show the change on the schedule before it happens.', 'Keep the schedule where your child can see it.'],
+      id: ['Lihat jadwal bersama sebelum rutinitas dimulai.', 'Tunjuk langkah yang sedang berjalan dan sebutkan dengan singkat.', 'Saat langkah selesai, centang atau coret bersama anak.', 'Jika rencana berubah, tunjukkan perubahannya di jadwal sebelum terjadi.', 'Letakkan jadwal di tempat yang mudah dilihat anak.']
     },
     timer: {
       en: ['Show the "Wait" card and say how long: "Wait, five minutes."', 'Cover one number on the strip each minute, or point to it as time passes.', 'At the end, show "Time to finish" and move to what comes next.', 'Use the same signal every time so waiting feels predictable.'],
-      id: ['Tunjukkan kartu "Tunggu" dan sebutkan lamanya: "Tunggu, lima menit."', 'Tutup satu angka setiap menit, atau tunjuk angkanya seiring waktu berjalan.', 'Di akhir, tunjukkan "Waktunya selesai" lalu lanjut ke kegiatan berikutnya.', 'Pakai tanda yang sama setiap kali agar menunggu terasa bisa ditebak.']
+      id: ['Tunjukkan kartu "Tunggu" dan sebutkan lamanya: "Tunggu, lima menit."', 'Tutup satu angka setiap menit, atau tunjuk angkanya seiring waktu berjalan.', 'Di akhir, tunjukkan "Waktunya selesai" lalu lanjut ke kegiatan berikutnya.', 'Pakai tanda yang sama setiap kali, supaya anak tahu apa yang akan terjadi saat menunggu.']
     },
     cards: {
-      en: ['Cut along the dashed lines. Laminate the cards if you can, so they last.', 'Add a Velcro dot to the back of each card.', 'Use one picture for one idea, and say the word as you show the card.'],
-      id: ['Gunting mengikuti garis putus-putus. Laminasi kartu jika bisa, agar awet.', 'Tempel titik velcro di belakang setiap kartu.', 'Satu gambar untuk satu hal, dan ucapkan katanya saat menunjukkan kartu.']
+      en: ['Cut out each card along its edge. Laminate the cards if you can, so they last.', 'Use one picture for one idea, and say the word as you show the card.'],
+      id: ['Gunting setiap kartu mengikuti tepinya. Laminasi kartu jika bisa, agar awet.', 'Satu gambar untuk satu hal, dan ucapkan katanya saat menunjukkan kartu.']
     }
   };
 
@@ -146,7 +148,7 @@
   function instrPage(kind, o, pw, ph, customTitle) {
     var lang = X.L();
     var lines = typeof kind === 'object' ? kind[lang] : INSTR[kind] ? INSTR[kind][lang] : [];
-    var title = customTitle || { tokens: 'Token Board', ft: lang === 'id' ? 'Papan Pertama–Lalu' : 'First–Then Board', sched: lang === 'id' ? 'Jadwal Visual' : 'Visual Schedule', timer: lang === 'id' ? 'Timer Visual' : 'Visual Timer', cards: lang === 'id' ? 'Kartu Gambar' : 'Picture Cards' }[kind];
+    var title = customTitle || { tokens: 'Token Board', ft: lang === 'id' ? 'First–Then Board' : 'First–Then Board', sched: lang === 'id' ? 'Visual Schedule' : 'Visual Schedule', timer: lang === 'id' ? 'Visual Timer' : 'Visual Timer', cards: lang === 'id' ? 'Kartu Bergambar' : 'Picture Cards' }[kind];
     var g = text(14, 30, title, 11) + text(14, 40, lang === 'id' ? W.howTo.id : W.howTo.en, 6, { fill: MUTED, body: true, weight: 500 }), y = 56;
     lines.forEach(function (ln, i) {
       g += '<circle cx="19" cy="' + (y - 1.6) + '" r="4.2" fill="' + ['#FFF1C7', '#DDF2E4', '#DCEBFA', '#E9E1F7', '#FBE0E6'][i % 5] + '"/>' + text(19, y, String(i + 1), 4.2, { anchor: 'middle' });
@@ -160,8 +162,13 @@
   }
 
   /* ---------- page builders per tool ---------- */
+  // tools that print two different things: a finished poster (PNG) or picture cards to cut out (PDF)
+  function hasModes(kind, ctx) { return ctx && ctx.build ? !!ctx.modes : kind === 'sched' || kind === 'ft'; }
+  function uniq(list) { return list.filter(function (v, i, a) { return a.indexOf(v) === i; }); }
   function build(kind, ctx, o) {
-    var pp = PAPER[o.paper], pw = pp[0], ph = pp[1], d = X.D(), out = [];
+    var pp = PAPER.a4, pw = pp[0], ph = pp[1], d = X.D(), out = [];
+    o = Object.assign({}, o, { cut: false, velcro: false });
+    o.mode = hasModes(kind, ctx) ? (o.format === 'pdf' ? 'cut' : 'poster') : '';
     // tools from tools-calm.js bring their own page builder
     if (ctx && ctx.build) {
       out = ctx.build(o, pw, ph, H);
@@ -172,78 +179,60 @@
     if (kind === 'tokens') {
       var c = d.tokens, n = c.count, g = '';
       g += heading(pw / 2, 30, 'working', mode, 11, 'middle');
+      // the chosen reward is printed in its place; the token circles stay empty
       var rs = 70, rx = (pw - rs) / 2, ry = 46;
-      if (o.velcro) {
-        g += '<rect x="' + rx + '" y="' + ry + '" width="' + rs + '" height="' + rs + '" rx="8" fill="none" stroke="#C9BFAE" stroke-width=".6" stroke-dasharray="3 2"/>' + velcro(pw / 2, ry + rs / 2, 5);
-      } else g += pcard(c.reward, rx, ry, rs, o).svg;
+      g += pcard(c.reward, rx, ry, rs, o).svg;
       var per = Math.min(5, n), rows = Math.ceil(n / per), dd = Math.min(32, (pw - 40 - (per - 1) * 6) / per), ty = ry + rs + 28;
       for (var i = 0; i < n; i++) {
         var row = Math.floor(i / per), inRow = row === rows - 1 ? n - row * per : per, col = i - row * per;
         var cx = pw / 2 - (inRow * dd + (inRow - 1) * 6) / 2 + col * (dd + 6) + dd / 2, cy = ty + row * (dd + 8) + dd / 2;
-        g += '<circle cx="' + cx + '" cy="' + cy + '" r="' + dd / 2 + '" fill="none" stroke="#C9BFAE" stroke-width=".6" stroke-dasharray="2.5 2"/>' + (o.velcro ? velcro(cx, cy, 3.4) : '');
+        g += '<circle cx="' + cx + '" cy="' + cy + '" r="' + dd / 2 + '" fill="#FBF8F3" stroke="#C9BFAE" stroke-width=".6" stroke-dasharray="2.5 2"/>';
       }
       var p = X.prof();
       g += text(pw / 2, ty + rows * (dd + 8) + 8, (p ? p.name + ' · ' : '') + w('tokensN', n), 4.2, { anchor: 'middle', fill: MUTED, body: true, weight: 500 });
       out.push(page(pw, ph, g));
-      // cut-out tokens + reward cards
-      var g2 = heading(14, 22, 'cutTok', mode, 7.5), ts = 36, cols = Math.floor((pw - 28) / ts), cnt = Math.min(cols * 4, Math.max(n * 2, cols * 2));
-      var sx = (pw - cols * ts) / 2;
-      for (var k = 0; k < cnt; k++) {
-        var x = sx + (k % cols) * ts, y = 30 + Math.floor(k / cols) * ts;
-        if (o.cut) g2 += cutRect(x, y, ts, ts);
-        g2 += nest(A.token(c.shape, true), x + 3, y + 3, ts - 6);
+      // the tokens on their own page, the same size as the empty circles
+      var tsz = dd - 1, cell = dd + 4, cols = Math.max(1, Math.min(n, Math.floor((pw - 28) / cell))), sx = (pw - cols * cell) / 2, g2 = heading(14, 22, 'cutTok', mode, 7.5);
+      for (var k = 0; k < n; k++) {
+        var x = sx + (k % cols) * cell + (cell - tsz) / 2, y = 32 + Math.floor(k / cols) * cell;
+        g2 += nest(A.token(c.shape, true), x, y, tsz);
       }
-      var ry2 = 30 + Math.ceil(cnt / cols) * ts + 10, rewards = [c.reward].concat((p && p.rewards) || []).filter(function (v, i2, a) { return a.indexOf(v) === i2 && X.cardInfo(v); }).slice(0, 4);
-      var s = Math.min(SIZE[o.size], (pw - 28 - 3 * 6) / 4), chh = cardH(s, o) + 8, cw = s + 8;
-      var rx2 = (pw - (rewards.length * cw + (rewards.length - 1) * 4)) / 2;
-      if (ry2 + chh < ph - 20) rewards.forEach(function (r, i3) { var x3 = rx2 + i3 * (cw + 4); if (o.cut) g2 += cutRect(x3, ry2, cw, chh); g2 += pcard(r, x3 + 4, ry2 + 4, s, o).svg; });
       out.push(page(pw, ph, g2));
     } else if (kind === 'ft') {
-      var f = d.ft, lw = ph, lh = pw; // landscape
-      var g3 = '', bw = (lw - 28 - 24) / 2, bh = lh - 60, by = 24;
-      ['first', 'then'].forEach(function (k2, idx) {
-        var bx = 14 + idx * (bw + 24);
-        g3 += '<rect x="' + bx + '" y="' + by + '" width="' + bw + '" height="' + bh + '" rx="10" fill="#fff" stroke="' + INK + '" stroke-width="1"/>';
-        g3 += heading(bx + bw / 2, by + 16, k2, mode, 12, 'middle');
-        var ref = k2 === 'first' ? f.first : f.then[0];
-        var cs = Math.min(bh - 50, bw - 30);
-        if (o.velcro) g3 += '<rect x="' + (bx + (bw - cs) / 2) + '" y="' + (by + 30) + '" width="' + cs + '" height="' + cs + '" rx="7" fill="none" stroke="#C9BFAE" stroke-width=".6" stroke-dasharray="3 2"/>' + velcro(bx + bw / 2, by + 30 + cs / 2, 5);
-        else g3 += pcard(ref, bx + (bw - cs) / 2, by + 28, cs, o).svg;
-      });
-      g3 += text(lw / 2, by + bh / 2 + 4, '→', 14, { anchor: 'middle' });
-      out.push(page(lw, lh, g3));
-      out = out.concat(cardPages([f.first].concat(f.then).filter(function (v, i4, a) { return a.indexOf(v) === i4; }), o, pw, ph, 'cutCards'));
+      var f = d.ft;
+      if (o.mode === 'cut') out = cardPages(uniq([f.first].concat(f.then)), o, pw, ph, 'cutCards');
+      else {
+        // the finished board, pictures already in place (landscape)
+        var lw = ph, lh = pw, g3 = '', bw = (lw - 28 - 24) / 2, bh = lh - 60, by = 24;
+        ['first', 'then'].forEach(function (k2, idx) {
+          var bx = 14 + idx * (bw + 24);
+          g3 += '<rect x="' + bx + '" y="' + by + '" width="' + bw + '" height="' + bh + '" rx="10" fill="#fff" stroke="' + INK + '" stroke-width="1"/>';
+          g3 += heading(bx + bw / 2, by + 16, k2, mode, 12, 'middle');
+          var cs = Math.min(bh - 50, bw - 30);
+          g3 += pcard(k2 === 'first' ? f.first : f.then[0], bx + (bw - cs) / 2, by + 28, cs, o).svg;
+        });
+        g3 += text(lw / 2, by + bh / 2 + 4, '→', 14, { anchor: 'middle' });
+        out.push(page(lw, lh, g3));
+      }
     } else if (kind === 'sched') {
       var s2 = X.activeSched(); if (!s2) return out;
       var steps = s2.steps.map(function (x) { return x.card; });
-      if (o.format === 'png') {
-        // a tall picture for the phone
-        var phW = 108, n2 = steps.length, rowH = 26, phH = Math.max(192, 40 + n2 * (rowH + 4) + 24);
-        var g4 = '<rect width="' + phW + '" height="' + phH + '" fill="#FBF8F3"/>' + text(8, 18, X.schedName(s2), 8);
-        steps.forEach(function (r, i5) {
-          var y5 = 28 + i5 * (rowH + 4), info = X.cardInfo(r), lb = X.labelsFor(info, mode === 'none' ? X.L() : mode);
-          g4 += '<rect x="8" y="' + y5 + '" width="' + (phW - 16) + '" height="' + rowH + '" rx="6" fill="#fff" stroke="#ECE6DC" stroke-width=".5"/>' + pcard(r, 11, y5 + 3, rowH - 6, Object.assign({}, o, { labels: 'none' })).svg +
-            text(11 + rowH, y5 + rowH / 2 + (lb.sub ? 0 : 2.4), lb.main || '', 6.4) + (lb.sub ? text(11 + rowH, y5 + rowH / 2 + 5.6, lb.sub, 4, { fill: MUTED, body: true, weight: 500 }) : '');
+      if (o.mode === 'cut') out = cardPages(uniq(steps), o, pw, ph, 'cutCards');
+      else {
+        // the finished schedule: every step in order with its picture and words
+        var g5 = text(14, 28, X.schedName(s2), 11), n3 = steps.length, top = 40, gap5 = 4, rw = pw - 28;
+        var slotH = Math.min(40, (ph - top - 24 - (n3 - 1) * gap5) / Math.max(1, n3)), TINT = ['#FFF1C7', '#DDF2E4', '#DCEBFA', '#E9E1F7', '#FBE0E6'];
+        steps.forEach(function (r, i6) {
+          var y6 = top + i6 * (slotH + gap5), lb2 = X.labelsFor(X.cardInfo(r), mode), nr = Math.min(6, slotH * 0.2), cs = slotH - 6;
+          var nx = 14 + 4 + nr, px = nx + nr + 4, tx = px + cs + 6, fs = Math.min(10, slotH * 0.26);
+          g5 += '<rect x="14" y="' + y6 + '" width="' + rw + '" height="' + slotH + '" rx="6" fill="' + TINT[i6 % 5] + '"/>' +
+            '<circle cx="' + nx + '" cy="' + (y6 + slotH / 2) + '" r="' + nr + '" fill="#fff"/>' + text(nx, y6 + slotH / 2 + nr * 0.4, String(i6 + 1), nr * 1.1, { anchor: 'middle' }) +
+            pcard(r, px, y6 + 3, cs, Object.assign({}, o, { labels: 'none' })).svg;
+          if (lb2.main) g5 += text(tx, y6 + slotH / 2 + (lb2.sub ? -fs * 0.1 : fs * 0.35), fitStr(lb2.main, pw - 14 - tx - 4, fs), fs);
+          if (lb2.sub) g5 += text(tx, y6 + slotH / 2 + fs * 0.85, fitStr(lb2.sub, pw - 14 - tx - 4, fs * 0.62), fs * 0.62, { fill: MUTED, body: true, weight: 500 });
         });
-        out.push(page(phW, phH, g4));
-        return out;
+        out.push(page(pw, ph, g5));
       }
-      var g5 = text(14, 26, X.schedName(s2), 10), n3 = steps.length;
-      var colW = pw * 0.58, slotGap = 4, avail = ph - 36 - 22, slotH = Math.min(46, (avail - (n3 - 1) * slotGap) / Math.max(1, n3));
-      steps.forEach(function (r, i6) {
-        var y6 = 36 + i6 * (slotH + slotGap);
-        g5 += '<rect x="14" y="' + y6 + '" width="' + colW + '" height="' + slotH + '" rx="5" fill="#fff" stroke="' + INK + '" stroke-width=".8"/>';
-        if (o.velcro) g5 += velcro(14 + slotH / 2 + 4, y6 + slotH / 2, 3.2);
-        else {
-          var info2 = X.cardInfo(r), lb2 = X.labelsFor(info2, mode);
-          g5 += pcard(r, 17, y6 + 3, slotH - 6, Object.assign({}, o, { labels: 'none' })).svg + text(17 + slotH, y6 + slotH / 2 + (lb2.sub ? -0.5 : 2.2), lb2.main || '', Math.min(8, slotH * 0.22)) +
-            (lb2.sub ? text(17 + slotH, y6 + slotH / 2 + 5, lb2.sub, Math.min(5, slotH * 0.14), { fill: MUTED, body: true, weight: 500 }) : '');
-        }
-      });
-      var dx = 14 + colW + 8, dw = pw - dx - 14;
-      g5 += '<rect x="' + dx + '" y="36" width="' + dw + '" height="' + (n3 * (slotH + slotGap) - slotGap) + '" rx="6" fill="#FBF8F3" stroke="#C9BFAE" stroke-width=".6" stroke-dasharray="3 2"/>' + nest(A.heart(30), dx + dw / 2 - 6, 42, 12) + heading(dx + dw / 2, 64, 'done', mode, 8, 'middle');
-      out.push(page(pw, ph, g5));
-      out = out.concat(cardPages(steps.filter(function (v, i7, a) { return a.indexOf(v) === i7; }), o, pw, ph, 'cutCards'));
     } else if (kind === 'timer') {
       var t = d.timer, g6 = '', cw2 = (pw - 28 - 10) / 2, chh2 = cw2 * 0.9;
       [['wait', '#DCEBFA'], ['finish', '#FFF1C7']].forEach(function (x, i8) {
@@ -271,22 +260,29 @@
   }
 
   /* ---------- fonts + logo for the final file ---------- */
-  var FONTCSS = null;
+  // the fonts are kept on this device after the first download, so later downloads don't wait for the network
+  var FONTCSS = null, FONTKEY = 'lu_print_fonts_v1', ASSETS = null;
+  try { FONTCSS = localStorage.getItem(FONTKEY) || null; } catch (e) { }
   function loadAssets() {
+    if (ASSETS) return ASSETS;
     var jobs = [];
     if (LOGO === null) jobs.push(fetch('/logo.png').then(function (r) { return r.blob(); }).then(blobToData).then(function (d) { LOGO = d; }).catch(function () { LOGO = ''; }));
     if (FONTCSS === null) {
       jobs.push(timeout(fetch('https://fonts.googleapis.com/css2?family=Fredoka:wght@600&family=Figtree:wght@500;600&display=swap').then(function (r) { return r.text(); }).then(function (css) {
-        var faces = css.split('@font-face').slice(1), out = [];
-        // keep only the latin subsets
-        faces = faces.filter(function (f) { return /U\+0000-00FF/.test(f); });
+        // keep only the latin subsets; the same font file is fetched once even when two weights share it
+        var faces = css.split('@font-face').slice(1).filter(function (f) { return /U\+0000-00FF/.test(f); }), files = {};
+        faces.forEach(function (f) { var m = f.match(/url\((https:[^)]+)\)/); if (m && !files[m[1]]) files[m[1]] = fetch(m[1]).then(function (r) { return r.blob(); }).then(blobToData); });
         return Promise.all(faces.map(function (f) {
-          var m = f.match(/url\((https:[^)]+)\)/); if (!m) return null;
-          return fetch(m[1]).then(function (r) { return r.blob(); }).then(blobToData).then(function (d) { out.push('@font-face' + f.replace(m[1], d).replace(/\/\*[\s\S]*?\*\//g, '')); });
-        })).then(function () { FONTCSS = out.join('\n'); });
+          var m = f.match(/url\((https:[^)]+)\)/); if (!m) return '';
+          return files[m[1]].then(function (d) { return '@font-face' + f.replace(m[1], d).replace(/\/\*[\s\S]*?\*\//g, ''); });
+        })).then(function (list) {
+          FONTCSS = list.join('\n');
+          try { if (FONTCSS) localStorage.setItem(FONTKEY, FONTCSS); } catch (e) { }
+        });
       }), 5000).catch(function () { FONTCSS = ''; }));
     }
-    return Promise.all(jobs);
+    ASSETS = Promise.all(jobs).then(function () { if (FONTCSS === '' || LOGO === '') ASSETS = null; });
+    return ASSETS;
   }
   function timeout(p, ms) { return Promise.race([p, new Promise(function (_, rej) { setTimeout(function () { rej(new Error('timeout')); }, ms); })]); }
   function blobToData(b) { return new Promise(function (res, rej) { var r = new FileReader(); r.onload = function () { res(r.result); }; r.onerror = rej; r.readAsDataURL(b); }); }
@@ -350,10 +346,14 @@
     X = api;
     var S = X.S();
     var prev = OPT || {};
-    OPT = { format: prev.format || 'pdf', paper: prev.paper || 'a4', color: 'colour', labels: S.settings.labels, size: prev.size || 'm', cut: prev.cut !== undefined ? prev.cut : true, velcro: ctx && ctx.build ? !!ctx.velcro : kind !== 'cards' && kind !== 'timer', instr: false };
+    // the poster (PNG) comes first and is the default
+    OPT = { format: prev.format || 'png', labels: S.settings.labels, size: prev.size || 'm', instr: false };
     var sh = X.sheet('', { full: true });
     var toolName = ctx && ctx.title ? ctx.title : { tokens: X.tr('tokens'), ft: X.tr('ft'), sched: X.tr('sched'), timer: X.tr('timer'), cards: X.tr('printCards') }[kind];
-    function opts() { return { format: OPT.format, paper: OPT.paper, ink: OPT.color === 'ink', labels: OPT.labels, size: OPT.size, cut: OPT.cut, velcro: OPT.velcro, instr: OPT.instr }; }
+    var modes = hasModes(kind, ctx);
+    function opts() { return { format: OPT.format, ink: false, labels: OPT.labels, size: OPT.size, instr: OPT.instr }; }
+    // card size only matters where loose picture cards are printed
+    function showSize() { return kind === 'cards' || (ctx && ctx.build ? ctx.file === 'feelings' : modes && OPT.format === 'pdf'); }
     function segH(name, list, cur) { return '<div class="tl-seg">' + list.map(function (o) { return '<button type="button" data-o="' + name + '" data-v="' + o[0] + '" class="' + (cur === o[0] ? 'on' : '') + '">' + esc(o[1]) + '</button>'; }).join('') + '</div>'; }
     function tog(name, on) { return '<button type="button" class="tl-tog" role="switch" aria-checked="' + !!on + '" data-t="' + name + '"></button>'; }
     function render() {
@@ -363,13 +363,11 @@
         '<div class="tl-dlprev"><div class="tl-dlpages">' + pages.slice(0, 4).map(function (pg) {
           return '<div class="tl-dlpage" style="aspect-ratio:' + pg.w + '/' + pg.h + '">' + svgDoc(pg) + '</div>';
         }).join('') + '</div><span class="tl-dlcount">' + esc(w('pages', pages.length)) + '</span></div>' +
-        '<div class="tl-lab2">' + esc(w('format')) + '</div>' + segH('format', [['pdf', w('pdf')], ['png', w('png')]], OPT.format) +
-        (OPT.format === 'pdf' || kind !== 'sched' ? '<div class="tl-lab2">' + esc(w('paper')) + '</div>' + segH('paper', [['a4', 'A4'], ['f4', 'F4 / Folio'], ['letter', 'Letter']], OPT.paper) : '') +
+        '<div class="tl-lab2">' + esc(w(modes ? 'printAs' : 'format')) + '</div>' + segH('format', modes ? [['png', w('poster')], ['pdf', w('cutting')]] : [['png', w('png')], ['pdf', w('pdf')]], OPT.format) +
+        (modes ? '<small style="display:block;margin:8px 2px 0;font-size:13px;line-height:1.4;color:var(--muted,#6B6875)">' + esc(w(OPT.format === 'pdf' ? 'cuttingD' : 'posterD')) + '</small>' : '') +
         '<div class="tl-lab2">' + esc(w('labels')) + '</div>' + segH('labels', [['id', 'ID'], ['en', 'EN'], ['both', w('both')], ['none', w('none')]], OPT.labels) +
-        '<div class="tl-lab2">' + esc(w('size')) + '</div>' + segH('size', [['s', w('s')], ['m', w('m')], ['l', w('l')]], OPT.size) +
+        (showSize() ? '<div class="tl-lab2">' + esc(w('size')) + '</div>' + segH('size', [['s', w('s')], ['m', w('m')], ['l', w('l')]], OPT.size) : '') +
         '<div class="tl-panel">' +
-        '<div class="tl-row"><div><b>' + esc(w('cut')) + '</b></div>' + tog('cut', OPT.cut) + '</div>' +
-        ((ctx && ctx.build ? ctx.velcro : kind !== 'cards' && kind !== 'timer') ? '<div class="tl-row"><div><b>' + esc(w('velcro')) + '</b><small>' + esc(w('velcroD')) + '</small></div>' + tog('velcro', OPT.velcro) + '</div>' : '') +
         '<div class="tl-row"><div><b>' + esc(w('instr')) + '</b><small>' + esc(w('instrD')) + '</small></div>' + tog('instr', OPT.instr) + '</div></div>' +
         '<div class="tl-sheetfoot col"><button type="button" class="tl-btn primary lg block" data-go>' + esc(OPT.format === 'pdf' ? w('dlPdf') : w('dlPng')) + '</button><small>' + esc(w('made')) + '</small></div>';
       sh.set(h);
@@ -392,7 +390,7 @@
       var pages = build(kind, ctx, o);
       var base = 'littleus-' + (ctx && ctx.file ? ctx.file : { tokens: 'token-board', ft: 'first-then', sched: 'schedule', timer: 'timer-cards', cards: 'cards' }[kind]) + (X.prof() ? '-' + X.prof().name.toLowerCase().replace(/[^a-z0-9]+/g, '-') : '');
       if (o.format === 'png') {
-        var dpi = kind === 'sched' ? 260 : 150;
+        var dpi = 200;
         return Promise.all(pages.map(function (pg) { return raster(pg, dpi); })).then(function (cvs) {
           var gap = 30, W2 = Math.max.apply(null, cvs.map(function (c) { return c.width; })), H2 = cvs.reduce(function (s, c) { return s + c.height; }, 0) + gap * (cvs.length - 1);
           var out = document.createElement('canvas'); out.width = W2; out.height = H2;
@@ -410,5 +408,6 @@
 
   // drawing helpers handed to page builders in other files (units: mm)
   var H = { page: page, text: text, wrapText: wrapText, nest: nest, pcard: pcard, cutRect: cutRect, velcro: velcro, cardPages: cardPages, fitStr: fitStr, cardH: cardH, SIZE: SIZE, INK: INK, MUTED: MUTED, LINE: LINE };
-  window.LUPrint = { open: open, build: function (k, c, o, api) { X = api; return build(k, c, o); }, svgDoc: svgDoc };
+  // warm(): fetch the fonts and logo in the background, so pressing Download doesn't wait for them
+  window.LUPrint = { open: open, warm: function () { loadAssets(); }, build: function (k, c, o, api) { X = api; return build(k, c, o); }, svgDoc: svgDoc };
 })();

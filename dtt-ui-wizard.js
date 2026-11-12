@@ -78,7 +78,7 @@
       }, function (err) {
         t.disabled = false;
         if (err && /dtt_program_limit/.test((err.data && err.data.message) || err.message || '')) { SH.close(); return ui.plusSheet('programs'); }
-        X.toast(T('The program was not saved. Check your connection and try again.', 'Program belum tersimpan. Periksa koneksi lalu coba lagi.'));
+        X.toast(T('The program was not saved. Check your connection and try again.', 'Program belum tersimpan. Cek koneksi internetmu, lalu coba lagi.'));
       });
     }
   }

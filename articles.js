@@ -14,7 +14,7 @@
   var CATS = {
     tips: { bg: '#DCEBFA', dot: '#7FB0E3', en: 'Tips for home & class', id: 'Tips di rumah & kelas' },
     tools: { bg: '#DDF2E4', dot: '#5DBB86', en: 'Tool guides', id: 'Panduan alat' },
-    resources: { bg: '#FFE9DA', dot: '#F0694F', en: 'New resources', id: 'Sumber baru' },
+    resources: { bg: '#FFE9DA', dot: '#F0694F', en: 'New resources', id: 'Materi baru' },
     bts: { bg: '#E9E1F7', dot: '#A58BD6', en: 'Behind the scenes', id: 'Di balik layar' }
   };
   var CAT_ORDER = ['tips', 'tools', 'resources', 'bts'];
@@ -37,33 +37,33 @@
     id: {
       home: 'Beranda', articles: 'Artikel', all: 'Semua artikel', latest: 'Terbaru', featured: 'Pilihan', readArticle: 'Baca artikel', readMore: 'Baca selengkapnya…',
       min: 'menit baca', enOnly: 'Hanya bahasa Inggris', updated: 'Diperbarui', onPage: 'Di halaman ini', tip: 'Tips singkat', freeTool: 'Alat gratis', open: 'Buka',
-      fromShop: 'Dari toko', seeRes: 'Lihat sumber', share: 'Bagikan', copy: 'Salin link', copied: 'Link tersalin',
+      fromShop: 'Dari toko', seeRes: 'Lihat materi', share: 'Bagikan', copy: 'Salin link', copied: 'Link disalin',
       aboutWriter: 'Tentang penulis', role: 'Praktisi pendidikan khusus',
-      bio: 'Saya praktisi pendidikan khusus di Jakarta. Saya membuat semua alat dan sumber di Little Us, dan menulis sendiri artikel-artikel ini.',
+      bio: 'Saya praktisi pendidikan khusus di Jakarta. Saya membuat semua alat dan materi di Little Us, dan menulis sendiri artikel-artikel ini.',
       moreAbout: 'Kenali saya lebih jauh', keepReading: 'Baca juga', seeAll: 'Lihat semua artikel →', loadMore: 'Tampilkan artikel lainnya',
       emptyH: 'Belum ada artikel di sini', emptyP: 'Coba kategori lain, atau lihat semua artikel.', showAll: 'Lihat semua artikel',
       noneYetH: 'Artikel segera hadir', noneYetP: 'Kami sedang menulis artikel pertama. Sementara itu, coba alat gratis atau lihat toko.',
-      tryTools: 'Coba alat gratis', nfH: 'Artikel ini tidak ditemukan', nfP: 'Mungkin sudah diganti nama atau diturunkan. Silakan lihat artikel lainnya.',
-      errH: 'Hmm, artikelnya belum termuat', errP: 'Periksa koneksi lalu coba lagi.', retry: 'Coba lagi',
+      tryTools: 'Coba alat gratis', nfH: 'Artikel ini tidak ditemukan', nfP: 'Mungkin judulnya sudah diganti atau artikelnya sudah dihapus. Coba lihat artikel lainnya.',
+      errH: 'Hmm, artikelnya gagal dimuat', errP: 'Cek koneksi internetmu, lalu coba lagi.', retry: 'Coba lagi',
       fromBlog: 'Dari blog', blogH: 'Tips, panduan alat, dan kabar terbaru', blogP: 'Ide praktis untuk di rumah dan di kelas, ditulis oleh Haikal.',
-      enOnlyNote: 'Mohon maaf, Bapak dan Ibu, artikel ini baru tersedia dalam bahasa Inggris. Versi bahasa Indonesianya sedang saya tulis.',
+      enOnlyNote: 'Maaf, artikel ini baru tersedia dalam bahasa Inggris. Versi bahasa Indonesianya sedang saya tulis.',
       free: 'Gratis', pages: function (n) { return n + ' halaman'; }
     }
   };
   var TOOLS = {
-    timer: { bg: '#DCEBFA', path: '/tools/timer', en: ['Visual Timer', 'A countdown your child can see, not just hear. Works on any phone, tablet or laptop.'], id: ['Timer Visual', 'Hitungan mundur yang bisa dilihat anak. Bisa dipakai di HP, tablet, atau laptop.'],
+    timer: { bg: '#DCEBFA', path: '/tools/timer', en: ['Visual Timer', 'A countdown your child can see, not just hear. Works on any phone, tablet or laptop.'], id: ['Visual Timer', 'Hitungan mundur yang bisa dilihat anak. Bisa dipakai di HP, tablet, atau laptop.'],
       ico: '<svg width="34" height="34" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="#fff" stroke="#2B2A35" stroke-width="1.6"/><path d="M10 10V2a8 8 0 0 1 7.6 10.5z" fill="#FFC94A" stroke="#2B2A35" stroke-width="1.6" stroke-linejoin="round"/></svg>' },
-    tokens: { bg: '#FFF1C7', path: '/tools/tokens', en: ['Token Board', 'Your child earns stars towards a reward they chose.'], id: ['Papan Token', 'Anak mengumpulkan bintang untuk hadiah pilihannya.'],
+    tokens: { bg: '#FFF1C7', path: '/tools/tokens', en: ['Token Board', 'Your child earns stars towards a reward they chose.'], id: ['Token Board', 'Anak mengumpulkan bintang untuk hadiah pilihannya.'],
       ico: '<svg width="34" height="34" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2l2.4 5 5.4.6-4 3.7 1.1 5.4L10 14l-4.9 2.7 1.1-5.4-4-3.7 5.4-.6z" fill="#FFC94A" stroke="#2B2A35" stroke-width="1.4" stroke-linejoin="round"/></svg>' },
-    ft: { bg: '#DDF2E4', path: '/tools/first-then', en: ['First–Then Board', 'Two pictures: what happens first, and what comes next.'], id: ['Papan Pertama–Lalu', 'Dua gambar: apa yang dilakukan dulu, dan apa yang datang sesudahnya.'],
+    ft: { bg: '#DDF2E4', path: '/tools/first-then', en: ['First–Then Board', 'Two pictures: what happens first, and what comes next.'], id: ['First–Then Board', 'Dua gambar: apa yang dilakukan dulu, dan apa yang dilakukan sesudahnya.'],
       ico: '<svg width="36" height="30" viewBox="0 0 22 18" aria-hidden="true"><rect x="1" y="3" width="8.5" height="12" rx="2" fill="#fff" stroke="#2B2A35" stroke-width="1.5"/><rect x="12.5" y="3" width="8.5" height="12" rx="2" fill="#FFC94A" stroke="#2B2A35" stroke-width="1.5"/></svg>' },
-    sched: { bg: '#E9E1F7', path: '/tools/schedule', en: ['Visual Schedule', 'The steps of a routine in pictures, one at a time.'], id: ['Jadwal Visual', 'Langkah rutinitas dalam gambar, satu per satu.'],
+    sched: { bg: '#E9E1F7', path: '/tools/schedule', en: ['Visual Schedule', 'The steps of a routine in pictures, one at a time.'], id: ['Visual Schedule', 'Langkah rutinitas dalam gambar, satu per satu.'],
       ico: '<svg width="32" height="32" viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="2.5" width="14" height="4" rx="1.5" fill="#fff" stroke="#2B2A35" stroke-width="1.4"/><rect x="3" y="8" width="14" height="4" rx="1.5" fill="#FFC94A" stroke="#2B2A35" stroke-width="1.4"/><rect x="3" y="13.5" width="14" height="4" rx="1.5" fill="#fff" stroke="#2B2A35" stroke-width="1.4"/></svg>' },
-    breathe: { bg: '#DCEBFA', path: '/tools/breathe', en: ['Breathing Buddy', 'A friendly buddy that breathes slowly, so your child can breathe along.'], id: ['Teman Napas', 'Teman yang bernapas pelan, supaya anak bisa ikut bernapas bersamanya.'],
+    breathe: { bg: '#DCEBFA', path: '/tools/breathe', en: ['Breathing Buddy', 'A friendly buddy that breathes slowly, so your child can breathe along.'], id: ['Breathing Buddy', 'Karakter yang bernapas pelan, supaya anak bisa ikut bernapas bareng.'],
       ico: '<svg width="34" height="34" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.5c3.3 0 5.3 2.4 5.3 5.4 0 3.4-2.6 6.4-5.3 6.7-2.7-.3-5.3-3.3-5.3-6.7 0-3 2-5.4 5.3-5.4Z" fill="#F6B3C2" stroke="#2B2A35" stroke-width="1.4"/><path d="M10 14.6c-.8 1.4.8 2 0 3" fill="none" stroke="#2B2A35" stroke-width="1.3" stroke-linecap="round"/></svg>' },
-    feelings: { bg: '#E9E1F7', path: '/tools/feelings', en: ['Feelings Check-In', 'Your child shows how they feel, how big it is, and what helps.'], id: ['Cek Perasaan', 'Anak menunjukkan apa yang dirasakan, seberapa besar, dan apa yang membantu.'],
+    feelings: { bg: '#E9E1F7', path: '/tools/feelings', en: ['Feelings Check-In', 'Your child shows how they feel, how big it is, and what helps.'], id: ['Feelings Check-In', 'Anak menunjukkan apa yang dirasakan, seberapa besar, dan apa yang membantu.'],
       ico: '<svg width="34" height="34" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.6" fill="#FFE29A" stroke="#2B2A35" stroke-width="1.4"/><circle cx="7.4" cy="8.6" r="1" fill="#2B2A35"/><circle cx="12.6" cy="8.6" r="1" fill="#2B2A35"/><path d="M7 12q3 3 6 0" fill="none" stroke="#2B2A35" stroke-width="1.3" stroke-linecap="round"/></svg>' },
-    worry: { bg: '#FBE0E6', path: '/tools/worry', en: ['Worry Jar', 'Drop a worry in, keep it safe, and talk about it later.'], id: ['Toples Khawatir', 'Masukkan rasa khawatir, simpan dengan aman, lalu bicarakan nanti.'],
+    worry: { bg: '#FBE0E6', path: '/tools/worry', en: ['Worry Jar', 'Drop a worry in, keep it safe, and talk about it later.'], id: ['Worry Jar', 'Masukkan rasa khawatir, simpan dengan aman, lalu bicarakan nanti.'],
       ico: '<svg width="34" height="34" viewBox="0 0 20 20" aria-hidden="true"><rect x="6" y="2.5" width="8" height="3" rx="1" fill="#F7A08C" stroke="#2B2A35" stroke-width="1.3"/><path d="M6.6 5.5h6.8c0 1 2.6 2 2.6 5v4.5c0 1.5-1 2.5-2.5 2.5h-7c-1.5 0-2.5-1-2.5-2.5V10.5c0-3 2.6-4 2.6-5Z" fill="#EEF6FD" stroke="#2B2A35" stroke-width="1.3"/><rect x="7.4" y="11.4" width="5" height="3.4" rx=".6" fill="#FFE29A" stroke="#2B2A35" stroke-width="1"/></svg>' }
   };
   var HEART = '<svg viewBox="0 0 64 60" aria-hidden="true"><path d="M31 54C24 49 6 37 6 21 6 12 12 6 20 6 26 6 30 10 32 15 34 10 38 6 44 6 52 6 58 12 58 21 58 34 46 44 38 50" fill="#fff" stroke="#2B2A35" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M38 50 46 57" stroke="#2B2A35" stroke-width="3.6" stroke-linecap="round"/><path d="M28 22V28M36 22V28" stroke="#2B2A35" stroke-width="3.4" stroke-linecap="round"/><path d="M24 34C28 39 36 39 40 34" fill="none" stroke="#2B2A35" stroke-width="3.2" stroke-linecap="round"/></svg>';
@@ -276,7 +276,9 @@
     o = o || {};
     var v = ver(a), toc = tocOf(v.body), showToc = toc.length > 1;
     var upd = a.updated_at && (new Date(a.updated_at) - new Date(a.published_at)) > 36 * 3600 * 1000 ? ' · ' + s('updated') + ' ' + fmtDate(a.updated_at) : '';
-    var h = crumbs([[s('home'), '/'], [s('articles'), '/articles'], [catName(a.category), '/articles?cat=' + a.category]]) +
+    // phones hide the breadcrumbs, so they get a back button to the list instead
+    var h = (o.related ? '<a class="ar-back" href="/articles"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>' + esc(s('articles')) + '</a>' : '') +
+      crumbs([[s('home'), '/'], [s('articles'), '/articles'], [catName(a.category), '/articles?cat=' + a.category]]) +
       '<header class="ar-head' + (showToc ? ' wide' : '') + '">' + chip(a.category) + '<h1>' + esc(v.title) + '</h1>' + (v.ex ? '<p class="ar-dek">' + esc(v.ex) + '</p>' : '') +
       '<span class="ar-meta">' + esc(fmtDate(a.published_at) + ' · ' + mins(a) + ' ' + s('min')) + esc(upd) + '</span>' +
       (v.enOnly ? '<div class="ar-note" role="note"><span>EN</span><p>' + esc(s('enOnlyNote')) + '</p></div>' : '') + '</header>' +
@@ -286,7 +288,6 @@
       '<div class="ar-share"><b>' + esc(s('share')) + '</b><a class="ar-pill" href="https://wa.me/?text=' + encodeURIComponent(v.title + ' ' + absUrl(a)) + '" target="_blank" rel="noopener">WhatsApp</a>' +
       '<a class="ar-pill" href="https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(absUrl(a)) + '" target="_blank" rel="noopener">Facebook</a>' +
       '<button type="button" class="ar-pill" data-ar-copy>' + esc(s('copy')) + '</button></div>' +
-      '<div class="ar-writer"><img src="/creator-head.webp" alt="Haikal Ilham Adlan" width="72" height="72"><div><span class="eyebrow">' + esc(s('aboutWriter')) + '</span><b>Haikal Ilham Adlan</b><small>' + esc(s('role')) + '</small><p>' + esc(s('bio')) + '</p><a href="/about">' + esc(s('moreAbout')) + '</a></div></div>' +
       '</div></div>';
     if (o.related) {
       var others = (CACHE || []).filter(function (x) { return x.id !== a.id; });
@@ -339,6 +340,7 @@
   var CSS = [
     '.ar-page{display:flex;flex-direction:column;gap:22px}',
     '.crumbs{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.crumbs span{color:#B5AEA3}',
+    '.ar-back{align-self:flex-start;display:inline-flex;align-items:center;gap:4px;min-height:40px;padding:0 16px 0 10px;border-radius:999px;background:#fff;border:1px solid var(--line);color:var(--ink);font-weight:700;font-size:14.5px;text-decoration:none;margin-bottom:4px}',
     '.ar-h1{font:600 clamp(28px,3.2vw,40px)/1.1 Fredoka,sans-serif;margin:0}',
     '.ar-chiprow{display:flex;gap:8px;flex-wrap:wrap}',
     '.ar-filter{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:6px 14px;border-radius:999px;background:#fff;border:1px solid var(--line);font:600 13.5px Figtree,sans-serif;color:var(--ink);cursor:pointer}',
@@ -414,6 +416,7 @@
     '.ar-sechead h2{font:600 clamp(22px,2.4vw,27px)/1.2 Fredoka,sans-serif}.ar-sechead a{font-size:14px;font-weight:700}',
     '#secBlog .ar-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr))}',
     '@media (min-width:960px){',
+    '.ar-back{display:none}',
     '.ar-feat{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);align-items:center;gap:40px;padding:14px}',
     '.ar-feattx{padding:16px 24px 16px 0}',
     '.ar-head.wide{max-width:976px}',

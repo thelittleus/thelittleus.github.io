@@ -37,7 +37,7 @@
       var set = D.store.set(p.setId), c = counts(p), ready = !P.issues(p, set).length;
       return '<div class="dtt-prow"><button type="button" class="dtt-prowopen" data-a="openProgram" data-id="' + p.id + '" aria-label="' + esc(T('Open ', 'Buka ') + (p.name || '')) + '"></button>' + tile(p, set) +
         '<div class="dtt-pinfo"><b class="dtt-pname">' + esc(p.name || T('Unnamed program', 'Program tanpa nama')) + '</b><span class="dtt-pmeta">' + pill(p.type) + '<span>' + esc((set ? (set.name || T('Unnamed set', 'Set tanpa nama')) + ' · ' : '') + T(c.learning + ' learning · ' + c.mastered + ' mastered', c.learning + ' dipelajari · ' + c.mastered + ' %mastered%')) + '</span></span></div>' + bar(c) +
-        (ready ? '<button type="button" class="dtt-btn sec sm" data-a="practice" data-id="' + p.id + '">' + esc(T('Practice', 'Latihan')) + '</button><button type="button" class="dtt-btn primary sm" data-a="startSession" data-id="' + p.id + '">▶ ' + esc(T('Start Session', 'Mulai Session')) + '</button>'
+        (ready ? '<button type="button" class="dtt-btn sec sm" data-a="practice" data-id="' + p.id + '">' + esc(T('Practice', 'Latihan')) + '</button><button type="button" class="dtt-btn primary sm" data-a="startSession" data-id="' + p.id + '">▶ ' + esc(T('Start Session', 'Mulai Sesi')) + '</button>'
           : '<span class="dtt-chip attention">' + esc(T('Needs setup', 'Perlu dilengkapi')) + '</span>') +
         moreBtn(p) + '</div>';
     }).join('') + '</div>' +
@@ -51,7 +51,7 @@
     var p = D.store.program(id);
     var sh = X.sheet(ui.dlg({ title: practice ? T('Ready to Practice?', 'Siap Latihan?') : T('Ready to Start?', 'Siap Mulai?'),
       body: '<p class="dtt-dlgp">' + esc(D.i18n.fill(T('Make sure the settings (trials, prompts, error correction, rewards and mastery) and the target order are how you want them for this ' + (practice ? 'practice.' : 'session.'), 'Pastikan pengaturan (trial, prompt, error correction, reward, dan %mastery%) serta urutan %targets% sudah sesuai untuk ' + (practice ? 'latihan ini.' : '%session% ini.')))) + '</p>',
-      foot: '<button type="button" class="dtt-btn sec" data-check>' + esc(T('Check Settings', 'Cek Pengaturan')) + '</button><button type="button" class="dtt-btn primary" data-go>▶ ' + esc(practice ? T('Start Practice', 'Mulai Latihan') : T('Start Session', 'Mulai Session')) + '</button>' }));
+      foot: '<button type="button" class="dtt-btn sec" data-check>' + esc(T('Check Settings', 'Cek Pengaturan')) + '</button><button type="button" class="dtt-btn primary" data-go>▶ ' + esc(practice ? T('Start Practice', 'Mulai Latihan') : T('Start Session', 'Mulai Sesi')) + '</button>' }));
     closeOn(sh);
     sh.el.addEventListener('click', function (e) {
       if (e.target.closest('[data-go]')) { sh.close(); D.session.start(p, practice ? { practice: true } : undefined); }
@@ -81,7 +81,7 @@
       '<div class="dtt-pagehead prog"><div class="dtt-titlewrap"><h1 class="dtt-h1">' + esc(p.name || T('Unnamed program', 'Program tanpa nama')) + '</h1><span class="dtt-pmeta">' + pill(p.type) + (set ? '<span>' + esc(set.name || T('Unnamed set', 'Set tanpa nama')) + '</span>' : '') + '</span></div>' +
       '<div class="tl-seg dtt-seg dtt-ptabs" role="tablist"><button type="button" role="tab" aria-selected="' + (U.ptab === 'setup') + '" class="' + (U.ptab === 'setup' ? 'on' : '') + '" data-a="ptab" data-v="setup">' + esc(T('Setup', 'Atur')) + '</button><button type="button" role="tab" aria-selected="' + (U.ptab === 'data') + '" class="' + (U.ptab === 'data' ? 'on' : '') + '" data-a="ptab" data-v="data">Data</button></div>' +
       '<div class="dtt-headr"><button type="button" class="dtt-btn sec two" data-a="practice" data-id="' + p.id + '"' + (ready ? '' : ' disabled') + '>' + esc(T('Practice', 'Latihan')) + '<small>' + esc(T('Not recorded', 'Tidak dicatat')) + '</small></button>' +
-      '<button type="button" class="dtt-btn primary lg" data-a="startSession" data-id="' + p.id + '"' + (ready ? '' : ' disabled') + '>▶ ' + esc(T('Start Real Session', 'Mulai Session')) + '</button>' + moreBtn(p, true) + '</div></div>' +
+      '<button type="button" class="dtt-btn primary lg" data-a="startSession" data-id="' + p.id + '"' + (ready ? '' : ' disabled') + '>▶ ' + esc(T('Start Real Session', 'Mulai Sesi')) + '</button>' + moreBtn(p, true) + '</div></div>' +
       (U.ptab === 'data' ? ui.dataTab(p, set) : setup(p, set, probs));
   }
   ACT.ptab = function (b) { U.ptab = b.dataset.v; ui.render(); };
@@ -168,7 +168,7 @@
         t.disabled = true;
         var p = D.transfer.create(src, { type: st.type, set: set, lang: D.i18n.lang(), name: src.name + ' (' + ui.typeName(st.type) + ')', startMastered: st.first, progress: D.store.progressOf(src.id) });
         D.store.addProgram(p).then(function () { sh.close(); U.programId = p.id; U.view = 'program'; U.ptab = 'setup'; ui.render(); window.scrollTo(0, 0); },
-          function (err) { t.disabled = false; if (err && /dtt_program_limit/.test((err.data && err.data.message) || err.message || '')) { sh.close(); return ui.plusSheet('programs'); } X.toast(T('The program was not saved. Check your connection and try again.', 'Program belum tersimpan. Periksa koneksi lalu coba lagi.')); });
+          function (err) { t.disabled = false; if (err && /dtt_program_limit/.test((err.data && err.data.message) || err.message || '')) { sh.close(); return ui.plusSheet('programs'); } X.toast(T('The program was not saved. Check your connection and try again.', 'Program belum tersimpan. Cek koneksi internetmu, lalu coba lagi.')); });
       }
     });
     draw();
@@ -181,7 +181,7 @@
     closeOn(sh);
     sh.el.addEventListener('click', function (e) {
       var t = e.target.closest('[data-go]'); if (!t) return; t.disabled = true;
-      D.store.deleteProgram(p).then(function () { sh.close(); U.view = 'programs'; ui.render(); }, function () { t.disabled = false; X.toast(T('The program was not deleted. Check your connection.', 'Program belum dihapus. Periksa koneksi.')); });
+      D.store.deleteProgram(p).then(function () { sh.close(); U.view = 'programs'; ui.render(); }, function () { t.disabled = false; X.toast(T('The program was not deleted. Check your connection.', 'Program belum dihapus. Cek koneksi internetmu.')); });
     });
   };
 
@@ -243,7 +243,7 @@
     closeOn(sh);
     sh.el.addEventListener('click', function (e) {
       var t = e.target.closest('[data-go]'); if (!t) return; t.disabled = true;
-      D.store.deleteStudentData(sid).then(function () { sh.close(); X.toast(T('The DTT data was deleted.', 'Data DTT sudah dihapus.')); ui.render(); }, function () { t.disabled = false; X.toast(T('It was not deleted. Check your connection.', 'Belum terhapus. Periksa koneksi.')); });
+      D.store.deleteStudentData(sid).then(function () { sh.close(); X.toast(T('The DTT data was deleted.', 'Data DTT sudah dihapus.')); ui.render(); }, function () { t.disabled = false; X.toast(T('It was not deleted. Check your connection.', 'Belum terhapus. Cek koneksi internetmu.')); });
     });
   };
   ACT.prefTog = function (b) { var p = ui.prefs(); p[b.dataset.k] = !p[b.dataset.k]; savePrefs(p); ui.render(); };

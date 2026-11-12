@@ -25,6 +25,8 @@
   function mount() {
     var el = document.getElementById('dttApp'); if (!el || el.dataset.bound) return;
     el.dataset.bound = '1'; ui.bind(el);
+    // shows Discrete Trial Teaching first in the home banner's "used last" row
+    if (window.LUTools && LUTools.markUsed) try { LUTools.markUsed('dtt'); } catch (e) { }
     D.guest.pick(); ui.render();
     D.session.checkResume();
     D.guest.offer();

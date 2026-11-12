@@ -124,7 +124,10 @@
     render: rerender,
     // the account brought a newer child setup from another device
     reloadState: function () { load(); photosLoad().then(rerender); },
-    fixLocked: function () { }
+    fixLocked: function () { },
+    // the home banner's "<child> used last" row: kept in its own key on this device, so opening DTT never
+    // pushes the child setup to the account (that could race the account's newer copy on a fresh device)
+    markUsed: function (tool) { try { localStorage.setItem('lu_last_tool', JSON.stringify({ tool: tool, at: Date.now() })); } catch (e) { } }
   };
   photosLoad().then(rerender);
   // another tab (the main site) changed the profiles

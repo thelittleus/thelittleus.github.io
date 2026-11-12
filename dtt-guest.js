@@ -175,7 +175,7 @@
   function loginUrl(page) { try { sessionStorage.setItem('lu_after_login', JSON.stringify('#/dtt')); } catch (e) { } return '/#/' + page; }
   D.ui.signIn = function () {
     var sh = X.sheet(D.ui.dlg({ title: T('Sign in to save your work', 'Masuk agar pekerjaanmu tersimpan'), cls: 'dtt-login',
-      body: '<p class="dtt-dlgp">' + esc(T('Programs, pictures and session results are saved to your account, so nothing is lost and you can open them on any device. A free account is enough.', 'Program, gambar, dan hasil session disimpan di akunmu, jadi tidak ada yang hilang dan bisa dibuka di perangkat mana pun. Akun gratis sudah cukup.')) + '</p>' +
+      body: '<p class="dtt-dlgp">' + esc(T('Programs, pictures and session results are saved to your account, so nothing is lost and you can open them on any device. A free account is enough.', 'Program, gambar, dan hasil sesi disimpan di akunmu, jadi tidak ada yang hilang dan bisa dibuka di perangkat mana saja. Akun gratis sudah cukup.')) + '</p>' +
         '<div class="dtt-stack"><a class="dtt-btn primary block" href="' + loginUrl('login') + '">' + esc(T('Log In', 'Masuk')) + '</a><a class="dtt-btn sec block" href="' + loginUrl('signup') + '">' + esc(T('Create a Free Account', 'Buat Akun Gratis')) + '</a>' +
         '<button type="button" class="dtt-linkbtn center" data-x>' + esc(T('Not now, keep it on this device', 'Nanti saja, simpan di perangkat ini')) + '</button></div>' }));
     sh.el.addEventListener('click', function (e) { if (e.target.closest('[data-x]')) sh.close(); });

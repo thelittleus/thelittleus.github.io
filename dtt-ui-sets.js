@@ -64,7 +64,7 @@
     pop.addEventListener('click', function (e) {
       var t = e.target.closest('button'); if (!t || t.disabled) return; var d = t.dataset.do; close();
       if (d === 'rename') { U.setId = s.id; U.view = 'set'; U.item = null; U.focusName = true; ui.render(); }
-      if (d === 'dup') D.store.addSet(s.name + ' ' + T('(copy)', '(salinan)')).then(function (c) { c.items = JSON.parse(JSON.stringify(s.items)).map(function (i) { i.id = P.uuid(); i.doNotPairWith = []; return i; }); return D.store.saveSet(c); }).then(function () { ui.render(); X.toast(T('Duplicated.', 'Diduplikat.')); }, function () { X.toast(T('It was not duplicated. Check your connection.', 'Belum terduplikat. Periksa koneksi.')); });
+      if (d === 'dup') D.store.addSet(s.name + ' ' + T('(copy)', '(salinan)')).then(function (c) { c.items = JSON.parse(JSON.stringify(s.items)).map(function (i) { i.id = P.uuid(); i.doNotPairWith = []; return i; }); return D.store.saveSet(c); }).then(function () { ui.render(); X.toast(T('Duplicated.', 'Diduplikat.')); }, function () { X.toast(T('It was not duplicated. Check your connection.', 'Belum terduplikat. Cek koneksi internetmu.')); });
       if (d === 'use') useIn(s);
       if (d === 'del') confirmDelete(s);
     });
@@ -76,7 +76,7 @@
     closeOn(sh);
     sh.el.addEventListener('click', function (e) {
       if (!e.target.closest('[data-go]')) return;
-      D.store.deleteSet(s).then(function () { sh.close(); U.view = 'sets'; ui.render(); }, function () { X.toast(T('The set was not deleted. Check your connection.', 'Set belum dihapus. Periksa koneksi.')); });
+      D.store.deleteSet(s).then(function () { sh.close(); U.view = 'sets'; ui.render(); }, function () { X.toast(T('The set was not deleted. Check your connection.', 'Set belum dihapus. Cek koneksi internetmu.')); });
     });
   }
   // 5l: a set goes into a new program, or replaces the set of an existing one
@@ -100,7 +100,7 @@
         if (st.pick === 'new') return ui.newProgramWith([set]);
         var p = D.store.program(st.pick); p.setId = set.id; p.queue = []; p.excluded = []; p.pinned = []; p.categories = []; p.patterns = []; P.syncQueue(p, set);
         return D.store.saveProgram(p).then(function () { U.view = 'program'; U.programId = p.id; U.ptab = 'setup'; ui.render(); window.scrollTo(0, 0); X.toast(T('The set was replaced.', 'Set sudah diganti.')); });
-      }, function () { t.disabled = false; X.toast(T('That did not work. Check your connection.', 'Belum berhasil. Periksa koneksi.')); });
+      }, function () { t.disabled = false; X.toast(T('That did not work. Check your connection.', 'Belum berhasil. Cek koneksi internetmu.')); });
     });
     draw();
   }
@@ -117,7 +117,7 @@
     sh.el.addEventListener('click', function (e) {
       var t = e.target.closest('button'); if (!t) return;
       if (t.hasAttribute('data-use')) { sh.close(); return useIn({ name: l.name[L()] }, l); }
-      if (t.hasAttribute('data-copy')) { t.disabled = true; copyLib(l).then(function () { sh.close(); U.setTab = 'mine'; ui.render(); X.toast(T('Added to My Sets.', 'Ditambahkan ke Set Saya.')); }, function () { t.disabled = false; X.toast(T('It was not copied. Check your connection.', 'Belum tersalin. Periksa koneksi.')); }); }
+      if (t.hasAttribute('data-copy')) { t.disabled = true; copyLib(l).then(function () { sh.close(); U.setTab = 'mine'; ui.render(); X.toast(T('Added to My Sets.', 'Ditambahkan ke Set Saya.')); }, function () { t.disabled = false; X.toast(T('It was not copied. Check your connection.', 'Belum disalin. Cek koneksi internetmu.')); }); }
     });
   };
 
@@ -149,7 +149,7 @@
       if (t.hasAttribute('data-go')) {
         t.disabled = true;
         Promise.all(st.pick.map(function (k) { return k.indexOf('s:') === 0 ? Promise.resolve(D.store.set(k.slice(2))) : copyLib(LIB.sets.filter(function (l) { return 'l:' + l.id === k; })[0]); }))
-          .then(function (sets) { sh.close(); done(sets.filter(Boolean)); }, function () { t.disabled = false; X.toast(T('It was not copied. Check your connection.', 'Belum tersalin. Periksa koneksi.')); });
+          .then(function (sets) { sh.close(); done(sets.filter(Boolean)); }, function () { t.disabled = false; X.toast(T('It was not copied. Check your connection.', 'Belum disalin. Cek koneksi internetmu.')); });
       }
     });
     draw();
@@ -166,7 +166,7 @@
       var how = t.dataset.how, nm = sh.el.querySelector('input').value.trim();
       if (!nm) { sh.el.querySelector('input').classList.add('bad'); sh.el.querySelector('input').focus(); return; }
       t.disabled = true;
-      D.store.addSet(nm).then(function (s) { sh.close(); ui.addStimulus(s, how, function () { done(s); }); }, function () { t.disabled = false; X.toast(T('The set was not created. Check your connection.', 'Set belum dibuat. Periksa koneksi.')); });
+      D.store.addSet(nm).then(function (s) { sh.close(); ui.addStimulus(s, how, function () { done(s); }); }, function () { t.disabled = false; X.toast(T('The set was not created. Check your connection.', 'Set belum dibuat. Cek koneksi internetmu.')); });
     });
   };
   function addOptions(a) {

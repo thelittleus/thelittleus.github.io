@@ -193,7 +193,7 @@
   };
   var BUDDY = ['#7FCB98', '#7DB3E8', '#FFC94A', '#F7A08C', '#B9A3E3', '#F6B3C2'];
   var LAYOUTS = [
-    { id: 'circles', name: ['Circles', 'Lingkaran'], sub: ['Closer or further away', 'Lebih dekat atau lebih jauh'], group: ['Rings', 'Cincin'], zones: [['Middle ring', 'Cincin tengah'], ['Second ring', 'Cincin kedua'], ['Outside ring', 'Cincin luar']], caps: [5, 8, 12], labels: [['I tell them anything', 'Aku cerita apa saja'], ['I can ask for help', 'Aku bisa minta tolong'], ['I say hi', 'Aku menyapa']] },
+    { id: 'circles', name: ['Circles', 'Lingkaran'], sub: ['Closer or further away', 'Lebih dekat atau lebih jauh'], group: ['Rings', 'Lingkaran'], zones: [['Middle ring', 'Lingkaran tengah'], ['Second ring', 'Lingkaran kedua'], ['Outside ring', 'Lingkaran luar']], caps: [5, 8, 12], labels: [['I tell them anything', 'Aku cerita apa saja'], ['I can ask for help', 'Aku bisa minta tolong'], ['I say hi', 'Aku menyapa']] },
     { id: 'hand', name: ['Five-finger hand', 'Lima jari'], sub: ['Five go-to people', 'Lima orang andalan'], group: ['Fingers', 'Jari'], zones: [['Thumb', 'Ibu jari'], ['Pointer finger', 'Jari telunjuk'], ['Middle finger', 'Jari tengah'], ['Ring finger', 'Jari manis'], ['Little finger', 'Jari kelingking']], caps: [1, 1, 1, 1, 1], labels: [['At home', 'Di rumah'], ['At home', 'Di rumah'], ['At school', 'Di sekolah'], ['Outside my family', 'Di luar keluarga'], ['I can call them', 'Bisa kutelepon']] },
     { id: 'house', name: ['House', 'Rumah'], sub: ['Someone in each room', 'Seseorang di tiap ruangan'], group: ['Rooms', 'Ruangan'], zones: [['Top left room', 'Ruang kiri atas'], ['Top right room', 'Ruang kanan atas'], ['Bottom left room', 'Ruang kiri bawah'], ['Bottom right room', 'Ruang kanan bawah']], caps: [3, 3, 3, 3], labels: [['My bedroom', 'Kamarku'], ['Kitchen', 'Dapur'], ['Living room', 'Ruang keluarga'], ['Front door', 'Pintu depan']] },
     { id: 'tree', name: ['Tree', 'Pohon'], sub: ['Closest on the trunk', 'Paling dekat di batang'], group: ['Tree parts', 'Bagian pohon'], zones: [['Trunk', 'Batang'], ['Branches', 'Dahan'], ['Leaves', 'Daun']], caps: [2, 4, 6], labels: [['Closest to me', 'Paling dekat'], ['I can ask for help', 'Aku bisa minta tolong'], ['I say hi', 'Aku menyapa']] },
@@ -201,18 +201,18 @@
     { id: 'solar', name: ['Solar system', 'Tata surya'], sub: ['Your child is the sun', 'Anakmu jadi mataharinya'], group: ['Orbits', 'Orbit'], zones: [['Closest orbit', 'Orbit terdekat'], ['Middle orbit', 'Orbit tengah'], ['Far orbit', 'Orbit jauh']], caps: [4, 7, 10], labels: [['I tell them anything', 'Aku cerita apa saja'], ['I can ask for help', 'Aku bisa minta tolong'], ['I say hi', 'Aku menyapa']] },
     { id: 'castle', name: ['Castle', 'Istana'], sub: ['Closest inside the walls', 'Paling dekat di dalam tembok'], group: ['Castle parts', 'Bagian istana'], zones: [['Tower', 'Menara'], ['Inside the walls', 'Dalam tembok'], ['Outside', 'Luar']], caps: [2, 4, 4], labels: [['In my tower', 'Di menaraku'], ['Inside the walls', 'Dalam tembok'], ['Outside the gate', 'Di luar gerbang']] },
     { id: 'pizza', name: ['Pizza', 'Pizza'], sub: ['Home, school, out and about', 'Rumah, sekolah, di luar'], group: ['Slices', 'Potongan'], zones: [['Top slice', 'Potongan atas'], ['Right slice', 'Potongan kanan'], ['Left slice', 'Potongan kiri']], caps: [4, 4, 4], labels: [['Home', 'Rumah'], ['School', 'Sekolah'], ['Out and about', 'Di luar']] },
-    { id: 'hero', name: ['Superhero team', 'Tim pahlawan'], sub: ['Everyone has a power', 'Semua punya kekuatan'], group: ['Powers', 'Kekuatan'], zones: [['Hero 1', 'Pahlawan 1'], ['Hero 2', 'Pahlawan 2'], ['Hero 3', 'Pahlawan 3'], ['Hero 4', 'Pahlawan 4'], ['Hero 5', 'Pahlawan 5'], ['Hero 6', 'Pahlawan 6']], caps: [1, 1, 1, 1, 1, 1], labels: [['Helps me when I’m sad', 'Menolong saat aku sedih'], ['Keeps me safe', 'Menjagaku aman'], ['Listens to me', 'Mendengarkanku'], ['Makes me laugh', 'Membuatku tertawa'], ['Helps me at school', 'Menolong di sekolah'], ['Comes when I call', 'Datang saat kupanggil']] }
+    { id: 'hero', name: ['Superhero team', 'Tim pahlawan'], sub: ['Everyone has a power', 'Semua punya kekuatan'], group: ['Powers', 'Kekuatan'], zones: [['Hero 1', 'Pahlawan 1'], ['Hero 2', 'Pahlawan 2'], ['Hero 3', 'Pahlawan 3'], ['Hero 4', 'Pahlawan 4'], ['Hero 5', 'Pahlawan 5'], ['Hero 6', 'Pahlawan 6']], caps: [1, 1, 1, 1, 1, 1], labels: [['Helps me when I’m sad', 'Menghiburku saat aku sedih'], ['Keeps me safe', 'Menjagaku tetap aman'], ['Listens to me', 'Mendengarkanku'], ['Makes me laugh', 'Membuatku tertawa'], ['Helps me at school', 'Membantuku di sekolah'], ['Comes when I call', 'Datang saat kupanggil']] }
   ];
   var LBY = {}; LAYOUTS.forEach(function (l) { LBY[l.id] = l; });
   // these layouts only come in the Plain theme
   var PLAIN_ONLY = { hand: 1, house: 1, tree: 1 };
   function themeFor(layout, theme) { return PLAIN_ONLY[layout] ? 'plain' : theme; }
   var PROMPTS = [
-    ['Who could you tell if something felt wrong?', 'Kepada siapa kamu bisa cerita kalau ada sesuatu yang terasa tidak benar?'],
+    ['Who could you tell if something felt wrong?', 'Kamu bisa cerita ke siapa kalau ada yang terasa nggak beres?'],
     ['Who helps you when you’re sad?', 'Siapa yang membantumu waktu kamu sedih?'],
-    ['Who would you look for if you got lost?', 'Siapa yang akan kamu cari kalau kamu tersesat?'],
+    ['Who would you look for if you got lost?', 'Kalau kamu tersesat, kamu akan cari siapa?'],
     ['Who makes you feel safe at school?', 'Siapa yang membuatmu merasa aman di sekolah?'],
-    ['Who could you talk to about a worry?', 'Kepada siapa kamu bisa bercerita tentang hal yang membuatmu khawatir?']
+    ['Who could you talk to about a worry?', 'Kamu bisa cerita ke siapa soal hal yang bikin kamu khawatir?']
   ];
 
   /* ===================== the map picture ===================== */
@@ -663,7 +663,7 @@
   };
   function dots(n) { return '<div class="spm-dots" aria-hidden="true">' + [0, 1, 2].map(function (i) { return '<i class="' + (i === n ? 'on' : i < n ? 'done' : '') + '"></i>'; }).join('') + '</div>'; }
   function topBar(back, n) {
-    return '<div class="spm-top wrap">' + back + '<div class="spm-toptx"><b>' + esc(t('Safe People Map', 'Peta Orang Aman')) + '</b></div>' + dots(n) + '</div>';
+    return '<div class="spm-top wrap">' + back + '<div class="spm-toptx"><b>' + esc(t('Safe People Map', 'Safe People Map')) + '</b></div>' + dots(n) + (X.helpBtn ? X.helpBtn('safe', true) : '') + '</div>';
   }
   function layoutCard(l, m) {
     var free = !locked('safe.' + l.id);
@@ -761,7 +761,7 @@
       var rows = [
         ['open-look', t('Change look', 'Ganti tampilan'), t('Switch layout or theme. Everyone stays on the map.', 'Ganti peta atau tema. Semua orang tetap di peta.')],
         ['toggle-edit', t('Edit map', 'Ubah peta'), t('Rename labels, change colours, edit or remove people.', 'Ganti nama label, warna, ubah atau hapus orang.')],
-        ['open-prompts', t('Prompts', 'Pertanyaan'), t('Gentle questions to show on the map.', 'Pertanyaan lembut untuk ditampilkan di peta.')],
+        ['open-prompts', t('Prompts', 'Pertanyaan'), t('Gentle questions to show on the map.', 'Pertanyaan ringan untuk ditampilkan di peta.')],
         ['open-download', t('Download', 'Unduh'), t('Save a picture, or a PDF to print.', 'Simpan gambar, atau PDF untuk dicetak.')],
         ['open-new', t('Start a new map', 'Mulai peta baru'), t('Clears this map and its photos.', 'Menghapus peta ini beserta fotonya.')]
       ];
@@ -779,7 +779,7 @@
     } else if (s === 'prompts') {
       title = t('Prompts', 'Pertanyaan');
       var name = kidName(), ownLock = locked('safe.prompts');
-      body = '<p class="spm-p">' + esc(t('Show a question on the map to start a gentle chat.', 'Tampilkan pertanyaan di peta untuk memulai obrolan yang lembut.') + (ownLock ? '' : ' ' + t('Change the words to suit ' + (name || 'your child') + '.', 'Ubah kata-katanya agar cocok untuk ' + (name || 'anakmu') + '.'))) + '</p><div class="spm-qs">' +
+      body = '<p class="spm-p">' + esc(t('Show a question on the map to start a gentle chat.', 'Tampilkan pertanyaan di peta untuk memulai obrolan santai.') + (ownLock ? '' : ' ' + t('Change the words to suit ' + (name || 'your child') + '.', 'Ubah kata-katanya agar cocok untuk ' + (name || 'anakmu') + '.'))) + '</p><div class="spm-qs">' +
         promptList(m).map(function (q, i) {
           return '<div class="spm-q">' + (ST.promptEdit === i ? '<input class="spm-input sm on" data-in="prompt" data-v="' + i + '" value="' + esc(q) + '" maxlength="120"><button type="button" class="spm-dark" data-a="prompt-done">' + esc(t('Save', 'Simpan')) + '</button>' :
             '<b>' + esc(q) + '</b><button type="button" class="spm-linkmini" data-a="prompt-edit" data-v="' + i + '">' + esc(t('Edit', 'Ubah')) + plusPill('safe.prompts') + '</button><button type="button" class="spm-show' + (ST.prompt === q ? ' on' : '') + '" data-a="prompt-show" data-v="' + i + '">' + esc(ST.prompt === q ? t('Showing', 'Ditampilkan') : t('Show', 'Tampilkan')) + '</button>') + '</div>';
@@ -922,7 +922,7 @@
   function exportSVG(m) {
     var title = esc(titleText()), r = drawMap({ layout: m.layout, theme: m.theme, pal: palFor(m, m.theme), labels: labelsFor(m, m.layout), people: m.people, g: kidG() });
     return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 500" width="1320" height="1500"><rect width="440" height="500" fill="#FBF8F3"/><text x="220" y="44" text-anchor="middle" font-family="Fredoka, Figtree, system-ui, sans-serif" font-weight="600" font-size="26" fill="' + K + '">' + title + '</text>' +
-      r.svg.replace('<svg ', '<svg x="20" y="64" ').replace('width="100%" height="100%"', 'width="400" height="400"') + '<text x="220" y="488" text-anchor="middle" font-family="Figtree, system-ui, sans-serif" font-size="11" fill="#6B6875">Little Us · ' + esc(t('Safe People Map', 'Peta Orang Aman')) + '</text></svg>';
+      r.svg.replace('<svg ', '<svg x="20" y="64" ').replace('width="100%" height="100%"', 'width="400" height="400"') + '<text x="220" y="488" text-anchor="middle" font-family="Figtree, system-ui, sans-serif" font-size="11" fill="#6B6875">Little Us · ' + esc(t('Safe People Map', 'Safe People Map')) + '</text></svg>';
   }
   function doDownload() {
     var m = curMap(), url = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(exportSVG(m));
@@ -1096,7 +1096,7 @@
     '.spm-grab{flex:none;display:flex;justify-content:center;padding:8px 0 0}.spm-grab i{width:40px;height:5px;border-radius:9px;background:#E4DCCF}',
     '.spm-shead{flex:none;display:flex;align-items:center;gap:10px;padding:8px 18px 4px}.spm-shead>b{flex:1;min-width:0;font:600 24px/1.2 Fredoka,sans-serif}.spm-x{flex:none;width:44px;height:44px;border-radius:50%;background:#fff;border:1px solid var(--sp-line);font:700 18px Figtree,sans-serif!important}',
     '.spm-sbody{flex:1;min-height:0;overflow-y:auto;padding:8px 18px 18px;display:flex;flex-direction:column;gap:14px}',
-    '.spm-sfoot{flex:none;display:flex;gap:10px;padding:12px 18px calc(18px + env(safe-area-inset-bottom));border-top:1px solid var(--sp-line);background:#FBF8F3;border-radius:0 0 28px 28px}',
+    '.spm-sfoot{flex:none;display:flex;gap:10px;padding:12px 18px calc(18px + var(--sa-b));border-top:1px solid var(--sp-line);background:#FBF8F3;border-radius:0 0 28px 28px}',
     '@media (min-width:700px){.spm-sheet{left:50%;right:auto;bottom:auto;top:50%;transform:translate(-50%,-50%);margin:0;width:min(640px,calc(100vw - 48px));max-height:min(760px,calc(100dvh - 48px));border-radius:28px}.spm-grab{display:none}.spm-shead{padding-top:16px}}',
     'html.lu-desk .spm-sheet{left:50%;right:auto;bottom:auto;top:50%;transform:translate(-50%,-50%);margin:0;width:min(640px,calc(100vw - 32px));max-height:min(760px,calc(100dvh - 32px));border-radius:28px}html.lu-desk .spm-grab{display:none}html.lu-desk .spm-shead{padding-top:16px}',
     'html.spm-lock{overflow:hidden}',
@@ -1123,7 +1123,7 @@
     '.spm-opt{position:relative;display:flex;flex-direction:column;gap:2px;padding:14px;border-radius:16px;background:#fff;border:1px solid var(--sp-line);text-align:left}.spm-opt.on{box-shadow:0 0 0 2.5px var(--sp-ink),0 0 0 6.5px #FFC94A}.spm-opt b{font-size:15.5px}.spm-opt small{font-size:12.5px;color:var(--sp-soft);line-height:1.35}',
     '.spm-toast{position:fixed;left:16px;right:16px;bottom:calc(24px + var(--ua-bar,0px));z-index:9100;display:flex;justify-content:center;pointer-events:none}.spm-toast div{max-width:460px;padding:12px 18px;border-radius:16px;background:var(--sp-ink,#2B2A35);color:#fff;font-weight:600;font-size:14.5px;line-height:1.4;box-shadow:0 10px 30px rgba(0,0,0,.2);text-wrap:pretty}',
     '.spm-ghost{position:fixed;width:64px;height:64px;transform:translate(-50%,-50%) scale(1.1);pointer-events:none;z-index:9200;filter:drop-shadow(0 8px 12px rgba(0,0,0,.25))}',
-    'html.lu-app .spm-foot{bottom:calc(var(--ua-bar,84px) + env(safe-area-inset-bottom));box-shadow:0 40px 0 #FBF8F3}',
+    'html.lu-app .spm-foot{bottom:calc(var(--ua-bar,84px) + var(--sa-b));box-shadow:0 40px 0 #FBF8F3}',
     '@media (max-width:420px){.spm-toptx b.big{font-size:19px}.spm-tray>b{font-size:22px}.spm-add>b{font-size:21px}.spm-addfaces{display:none}}'
   ].join('');
 
@@ -1156,8 +1156,8 @@
   function hubVis() { var A = window.LUArt; return '<div class="tl-mini-art">' + (A && A.toolArt ? A.toolArt('safe') : '') + '</div>'; }
   LUTools.register('tools/safe-people', {
     page: page, click: function () { },
-    card: { grp: 'talk', tint: '#DDF2E4', vis: hubVis, title: function () { return t('Safe People Map', 'Peta Orang Aman'); },
-      desc: function () { return t('A child and a grown-up map out, together, the people the child trusts and when to go to each of them.', 'Anak dan orang dewasa memetakan bersama orang-orang yang dipercaya anak, dan kapan harus menghampiri mereka.'); } }
+    card: { grp: 'talk', tint: '#DDF2E4', vis: hubVis, title: function () { return t('Safe People Map', 'Safe People Map'); },
+      desc: function () { return t('A child and a grown-up map out, together, the people the child trusts and when to go to each of them.', 'Anak dan orang dewasa bersama-sama memetakan orang-orang yang dipercaya anak, dan kapan anak bisa datang ke mereka.'); } }
   });
   window.LUSafe = { version: '1', drawMap: drawMap, avatarSVG: avatarSVG, fullSVG: fullSVG, LIB: LIB };
   if (LUTools.render) try { LUTools.render(); } catch (e) { }

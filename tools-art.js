@@ -1033,7 +1033,7 @@
     } },
     { id: 'donat', cat: 'food', en: 'Doughnut', idn: 'Donat', tags: 'doughnut donut sweet donat kue', draw: function () {
       return sdw(40) + E(60, 68, 42, 30, C.brownL) +
-        P('M22 64C22 46 40 36 60 36 80 36 98 46 98 64 90 60 84 66 76 62 68 68 60 62 52 68 44 62 36 66 30 60 22 64Z', C.pink) + E(60, 60, 12, 7, '#FFF1C7') +
+        P('M22 64C22 46 40 36 60 36 80 36 98 46 98 64 90 60 84 66 76 62 68 68 60 62 52 68 44 62 36 66 30 60 26 62 24 63 22 64Z', C.pink) + E(60, 60, 12, 7, '#FFF1C7') +
         P('M40 48l4-2M72 46l5 1M82 56l3 3M48 56l-2 4', 'none', ' stroke="' + C.blue + '"' + SW(2.6)) + P('M58 44l4-1M34 56l2 3M78 50l-1 4', 'none', ' stroke="' + C.yellow + '"' + SW(2.6));
     } },
     { id: 'sereal', cat: 'food', en: 'Cereal', idn: 'Sereal', tags: 'cereal breakfast milk sereal sarapan', draw: function () {
@@ -1771,6 +1771,21 @@
           P('M66 70q4-5 8 0q4 5 8 0q4-5 8 0', 'none', s(2.6)) +
           G('rotate(-12 26 92)', R(12, 78, 28, 28, 7, '#fff') + O(20, 86, 2.6, K, NS) + O(32, 98, 2.6, K, NS) + O(26, 92, 2.6, K, NS));
       },
+      // Problem Sorter: a balanced seesaw with a rock (the problem) and a speech bubble (the reaction)
+      sorter: function () {
+        return E(60, 109, 48, 4.5, K, NS + ' opacity=".14"') +
+          P('M2 104C20 96 40 99 60 98C82 97 100 95 118 102V108H2Z', C.greenL) +
+          P('M10 103v-6M13 103v-4M104 101v-6M108 101v-4', 'none', ' stroke="' + C.greenD + '"' + s(2.2)) +
+          P('M46 104C48 92 53 82 57 76C59 73 61 73 63 76C67 82 72 92 74 104Z', C.grey) + P('M56 92l4 3-2 5', 'none', ' stroke="#9AA2AE"' + s(1.6)) +
+          G('rotate(-3 60 72)',
+            R(6, 68, 108, 9, 4.5, C.brown) + P('M16 72.5h22M50 71.5h14M78 73h26', 'none', ' stroke="' + C.brownD + '" opacity=".5"' + s(1.4)) + O(60, 72.5, 2.4, K, NS) +
+            R(10, 62, 34, 6, 2.5, C.brownL) + R(76, 62, 34, 6, 2.5, C.brownL) +
+            P('M14 62C13 50 20 41 29 40C38 39 43 46 42 54L41 62Z', C.grey) + HL('M20 50c1-4 4-6 7-6') + P('M33 49l-3 5', 'none', ' stroke="#9AA2AE"' + s(1.6)) +
+            R(80, 52, 26, 10, 3, C.brownL) + P('M84 52v10M89 52v10M94 52v10M99 52v10', 'none', ' stroke="' + C.brownD + '" opacity=".45"' + s(1.3)) +
+            P('M80 26H106C111 26 114 29 114 34V42C114 47 111 50 106 50H97L91 56L92 50H80C75 50 72 47 72 42V34C72 29 75 26 80 26Z', C.blueL) +
+            O(85, 38, 2.4, K, NS) + O(93, 38, 2.4, K, NS) + O(101, 38, 2.4, K, NS)) +
+          P('M60 8l2.4 5.6 5.6 2.4-5.6 2.4-2.4 5.6-2.4-5.6-5.6-2.4 5.6-2.4z', C.yellow, s(2.2));
+      },
       // Safe People Map, and coming soon: Social Scenarios Talk, Personal Space, Discrete Trial Teaching, Early Reading
       // these use the same heads and bodies as the picture cards, so the people match the rest of Little Us
       safe: function () {
@@ -1852,11 +1867,11 @@
   // tools still in the works: shown with a "Coming soon" badge on the home page, the tools list and the menus
   var SOON = [
     { k: 'scenarios', grp: 'talk', tint: '#E9E1F7', en: 'Social Scenarios Talk', idn: 'Ngobrol Situasi Sosial',
-      d: ['Everyday social situations in pictures, with prompts to talk through what to say and do.', 'Situasi sosial sehari-hari dalam gambar, dengan pertanyaan untuk membahas apa yang dikatakan dan dilakukan.'] },
+      d: ['Everyday social situations in pictures, with prompts to talk through what to say and do.', 'Situasi sosial sehari-hari dalam gambar, dengan pertanyaan pemandu untuk membahas apa yang bisa diucapkan dan dilakukan.'] },
     { k: 'space', grp: 'talk', tint: '#DCEBFA', en: 'Personal Space', idn: 'Ruang Pribadi',
       d: ['Learn about personal space and body boundaries through simple, playful activities.', 'Belajar tentang ruang pribadi dan batasan tubuh lewat aktivitas sederhana dan seru.'] },
     { k: 'read', grp: 'teach', tint: '#FFE9DA', en: 'Early Reading', idn: 'Membaca Awal',
-      d: ['Letters, sounds and first words, one small step at a time.', 'Huruf, bunyi, dan kata pertama, satu langkah kecil setiap kali.'] }
+      d: ['Letters, sounds and first words, one small step at a time.', 'Huruf, bunyi, dan kata-kata pertama, sedikit demi sedikit.'] }
   ];
 
   window.LUArt = {

@@ -346,57 +346,57 @@
     livePreview: ['Live preview', 'Pratinjau langsung'], style: ['Style', 'Gaya'], soon: ['Soon', 'Segera'], close: ['Close', 'Tutup'],
     min: ['min', 'menit'], minLeft: ['minutes left', 'menit lagi'],
     // breathing buddy
-    bbTitle: ['Breathing Buddy', 'Teman Napas'], bbDesc: ['A friendly animation to breathe along with, like a balloon that grows and shrinks. It helps your child slow down and calm their body.', 'Animasi ramah untuk bernapas bersama, seperti balon yang membesar dan mengecil. Membantu anak memperlambat napas dan menenangkan tubuhnya.'],
-    balloon: ['Balloon', 'Balon'], star: ['Star', 'Bintang'], flower: ['Flower & candle', 'Bunga & lilin'], box: ['Box', 'Kotak'], belly: ['Belly Buddy', 'Dino perut'],
+    bbTitle: ['Breathing Buddy', 'Breathing Buddy'], bbDesc: ['A friendly animation to breathe along with, like a balloon that grows and shrinks. It helps your child slow down and calm their body.', 'Animasi lucu untuk latihan napas bareng, misalnya balon yang membesar dan mengecil. Membantu anak memperlambat napas dan menenangkan diri.'],
+    balloon: ['Balloon', 'Balon'], star: ['Star', 'Bintang'], flower: ['Flower & candle', 'Bunga & lilin'], box: ['Box', 'Kotak'], belly: ['Belly Buddy', 'Belly Buddy'],
     styleD: {
       balloon: ['Grows as you breathe in, shrinks as you breathe out.', 'Membesar saat tarik napas, mengecil saat buang napas.'],
-      star: ['Trace up to a point as you breathe in, and down as you breathe out.', 'Naik ke ujung saat tarik napas, turun saat buang napas.'],
+      star: ['Trace up to a point as you breathe in, and down as you breathe out.', 'Telusuri ke atas sampai ujung saat tarik napas, lalu turun saat buang napas.'],
       flower: ['Smell the flower, then blow out the candle.', 'Cium bunganya, lalu tiup lilinnya.'],
       box: ['In, hold, out, hold. Best for children aged 7 and up.', 'Tarik, tahan, buang, tahan. Cocok untuk usia 7 tahun ke atas.'],
-      belly: ['A little dino lies on its back. Its tummy rises and falls, and the star toy rides along.', 'Dino kecil berbaring. Perutnya naik turun, dan mainan bintang ikut bergerak.']
+      belly: ['A little dino lies on its back. Its tummy rises and falls, and the star toy rides along.', 'Dino kecil berbaring telentang. Perutnya naik turun, dan mainan bintang di atasnya ikut bergerak.']
     },
-    pace: ['Pace', 'Kecepatan'], paceNote: ['Never shown to the child', 'Tidak tampil untuk anak'], pLittle: ['Little ones', 'Si kecil'], pKids: ['Kids', 'Anak'], pCalm: ['Slow & calm', 'Pelan & tenang'],
-    inS: ['Breathe in', 'Tarik napas'], outS: ['Breathe out', 'Buang napas'], holdS: ['Hold', 'Tahan'], holdNote: ['Box only', 'Khusus kotak'],
+    pace: ['Pace', 'Kecepatan'], paceNote: ['Never shown to the child', 'Tidak terlihat oleh anak'], pLittle: ['Little ones', 'Si kecil'], pKids: ['Kids', 'Anak'], pCalm: ['Slow & calm', 'Pelan & tenang'],
+    inS: ['Breathe in', 'Tarik napas'], outS: ['Breathe out', 'Buang napas'], holdS: ['Hold', 'Tahan'], holdNote: ['Box only', 'Khusus gaya Kotak'],
     nBreaths: ['Number of breaths', 'Jumlah napas'], breathsRange: ['breaths · 3 to 10', 'napas · 3 sampai 10'],
     summary: [function (a, b, n) { return a + ' s in · ' + b + ' s out · ' + n + ' breaths'; }, function (a, b, n) { return a + ' dtk tarik · ' + b + ' dtk buang · ' + n + ' napas'; }],
-    soundsFeel: ['Sounds & feel', 'Suara & getaran'],
+    soundsFeel: ['Sounds & feel', 'Suara & tampilan'],
     sayIO: ['Say “breathe in / breathe out”', 'Ucapkan “tarik napas / buang napas”'], sayIOd: ['A soft voice, in the site language', 'Suara lembut, dalam bahasa situs'],
     counting: ['Soft counting', 'Hitungan pelan'], countingD: ['“1, 2, 3, 4” on each breath', '“1, 2, 3, 4” di setiap napas'],
     tone: ['Gentle breath sound', 'Suara napas lembut'], toneD: ['A soft tone that rises and falls', 'Nada lembut yang naik dan turun'],
     vib: ['Gentle vibration', 'Getaran lembut'], vibD: ['A soft buzz when the breath changes', 'Getar pelan saat napas berganti'],
     showWords: ['Show words on screen', 'Tampilkan kata di layar'], showWordsD: ['“Breathe in” and “Breathe out” under the buddy', '“Tarik napas” dan “Buang napas” di bawah gambar'],
     blowReal: ['Blow for real', 'Tiup sungguhan'], flowerOnly: ['Flower & candle only', 'Khusus bunga & lilin'],
-    useMic: ['Use the microphone', 'Pakai mikrofon'], useMicD: ['The flame flickers and goes out when your child really blows. Sound is never recorded or saved.', 'Api bergoyang dan padam saat anak benar-benar meniup. Suara tidak pernah direkam atau disimpan.'],
-    micAskH: ['Turn on “blow for real”?', 'Nyalakan “tiup sungguhan”?'],
+    useMic: ['Use the microphone', 'Pakai mikrofon'], useMicD: ['The flame flickers and goes out when your child really blows. Sound is never recorded or saved.', 'Apinya bergoyang lalu padam saat anak benar-benar meniup. Suara tidak pernah direkam atau disimpan.'],
+    micAskH: ['Turn on “blow for real”?', 'Aktifkan “tiup sungguhan”?'],
     micAskP: ['Your child blows towards the screen and the candle really goes out. The microphone only listens for a puff of air while the candle is showing.', 'Anak meniup ke arah layar dan lilinnya benar-benar padam. Mikrofon hanya mendengarkan tiupan selama lilin tampil.'],
-    micL1: ['Nothing is recorded, saved or sent', 'Tidak ada yang direkam, disimpan, atau dikirim'], micL2: ['A small “Mic on” dot shows while it listens', 'Tanda kecil “Mik nyala” tampil saat mendengarkan'], micL3: ['Tapping the candle always works too', 'Mengetuk lilin juga selalu bisa'],
+    micL1: ['Nothing is recorded, saved or sent', 'Tidak ada yang direkam, disimpan, atau dikirim'], micL2: ['A small “Mic on” dot shows while it listens', 'Tanda kecil “Mikrofon aktif” muncul selama mikrofon mendengarkan'], micL3: ['Tapping the candle always works too', 'Lilinnya juga tetap bisa diketuk'],
     allowMic: ['Allow microphone', 'Izinkan mikrofon'], notNow: ['Not now', 'Nanti saja'], micAsk2: ['Your browser asks next. You can turn this off any time here.', 'Browser akan bertanya setelah ini. Bisa dimatikan kapan saja di sini.'],
-    micNo: ['The microphone isn’t available here. Tapping the candle still works.', 'Mikrofon tidak tersedia. Mengetuk lilin tetap bisa.'], micOn: ['Mic on', 'Mik nyala'],
-    noCount: ['<b>No countdown, on purpose.</b> Your child sees dots fill in, never a number going down. Breathing Buddy also opens from Feelings Check-In.', '<b>Sengaja tanpa hitung mundur.</b> Anak melihat titik terisi, bukan angka yang berkurang. Teman Napas juga bisa dibuka dari Cek Perasaan.'],
+    micNo: ['The microphone isn’t available here. Tapping the candle still works.', 'Mikrofon tidak tersedia di sini. Lilinnya tetap bisa diketuk.'], micOn: ['Mic on', 'Mikrofon aktif'],
+    noCount: ['<b>No countdown, on purpose.</b> Your child sees dots fill in, never a number going down. Breathing Buddy also opens from Feelings Check-In.', '<b>Sengaja tanpa hitung mundur.</b> Anak melihat titik terisi, bukan angka yang berkurang. Breathing Buddy juga bisa dibuka dari Feelings Check-In.'],
     stayAwake: ['The screen stays awake. Press and hold to exit.', 'Layar tetap menyala. Tekan lama untuk keluar.'],
     smell: ['Smell the flower', 'Cium bunganya'], blow: ['Blow out the candle', 'Tiup lilinnya'], whoosh: ['Whoosh!', 'Wuuus!'], relight: ['The candle lights again for the next breath', 'Lilin menyala lagi untuk napas berikutnya'],
     youDid: ['You did it', 'Kamu berhasil'],
     // feelings
-    feTitle: ['Feelings Check-In', 'Cek Perasaan'], feDesc: ['Your child picks how they feel and how big the feeling is, shows where they feel it in their body, and chooses something that helps.', 'Anak memilih apa yang dirasakan dan seberapa besar perasaannya, menunjukkan di mana terasa di tubuh, lalu memilih hal yang membantu.'],
+    feTitle: ['Feelings Check-In', 'Feelings Check-In'], feDesc: ['Your child picks how they feel and how big the feeling is, shows where they feel it in their body, and chooses something that helps.', 'Anak memilih apa yang dirasakan dan seberapa besar perasaannya, menunjukkan di mana terasa di tubuh, lalu memilih hal yang membantu.'],
     whatUse: ['What will your child use?', 'Apa yang akan dipakai anak?'],
-    mCheck: ['How I feel', 'Perasaanku'], mCheckD: ['How do you feel, and how big?', 'Merasa apa, seberapa besar?'],
+    mCheck: ['How I feel', 'Perasaanku'], mCheckD: ['How do you feel, and how big?', 'Kamu merasa apa, dan seberapa besar?'],
     mBody: ['Body map', 'Peta tubuh'], mBodyD: ['Where do you feel it?', 'Di mana terasa?'],
     mMenu: ['Calm-down menu', 'Menu tenang'], mMenuD: ['Choose what helps', 'Pilih yang membantu'],
-    steps: ['Steps', 'Langkah'], sBoth: ['Feeling + size', 'Perasaan + ukuran'], sFace: ['Feeling only', 'Perasaan saja'], sSize: ['Size only', 'Ukuran saja'],
-    sizeOnlyD: ['Size only works well for children who can’t name the feeling yet.', 'Ukuran saja cocok untuk anak yang belum bisa menyebut perasaannya.'],
+    steps: ['Steps', 'Langkah'], sBoth: ['Feeling + size', 'Perasaan + seberapa besar'], sFace: ['Feeling only', 'Perasaan saja'], sSize: ['Size only', 'Seberapa besar saja'],
+    sizeOnlyD: ['Size only works well for children who can’t name the feeling yet.', '“Seberapa besar saja” cocok untuk anak yang belum bisa menyebut perasaannya.'],
     feelShow: ['Feelings to show', 'Perasaan yang ditampilkan'], upTo6: [function (n) { return n + ' chosen'; }, function (n) { return n + ' dipilih'; }],
     levels: ['How big is it? · levels', 'Seberapa besar? · tingkat'],
     askHelp: ['Then show “What can help?”', 'Lalu tampilkan “Apa yang bisa membantu?”'], askHelpD: ['Uses the cards in your calm-down menu', 'Memakai kartu di menu tenangmu'],
-    sayQ: ['Say the question out loud', 'Ucapkan pertanyaannya'], sayQD: ['Also says each choice when tapped', 'Juga mengucapkan pilihan yang diketuk'],
-    sensCards: ['Sensation cards', 'Kartu rasa'], askSens: ['Ask what it feels like', 'Tanyakan rasanya seperti apa'], askSensD: ['Off: just tap the body', 'Mati: cukup ketuk tubuh'],
-    sayParts: ['Say body parts out loud', 'Ucapkan bagian tubuh'], glowCol: ['Glow colour', 'Warna cahaya'],
+    sayQ: ['Say the question out loud', 'Bacakan pertanyaannya'], sayQD: ['Also says each choice when tapped', 'Pilihan yang diketuk juga ikut dibacakan'],
+    sensCards: ['Sensation cards', 'Kartu sensasi'], askSens: ['Ask what it feels like', 'Tanyakan rasanya seperti apa'], askSensD: ['Off: just tap the body', 'Kalau mati: anak cukup mengetuk tubuh'],
+    sayParts: ['Say body parts out loud', 'Bacakan nama bagian tubuh'], glowCol: ['Glow colour', 'Warna cahaya'],
     menuH: ['Calm-down menu', 'Menu tenang'], menuSub: [function (n) { return n + ' chosen · tap a card to swap it'; }, function (n) { return n + ' dipilih · ketuk kartu untuk mengganti'; }],
-    helpNote: ['Search or tap cards to add them. Tap a chosen card again to take it out.', 'Cari atau ketuk kartu untuk menambah. Ketuk kartu yang sudah dipilih untuk menghapusnya.'],
+    helpNote: ['Search or tap cards to add them. Tap a chosen card again to take it out.', 'Cari atau ketuk kartu untuk menambahkannya. Ketuk lagi kartu yang sudah dipilih untuk mengeluarkannya.'],
     addNHelp: [function (n) { return 'Use ' + n + (n === 1 ? ' card' : ' cards'); }, function (n) { return 'Pakai ' + n + ' kartu'; }], swapCard: ['Swap card', 'Ganti kartu'],
     addHelp: ['+ Add or search cards', '+ Tambah atau cari kartu'], whenChosen: ['When this card is chosen', 'Saat kartu ini dipilih'],
-    actNone: ['Just show it', 'Tampilkan saja'], actTimer: [function (m) { return 'Timer · ' + m + ' min'; }, function (m) { return 'Timer · ' + m + ' menit'; }], actBreathe: ['Open Breathing Buddy', 'Buka Teman Napas'],
+    actNone: ['Just show it', 'Tampilkan saja'], actTimer: [function (m) { return 'Timer · ' + m + ' min'; }, function (m) { return 'Timer · ' + m + ' menit'; }], actBreathe: ['Open Breathing Buddy', 'Buka Breathing Buddy'],
     removeCard: ['Remove from menu', 'Hapus dari menu'], moveUp: ['Move up', 'Naikkan'],
-    comeBack: ['Come back to', 'Kembali ke'], showNext: ['Show what comes next', 'Tampilkan kegiatan berikutnya'], showNextD: ['After calming, a First–Then ending: “Then: …”', 'Setelah tenang, penutup Pertama–Lalu: “Lalu: …”'],
+    comeBack: ['Come back to', 'Kembali ke'], showNext: ['Show what comes next', 'Tampilkan kegiatan berikutnya'], showNextD: ['After calming, a First–Then ending: “Then: …”', 'Setelah tenang, ditutup dengan First–Then: “Setelah itu: …”'],
     chooseNext: ['Choose the next activity', 'Pilih kegiatan berikutnya'],
     menuTip: ['<b>Tip:</b> practise the menu when your child is calm, so it’s familiar when it’s needed.', '<b>Tips:</b> latih menu ini saat anak sedang tenang, agar sudah terbiasa saat dibutuhkan.'],
     nothingSaved: ['<b>Nothing is saved.</b> Each check-in starts fresh. No history, no charts.', '<b>Tidak ada yang disimpan.</b> Setiap cek dimulai dari awal. Tanpa riwayat, tanpa grafik.'],
@@ -407,34 +407,34 @@
     lv3: [['A little', 'Medium', 'Big'], ['Sedikit', 'Sedang', 'Besar']],
     lv4: [['A little', 'Medium', 'Big', 'Very big'], ['Sedikit', 'Sedang', 'Besar', 'Besar sekali']],
     lv5: [['A tiny bit', 'A little', 'Medium', 'Big', 'Very big'], ['Sedikit sekali', 'Sedikit', 'Sedang', 'Besar', 'Besar sekali']],
-    whereFeel: ['Where do you feel it?', 'Di mana kamu merasakannya?'], feelLike: ['What does it feel like?', 'Rasanya seperti apa?'], tapBody: ['Tap the body', 'Ketuk tubuhnya'],
+    whereFeel: ['Where do you feel it?', 'Di mana kamu merasakannya?'], feelLike: ['What does it feel like?', 'Rasanya seperti apa?'], tapBody: ['Tap the body', 'Ketuk bagian tubuhnya'],
     thanksShow: ['Thank you for showing me', 'Terima kasih sudah menunjukkan'], inMy: [function (l) { return 'In my ' + l; }, function (l) { return 'Terasa di ' + l; }], and: ['and', 'dan'],
     calmI: ['To feel calm, I can…', 'Supaya tenang, aku bisa…'], chooseAnother: ['Choose another', 'Pilih yang lain'], feelCalm: ['I feel calm', 'Aku sudah tenang'],
     wellDone: ['Well done for calming down', 'Hebat, kamu sudah tenang'], ready: ['I’m ready', 'Aku siap'], emptyMenu: ['Add a few cards to the calm-down menu first.', 'Tambahkan beberapa kartu ke menu tenang dulu.'],
     // worry jar
-    wjTitle: ['Worry Jar', 'Toples Khawatir'], wjDesc: ['Your child draws or writes a worry and puts it in a jar on screen. Later, you open the jar together and talk it through.', 'Anak menggambar atau menulis kekhawatirannya lalu memasukkannya ke toples di layar. Nanti, kalian membuka toples bersama dan membicarakannya.'],
+    wjTitle: ['Worry Jar', 'Worry Jar'], wjDesc: ['Your child draws or writes a worry and puts it in a jar on screen. Later, you open the jar together and talk it through.', 'Anak menggambar atau menulis kekhawatirannya lalu memasukkannya ke toples di layar. Nanti, kalian membuka toples bersama dan membicarakannya.'],
     inJar: [function (n) { return n === 0 ? 'The jar is empty' : n + (n === 1 ? ' worry in the jar' : ' worries in the jar'); }, function (n) { return n === 0 ? 'Toplesnya kosong' : n + ' kekhawatiran di toples'; }],
     lookTogether: ['Look together →', 'Lihat bersama →'], worryIn: [function (m) { return 'Worry time in ' + m + ' min'; }, function (m) { return 'Waktunya cerita dalam ' + m + ' menit'; }], worryNow: ['It’s worry time', 'Sudah waktunya cerita'],
     addedWhen: [function (s) { return 'Last added ' + s; }, function (s) { return 'Terakhir ditambahkan ' + s; }],
     howAdd: [function (n) { return 'How ' + n + ' adds a worry'; }, function (n) { return 'Cara ' + n + ' menambah kekhawatiran'; }],
     draw: ['Draw', 'Gambar'], type: ['Type', 'Tulis'], voice: ['Voice', 'Suara'],
-    worryLater: ['Worry time later', 'Waktu cerita nanti'], openLater: ['Open the jar together later', 'Buka toples bersama nanti'], openLaterD: ['A timer starts when a worry goes in. When it ends, the jar opens.', 'Timer mulai saat kekhawatiran masuk. Saat selesai, toples terbuka.'],
+    worryLater: ['Worry time later', 'Waktu cerita nanti'], openLater: ['Open the jar together later', 'Buka toples bersama nanti'], openLaterD: ['A timer starts when a worry goes in. When it ends, the jar opens.', 'Timer mulai berjalan saat kekhawatiran dimasukkan. Begitu waktunya habis, toples terbuka.'],
     openWorryNow: ['Open worry time now', 'Buka waktu cerita sekarang'], startWorry: ['Start in child mode', 'Mulai mode anak'],
-    somethingWorry: ['Is something worrying you?', 'Ada yang bikin kamu khawatir?'], drawIt: ['Draw it', 'Gambar'], writeIt: ['Write it', 'Tulis'], sayIt: ['Say it · coming later', 'Ucapkan · segera hadir'],
+    somethingWorry: ['Is something worrying you?', 'Ada yang bikin kamu khawatir?'], drawIt: ['Draw it', 'Gambar'], writeIt: ['Write it', 'Tulis'], sayIt: ['Say it · coming later', 'Rekam suara · segera hadir'],
     drawWorry: ['Draw your worry', 'Gambar kekhawatiranmu'], worriedThat: ['I’m worried that…', 'Aku khawatir kalau…'], putIn: ['Put it in the jar', 'Masukkan ke toples'],
     undo: ['Undo', 'Batal'], eraser: ['Eraser', 'Penghapus'], itsIn: ['It’s in the jar', 'Sudah masuk toples'],
     safe: ['Your worry is safe in the jar', 'Kekhawatiranmu aman di toples'], lookSoon: ['We’ll look together soon', 'Nanti kita lihat bersama'], another: ['+ Another', '+ Tambah lagi'],
     worryTime: ['Worry time', 'Waktunya cerita'], tapOne: ['Tap a worry to look at it together', 'Ketuk satu untuk dilihat bersama'],
-    forAdult: ['For the adult', 'Untuk orang dewasa'], forAdultP: ['Ask what happened, what might help, and what to do if it happens. When you’ve talked it through, you can let it go together.', 'Tanyakan apa yang terjadi, apa yang bisa membantu, dan apa yang dilakukan jika itu terjadi. Setelah dibicarakan, kalian bisa melepaskannya bersama.'],
-    holdFloat: ['Hold: float away', 'Tahan: lepaskan'], holdFloatD: ['Adults · hold for 2 seconds', 'Orang dewasa · tahan 2 detik'], closeJar: ['Close the jar', 'Tutup toples'],
-    byeWorry: ['Bye bye, worry', 'Dadah, khawatir'], leftInJar: [function (n) { return n === 0 ? 'The jar is empty' : n + ' left in the jar'; }, function (n) { return n === 0 ? 'Toplesnya kosong' : 'Sisa ' + n + ' di toples'; }],
+    forAdult: ['For the adult', 'Untuk orang dewasa'], forAdultP: ['Ask what happened, what might help, and what to do if it happens. When you’ve talked it through, you can let it go together.', 'Tanyakan apa yang terjadi, apa yang bisa membantu, dan apa yang bisa dilakukan kalau itu terjadi. Setelah dibahas, kalian bisa melepaskannya bersama.'],
+    holdFloat: ['Hold: float away', 'Tahan: terbangkan'], holdFloatD: ['Adults · hold for 2 seconds', 'Orang dewasa · tahan 2 detik'], closeJar: ['Close the jar', 'Tutup toples'],
+    byeWorry: ['Bye bye, worry', 'Dadah, rasa khawatir!'], leftInJar: [function (n) { return n === 0 ? 'The jar is empty' : n + ' left in the jar'; }, function (n) { return n === 0 ? 'Toplesnya kosong' : 'Sisa ' + n + ' di toples'; }],
     keepIt: ['Keep it in the jar', 'Simpan di toples'],
     today: ['today', 'hari ini'], yesterday: ['yesterday', 'kemarin'], daysAgo: [function (n) { return n + ' days ago'; }, function (n) { return n + ' hari lalu'; }],
     // download
-    dlBreath: ['Breathing card', 'Kartu napas'], dlBreathCards: ['Breathing buddies to cut out', 'Kartu teman napas untuk digunting'],
+    dlBreath: ['Breathing card', 'Kartu napas'], dlBreathCards: ['Breathing buddies to cut out', 'Kartu Breathing Buddy untuk digunting'],
     dlColour: ['Colour in a dot after each breath', 'Warnai satu titik setiap selesai bernapas'],
     dlFeel: ['How do I feel?', 'Aku merasa apa?'], dlBig: ['How big?', 'Seberapa besar?'], dlBody: ['Where do I feel it?', 'Di mana aku merasakannya?'],
-    dlJar: ['My Worry Jar', 'Toples Khawatirku'], dlJarP: ['Draw or write a worry, fold it, and put it in the jar.', 'Gambar atau tulis kekhawatiranmu, lipat, lalu masukkan ke toples.'], dlSlips: ['Worry notes to cut out', 'Catatan khawatir untuk digunting']
+    dlJar: ['My Worry Jar', 'Worry Jar-ku'], dlJarP: ['Draw or write a worry, fold it, and put it in the jar.', 'Gambar atau tulis kekhawatiranmu, lipat, lalu masukkan ke toples.'], dlSlips: ['Worry notes to cut out', 'Kertas kekhawatiran untuk digunting']
   };
   function w(k) {
     var v = W[k]; if (!v) return k;
@@ -458,7 +458,7 @@
     if (!d.calm) d.calm = {};
     var c = d.calm;
     function fill(k, def) { if (!c[k] || typeof c[k] !== 'object') c[k] = {}; for (var x in def) if (c[k][x] === undefined) c[k][x] = def[x]; }
-    fill('bb', { style: 'balloon', pace: 'kids', inS: 4, outS: 4, hold: 4, n: 5, say: true, count: false, tone: true, vib: false, mic: false, words: true });
+    fill('bb', { style: 'balloon', pace: 'kids', inS: 4, outS: 4, hold: 4, n: 5, tone: true, mic: false, words: true });
     fill('fe', { mode: 'check', steps: 'both', show: ['happy', 'sad', 'angry', 'scared', 'tired', 'calm'], levels: 4, help: true, sayQ: true, sens: true, sensShow: ['tight', 'hot', 'shaky', 'butterflies', 'heavy', 'heart'], sayParts: true, bodyHelp: true, glow: '#F0694F', menu: MENU_DEFAULT.map(function (m) { return { ref: m.ref, act: m.act }; }), back: false, backRef: null });
     // fixed now: both steps, 5 levels, voice on, and calming cards just show (no actions)
     c.fe.steps = 'both'; c.fe.levels = 5; c.fe.sayQ = true; c.fe.sayParts = true;
@@ -642,11 +642,8 @@
             var t = bbWords(name);
             setWord(t);
             if (dots) dots.outerHTML = dotsHTML(c.n, bi, bi), dots = el.querySelector('.lc-dots');
-            if (c.say) speak(t); else if (c.count) speak('1');
             if (c.tone && (name === 'in' || name === 'out')) tone(name === 'in', dur);
-            if (c.vib) X.buzz(name === 'in' ? 40 : [30, 60, 30]);
           },
-          second: function (name, n) { if (c.count) speak(String(n), true); },
           done: function () { if (mic) { mic.stop(); mic = null; } later(finish, 700); }
         });
         // stop the mic if the child view closes
@@ -654,7 +651,6 @@
       }
       function finish() {
         X.chime('done');
-        if (c.say) speak(w('youDid'));
         el.innerHTML = '<div class="tl-cwrap lc-child lc-end ' + c.style + '">' + X.exitPill() + '<div class="lc-endin"><span class="lc-heartbig">' + heartSVG(70, '#FBD5DE') + '</span><h2 class="lc-bigq">' + esc(w('youDid')) + '</h2>' + dotsHTML(c.n, c.n, -1) + '</div>' +
           '<div class="lc-endbtns"><button type="button" class="lc-bigbtn" data-again>↻ ' + esc(w('again')) + '</button><button type="button" class="lc-bigbtn yellow" data-done>✓ ' + esc(w('done')) + '</button></div></div>';
         X.wireExit(el);
@@ -673,7 +669,7 @@
     var stepper = function (key, label, val, note) {
       return '<div class="tl-row"><div><b>' + esc(label) + '</b>' + (note ? '<small>' + esc(note) + '</small>' : '') + '</div><div class="lc-step"><button type="button" class="tl-iconbtn round" data-lc="bstep" data-k="' + key + '" data-d="-1" aria-label="−">−</button><b>' + val + ' s</b><button type="button" class="tl-iconbtn round" data-lc="bstep" data-k="' + key + '" data-d="1" aria-label="+">+</button></div></div>';
     };
-    var h = '<div class="tl-page narrow lc-setup">' + X.topbar(w('bbTitle'), X.tr('parentSetup'), { dl: true }) +
+    var h = '<div class="tl-page narrow lc-setup">' + X.topbar(w('bbTitle'), X.tr('parentSetup'), { help: 'breathe' }) +
       '<div class="tl-previewbox lc-pv" style="background:#DCEBFA"><span class="lc-pvtag">' + esc(w('livePreview')) + '</span><div class="lc-pvbud" id="lcPrev">' + buddySVG(c.style) + '</div><div class="lc-pvword"><b>' + esc(bbWords('in')) + '</b><small>' + esc(w('summary', c.style === 'box' ? c.inS : c.inS, c.outS, c.n)) + '</small></div></div>' +
       '<div class="tl-lab2">' + esc(w('style')) + '</div><div class="lc-stylegrid">' + styles.map(function (s) {
         return '<button type="button" class="tl-opt' + (c.style === s ? ' on' : '') + '" data-lc="bstyle" data-v="' + s + '"><span class="tl-optvis">' + buddyIcon(s) + '</span><b>' + esc(w(s)) + (s === 'box' ? ' <em>7+</em>' : '') + '</b></button>';
@@ -683,12 +679,11 @@
       '<div class="tl-lab2">' + esc(w('nBreaths')) + '</div>' +
       '<div class="tl-panel stepper"><button type="button" class="tl-iconbtn" data-lc="bn" data-d="-1">−</button><div><b>' + c.n + '</b><span class="lc-ndots">' + new Array(c.n + 1).join('<i></i>') + '</span><small>' + esc(w('breathsRange')) + '</small></div><button type="button" class="tl-iconbtn" data-lc="bn" data-d="1">+</button></div>' +
       '<div class="tl-lab2">' + esc(w('soundsFeel')) + '</div><div class="tl-panel">' +
-      X.row(esc(w('sayIO')), esc(w('sayIOd')), X.toggle('say', c.say)) + X.row(esc(w('counting')), esc(w('countingD')), X.toggle('count', c.count)) +
-      X.row(esc(w('tone')), esc(w('toneD')), X.toggle('tone', c.tone)) + X.row(esc(w('vib')), esc(w('vibD')), X.toggle('vib', c.vib)) +
+      X.row(esc(w('tone')), esc(w('toneD')), X.toggle('tone', c.tone)) +
       X.row(esc(w('showWords')), esc(w('showWordsD')), X.toggle('words', c.words)) + '</div>' +
       '<div class="tl-lab2 between"><span>' + esc(w('blowReal')) + '</span><small>' + esc(w('flowerOnly')) + '</small></div>' +
       '<div class="tl-panel' + (c.style === 'flower' ? '' : ' lc-dim') + '"><div class="tl-row"><span class="lc-micico">🎙</span><div><b>' + esc(w('useMic')) + '</b><small>' + esc(w('useMicD')) + '</small></div>' + X.toggle('mic', c.mic && c.style === 'flower') + '</div></div>' +
-      '<div class="tl-foot"><button type="button" class="tl-btn primary lg block" data-lc="bstart">' + esc(X.tr('startChild')) + '</button><small>' + esc(w('stayAwake')) + '</small></div></div>';
+      '<div class="tl-foot"><button type="button" class="tl-btn primary lg block" data-lc="bstart">' + esc(X.tr('startChild')) + '</button></div></div>';
     later(function () { startPreview(); }, 30);
     return h;
   }
@@ -754,7 +749,7 @@
   function pageFeelings() {
     var c = CFG().fe, p = X.prof();
     var modes = [['check', 'mCheck', 'mCheckD', feelIcon()], ['body', 'mBody', 'mBodyD', bodyIcon(kid())], ['menu', 'mMenu', 'mMenuD', menuIcon()]];
-    var h = '<div class="tl-page narrow lc-setup">' + X.topbar(w('feTitle'), X.tr('parentSetup'), { dl: true }) +
+    var h = '<div class="tl-page narrow lc-setup">' + X.topbar(w('feTitle'), X.tr('parentSetup'), { help: 'feelings' }) +
       '<div class="tl-lab2">' + esc(w('whatUse')) + '</div><div class="lc-modes">' + modes.map(function (m) {
         return '<button type="button" class="tl-opt lc-mode' + (c.mode === m[0] ? ' on' : '') + '" data-lc="fmode" data-v="' + m[0] + '"><span class="tl-optvis">' + m[3] + '</span><b>' + esc(w(m[1])) + '</b><small>' + esc(w(m[2])) + '</small></button>';
       }).join('') + '</div>';
@@ -789,7 +784,7 @@
       }
     }
 
-    h += '<div class="tl-foot"><button type="button" class="tl-btn primary lg block" data-lc="fstart">' + esc(w(c.mode === 'check' ? 'startCheck' : c.mode === 'body' ? 'startBody' : 'startMenu')) + '</button><small>' + esc(w('stayAwake')) + '</small></div></div>';
+    h += '<div class="tl-foot">' + X.startRow('<button type="button" class="tl-btn primary lg block" data-lc="fstart">' + esc(w(c.mode === 'check' ? 'startCheck' : c.mode === 'body' ? 'startBody' : 'startMenu')) + '</button>', true) + '</div></div>';
     return h;
   }
   function chooseAct(i) {
@@ -1076,7 +1071,7 @@
   function pageWorry() {
     var c = CFG().wj, n = c.items.length, name = X.profName(), now = Date.now();
     var timeLine = c.at ? (c.at > now ? w('worryIn', Math.max(1, Math.ceil((c.at - now) / 60000))) : w('worryNow')) : (n ? w('addedWhen', relDay(c.items[n - 1].at)) : '');
-    var h = '<div class="tl-page narrow lc-setup">' + X.topbar(w('wjTitle'), X.tr('parentSetup'), { dl: true }) +
+    var h = '<div class="tl-page narrow lc-setup">' + X.topbar(w('wjTitle'), X.tr('parentSetup'), { help: 'worry' }) +
       '<div class="lc-jarcard' + (c.at && c.at <= now ? ' due' : '') + '"><span class="lc-jarmini">' + jarSVG({ n: n, face: true }) + '</span><div><b>' + esc(w('inJar', n)) + '</b><small>' + esc(timeLine) + '</small>' +
       (n ? '<button type="button" class="tl-btn outline sm" data-lc="wnow">' + esc(w('lookTogether')) + '</button>' : '') + '</div></div>' +
       '<div class="tl-lab2">' + esc(w('howAdd', name)) + '</div><div class="lc-addways">' +
@@ -1085,7 +1080,7 @@
       '<button type="button" class="tl-opt lc-off" disabled><span class="lc-wico">🎙</span><b>' + esc(w('voice')) + '</b><em class="lc-soon">' + esc(w('soon')) + '</em></button></div>' +
       '<div class="tl-lab2">' + esc(w('worryLater')) + '</div><div class="tl-panel">' + X.row(esc(w('openLater')), esc(w('openLaterD')), X.toggle('later', c.later)) +
       (c.later ? '<div class="tl-row"><div class="tl-chips wrap">' + [10, 20, 30, 60].map(function (m) { return '<button type="button" class="tl-chip' + (c.laterMin === m ? ' on' : '') + '" data-lc="wmin" data-v="' + m + '">' + m + ' ' + esc(w('min')) + '</button>'; }).join('') + '</div></div>' : '') + '</div>' +
-      '<div class="tl-foot"><button type="button" class="tl-btn primary lg block" data-lc="wstart">' + esc(X.tr('startChild')) + '</button>' + (n ? '<button type="button" class="tl-btn outline lg block" data-lc="wnow">' + esc(w('openWorryNow')) + '</button>' : '') + '<small>' + esc(w('stayAwake')) + '</small></div></div>';
+      '<div class="tl-foot">' + X.startRow('<button type="button" class="tl-btn primary lg block" data-lc="wstart">' + esc(X.tr('startChild')) + '</button>', true) + (n ? '<button type="button" class="tl-btn outline lg block" data-lc="wnow">' + esc(w('openWorryNow')) + '</button>' : '') + '</div></div>';
     if (c.at && c.at > now) later(function () { if (X.route() === 'tools/worry') X.rerender(); }, Math.min(60000, c.at - now + 500));
     return h;
   }
@@ -1144,8 +1139,7 @@
         if (c.draw && !c.type) return drawScreen();
         if (c.type && !c.draw) return writeScreen();
         var r = shell(el, 'lc-wj', head(w('somethingWorry'), '', { spk: true }) + '<div class="lc-jarbig">' + jarSVG({ n: Math.min(c.items.length, 6) }) + '</div>' +
-          '<div class="lc-endbtns"><button type="button" class="lc-bigbtn tall" data-draw><span class="lc-wico">✎</span>' + esc(w('drawIt')) + '</button><button type="button" class="lc-bigbtn tall" data-write><span class="lc-wico">Aa</span>' + esc(w('writeIt')) + '</button></div>' +
-          '<p class="lc-later">' + esc(w('sayIt')) + '</p>');
+          '<div class="lc-endbtns"><button type="button" class="lc-bigbtn tall" data-draw><span class="lc-wico">✎</span>' + esc(w('drawIt')) + '</button><button type="button" class="lc-bigbtn tall" data-write><span class="lc-wico">Aa</span>' + esc(w('writeIt')) + '</button></div>');
         speak(w('somethingWorry'));
         r.onclick = function (e) {
           if (e.target.closest('[data-spk]')) return speak(w('somethingWorry'));
@@ -1318,7 +1312,7 @@
   }
   function openDl(kind) {
     var title = kind === 'breathe' ? w('bbTitle') : kind === 'feelings' ? w('feTitle') : w('wjTitle');
-    X.openDownload('ext', { title: title, file: kind === 'breathe' ? 'breathing-buddy' : kind === 'feelings' ? 'feelings' : 'worry-jar', velcro: kind === 'feelings', instr: INSTR[kind], build: function (o, pw, ph, H) { return buildPages(kind, o, pw, ph, H); } });
+    X.openDownload('ext', { title: title, file: kind === 'breathe' ? 'breathing-buddy' : kind === 'feelings' ? 'feelings' : 'worry-jar', modes: kind !== 'feelings', instr: INSTR[kind], build: function (o, pw, ph, H) { return buildPages(kind, o, pw, ph, H); } });
   }
   function svgIn(svg, x, y, wdt, hgt) { return svg.replace(/^<svg /, '<svg x="' + x + '" y="' + y + '" width="' + wdt + '" height="' + hgt + '" '); }
   function inkify(svg, o) { return o.ink ? svg.replace(/fill="(?!none|url)[^"]*"/g, 'fill="#fff"') : svg; }
@@ -1337,7 +1331,8 @@
       y += 8; g += T2(mid, y, w('dlColour'), 4.4, { anchor: 'middle', fill: H.MUTED, body: true, weight: 600 }); y += 8;
       var dr = 6.5, gap = 6, tw = b.n * dr * 2 + (b.n - 1) * gap;
       for (var i = 0; i < b.n; i++) g += '<circle cx="' + (mid - tw / 2 + dr + i * (dr * 2 + gap)) + '" cy="' + (y + dr) + '" r="' + dr + '" fill="#fff" stroke="' + H.INK + '" stroke-width=".6" stroke-dasharray="1.6 1.2"/>';
-      out.push(H.page(pw, ph, g));
+      // poster: the breathing page; cutting activity: the buddy cards
+      if (o.mode !== 'cut') return [H.page(pw, ph, g)];
       // cut-out buddies
       var g2 = T2(14, 22, w('dlBreathCards'), 7.5), sz = (pw - 28 - 10) / 2, styles = ['balloon', 'star', 'flower', 'box', 'belly'];
       styles.forEach(function (s, k) {
@@ -1393,8 +1388,9 @@
       var g6 = T2(mid, 28, w('dlJar'), 12, { anchor: 'middle' }) + T2(mid, 37, w('dlJarP'), 4.8, { anchor: 'middle', body: true, weight: 500, fill: '#4A4855' });
       var jw = pw - 50, jh = jw * 290 / 292; if (jh > 200) { jh = 200; jw = jh * 292 / 290; }
       g6 += svgIn(inkify(jarSVG({ n: 0 }), o), (pw - jw) / 2, 46, jw, jh);
-      out.push(H.page(pw, ph, g6));
-      var g7 = T2(14, 22, w('dlSlips'), 7.5), nw = (pw - 28 - 8) / 2, nh = 52;
+      // poster: the jar; cutting activity: the worry slips
+      if (o.mode !== 'cut') return [H.page(pw, ph, g6)];
+      var g7 =T2(14, 22, w('dlSlips'), 7.5), nw = (pw - 28 - 8) / 2, nh = 52;
       for (var q = 0; q < 8; q++) {
         var x2 = 14 + (q % 2) * (nw + 8), y2 = 30 + Math.floor(q / 2) * (nh + 8);
         if (o.cut) g7 += H.cutRect(x2, y2, nw, nh);

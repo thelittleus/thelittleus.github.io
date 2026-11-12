@@ -23,7 +23,7 @@
   var timers = {};
   function flash(ok) {
     var el = document.getElementById('dttSaved'); if (!el) return;
-    el.textContent = ok ? T('Saved', 'Tersimpan') : T('Not saved. Check your connection.', 'Belum tersimpan. Periksa koneksi.');
+    el.textContent = ok ? T('Saved', 'Tersimpan') : T('Not saved. Check your connection.', 'Belum tersimpan. Cek koneksi internetmu.');
     el.className = 'dtt-saved show' + (ok ? '' : ' bad');
     clearTimeout(timers.flash);
     if (ok) timers.flash = setTimeout(function () { var e = document.getElementById('dttSaved'); if (e) e.className = 'dtt-saved'; }, 1600);
@@ -79,7 +79,7 @@
       '<h1 class="dtt-h1">' + esc(T('Who are you teaching?', 'Siapa yang kamu ajar?')) + '</h1><p class="dtt-p">' + esc(T('Add a student to make their first program.', 'Tambahkan anak untuk membuat program pertamanya.')) + '</p>' +
       '<button type="button" class="dtt-btn primary" data-a="addStudent">' + esc(T('+ Add Student', '+ Tambah Anak')) + '</button></div>';
     if (U.error) return gate(T('We could not open your programs', 'Program belum bisa dibuka'),
-      T('Check your connection and try again.', 'Periksa koneksi lalu coba lagi.'),
+      T('Check your connection and try again.', 'Cek koneksi internetmu, lalu coba lagi.'),
       '<button type="button" class="dtt-btn primary" data-a="retry">' + esc(T('Try again', 'Coba lagi')) + '</button>');
     if (!D.store.isLoaded()) { start(); return '<div class="dtt-loading" role="status">' + esc(T('Opening your programs...', 'Membuka program...')) + '</div>'; }
     return (VIEWS[U.view] || VIEWS.programs)();
@@ -206,9 +206,9 @@
     var c = e && e.message;
     X.toast(c === 'too_big' ? T('That file is over 50 MB. Try a smaller one.', 'File itu lebih dari 50 MB. Coba file yang lebih kecil.') :
       c === 'unreadable' ? T('We could not open that photo. Try a JPEG or PNG.', 'Foto itu tidak bisa dibuka. Coba JPEG atau PNG.') :
-      c === 'heic' ? T('We could not open that iPhone photo. Check your connection and try again, or try a JPEG or PNG.', 'Foto iPhone itu tidak bisa dibuka. Periksa koneksi lalu coba lagi, atau coba JPEG atau PNG.') :
+      c === 'heic' ? T('We could not open that iPhone photo. Check your connection and try again, or try a JPEG or PNG.', 'Foto iPhone itu tidak bisa dibuka. Cek koneksi internetmu, lalu coba lagi, atau coba JPEG atau PNG.') :
       c === 'still_big' ? T('We could not make that photo small enough. Try another one.', 'Foto itu tidak bisa diperkecil lagi. Coba foto lain.') :
-      T('The photo did not upload. Check your connection and try again.', 'Foto belum terunggah. Periksa koneksi lalu coba lagi.'));
+      T('The photo did not upload. Check your connection and try again.', 'Foto belum terunggah. Cek koneksi internetmu, lalu coba lagi.'));
   }
   ui.photoRoom = function (n) {
     var used = D.store.photoCount(), lim = D.store.photoLimit();

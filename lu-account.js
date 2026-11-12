@@ -63,7 +63,7 @@
     createIntro: [function (c) { return 'Optional and free. Set up ' + c + ' once and find everything on your phone, tablet and computer.'; }, function (c) { return 'Opsional dan gratis. Atur ' + c + ' sekali, lalu semuanya ada di HP, tablet, dan komputermu.'; }],
     yourChild: ['your child', 'anakmu'],
     contEmail: ['Continue with email', 'Lanjut dengan email'],
-    includes: ['A free account includes', 'Akun gratis berisi'],
+    includes: ['A free account includes', 'Yang kamu dapat dari akun gratis'],
     inc1: ['Your child’s setup on every phone, tablet and computer', 'Pengaturan anakmu di setiap HP, tablet, dan komputer'],
     inc2: ['Boards, rewards and characters kept if you change devices', 'Papan, hadiah, dan karakter tetap ada saat ganti perangkat'],
     inc3: ['Upgrade to Little Us Plus whenever you want', 'Upgrade ke Little Us Plus kapan saja'],
@@ -74,7 +74,7 @@
     eName: ['Please add your name.', 'Isi namamu dulu ya.'], eEmail: ['Please check the email address.', 'Cek lagi alamat emailnya ya.'],
     ePw: ['Use at least 8 characters.', 'Gunakan minimal 8 karakter.'], ePw2: ['The two passwords are different.', 'Kedua kata sandi belum sama.'],
     // A03
-    hasAccH: ['Good news, you already have an account', 'Kabar baik, kamu sudah punya akun'],
+    hasAccH: ['Good news, you already have an account', 'Ternyata kamu sudah punya akun'],
     hasAccP: [function (e) { return e + ' is already with Little Us. Log in and pick up where you left off.'; }, function (e) { return e + ' sudah terdaftar di Little Us. Masuk dan lanjutkan dari terakhir kali.'; }],
     logInWith: ['Log in with this email', 'Masuk dengan email ini'], forgot: ['Forgot password?', 'Lupa kata sandi?'],
     // A04
@@ -85,7 +85,7 @@
     wrongEmail: ['Wrong email? Change it', 'Email salah? Ganti'],
     confirmedToast: ['Email confirmed. Welcome to Little Us!', 'Email terkonfirmasi. Selamat datang di Little Us!'],
     // A05
-    welcomeBack: ['Welcome back', 'Selamat datang kembali'], loginP: ['Log in to use your Plus pass and your child’s setup on this device.', 'Masuk untuk memakai pass Plus dan pengaturan anakmu di perangkat ini.'],
+    welcomeBack: ['Welcome back', 'Selamat datang kembali'], loginP: ['Log in to use your Plus pass and your child’s setup on this device.', 'Masuk untuk memakai paket Plus dan pengaturan anakmu di perangkat ini.'],
     newHere: ['New here?', 'Baru di sini?'], createFree: ['Create a free account', 'Buat akun gratis'],
     badLogin: ['That password doesn’t match. Try again or reset it.', 'Kata sandi tidak cocok. Coba lagi atau atur ulang.'],
     notConfirmed: ['Please confirm your email first. We can send the link again.', 'Konfirmasi emailmu dulu ya. Kami bisa kirim ulang link-nya.'],
@@ -93,21 +93,21 @@
     // A06/A07
     resetH: ['Reset your password', 'Atur ulang kata sandi'], resetP: ['Enter the email you use for Little Us. We’ll send a link to set a new password.', 'Masukkan email yang kamu pakai di Little Us. Kami akan kirim link untuk membuat kata sandi baru.'],
     sendReset: ['Send reset link', 'Kirim link'], backLogin: ['Back to log in', 'Kembali ke halaman masuk'],
-    inboxH: ['Check your inbox', 'Cek kotak masukmu'],
+    inboxH: ['Check your inbox', 'Cek inbox emailmu'],
     inboxP: [function (e) { return 'If <b>' + e + '</b> has a Little Us account, a reset link is on its way. It works for 1 hour.'; }, function (e) { return 'Jika <b>' + e + '</b> punya akun Little Us, link untuk atur ulang sedang dikirim. Berlaku 1 jam.'; }],
     resendLink: ['Resend link', 'Kirim ulang link'],
     // A08/A09
     newPwH: ['Set a new password', 'Buat kata sandi baru'], forE: [function (e) { return 'For ' + e; }, function (e) { return 'Untuk ' + e; }],
     newPw: ['New password', 'Kata sandi baru'], typeAgain: ['Type it again', 'Ketik ulang'], saveNewPw: ['Save new password', 'Simpan kata sandi baru'],
-    expiredLink: ['This link has expired', 'Link ini sudah kedaluwarsa'], expiredP: ['Reset links work for 1 hour. Send a new one and use it straight away.', 'Link berlaku 1 jam. Kirim link baru dan langsung pakai.'],
+    expiredLink: ['This link has expired', 'Link ini sudah kedaluwarsa'], expiredP: ['Reset links work for 1 hour. Send a new one and use it straight away.', 'Link untuk atur ulang hanya berlaku 1 jam. Kirim link baru, lalu langsung dipakai ya.'],
     sendNew: ['Send a new link', 'Kirim link baru'],
     pwUpdated: ['Password updated', 'Kata sandi diperbarui'],
     pwUpdatedP: [function (e) { return 'You’re logged in. Next time, use your new password with ' + e + '.'; }, function (e) { return 'Kamu sudah masuk. Lain kali, pakai kata sandi baru dengan ' + e + '.'; }],
-    goDash: ['Go to my dashboard', 'Ke beranda saya'],
+    goDash: ['Go to my dashboard', 'Ke dashboard'],
     // plans
     upgradeH: ['Upgrade to Little Us Plus', 'Upgrade ke Little Us Plus'], upgradeTo: ['Upgrade to Little Us', 'Upgrade ke Little Us'],
     moreForH: [function (c) { return 'More for ' + c + ', every download for you'; }, function (c) { return 'Lebih banyak untuk ' + c + ', semua unduhan untukmu'; }],
-    choosePass: ['Choose a pass. You pay once and it simply ends; nothing renews.', 'Pilih pass. Bayar sekali lalu selesai; tidak ada perpanjangan otomatis.'],
+    choosePass: ['Choose a pass. You pay once and it simply ends; nothing renews.', 'Pilih paket. Cukup bayar sekali, tanpa perpanjangan otomatis.'],
     choosePlan: ['Choose a plan', 'Pilih paket'], m3: ['3 Months', '3 Bulan'], m6: ['6 Months', '6 Bulan'], m12: ['12 Months', '12 Bulan'], bestValue: ['BEST VALUE', 'PALING HEMAT'],
     plusUntil: [function (d) { return 'Plus until ' + d; }, function (d) { return 'Plus sampai ' + d; }],
     untilD: [function (d) { return 'Until ' + d; }, function (d) { return 'Sampai ' + d; }], fxNote: [function (a, b) { return 'Shown in your currency at today’s rate. Card or PayPal is charged ' + a + ' or ' + b + ' by Gumroad; your bank does the conversion.'; }, function (a, b) { return 'Ditampilkan dalam mata uangmu dengan kurs hari ini. Kartu atau PayPal ditagih ' + a + ' atau ' + b + ' oleh Gumroad; bankmu yang mengonversinya.'; }],
@@ -115,7 +115,7 @@
     contPay: [function (p) { return 'Continue to payment · ' + p; }, function (p) { return 'Lanjut ke pembayaran · ' + p; }],
     contCheckout: [function (p) { return 'Continue to checkout · ' + p; }, function (p) { return 'Lanjut ke pembayaran · ' + p; }],
     addedTo: [function (e) { return 'Plus is added to <b>' + e + '</b>.'; }, function (e) { return 'Plus ditambahkan ke <b>' + e + '</b>.'; }],
-    opensTab: ['Choose how to pay next', 'Pilih cara bayar berikutnya'],
+    opensTab: ['Choose how to pay next', 'Cara bayarnya dipilih di langkah berikutnya'],
     oneTime: ['One-time payment, no auto-renewal.', 'Sekali bayar, tanpa perpanjangan otomatis.'],
     oneTimeP: ['Handled securely by Gumroad or Midtrans.', 'Diproses dengan aman oleh Gumroad atau Midtrans.'],
     payH: ['How would you like to pay?', 'Mau bayar dengan apa?'], payHP: ['You pay once. Plus ends by itself and never renews.', 'Kamu membayar sekali. Plus berakhir sendiri dan tidak diperpanjang otomatis.'],
@@ -125,10 +125,10 @@
     payOpening: ['Opening payment…', 'Membuka pembayaran…'], payFail: ['We couldn’t start the payment. Please try again, or choose the other way to pay.', 'Pembayaran belum bisa dimulai. Coba lagi, atau pilih cara bayar yang lain.'],
     pendingH: ['Waiting for your payment', 'Menunggu pembayaranmu'], pendingP: ['Finish paying in your banking or e-wallet app. Plus switches on by itself as soon as the payment arrives, so you can close this page.', 'Selesaikan pembayaran di aplikasi bank atau dompet digitalmu. Plus aktif sendiri begitu pembayaran masuk, jadi halaman ini boleh ditutup.'],
     pendingNote: ['Bank transfers can take a little while. The payment code stays valid for 24 hours.', 'Transfer bank bisa butuh waktu. Kode pembayaran berlaku selama 24 jam.'],
-    b1: ['About 60% more styles in every tool', 'Sekitar 60% gaya lebih banyak di setiap alat'],
-    b2: ['Every worksheet, social story and bundle in the Shop', 'Semua lembar kerja, cerita sosial, dan paket di Toko'],
+    b1: ['About 60% more styles in every tool', 'Sekitar 60% lebih banyak gaya di setiap alat'],
+    b2: ['Every worksheet, social story and bundle in the Shop', 'Semua worksheet, social story, dan paket di Toko'],
     b3: ['A profile for each child, not just one', 'Profil untuk setiap anak, tidak hanya satu'],
-    b4: ['Works on every phone, tablet and computer you sign in on', 'Berlaku di setiap HP, tablet, dan komputer tempat kamu masuk'],
+    b4: ['Works on every phone, tablet and computer you sign in on', 'Bisa dipakai di HP, tablet, dan komputer mana saja tempat kamu masuk'],
     freeAndPlus: ['Free and Plus', 'Gratis dan Plus'], freeAcc: ['Free account', 'Akun gratis'],
     cmp: [
       [['Visual tools', 'Alat visual'], ['All tools', 'Semua alat'], ['All tools', 'Semua alat']],
@@ -144,26 +144,27 @@
       [['What happens when it ends?', 'Apa yang terjadi saat berakhir?'], ['You go back to a free account with one child profile. The free tools stay, and so does anything you bought on its own earlier. Nothing is deleted.', 'Kamu kembali ke akun gratis dengan satu profil anak. Alat gratis tetap ada, begitu juga produk yang dulu kamu beli satuan. Tidak ada yang dihapus.']],
       [['Can I add more time?', 'Bisa menambah waktu?'], ['Yes. Buying again before it ends adds the time to your current end date.', 'Bisa. Membeli lagi sebelum berakhir akan menambah waktu dari tanggal berakhir saat ini.']],
       [['Which payment methods can I use?', 'Metode pembayaran apa yang bisa dipakai?'], ['Card or PayPal through Gumroad (international payment), or GoPay, QRIS and bank transfer through Midtrans (rupiah). You don’t need an account with either. Log in with the same Little Us account on any device to use Plus.', 'Kartu atau PayPal lewat Gumroad (pembayaran internasional), atau GoPay, QRIS, dan transfer bank lewat Midtrans (rupiah). Kamu tidak perlu akun di keduanya. Masuk dengan akun Little Us yang sama di perangkat mana pun untuk memakai Plus.']],
-      [['Can I get a refund?', 'Bisa minta pengembalian dana?'], ['Passes are final, so we don’t refund a change of mind or an unused pass. If Plus doesn’t work and we can’t fix it, we refund you. See our Refund Policy.', 'Pass bersifat final, jadi kami tidak mengembalikan dana karena berubah pikiran atau pass yang tidak dipakai. Jika Plus tidak berfungsi dan tidak bisa kami perbaiki, dana kamu dikembalikan. Lihat Kebijakan Pengembalian Dana kami.']]
+      [['Can I get a refund?', 'Bisa minta pengembalian dana?'], ['Passes are final, so we don’t refund a change of mind or an unused pass. If Plus doesn’t work and we can’t fix it, we refund you. See our Refund Policy.', 'Pembelian paket bersifat final, jadi dana tidak bisa dikembalikan karena berubah pikiran atau karena paketnya tidak dipakai. Kalau Plus tidak berfungsi dan tidak bisa kami perbaiki, uangmu akan dikembalikan. Lihat Kebijakan Pengembalian Dana kami.']]
     ],
     questions: ['Questions', 'Pertanyaan'], refundLink: ['Refund Policy', 'Kebijakan Pengembalian Dana'],
     notSet: ['Little Us Plus isn’t open for sale yet. Please check back soon.', 'Little Us Plus belum dibuka. Coba lagi nanti ya.'],
     // C03
     quickStep: ['One quick step first', 'Satu langkah dulu'],
-    quickStepP: ['Create a free account or log in, so your pass is saved to you and works on every device.', 'Buat akun gratis atau masuk, agar pass tersimpan di akunmu dan berlaku di semua perangkat.'],
+    quickStepP: ['Create a free account or log in, so your pass is saved to you and works on every device.', 'Buat akun gratis atau masuk, supaya paketnya tersimpan di akunmu dan bisa dipakai di semua perangkat.'],
     thenCheckout: ['Then we’ll take you straight to checkout.', 'Setelah itu kamu langsung diarahkan ke pembayaran.'],
     // C04-C08
     openingH: ['Opening secure checkout in a new tab', 'Membuka pembayaran aman di tab baru'],
     openingP: ['Gumroad handles the payment. Come back here when you’re done; we’ll take it from there.', 'Gumroad memproses pembayaran. Kembali ke sini setelah selesai; sisanya kami urus.'],
-    nothingOpened: ['Nothing opened?', 'Tidak ada yang terbuka?'], openCheckout: ['Open checkout', 'Buka pembayaran'],
+    nothingOpened: ['Nothing opened?', 'Halamannya nggak terbuka?'], openCheckout: ['Open checkout', 'Buka pembayaran'],
     checkoutOpen: ['Checkout is open in another tab', 'Pembayaran terbuka di tab lain'], finishH: ['Finish paying on Gumroad', 'Selesaikan pembayaran di Gumroad'],
     oneTimeUntil: [function (d) { return 'One-time payment · Plus until ' + d; }, function (d) { return 'Sekali bayar · Plus sampai ' + d; }],
     st1: ['Pay on the Gumroad page', 'Bayar di halaman Gumroad'], st2: ['Come back to this page', 'Kembali ke halaman ini'], st3: ['Plus switches on by itself', 'Plus aktif dengan sendirinya'],
-    ivePaid: ['I’ve paid', 'Saya sudah bayar'], reopen: ['Reopen checkout', 'Buka lagi pembayaran'], diffPlan: ['Choose a different plan', 'Pilih paket lain'],
-    activatingH: ['We’re activating your pass', 'Kami sedang mengaktifkan pass-mu'],
+    ivePaid: ['I’ve paid', 'Aku sudah bayar'], reopen: ['Reopen checkout', 'Buka lagi pembayaran'], diffPlan: ['Choose a different plan', 'Pilih paket lain'],
+    activatingH: ['We’re activating your pass', 'Kami sedang mengaktifkan paketmu'],
     activatingP: ['This usually takes a few seconds. Stay here, we’re checking automatically.', 'Biasanya hanya beberapa detik. Tetap di sini, kami cek otomatis.'],
     lastChecked: ['Last checked just now', 'Terakhir dicek barusan'],
     thanksH: ['Thank you for joining Little Us Plus', 'Terima kasih sudah bergabung dengan Little Us Plus'],
+    plusOnToast: ['Your payment arrived. Little Us Plus is on!', 'Pembayaranmu sudah masuk. Little Us Plus sudah aktif!'],
     plan: ['Plan', 'Paket'], paid: ['Paid', 'Dibayar'], oneTimeSfx: [', one-time', ', sekali bayar'],
     addedTime: [function (p, d) { return 'Added ' + p + ' · Plus now until ' + d; }, function (p, d) { return 'Ditambah ' + p + ' · Plus sekarang sampai ' + d; }],
     receipt: [function (e) { return 'Plus is added to your account (' + e + ').'; }, function (e) { return 'Plus ditambahkan ke akunmu (' + e + ').'; }],
@@ -175,35 +176,35 @@
     orderRef: ['Order ref', 'Kode pesanan'], checkAgain: ['Check again', 'Cek lagi'], emailSupport: ['Email support', 'Email bantuan'], backHome: ['Back to Home', 'Kembali ke Beranda'],
     // locks
     comesWith: [function (n) { return n + ' comes with Little Us Plus'; }, function (n) { return n + ' termasuk Little Us Plus'; }],
-    lockP: ['Plus adds more styles to every tool, and every worksheet in the Shop as a download.', 'Plus menambah gaya di setiap alat, dan semua lembar kerja di Toko bisa diunduh.'],
-    l1: ['About 60% more tool styles', 'Sekitar 60% gaya alat lebih banyak'], l2: ['Every worksheet and resource to download', 'Semua lembar kerja dan materi bisa diunduh'],
+    lockP: ['Plus adds more styles to every tool, and every worksheet in the Shop as a download.', 'Dengan Plus, ada lebih banyak gaya di setiap alat, dan semua worksheet di Toko bisa diunduh.'],
+    l1: ['About 60% more tool styles', 'Sekitar 60% lebih banyak gaya alat'], l2: ['Every worksheet and resource to download', 'Semua worksheet dan materi bisa diunduh'],
     getPlus: ['Get Little Us Plus', 'Dapatkan Little Us Plus'], keepUsing: [function (n) { return 'Keep using ' + n; }, function (n) { return 'Tetap pakai ' + n; }],
     notNow: ['Not now', 'Nanti saja'],
     fromNote: [function (p) { return 'From ' + p + ' · one-time payment, no automatic renewal'; }, function (p) { return 'Mulai ' + p + ' · sekali bayar, tanpa perpanjangan otomatis'; }],
     accLockH: [function (n) { return n + ' comes with a free account'; }, function (n) { return n + ' tersedia dengan akun gratis'; }],
     accLockP: ['Create a free account (it takes a minute) and this style is yours on every device.', 'Buat akun gratis (cukup semenit) dan gaya ini bisa kamu pakai di semua perangkat.'],
-    childLockH: ['More than one child comes with Little Us Plus', 'Lebih dari satu anak termasuk Little Us Plus'],
+    childLockH: ['More than one child comes with Little Us Plus', 'Profil untuk lebih dari satu anak ada di Little Us Plus'],
     childMaxH: [function (n) { return 'Plus covers up to ' + n + ' children'; }, function (n) { return 'Plus mencakup hingga ' + n + ' anak'; }],
     childMaxP: [function (n) { return 'One Little Us Plus pass is for one family or one practitioner, with up to ' + n + ' child profiles. Running a centre or school? Get in touch and we will set you up.'; }, function (n) { return 'Satu pass Little Us Plus untuk satu keluarga atau satu praktisi, dengan hingga ' + n + ' profil anak. Mengelola pusat terapi atau sekolah? Hubungi kami dan kami bantu siapkan.'; }],
-    childMaxC: ['Contact us about a centre', 'Hubungi kami untuk pusat terapi'], okGotIt: ['OK, got it', 'Oke, mengerti'],
-    photoLockH: ['Your own photos come with Little Us Plus', 'Foto sendiri termasuk Little Us Plus'],
-    qLockH: ['Your own questions come with Little Us Plus', 'Pertanyaan sendiri termasuk Little Us Plus'],
+    childMaxC: ['Contact us about a centre', 'Hubungi kami untuk pusat terapi'], okGotIt: ['OK, got it', 'Oke, paham'],
+    photoLockH: ['Your own photos come with Little Us Plus', 'Fitur foto sendiri ada di Little Us Plus'],
+    qLockH: ['Your own questions come with Little Us Plus', 'Fitur pertanyaan sendiri ada di Little Us Plus'],
     qLockP: ['Write questions about your child’s own friends, school and family, and play them in every game. Free accounts can play all the ready-made questions.', 'Tulis pertanyaan tentang teman, sekolah, dan keluarga anakmu sendiri, lalu mainkan di setiap permainan. Akun gratis bisa memainkan semua pertanyaan yang sudah tersedia.'],
     photoLockP: ['Turn photos of your child’s own things, people and places into picture cards. Free accounts can use every Little Us picture and make text cards.', 'Ubah foto barang, orang, dan tempat milik anakmu menjadi kartu bergambar. Akun gratis tetap bisa memakai semua gambar Little Us dan membuat kartu teks.'],
     childLockP: ['A free account has one child profile. Plus gives up to 6 children their own profile, cards and rewards.', 'Akun gratis punya satu profil anak. Dengan Plus, hingga 6 anak punya profil, kartu, dan hadiahnya sendiri.'],
     twoWays: ['Two ways to get this', 'Dua cara mendapatkannya'], inclPlus: ['Included with Little Us Plus', 'Termasuk Little Us Plus'],
-    inclPlusP: [function (p) { return 'This and every other worksheet, plus more tool styles. From ' + p + '.'; }, function (p) { return 'Ini dan semua lembar kerja lainnya, plus lebih banyak gaya alat. Mulai ' + p + '.'; }],
-    justThis: ['Buy just this one', 'Beli yang ini saja'], yoursKeep: ['yours to keep', 'jadi milikmu'], buyNow: ['Buy now', 'Beli sekarang'],
+    inclPlusP: [function (p) { return 'This and every other worksheet, plus more tool styles. From ' + p + '.'; }, function (p) { return 'Ini dan semua worksheet lainnya, plus lebih banyak gaya alat. Mulai ' + p + '.'; }],
+    justThis: ['Buy just this one', 'Beli yang ini saja'], yoursKeep: ['yours to keep', 'jadi milikmu selamanya'], buyNow: ['Buy now', 'Beli sekarang'],
     download: ['Download', 'Unduh'], inPlus: ['IN PLUS', 'DI PLUS'], inclWithPlus: ['Included with your Plus', 'Termasuk Plus-mu'], youOwn: ['You bought this', 'Kamu sudah membeli ini'],
     notOnSale: ['Not on sale yet. Ask us by email.', 'Belum dijual. Tanya kami lewat email.'],
     preparing: ['Preparing your download…', 'Menyiapkan unduhan…'], dlFail: ['The download couldn’t start. Please try again.', 'Unduhan gagal dimulai. Coba lagi ya.'],
     // account
     account: ['Account', 'Akun'], signedInEmail: ['Signed in with email', 'Masuk dengan email'],
-    pass12: ['12 Months pass', 'Pass 12 Bulan'], pass6: ['6 Months pass', 'Pass 6 Bulan'], pass3: ['3 Months pass', 'Pass 3 Bulan'], passPlus: ['Little Us Plus', 'Little Us Plus'],
+    pass12: ['12 Months pass', 'Paket 12 Bulan'], pass6: ['6 Months pass', 'Paket 6 Bulan'], pass3: ['3 Months pass', 'Paket 3 Bulan'], passPlus: ['Little Us Plus', 'Little Us Plus'],
     activeUntil: ['Active until', 'Aktif sampai'], buyAgainAdd: ['Buy again to add time', 'Beli lagi untuk menambah waktu'],
     until: [function (d) { return 'Until ' + d; }, function (d) { return 'Sampai ' + d; }],
     endsIn: [function (n, d) { return 'Ends in ' + n + (n === 1 ? ' day' : ' days') + ', on ' + d; }, function (n, d) { return 'Berakhir dalam ' + n + ' hari, pada ' + d; }],
-    addTimeNote: ['Add time below and nothing changes.', 'Tambah waktu di bawah dan tidak ada yang berubah.'],
+    addTimeNote: ['Add time below and nothing changes.', 'Tambah waktu di bawah, dan semuanya tetap seperti sekarang.'],
     freeAccP: ['Your setup is saved to your account and works on every device. Plus adds about 60% more tool styles and every download.', 'Pengaturanmu tersimpan di akun dan berlaku di semua perangkat. Plus menambah sekitar 60% gaya alat dan semua unduhan.'],
     fromRenew: [function (p) { return 'From ' + p + ' · one payment, no renewal'; }, function (p) { return 'Mulai ' + p + ' · sekali bayar, tanpa perpanjangan'; }],
     endedOn: [function (d) { return 'Your Plus pass ended on ' + d; }, function (d) { return 'Pass Plus-mu berakhir pada ' + d; }], buyAgain: ['Buy again', 'Beli lagi'],
@@ -216,13 +217,13 @@
     // settings card
     notSigned: ['Not signed in. Your setup is saved on this device only.', 'Belum masuk. Pengaturanmu hanya tersimpan di perangkat ini.'],
     createFreeAcc: ['Create free account', 'Buat akun gratis'], fromP: [function (p) { return 'From ' + p; }, function (p) { return 'Mulai ' + p; }],
-    moreStyles: ['More styles, every download', 'Lebih banyak gaya, semua unduhan'], getPlusShort: ['Get Plus', 'Dapatkan Plus'],
+    moreStyles: ['More styles, every download', 'Lebih banyak gaya, bebas unduh semua materi'], getPlusShort: ['Get Plus', 'Dapatkan Plus'],
     synced: ['synced just now', 'baru disinkronkan'], syncing: ['syncing…', 'menyinkronkan…'], syncOff: ['not synced yet', 'belum disinkronkan'],
     plusEndsAdd: [function (d) { return 'Plus ends ' + d + ' · Add time'; }, function (d) { return 'Plus berakhir ' + d + ' · Tambah waktu'; }],
     // home
     freeAccCardH: ['3 · Free account', '3 · Akun gratis'], freeAccCardP: ['Save your setup on every phone, tablet and computer', 'Simpan pengaturanmu di setiap HP, tablet, dan komputer'], create: ['Create', 'Buat'],
-    upCardH: ['More styles, every download', 'Lebih banyak gaya, semua unduhan'], upCardP: ['One payment, never renews', 'Sekali bayar, tidak diperpanjang otomatis'], upgrade: ['Upgrade', 'Upgrade'],
-    unlockedH: ['Everything is unlocked', 'Semuanya sudah terbuka'],
+    upCardH: ['More styles, every download', 'Lebih banyak gaya, bebas unduh semua materi'], upCardP: ['One payment, never renews', 'Sekali bayar, tidak diperpanjang otomatis'], upgrade: ['Upgrade', 'Upgrade'],
+    unlockedH: ['Everything is unlocked', 'Semua fitur sudah terbuka'],
     expiringH: [function (n) { return 'Plus ends in ' + n + (n === 1 ? ' day' : ' days'); }, function (n) { return 'Plus berakhir dalam ' + n + ' hari'; }],
     expiringP: [function (d) { return 'On ' + d + '. Add time and nothing changes.'; }, function (d) { return 'Pada ' + d + '. Tambah waktu dan tidak ada yang berubah.'; }], addTime: ['Add time', 'Tambah waktu'],
     endedH: [function (d) { return 'Plus ended on ' + d; }, function (d) { return 'Plus berakhir pada ' + d; }],
@@ -233,9 +234,9 @@
     pickUp: ['Pick up where you left off', 'Lanjutkan dari terakhir kali'], usedLast: [function (n) { return n + ' used last'; }, function (n) { return 'Terakhir dipakai ' + n; }],
     daysLeftN: [function (n) { return n + (n === 1 ? ' day left' : ' days left'); }, function (n) { return 'Sisa ' + n + ' hari'; }], planEnds: [function (p, d) { return p + ' plan · ends ' + d; }, function (p, d) { return 'Paket ' + p + ' · berakhir ' + d; }],
     m12: ['12 Months', '12 Bulan'], m6: ['6 Months', '6 Bulan'], m3: ['3 Months', '3 Bulan'], managePlan: ['Manage plan', 'Kelola paket'], activeP: ['Active', 'Aktif'], allTools: ['All tools', 'Semua alat'], open: ['Open', 'Buka'],
-    emptyLibH: ['Nothing here yet', 'Belum ada apa-apa'], emptyLibP: ['Anything you buy is kept here, on every device.', 'Semua yang kamu beli tersimpan di sini, di semua perangkat.'],
-    browseFree: ['Browse free printables', 'Lihat materi gratis'], plusLibH: ['Every worksheet is yours to download', 'Semua lembar kerja bisa kamu unduh'],
-    plusLibP: ['Little Us Plus includes every worksheet, social story and bundle in the Shop.', 'Little Us Plus mencakup semua lembar kerja, cerita sosial, dan paket di Toko.'], browseShop: ['Browse the shop', 'Lihat toko'],
+    emptyLibH: ['Nothing here yet', 'Belum ada apa-apa'], emptyLibP: ['Everything you download, free or Plus, is kept here on every device.', 'Semua yang kamu unduh, gratis atau Plus, tersimpan di sini, di semua perangkat.'],
+    browseFree: ['Browse free printables', 'Lihat materi gratis'], plusLibH: ['Every worksheet is yours to download', 'Semua worksheet bisa kamu unduh'],
+    plusLibP: ['Little Us Plus includes every worksheet, social story and bundle in the Shop.', 'Little Us Plus mencakup semua worksheet, social story, dan paket di Toko.'], browseShop: ['Browse the shop', 'Lihat toko'],
     upBarH: ['Upgrade to Little Us Plus', 'Upgrade ke Little Us Plus'], upBarP: ['Get more tool styles and all our resources', 'Dapatkan lebih banyak gaya alat dan semua materi kami'],
     seePlans: [function (p) { return 'See plans · from ' + p; }, function (p) { return 'Lihat paket · mulai ' + p; }],
     childProfile: ['Child profile', 'Profil anak'], switchC: ['Switch', 'Ganti'],
@@ -399,13 +400,15 @@
     return userP.then(function (u) {
       return Promise.all([
         http('/rest/v1/profiles?select=id,email,name,lang,plus_until,plus_plan,created_at&id=eq.' + u.id),
-        http('/rest/v1/purchases?select=id,kind,plan,product_id,price_label,status,plus_to,created_at&order=created_at.desc&limit=50').catch(function () { return []; })
+        http('/rest/v1/purchases?select=id,kind,plan,product_id,price_label,status,plus_to,created_at&order=created_at.desc&limit=50').catch(function () { return []; }),
+        // downloads saved to the account (null until supabase/library-setup.sql has been run)
+        http('/rest/v1/user_library?select=product_id,created_at&order=created_at.desc&limit=100').catch(function () { return null; })
       ]);
     }).then(function (r) {
-      var before = JSON.stringify([A.profile && A.profile.plus_until, A.profile && A.profile.name]);
-      A = { profile: (r[0] || [])[0] || A.profile || null, purchases: r[1] || [], at: Date.now() };
+      var before = JSON.stringify([A.profile && A.profile.plus_until, A.profile && A.profile.name, (A.library || []).length]);
+      A = { profile: (r[0] || [])[0] || A.profile || null, purchases: r[1] || [], library: r[2] || A.library || [], at: Date.now() };
       store.setJson(CKEY, A);
-      if (before !== JSON.stringify([A.profile && A.profile.plus_until, A.profile && A.profile.name])) emit();
+      if (before !== JSON.stringify([A.profile && A.profile.plus_until, A.profile && A.profile.name, (A.library || []).length])) emit();
       fixToolsState();
       return A;
     }).catch(function (e) { if (e && e.status === 401) { setSession(null); clearAccount(); } });
@@ -593,7 +596,7 @@
     /* sheets */
     '.la-scrim{position:fixed;inset:0;background:#2B2A3566;z-index:900;display:flex;align-items:flex-end;justify-content:center;animation:laFade .15s}',
     '@media(min-width:700px){.la-scrim{align-items:center}}',
-    '.la-sheet{background:var(--paper);width:100%;max-width:440px;border-radius:28px 28px 0 0;padding:12px 22px calc(22px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:14px;max-height:92vh;overflow:auto;animation:laUp .2s ease-out;position:relative}',
+    '.la-sheet{background:var(--paper);width:100%;max-width:440px;border-radius:28px 28px 0 0;padding:12px 22px calc(22px + var(--sa-b));display:flex;flex-direction:column;gap:14px;max-height:92vh;overflow:auto;animation:laUp .2s ease-out;position:relative}',
     '@media(min-width:700px){.la-sheet{border-radius:28px;padding:22px 26px 26px}}',
     '.la-handle{width:40px;height:5px;border-radius:9px;background:var(--line);align-self:center}',
     '@media(min-width:700px){.la-handle{display:none}}',
@@ -760,7 +763,8 @@
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && openSheets.length) openSheets[openSheets.length - 1].close(); });
 
   // B01: a locked tool style
-  function lockSheet(id, visHTML, currentName) {
+  // title: optional heading in place of "<feature> comes with Little Us Plus"
+  function lockSheet(id, visHTML, currentName, title) {
     var a = access(id), nm = featName(id), st = settings();
     if (a === 'account') {
       var s1 = sheet('<div style="display:flex;align-items:center;gap:12px">' + (visHTML ? '<span class="la-lockvis">' + visHTML + '</span>' : '') + '<span class="la-pill free">' + esc(t('free')) + '</span></div>' +
@@ -769,7 +773,7 @@
         '<a class="la-btn soft block" href="#/login" data-close>' + esc(t('logIn')) + '</a>');
       return s1;
     }
-    var title = st.popTitle ? st.popTitle.replace('{name}', nm) : t('comesWith', nm);
+    title = title || (st.popTitle ? st.popTitle.replace('{name}', nm) : t('comesWith', nm));
     return sheet('<div style="display:flex;align-items:center;gap:12px">' + (visHTML ? '<span class="la-lockvis">' + visHTML + '</span>' : '') + pill('plus') + '</div>' +
       '<h2>' + esc(title) + '</h2><p class="la-p">' + esc(st.popBody || t('lockP')) + '</p>' +
       '<ul class="la-checks"><li><span class="la-chk">' + IC.check + '</span>' + esc(t('l1')) + '</li><li><span class="la-chk">' + IC.check + '</span>' + esc(t('l2')) + '</li></ul>' +
@@ -1221,9 +1225,32 @@
       '<button type="button" class="la-btn primary block" data-act="again">' + esc(t('checkAgain')) + '</button><a class="la-btn line block" href="' + esc(mail) + '">' + esc(t('emailSupport')) + '</a><a class="la-link" style="align-self:center" href="#/">' + esc(t('backHome')) + '</a></div>';
   }
   function newEndFrom(base, plan) { var b = base && new Date(base) > new Date() ? new Date(base) : new Date(); return addMonths(b, planMonths(plan)); }
+  // Ask our server to look the payment up with Midtrans / Gumroad itself, so Plus switches on even when
+  // their notification (webhook) is late or never arrives. The server only trusts what Midtrans / Gumroad answer.
+  var lastCheck = 0;
+  function serverCheck(c) {
+    var mt = c.provider === 'midtrans';
+    if (!mt && (CO.state === 'waiting' || CO.state === 'opening')) return Promise.resolve(); // Gumroad: only once they say they've paid
+    if (Date.now() - lastCheck < (mt ? 4000 : 9000)) return Promise.resolve();
+    lastCheck = Date.now();
+    return http('/functions/v1/plus', { method: 'POST', body: mt ? { action: 'midtrans_check', order_id: c.order || '' } : { action: 'gumroad_check' } }).catch(function () {});
+  }
+  // A Midtrans payment that was never confirmed (closed tab, missed notification): picked up the next time the parent visits.
+  function recoverPayments() {
+    if (!ON || !signedIn() || (window.LU && LU.route === 'plus/checkout')) return;
+    var last = Number(ss.json('lu_pay_recover', 0)) || 0; if (Date.now() - last < 10 * 60 * 1000) return;
+    ss.setJson('lu_pay_recover', Date.now());
+    var since = new Date(Date.now() - 3 * 86400000).toISOString();
+    http('/rest/v1/midtrans_orders?select=order_id&status=eq.pending&created_at=gte.' + encodeURIComponent(since) + '&limit=1').then(function (rows) {
+      if (!rows || !rows.length) return;
+      return http('/functions/v1/plus', { method: 'POST', body: { action: 'midtrans_check' } }).then(function (r) {
+        if (r && r.paid) return loadAccount().then(function () { emit(); toast(t('plusOnToast'), 'success'); });
+      });
+    }).catch(function () {});
+  }
   function paidYet() {
     var c = ss.json('lu_checkout', null) || {};
-    return loadAccount().then(function () {
+    return serverCheck(c).then(function () { return loadAccount(); }).then(function () {
       var u = plusUntil(); if (!u) return false;
       var base = c.base ? new Date(c.base) : null;
       if (base ? u > new Date(base.getTime() + 60000) : u > new Date()) {
@@ -1325,7 +1352,10 @@
     'forgot-password': { title: 'resetH', header: 'none', footer: 'none', render: renderForgot, wire: wireForgot, init: function () { FP.sent = false; } },
     'reset-password': { title: 'newPwH', header: 'none', footer: 'none', render: renderReset, wire: wireReset, init: function () { RP.done = false; } },
     welcome: { title: 'confirmedToast', header: 'none', footer: 'none', render: renderWelcome, init: function () { if (!signedIn()) { go('#/login', true); } } },
-    plus: { title: 'upgradeH', focus: true, render: renderPlans, wire: wirePlans, init: function () { var q = LU.qs && LU.qs.get('plan'); if (q === '3m' || q === '6m' || q === '12m') PL.plan = q; return loadFeatures(true); } },
+    plus: { title: 'upgradeH', focus: true, render: renderPlans, wire: wirePlans, init: function () { var q = LU.qs && LU.qs.get('plan'); if (q === '3m' || q === '6m' || q === '12m') PL.plan = q;
+      // show the plans at once from the saved prices; fresh ones redraw the page when they arrive (no wait on the network)
+      if (FEAT.settings) { loadFeatures(true).then(function () { if (window.LU && LU.route === 'plus') rerender(); }); return; }
+      return loadFeatures(true); } },
     'plus/checkout': {
       title: 'finishH', header: 'none', footer: 'none', render: renderCheckout, wire: wireCheckout,
       init: function () {
@@ -1385,11 +1415,22 @@
 
   // Home: account cards (phone) and the signed-in dashboard (desktop)
   var TOOLS_META = {
-    timer: ['Visual Timer', 'Timer Visual', 'var(--sky)', '#/tools/timer'], tokens: ['Token Board', 'Papan Token', 'var(--butter)', '#/tools/tokens'],
-    ft: ['First–Then Board', 'Papan Pertama–Lalu', 'var(--mint)', '#/tools/first-then'], sched: ['Visual Schedule', 'Jadwal Visual', 'var(--lilac)', '#/tools/schedule'],
-    breathe: ['Breathing Buddy', 'Teman Bernapas', 'var(--sky)', '#/tools/breathe'], feelings: ['Feelings Check-In', 'Cek Perasaan', 'var(--lilac)', '#/tools/feelings'], worry: ['Worry jar', 'Toples Khawatir', 'var(--rose)', '#/tools/worry']
+    timer: ['Visual Timer', 'Visual Timer', 'var(--sky)', '#/tools/timer'], tokens: ['Token Board', 'Token Board', 'var(--butter)', '#/tools/tokens'],
+    ft: ['First–Then Board', 'First–Then Board', 'var(--mint)', '#/tools/first-then'], sched: ['Visual Schedule', 'Visual Schedule', 'var(--lilac)', '#/tools/schedule'],
+    breathe: ['Breathing Buddy', 'Teman Bernapas', 'var(--sky)', '#/tools/breathe'], feelings: ['Feelings Check-In', 'Feelings Check-In', 'var(--lilac)', '#/tools/feelings'], worry: ['Worry jar', 'Worry Jar', 'var(--rose)', '#/tools/worry'],
+    sorter: ['Problem Sorter', 'Problem Sorter', 'var(--peach)', '#/tools/problem-sorter'],
+    talk: ['Conversation Starters', 'Conversation Starters', 'var(--butter)', '#/tools/conversation-starters'], safe: ['Safe People Map', 'Safe People Map', 'var(--mint)', '#/tools/safe-people'],
+    dtt: ['Discrete Trial Teaching', 'Discrete Trial Teaching', 'var(--butter)', '/dtt']
   };
-  function toolKey(x) { x = String(x || '').replace(/^tools\//, ''); return x === 'first-then' ? 'ft' : x === 'schedule' ? 'sched' : x; }
+  var TOOL_ART = { timer: 1, tokens: 1, ft: 1, sched: 1, talk: 1, safe: 1, dtt: 1, sorter: 1 };
+  function toolKey(x) { x = String(x || '').replace(/^tools\//, ''); return x === 'first-then' ? 'ft' : x === 'schedule' ? 'sched' : x === 'conversation-starters' ? 'talk' : x === 'safe-people' ? 'safe' : x === 'problem-sorter' ? 'sorter' : x; }
+  // the tool used last on this device: the tools keep it in the child setup (S.last); DTT, its own page, in lu_last_tool
+  function lastTool() {
+    var a = null, b = store.json('lu_last_tool', null);
+    try { var S = store.json(TKEY, null); if (S && S.last && S.last.tool) a = S.last; } catch (e) {}
+    var w = a && b ? ((b.at || 0) > (a.at || 0) ? b : a) : (a || b);
+    return w && w.tool && TOOLS_META[toolKey(w.tool)] ? { tool: toolKey(w.tool), at: w.at || 0 } : null;
+  }
   function homeCardHTML() {
     var s = status(), st = settings(), kid = childName();
     if (s === 'none') {
@@ -1413,18 +1454,18 @@
   }
   function dashHTML() {
     var u = me() || {}, s = status(), st = settings(), kid = currentChild();
-    var tools = []; try { var S = store.json(TKEY, null); if (S && S.last && S.last.tool) tools.push(toolKey(S.last.tool)); } catch (e) {}
+    var last = lastTool(), tools = last ? [last.tool] : [];
     ['timer', 'tokens', 'sched', 'ft'].forEach(function (k) { if (tools.indexOf(k) < 0) tools.push(k); });
     tools = tools.filter(function (k) { return TOOLS_META[k]; }).slice(0, 3);
     var used = tools.map(function (k, i) {
       var m = TOOLS_META[k];
-      var art = ''; try { var AR = window.LUArt, tk = { timer: 'timer', tokens: 'tokens', ft: 'ft', sched: 'sched' }[k]; if (AR && AR.toolArt && tk) art = AR.toolArt(tk).replace('<svg ', '<svg style="width:100%;height:100%;display:block" '); } catch (e) {}
-      return '<a class="la-used" href="' + m[3] + '"><span class="ic" style="background:' + m[2] + '">' + (art || heartFace(22)) + '</span><span><b>' + esc(L() === 'id' ? m[1] : m[0]) + '</b>' + (i === 0 && store.json(TKEY, {}) && (store.json(TKEY, {}).last || {}).at ? '<small>' + esc(fmtDate(store.json(TKEY, {}).last.at)) + '</small>' : '') + '</span><span class="op">' + esc(t('open')) + ' →</span></a>';
+      var art = ''; try { var AR = window.LUArt; if (AR && AR.toolArt && TOOL_ART[k]) art = AR.toolArt(k).replace('<svg ', '<svg style="width:100%;height:100%;display:block" '); } catch (e) {}
+      return '<a class="la-used" href="' + m[3] + '"><span class="ic" style="background:' + m[2] + '">' + (art || heartFace(22)) + '</span><span><b>' + esc(L() === 'id' ? m[1] : m[0]) + '</b>' + (i === 0 && last && last.at ? '<small>' + esc(fmtDate(last.at)) + '</small>' : '') + '</span><span class="op">' + esc(t('open')) + ' →</span></a>';
     }).join('');
-    var owned = (A.purchases || []).filter(function (p) { return p.kind === 'product' && p.status === 'paid'; });
-    var lib;
-    if (s === 'plus' || s === 'expiring') lib = '<div class="la-empty" style="border-style:solid;border-color:var(--mint);background:var(--mint)"><h3>' + esc(t('plusLibH')) + '</h3><p>' + esc(t('plusLibP')) + '</p><a class="la-btn primary sm" href="#/catalogue">' + esc(t('browseShop')) + '</a></div>';
-    else if (owned.length) lib = '<div class="la-stack" data-la-lib>' + owned.slice(0, 4).map(function (p) { return '<a class="la-libitem" href="#/product/' + encodeURIComponent(p.product_id) + '"><span class="la-pill plain">PDF</span><b data-pid="' + esc(p.product_id) + '">' + esc(p.product_id) + '</b></a>'; }).join('') + '</div>';
+    var items = libraryIds(), lib, plusOn = s === 'plus' || s === 'expiring';
+    if (items.length) lib = '<div class="la-stack" data-la-lib>' + items.slice(0, 4).map(function (id) { return '<a class="la-libitem" href="#/product/' + encodeURIComponent(id) + '"><span class="la-pill plain">PDF</span><b data-pid="' + esc(id) + '">' + esc(libTitle(id)) + '</b></a>'; }).join('') + '</div>' +
+      '<a class="la-lk" style="align-self:flex-start;margin-top:10px" href="#/catalogue' + (plusOn ? '' : '?free=1') + '">' + esc(plusOn ? t('browseShop') : t('browseFree')) + ' →</a>';
+    else if (plusOn) lib = '<div class="la-empty" style="border-style:solid;border-color:var(--mint);background:var(--mint)"><h3>' + esc(t('plusLibH')) + '</h3><p>' + esc(t('plusLibP')) + '</p><a class="la-btn primary sm" href="#/catalogue">' + esc(t('browseShop')) + '</a></div>';
     else lib = '<div class="la-empty"><h3>' + esc(t('emptyLibH')) + '</h3><p>' + esc(t('emptyLibP')) + '</p><a class="la-btn primary sm" href="#/catalogue?free=1">' + esc(t('browseFree')) + '</a></div>';
     var up = s === 'free' || s === 'expired' ? '<div class="la-upbar">' + pill('plus') + '<b>' + esc(t('upBarH')) + '</b><span class="d">' + esc(t('upBarP')) + '</span><a class="la-btn primary sm" href="#/plus">' + esc(t('seePlans', st.p3)) + '</a></div>'
       : ''; // paying members don't need a Plus row on the banner
@@ -1450,7 +1491,7 @@
     }
     if (window.LUTools && LUTools.api && LUTools.api.openProfiles) return show();
     if (!window.luLoad) return show();
-    luLoad('/tools.css?v=21').then(function () { return luLoad('/tools-art.js?v=28'); }).then(function () { return luLoad('/tools.js?v=30'); })
+    luLoad('/tools.css?v=22').then(function () { return luLoad('/tools-art.js?v=31'); }).then(function () { return luLoad('/tools.js?v=35'); })
       .then(function () { var a = window.LUTools && LUTools.api; return a && a.photosLoad ? a.photosLoad() : null; }).then(show, show);
   }
   function homeRender() {
@@ -1468,8 +1509,9 @@
     var libEl = box.querySelector('[data-la-lib]');
     if (libEl && window.LU && LU.api && LU.api.byIds) {
       var ids = $$('[data-pid]', libEl).map(function (b) { return b.dataset.pid; });
-      LU.api.byIds(ids).then(function (rows) { (rows || []).forEach(function (p) { var b = libEl.querySelector('[data-pid="' + p.id + '"]'); if (b) b.textContent = LU.title ? LU.title(p) : p.title_en; }); }).catch(function () {});
+      LU.api.byIds(ids).then(function (rows) { (rows || []).forEach(function (p) { libName(p.id, { en: p.title_en, id: p.title_id }); var b = libEl.querySelector('[data-pid="' + p.id + '"]'); if (b) b.textContent = LU.title ? LU.title(p) : p.title_en; }); }).catch(function () {});
     }
+    if (signedIn()) libFromOrders();
   }
   window.addEventListener('resize', function () { if (document.getElementById('laHome')) { var hero = document.querySelector('.h2-hero-wrap'); if (hero) hero.style.display = signedIn() && window.matchMedia('(min-width:960px)').matches ? 'none' : ''; } });
 
@@ -1485,6 +1527,46 @@
   }
   function prodInfo(id) { return PROD.map[id] || { url: '', plus: true }; }
   function owns(id) { return (A.purchases || []).some(function (p) { return p.kind === 'product' && p.status === 'paid' && p.product_id === id; }); }
+
+  /* ===================== library: everything this account has downloaded ===================== */
+  // Bought items come from purchases. Downloads (free printables and Plus resources) are saved to user_library
+  // (supabase/library-setup.sql) and also kept on this device, so the list shows straight away.
+  function libKey() { return 'lu_lib_' + ((session && session.user && session.user.id) || ''); }
+  function libLocal() { var l = store.json(libKey(), []); return Array.isArray(l) ? l : []; }
+  function libraryIds() {
+    var rows = [], seen = {}, out = [];
+    (A.purchases || []).forEach(function (p) { if (p.kind === 'product' && p.status === 'paid' && p.product_id) rows.push({ id: p.product_id, at: new Date(p.created_at).getTime() || 0 }); });
+    (A.library || []).forEach(function (r) { rows.push({ id: r.product_id, at: new Date(r.created_at).getTime() || 0 }); });
+    libLocal().forEach(function (r) { rows.push(r); });
+    rows.sort(function (a, b) { return (b.at || 0) - (a.at || 0); });
+    rows.forEach(function (r) { if (r.id && !seen[r.id]) { seen[r.id] = 1; out.push(String(r.id)); } });
+    return out;
+  }
+  var LIBT = store.json('lu_lib_titles', null) || {};
+  function libTitle(id) { var x = LIBT[id]; return x ? ((L() === 'id' ? x.id || x.en : x.en || x.id) || id) : id; }
+  function libName(id, title) { if (id && title && (title.en || title.id)) { LIBT[id] = { en: title.en || '', id: title.id || '' }; store.setJson('lu_lib_titles', LIBT); } }
+  function libAdd(id, title) {
+    if (!id || !signedIn() || !session.user) return;
+    id = String(id); libName(id, title);
+    var l = libLocal().filter(function (r) { return r.id !== id; }); l.unshift({ id: id, at: Date.now() }); store.setJson(libKey(), l.slice(0, 100));
+    if (ON) http('/rest/v1/user_library?on_conflict=user_id,product_id', { method: 'POST', headers: { Prefer: 'resolution=ignore-duplicates,return=minimal' }, body: [{ user_id: session.user.id, product_id: id }] }).catch(function () {});
+    if (document.getElementById('laHome')) homeRender();
+  }
+  // free printables fetched before the library existed: read them once from the free orders this device remembers
+  var libBusy = {};
+  function libFromOrders() {
+    if (!signedIn() || !window.LU || !LU.myOrders || !LU.myOrders.all || !LU.api || !LU.api.call) return;
+    var done = store.json('lu_lib_orders', []); if (!Array.isArray(done)) done = [];
+    (LU.myOrders.all() || []).filter(function (o) { return o && o.token && done.indexOf(o.token) < 0 && !libBusy[o.token]; }).slice(0, 5).forEach(function (o) {
+      libBusy[o.token] = 1;
+      LU.api.call('orderStatus', { token: o.token }).then(function (r) {
+        var ord = r && r.order; if (!ord) return;
+        var ok = ord.status === 'APPROVED' || Number(ord.total) === 0;
+        if (ok || /EXPIRED|REJECTED|CANCEL/.test(String(ord.status))) { done = store.json('lu_lib_orders', []); done.push(o.token); store.setJson('lu_lib_orders', done.slice(-50)); }
+        if (ok) (ord.items || []).forEach(function (it) { if (it.product_id) libAdd(it.product_id, { en: it.title_en, id: it.title_id }); });
+      }).catch(function () {}).then(function () { delete libBusy[o.token]; });
+    });
+  }
   function productBuyUrl(p) {
     var g = prodInfo(p.id).url; if (!g) return '';
     var q = 'wanted=true' + (signedIn() ? '&uid=' + encodeURIComponent(session.user.id) + ((me() || {}).email ? '&email=' + encodeURIComponent(me().email) : '') : '');
@@ -1496,6 +1578,7 @@
     busy(btn, true); toast(t('preparing'));
     http('/functions/v1/plus', { method: 'POST', body: { action: 'download', product_id: p.id } }).then(function (r) {
       busy(btn, false);
+      if ((r.files || []).length) libAdd(p.id, { en: p.title_en, id: p.title_id });
       (r.files || []).forEach(function (f, i) { setTimeout(function () { var a = document.createElement('a'); a.href = f.url; a.download = f.name || ''; a.rel = 'noopener'; document.body.appendChild(a); a.click(); a.remove(); }, i * 600); });
     }).catch(function (e) { busy(btn, false); toast(e && e.status === 403 ? t('getPlus') : t('dlFail'), 'error'); });
   }
@@ -1566,12 +1649,44 @@
     if (window.LUTools && LUTools.render) { try { LUTools.render(); } catch (e) {} }
   });
 
+  /* ===================== visit counter (admin → Visits) =====================
+     Adds 1 to an anonymous counter for each page opened: the page, the day, phone/tablet/desktop, the site the
+     visitor came from (host name only), the language and whether it's the installed app. No cookie, no ID, no IP
+     is stored. A "visit" is the first page in a browser tab session (sessionStorage, forgotten when the tab closes).
+     Table and functions: supabase/visits-setup.sql. Until that SQL is run the call fails quietly. */
+  var VLAST = null, VOFF = false;
+  function trackView() {
+    if (!ON || VOFF) return;
+    try {
+      if (/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname) || /\.(localhost|test)$/.test(location.hostname) || navigator.webdriver) return;
+      var path = location.pathname.replace(/\/index\.html$/, '/').replace(/\/+$/, '') || '/';
+      if (/^\/(admin|pilot)/.test(path) || path === VLAST) return;
+      VLAST = path;
+      // product and article pages keep their own address so the admin can see which ones are read
+      var fresh = false; try { fresh = !sessionStorage.getItem('lu_v'); sessionStorage.setItem('lu_v', '1'); } catch (e) {}
+      var w = window.innerWidth, coarse = false; try { coarse = matchMedia('(pointer:coarse)').matches; } catch (e) {}
+      var device = w < 760 ? 'phone' : coarse && w <= 1400 ? 'tablet' : 'desktop';
+      var src = 'direct';
+      if (fresh && document.referrer) { try { var h = new URL(document.referrer).hostname.replace(/^www\./, ''); if (h && h !== location.hostname.replace(/^www\./, '')) src = h; } catch (e) {} }
+      var app = false; try { app = matchMedia('(display-mode: standalone)').matches || !!navigator.standalone; } catch (e) {}
+      var lang = (window.LU && LU.lang) || store.get('lu_lang') || 'en';
+      http('/rest/v1/rpc/lu_track', { method: 'POST', auth: false, body: { p_path: path, p_device: device, p_source: src, p_lang: lang, p_app: app, p_new: fresh } })
+        .catch(function (e) { if (e && (e.status === 404 || e.status === 400)) VOFF = true; }); // not set up yet: stop trying this visit
+    } catch (e) {}
+  }
+  (function watchViews() {
+    var wrap = function (k) { var f = history[k]; history[k] = function () { var r = f.apply(this, arguments); setTimeout(trackView, 0); return r; }; };
+    try { wrap('pushState'); wrap('replaceState'); } catch (e) {}
+    window.addEventListener('popstate', function () { setTimeout(trackView, 0); });
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { setTimeout(trackView, 300); }); else setTimeout(trackView, 300);
+  })();
+
   function boot() {
     if (!ON) return;
     loadFeatures();
     loadProductLinks();
     if (signedIn()) {
-      loadAccount().then(function () { return pullState(); });
+      loadAccount().then(function () { recoverPayments(); return pullState(); });
     }
     setInterval(function () { if (signedIn() && document.visibilityState === 'visible') loadAccount(); }, 5 * 60 * 1000);
     var obs = new MutationObserver(function () { if (document.getElementById('tools-root')) watchTools(); });
@@ -1588,7 +1703,7 @@
     headerHTML: headerHTML, logoBadge: logoBadge, tabPlus: tabPlus, settingsCard: settingsCard, homeRender: homeRender,
     face: face,
     priceLabel: function (plan) { var s = settings(); return String(s['p' + planMonths(plan)]).replace(/^≈ /, ''); },
-    productBuy: productBuy, cardTag: cardTag, onChange: function (f) { listeners.push(f); },
+    productBuy: productBuy, cardTag: cardTag, onChange: function (f) { listeners.push(f); }, libAdd: libAdd,
     t: t, _auth: auth, _http: http, _session: function () { return session; }, _token: token, _sb: SB, _key: KEY, addFeatures: addFeatures
   };
 })();

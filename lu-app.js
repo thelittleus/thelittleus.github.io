@@ -16,15 +16,15 @@
     ready: ['Getting your tools ready…', 'Menyiapkan alatmu…'],
     hiWelcome: ['Hi, welcome!', 'Halo, selamat datang!'], hiAgain: ['Hi again!', 'Halo lagi!'],
     welcomeP: ['All-in-one hub for learning tools, visual supports, and printables', 'Satu tempat untuk alat belajar, bantuan visual, dan materi cetak'],
-    login: ['Login', 'Masuk'], whoWith: ['Who are we learning with?', 'Kita belajar bersama siapa?'], setChild: ['Set up your child', 'Atur untuk anakmu'],
+    login: ['Login', 'Masuk'], whoWith: ['Who are we learning with?', 'Hari ini belajar bareng siapa?'], setChild: ['Set up your child', 'Atur untuk anakmu'],
     langNote: ['You can change this anytime in Settings.', 'Kamu bisa menggantinya kapan saja di Pengaturan.'],
     againP: [function (n) { return 'What would you like to do with ' + n + ' today?'; }, function (n) { return 'Mau melakukan apa bersama ' + n + ' hari ini?'; }],
-    againP0: ['What would you like to do today?', 'Mau melakukan apa hari ini?'],
+    againP0: ['What would you like to do today?', 'Hari ini mau ngapain?'],
     toolsP: ['Customizable tools for learning and everyday routines', 'Alat yang bisa disesuaikan untuk belajar dan rutinitas sehari-hari'], toolsPL: ['Customizable tools for learning and everyday routines', 'Alat yang bisa disesuaikan untuk belajar dan rutinitas sehari-hari'],
-    shopP: ['Printable files and activities', 'File dan aktivitas untuk dicetak'], articlesP: ['A short read on what’s new', 'Bacaan singkat tentang hal terbaru'], free: ['FREE', 'GRATIS'],
+    shopP: ['Printable files and activities', 'File dan aktivitas untuk dicetak'], articlesP: ['A short read on what’s new', 'Bacaan singkat seputar info terbaru'], free: ['FREE', 'GRATIS'],
     change: ['Change', 'Ganti'], cont: ['Continue', 'Lanjutkan'],
-    plusCard: ['More styles, every download', 'Lebih banyak gaya, semua unduhan'], plusCardP: ['One payment, never renews', 'Sekali bayar, tidak diperpanjang otomatis'], upgrade: ['Upgrade', 'Upgrade'],
-    unlocked: ['Everything is unlocked', 'Semuanya sudah terbuka'], plusUntil: [function (d) { return 'Little Us Plus until ' + d; }, function (d) { return 'Little Us Plus sampai ' + d; }],
+    plusCard: ['More styles, every download', 'Lebih banyak gaya, bebas unduh semua materi'], plusCardP: ['One payment, never renews', 'Sekali bayar, tidak diperpanjang otomatis'], upgrade: ['Upgrade', 'Upgrade'],
+    unlocked: ['Everything is unlocked', 'Semua fitur sudah terbuka'], plusUntil: [function (d) { return 'Little Us Plus until ' + d; }, function (d) { return 'Little Us Plus sampai ' + d; }],
     endsIn: [function (n) { return 'Plus ends in ' + n + (n === 1 ? ' day' : ' days'); }, function (n) { return 'Plus berakhir dalam ' + n + ' hari'; }],
     endsInP: [function (d) { return 'On ' + d + '. Add time and nothing changes.'; }, function (d) { return 'Pada ' + d + '. Tambah waktu dan tidak ada yang berubah.'; }], addTime: ['Add time', 'Tambah waktu'],
     ended: [function (d) { return 'Plus ended on ' + d; }, function (d) { return 'Plus berakhir pada ' + d; }], endedP: [function (n) { return n + '’s boards are all still here'; }, function (n) { return 'Semua papan ' + n + ' masih ada'; }], buyAgain: ['Buy again', 'Beli lagi'],
@@ -36,37 +36,39 @@
     grpRoutine: ['Everyday Routines', 'Rutinitas Sehari-hari'], grpCalm: ['Emotional Regulation', 'Regulasi Emosi'], grpTalk: ['Social Skills', 'Keterampilan Sosial'], grpTeach: ['Teaching Tools', 'Alat Mengajar'], soon: ['Coming soon', 'Segera hadir'],
     usingDefaults: ['Using default settings.', 'Memakai pengaturan bawaan.'], setUpFor: ['Set up for your child', 'Atur untuk anakmu'],
     close: ['Close', 'Tutup'], open: ['Open', 'Buka'],
-    skipH: ['No problem! Until you set up a child, the tools use:', 'Tidak apa-apa! Sebelum anak diatur, alat memakai:'],
+    skipH: ['No problem! Until you set up a child, the tools use:', 'Nggak apa-apa! Selama profil anak belum diatur, alat akan memakai:'],
     skip1: ['English, with English card labels', 'Bahasa Inggris, dengan label kartu bahasa Inggris'], skip1id: ['Indonesian, with Indonesian card labels', 'Bahasa Indonesia, dengan label kartu bahasa Indonesia'],
     skip2: ['The boy character on the cards', 'Karakter anak laki-laki di kartu'], skip3: ['A starter set of favourite rewards', 'Satu set hadiah favorit bawaan'], skip4: ['No child name or photo', 'Tanpa nama atau foto anak'],
-    skipNote: ['You can set up a child any time from the Child tab.', 'Kamu bisa mengatur anak kapan saja dari menu Anak.'], setUpNow: ['Set up now', 'Atur sekarang'], contDefaults: ['Continue with defaults', 'Lanjut dengan bawaan'],
-    a2hsH: ['Keep Little Us on your home screen', 'Simpan Little Us di layar utama'], a2hsP: ['Opens full screen and works offline.', 'Terbuka layar penuh dan bisa offline.'], notNow: ['Not now', 'Nanti saja'], a2hsBtn: ['Add to home screen', 'Tambah ke layar utama'],
+    skipNote: ['You can set up a child any time from the Child tab.', 'Profil anak bisa diatur kapan saja dari menu Anak.'], setUpNow: ['Set up now', 'Atur sekarang'], contDefaults: ['Continue with defaults', 'Lanjut pakai pengaturan bawaan'],
+    a2hsH: ['Keep Little Us on your home screen', 'Simpan Little Us di layar utama'], a2hsP: ['Opens full screen and works offline.', 'Tampil layar penuh dan bisa dipakai offline.'], notNow: ['Not now', 'Nanti saja'], a2hsBtn: ['Add to home screen', 'Tambah ke layar utama'],
     iosH: ['Add Little Us to your Home Screen', 'Tambahkan Little Us ke Layar Utama'], ios1: ['Tap <b>Share</b> in the bar below', 'Ketuk <b>Bagikan</b> di bilah bawah'], ios2: ['Choose <b>Add to Home Screen</b>', 'Pilih <b>Tambah ke Layar Utama</b>'], ios3: ['Tap <b>Add</b>. Done!', 'Ketuk <b>Tambah</b>. Selesai!'],
-    language: ['App Language', 'Bahasa Aplikasi'], cardLabels: ['Card labels', 'Label kartu'], both: ['Both', 'Keduanya'], none: ['None', 'Tanpa'],
+    language: ['App Language', 'Bahasa Aplikasi'], cardLabels: ['Card labels', 'Label kartu'], both: ['Both', 'Keduanya'], none: ['None', 'Tidak ada'],
     sounds: ['Sounds', 'Suara'], soundsP: ['Chimes and spoken warnings', 'Bunyi dan peringatan suara'], soft: ['Soft', 'Pelan'], loud: ['Loud', 'Keras'],
     reduce: ['Reduce motion', 'Kurangi gerakan'], reduceP: ['No movement at all. Already on if your phone asks for it.', 'Tanpa gerakan sama sekali. Otomatis aktif jika HP-mu memintanya.'],
     leaving: ['Leaving child mode', 'Keluar dari mode anak'], hold3: ['Hold 3 seconds', 'Tahan 3 detik'], adultCheck: ['Adult check', 'Cek orang dewasa'],
-    children: ['Children', 'Anak'], childrenP: ['backup and share', 'cadangan dan berbagi'], noChildYet: ['No child set up yet', 'Belum ada anak'],
-    plusRow: ['Little Us Plus', 'Little Us Plus'], fromPrice: ['From $9', 'Mulai $9'], plusRowP: ['More styles, every download', 'Lebih banyak gaya, semua unduhan'], getPlus: ['Get Plus', 'Dapatkan Plus'],
-    more: ['More', 'Lainnya'], cardLibrary: ['Card library', 'Perpustakaan kartu'], backupShare: ['Backup & share', 'Cadangan & berbagi'], findOrder: ['Find my order', 'Cari pesanan saya'], about: ['About Little Us', 'Tentang Little Us'], help: ['Help and FAQ', 'Bantuan dan FAQ'],
+    children: ['Children', 'Anak'], childrenP: ['backup and share', 'cadangan dan berbagi'], noChildYet: ['No child set up yet', 'Belum ada profil anak'],
+    plusRow: ['Little Us Plus', 'Little Us Plus'], fromPrice: ['From $9', 'Mulai $9'], plusRowP: ['More styles, every download', 'Lebih banyak gaya, bebas unduh semua materi'], getPlus: ['Get Plus', 'Dapatkan Plus'],
+    more: ['More', 'Lainnya'], cardLibrary: ['Card library', 'Koleksi kartu'], backupShare: ['Backup & share', 'Cadangan & berbagi'], findOrder: ['Find my order', 'Cari pesanan saya'], about: ['About Little Us', 'Tentang Little Us'], help: ['Help and FAQ', 'Bantuan dan FAQ'],
     child: ['Child', 'Anak'], edit: ['Edit', 'Ubah'], character: ['Character', 'Karakter'], favRewards: ['Favourite rewards', 'Hadiah favorit'], otherChildren: ['Other children', 'Anak lainnya'], sw: ['Switch', 'Ganti'],
     backupH: ['Backup and share', 'Cadangan dan berbagi'], saveBackup: ['Save a backup file', 'Simpan file cadangan'], saveBackupP: ['Keep a copy of every board and setting', 'Simpan salinan semua papan dan pengaturan'],
     sendTeacher: ['Send to a teacher or therapist', 'Kirim ke guru atau terapis'], sendTeacherP: ['Shares one file through WhatsApp, email…', 'Bagikan satu file lewat WhatsApp, email…'],
-    emptyH: ['Make the tools feel like theirs', 'Buat alatnya terasa milik mereka'], emptyP: ['Add a nickname, pick a character and choose favourite rewards. About a minute, and it stays on this phone.', 'Tambahkan nama panggilan, pilih karakter, dan hadiah favorit. Sekitar semenit, dan tersimpan di HP ini.'],
+    emptyH: ['Make the tools feel like theirs', 'Bikin alatnya terasa lebih personal'], emptyP: ['Add a nickname, pick a character and choose favourite rewards. About a minute, and it stays on this phone.', 'Tambahkan nama panggilan, pilih karakter, dan hadiah favorit. Cuma sekitar semenit, dan semuanya tersimpan di HP ini.'],
     setUpMine: ['Set up for my child', 'Atur untuk anakku'], restore: ['Restore from a backup file', 'Pulihkan dari file cadangan'],
     boyChar: ['Boy character', 'Karakter laki-laki'], girlChar: ['Girl character', 'Karakter perempuan'], done: ['Done', 'Selesai'], addReward: ['Add a reward', 'Tambah hadiah'], remove: ['Remove', 'Hapus'],
     shopH: ['Shop', 'Toko'], articlesH: ['Articles', 'Artikel'], back: ['Back', 'Kembali'],
     tl: {
-      timer: [['Visual Timer', 'A countdown your child can see, not just hear. It helps with waiting, taking turns and knowing when an activity will end.'], ['Timer Visual', 'Hitungan mundur yang bisa dilihat anak, bukan hanya didengar. Membantu saat menunggu, bergantian, dan tahu kapan kegiatan selesai.']],
-      tokens: [['Token Board', 'Your child earns a star for each step or good effort, and gets the reward they chose when the board is full.'], ['Papan Token', 'Anak mendapat bintang untuk setiap langkah atau usaha baik, lalu mendapat hadiah pilihannya saat papan penuh.']],
-      ft: [['First–Then Board', 'Shows the task that comes first and the fun thing after, so “first bath, then play” is easy to understand.'], ['Papan Pertama–Lalu', 'Menunjukkan tugas yang dilakukan dulu dan hal menyenangkan sesudahnya, agar “mandi dulu, lalu main” mudah dipahami.']],
-      sched: [['Visual Schedule', 'The steps of a routine or the whole day in pictures, so your child knows what is happening now and next.'], ['Jadwal Visual', 'Langkah rutinitas atau kegiatan seharian dalam gambar, agar anak tahu apa yang terjadi sekarang dan selanjutnya.']],
-      breathe: [['Breathing Buddy', 'A friendly shape to breathe along with. It grows as you breathe in and shrinks as you breathe out.'], ['Teman Napas', 'Bentuk ramah untuk bernapas bersama. Membesar saat menarik napas dan mengecil saat mengembuskan napas.']],
-      feelings: [['Feelings Check-In', 'Your child picks how they feel and how big the feeling is, then chooses something that helps.'], ['Cek Perasaan', 'Anak memilih perasaannya dan seberapa besar perasaan itu, lalu memilih hal yang membantu.']],
-      worry: [['Worry Jar', 'Your child draws or writes a worry and puts it in a jar. Later, you open the jar together and talk it through.'], ['Toples Khawatir', 'Anak menggambar atau menulis kekhawatiran lalu memasukkannya ke toples. Nanti, kalian membukanya bersama dan membicarakannya.']],
-      talk: [['Conversation Starters', 'Board and party games for a grown-up and child. Each turn opens up a gentle chat about feelings, friends and choices.'], ['Pembuka Obrolan', 'Permainan papan dan permainan seru untuk anak dan orang dewasa. Setiap giliran membuka obrolan hangat tentang perasaan, teman, dan pilihan.']],
-      safe: [['Safe People Map', 'A child and a grown-up map out, together, the people the child trusts and when to go to each of them.'], ['Peta Orang Aman', 'Anak dan orang dewasa memetakan bersama orang-orang yang dipercaya anak, dan kapan harus menghampiri mereka.']],
-      dtt: [['Discrete Trial Teaching', 'Create teaching programs for a child, run teacher-led sessions with picture cards, and follow the progress.'], ['Discrete Trial Teaching', 'Buat program mengajar untuk anak, jalankan session yang dipimpin guru dengan kartu gambar, dan pantau kemajuannya.']]
+      timer: [['Visual Timer', 'A countdown your child can see, not just hear. It helps with waiting, taking turns and knowing when an activity will end.'], ['Visual Timer', 'Hitungan mundur yang bisa dilihat anak, bukan hanya didengar. Membantu saat menunggu, bergantian, dan tahu kapan kegiatan selesai.']],
+      tokens: [['Token Board', 'Your child earns a star for each step or good effort, and gets the reward they chose when the board is full.'], ['Token Board', 'Anak mendapat bintang untuk setiap langkah atau usaha baik, lalu mendapat hadiah pilihannya saat papan penuh.']],
+      ft: [['First–Then Board', 'Shows the task that comes first and the fun thing after, so “first bath, then play” is easy to understand.'], ['First–Then Board', 'Menunjukkan tugas yang dilakukan dulu dan hal menyenangkan sesudahnya, agar “mandi dulu, lalu main” mudah dipahami.']],
+      sched: [['Visual Schedule', 'The steps of a routine or the whole day in pictures, so your child knows what is happening now and next.'], ['Visual Schedule', 'Langkah rutinitas atau kegiatan seharian dalam gambar, agar anak tahu apa yang terjadi sekarang dan selanjutnya.']],
+      breathe: [['Breathing Buddy', 'A friendly shape to breathe along with. It grows as you breathe in and shrinks as you breathe out.'], ['Breathing Buddy', 'Karakter lucu untuk latihan napas bareng. Membesar saat tarik napas, mengecil saat buang napas.']],
+      feelings: [['Feelings Check-In', 'Your child picks how they feel and how big the feeling is, then chooses something that helps.'], ['Feelings Check-In', 'Anak memilih perasaannya dan seberapa besar perasaan itu, lalu memilih hal yang membantu.']],
+      worry: [['Worry Jar', 'Your child draws or writes a worry and puts it in a jar. Later, you open the jar together and talk it through.'], ['Worry Jar', 'Anak menggambar atau menulis kekhawatiran lalu memasukkannya ke toples. Nanti, kalian membukanya bersama dan membicarakannya.']],
+      // English only for now (Indonesian to come)
+      sorter: [['Problem Sorter', 'Learn to match the size of a reaction to the size of the problem.'], ['Problem Sorter', 'Learn to match the size of a reaction to the size of the problem.']],
+      talk: [['Conversation Starters', 'Board and party games for a grown-up and child. Each turn opens up a gentle chat about feelings, friends and choices.'], ['Conversation Starters', 'Board game dan game seru untuk anak dan orang dewasa. Setiap giliran membuka obrolan hangat tentang perasaan, teman, dan pilihan.']],
+      safe: [['Safe People Map', 'A child and a grown-up map out, together, the people the child trusts and when to go to each of them.'], ['Safe People Map', 'Anak dan orang dewasa bersama-sama memetakan orang-orang yang dipercaya anak, dan kapan anak bisa datang ke mereka.']],
+      dtt: [['Discrete Trial Teaching', 'Create teaching programs for a child, run teacher-led sessions with picture cards, and follow the progress.'], ['Discrete Trial Teaching', 'Buat program belajar untuk anak, jalankan sesi bersama guru pakai kartu bergambar, lalu pantau perkembangannya.']]
     }
   };
   function lang() { return (window.LU && LU.lang) || 'en'; }
@@ -138,8 +140,8 @@
   function accStatus() { var a = acc(); try { return a ? a.status() : 'none'; } catch (e) { return 'none'; } }
   function load() {
     if (!window.luLoad) return Promise.resolve();
-    return luLoad('/tools.css?v=21').then(function () { return luLoad('/tools-art.js?v=28'); }).then(function () { return luLoad('/tools.js?v=30'); })
-      .then(function () { return luLoad('/tools-calm.js?v=19'); }).then(function () { var a = api(); return a && a.photosLoad ? a.photosLoad() : null; }).catch(function () { });
+    return luLoad('/tools.css?v=22').then(function () { return luLoad('/tools-art.js?v=31'); }).then(function () { return luLoad('/tools.js?v=35'); })
+      .then(function () { return luLoad('/tools-calm.js?v=23'); }).then(function () { var a = api(); return a && a.photosLoad ? a.photosLoad() : null; }).catch(function () { });
   }
   function photo(p) { var a = api(); return p && p.photo && a && a.PH && a.PH[p.photo] ? a.PH[p.photo] : ''; }
   function ava(p, size, cls) {
@@ -162,6 +164,7 @@
       if (k === 'worry' && C) return '<div class="ua-art one">' + fit(C.jarSVG({ n: 2 })) + '</div>';
       if (k === 'talk') return '<div class="ua-art one">' + fit(Ar.toolArt('talk')) + '</div>';
       if (k === 'safe') return '<div class="ua-art one">' + fit(Ar.toolArt('safe')) + '</div>';
+      if (k === 'sorter') return '<div class="ua-art one">' + fit(Ar.toolArt('sorter')) + '</div>';
       if (k === 'dtt') return '<div class="ua-art one">' + fit(Ar.toolArt('dtt')) + '</div>';
     } catch (e) { }
     return '';
@@ -171,6 +174,7 @@
     { k: 'timer', r: 'tools/timer', tint: '#DCEBFA', g: 'routine' }, { k: 'tokens', r: 'tools/tokens', tint: '#FFF1C7', g: 'routine' },
     { k: 'ft', r: 'tools/first-then', tint: '#DDF2E4', g: 'routine' }, { k: 'sched', r: 'tools/schedule', tint: '#E9E1F7', g: 'routine' },
     { k: 'breathe', r: 'tools/breathe', tint: '#DCEBFA', g: 'calm' }, { k: 'feelings', r: 'tools/feelings', tint: '#E9E1F7', g: 'calm' }, { k: 'worry', r: 'tools/worry', tint: '#FBE0E6', g: 'calm' },
+    { k: 'sorter', r: 'tools/problem-sorter', tint: '#FFE9DA', g: 'calm' },
     { k: 'talk', r: 'tools/conversation-starters', tint: '#FFF1C7', g: 'talk' }, { k: 'safe', r: 'tools/safe-people', tint: '#DDF2E4', g: 'talk' },
     // its own full-screen page: #/tools/dtt sends the browser to /dtt
     { k: 'dtt', r: 'tools/dtt', tint: '#FFF1C7', g: 'teach' }
@@ -302,12 +306,13 @@
     s.className = 'ua-splash';
     s.setAttribute('aria-hidden', 'true');
     var heart = '<svg viewBox="0 0 64 60" width="132" height="124"><path d="M31 54C24 49 6 37 6 21 6 12 12 6 20 6 26 6 30 10 32 15 34 10 38 6 44 6 52 6 58 12 58 21 58 34 46 44 38 50" fill="none" stroke="#2B2A35" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M38 50 46 57" stroke="#2B2A35" stroke-width="3.6" stroke-linecap="round"/><path d="M28 22V28M36 22V28" stroke="#2B2A35" stroke-width="3.4" stroke-linecap="round"/><path d="M24 34C28 39 36 39 40 34" fill="none" stroke="#2B2A35" stroke-width="3.2" stroke-linecap="round"/></svg>';
-    s.innerHTML = '<div class="ua-splmid">' + heart + '<img src="/logo.png" alt="" class="ua-spllogo"></div><div class="ua-splbot"><div class="ua-bar"><i><em>' + heart.replace('width="132" height="124"', 'width="26" height="24"') + '</em></i></div><small>' + esc(t('ready')) + '</small></div>';
+    // just the logo in the middle, gone as soon as the page is ready
+    s.innerHTML = '<div class="ua-splmid">' + heart + '<img src="/logo.png" alt="" class="ua-spllogo"></div>';
     document.body.appendChild(s);
     var t0 = Date.now();
-    var done = function () { var wait = Math.max(0, 1600 - (Date.now() - t0)); setTimeout(function () { s.classList.add('out'); setTimeout(function () { s.remove(); }, 400); }, wait); };
+    var done = function () { var wait = Math.max(0, 700 - (Date.now() - t0)); setTimeout(function () { s.classList.add('out'); setTimeout(function () { s.remove(); }, 400); }, wait); };
     if (document.readyState === 'complete') done(); else window.addEventListener('load', done);
-    setTimeout(function () { if (s.parentNode) { s.classList.add('out'); setTimeout(function () { s.remove(); }, 400); } }, 4000);
+    setTimeout(function () { if (s.parentNode) { s.classList.add('out'); setTimeout(function () { s.remove(); }, 400); } }, 3000);
   }
 
   /* ===================== tab bar / rail ===================== */
@@ -360,6 +365,9 @@
       ['#/catalogue', t('shop'), t('shopP'), '#FFE9DA', sheetArt('shop'), false],
       ['#/articles', t('articles'), t('articlesP'), '#DCEBFA', sheetArt('art'), false]
     ];
+    // Upgrade sits next to Articles for everyone who isn't on Plus yet
+    var st = accStatus();
+    if (st !== 'plus') rows.push(['#/plus', t('upgrade'), t('plusRowP'), '#FFC94A', '<span class="ua-upart">' + (Ar && Ar.heart ? fit(Ar.heart(40, '#fff')) : '') + '<em class="ua-plus">PLUS</em></span>', false]);
     return '<div class="ua-where' + (land ? ' big' : '') + '">' + rows.map(function (r) {
       return '<a class="ua-wrow" href="' + r[0] + '"><span class="ua-wart" style="background:' + r[3] + '">' + r[4] + '</span><span class="ua-wtx"><b>' + esc(r[1]) + '' + '</b><small>' + esc(r[2]) + '</small></span></a>';
     }).join('') + '</div>';
@@ -593,8 +601,9 @@
   function decorate(r) {
     setTimeout(function () {
       var main = document.getElementById('lu-main'); if (!main) return;
-      if ((r === 'catalogue' || r === 'articles') && !main.querySelector('.ua-pagetitle')) {
-        var h = document.createElement('h1'); h.className = 'ua-pagetitle'; h.textContent = r === 'catalogue' ? t('shopH') : t('articlesH');
+      // the Articles page already has its own big title, so only the Shop gets one here
+      if (r === 'catalogue' && !main.querySelector('.ua-pagetitle')) {
+        var h = document.createElement('h1'); h.className = 'ua-pagetitle'; h.textContent = t('shopH');
         main.insertBefore(h, main.firstChild);
       }
     }, 0);
@@ -610,9 +619,9 @@
     upgradeTo: ['Upgrade to', 'Upgrade ke'], fromP: ['From', 'Mulai'], for3: ['for 3 months', 'untuk 3 bulan'],
     pb1: ['About 60% more tool styles', 'Sekitar 60% lebih banyak gaya alat'], pb2: ['Save settings up to 6 children', 'Simpan pengaturan hingga 6 anak'],
     pb3: ['Add your own photos and texts', 'Tambah foto dan teks sendiri'], pb4: ['Every resource in the shop', 'Semua materi di toko'],
-    explore: ['Explore right away', 'Langsung jelajahi'], createAcc: ['Create an account', 'Buat akun'],
+    explore: ['Explore right away', 'Langsung coba'], createAcc: ['Create an account', 'Buat akun'],
     whyAcc: ['Why create a free account?', 'Kenapa membuat akun gratis?'],
-    why1: ['Save your settings, pick up where you left off on any device', 'Simpan pengaturanmu, lanjutkan dari mana saja di perangkat apa pun'],
+    why1: ['Save your settings, pick up where you left off on any device', 'Pengaturanmu tersimpan, jadi bisa lanjut di perangkat mana saja'],
     why2: ['Can upgrade to unlock all tool styles and resources', 'Bisa upgrade untuk membuka semua gaya alat dan materi'],
     justStart: ['Just start', 'Langsung mulai'], noAccount: ['NO ACCOUNT', 'TANPA AKUN'], justStartP: ['Every tool and free printable. Setup stays on this device.', 'Semua alat dan materi gratis. Pengaturan tersimpan di perangkat ini.'], tryTools: ['Try the free tools', 'Coba alat gratis'],
     freeAcc: ['Free account', 'Akun gratis'], freeAccP: ['Your child’s setup on every phone, tablet and computer.', 'Pengaturan anakmu di setiap HP, tablet, dan komputer.'], makeAcc: ['Make an account', 'Buat akun'],
@@ -621,8 +630,8 @@
     m3: ['3 Months', '3 Bulan'], m6: ['6 Months', '6 Bulan'], m12: ['12 Months', '12 Bulan'],
     tools: ['Tools', 'Alat'], shop: ['Shop', 'Toko'], articles: ['Articles', 'Artikel'], allTools: ['All tools →', 'Semua alat →'], browseShop: ['Browse the shop →', 'Lihat toko →'], allArticles: ['All articles →', 'Semua artikel →'],
     account: ['Account', 'Akun'],
-    cWork: ['Worksheet', 'Lembar kerja'], cStory: ['Social story', 'Cerita sosial'], cPrint: ['Printable', 'Materi cetak'],
-    cTimer: ['Visual Timer', 'Timer Visual'], cTokens: ['Token Board', 'Papan Token'], cSched: ['Visual Schedule', 'Jadwal Visual']
+    cWork: ['Worksheet', 'Worksheet'], cStory: ['Social story', 'Social story'], cPrint: ['Printable', 'Materi cetak'],
+    cTimer: ['Visual Timer', 'Visual Timer'], cTokens: ['Token Board', 'Token Board'], cSched: ['Visual Schedule', 'Visual Schedule']
   };
   function dt(k) { return px(DW[k][isId() ? 1 : 0]); }
   function deskHome() {
@@ -794,7 +803,7 @@
     railOrder(row);
   }
   // signed-in Tools row: a "?" on each preview that shows what the tool is for
-  var QCOL = { timer: '#3F6FA8', tokens: '#9A6A00', 'first-then': '#2F7A4D', schedule: '#6B55C8', breathe: '#3F6FA8', feelings: '#6B55C8', worry: '#C2456A', 'conversation-starters': '#9A6A00', 'safe-people': '#2F7A4D', dtt: '#9A6A00' };
+  var QCOL = { timer: '#3F6FA8', tokens: '#9A6A00', 'first-then': '#2F7A4D', schedule: '#6B55C8', breathe: '#3F6FA8', feelings: '#6B55C8', worry: '#C2456A', 'problem-sorter': '#8A3A22', 'conversation-starters': '#9A6A00', 'safe-people': '#2F7A4D', dtt: '#9A6A00' };
   function toolBadges(main) {
     [].slice.call(main.querySelectorAll('.h2-tool:not(.soon)')).forEach(function (a) {
       var vis = a.querySelector('.h2-vis'); if (!vis || vis.querySelector('.ud-q')) return;
@@ -830,14 +839,17 @@
     el.addEventListener('click', function (ev) { if (ev.target.closest('a')) closeInfo(); });
   }
   document.addEventListener('click', toggleInfo, true);
-  // banner "Explore right away": glide down to the Free Tools section instead of leaving the page
+  // banner "Explore right away": glide straight down to "Visual Supports for Everyday Moments" (the first tool group)
   document.addEventListener('click', function (e) {
     var a = e.target.closest && e.target.closest('[data-explore]'); if (!a) return;
     var main = document.getElementById('lu-main'), h = main && main.querySelector('#hTools'), sec = h && (h.closest('section') || h);
-    if (!sec) return;
+    var grp = main && main.querySelector('.h2-groups .h2-grp'), to = grp || sec;
+    if (!to) return;
     e.preventDefault(); e.stopPropagation();
+    // keep the group title clear of the sticky header
+    var off = 20; [].slice.call(document.querySelectorAll('body > header, .site-header, .hdr')).forEach(function (hd) { try { var cs = getComputedStyle(hd); if (/sticky|fixed/.test(cs.position)) off = Math.max(off, hd.getBoundingClientRect().height + 16); } catch (er) { } });
     var reduce = false; try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (er) { }
-    window.scrollTo({ top: sec.getBoundingClientRect().top + window.scrollY - 20, behavior: reduce ? 'auto' : 'smooth' });
+    window.scrollTo({ top: to.getBoundingClientRect().top + window.scrollY - off, behavior: reduce ? 'auto' : 'smooth' });
   }, true);
   document.addEventListener('keydown', toggleInfo, true);
   window.addEventListener('resize', closeInfo);

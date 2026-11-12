@@ -686,12 +686,12 @@ body:has(.dtt-session) .dtt-toasts{top:16px;bottom:auto}
 @media (max-width:699px){
   .dtt-shell{display:block}
   .dtt-side{display:none}
-  .dtt-top{display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:50;padding:10px 14px;padding-top:max(10px,env(safe-area-inset-top));background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border-bottom:1.5px solid var(--line)}
+  .dtt-top{display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:50;padding:10px 14px;padding-top:max(10px,var(--sa-t));background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border-bottom:1.5px solid var(--line)}
   .dtt-topback{display:flex;align-items:center;gap:6px;color:var(--ink);text-decoration:none;min-height:40px}
   .dtt-topback img{height:20px;width:auto;display:block}
   .dtt-brand.sm{font-size:15px;padding:0 0 0 10px;color:var(--muted);border-left:1.5px solid var(--line)}
   .dtt-top .dtt-who{width:auto;max-width:46%;margin-left:auto;min-height:40px;padding:4px 10px 4px 4px}
-  .dtt-tabbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:60;background:#fff;border-top:1.5px solid var(--line);padding:6px 8px;padding-bottom:max(6px,env(safe-area-inset-bottom))}
+  .dtt-tabbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:60;background:#fff;border-top:1.5px solid var(--line);padding:6px 8px;padding-bottom:max(6px,var(--sa-b))}
   .dtt-tabbar button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;min-height:52px;border:0;background:none;border-radius:12px;font-size:12px;font-weight:700;color:var(--muted)}
   .dtt-tabbar button.on{color:var(--ink);background:var(--butter)}
   .dtt-mainc{padding:18px 16px 100px;gap:16px}
@@ -733,13 +733,13 @@ body:has(.dtt-session) .dtt-toasts{top:16px;bottom:auto}
   .tl-sheetwrap.drawer .tl-sheet{height:92vh}
   .dtt-dlghead{padding:18px 18px 0}
   .dtt-dlgbody{padding:16px 18px 20px}
-  .dtt-dlgfoot{padding:12px 18px calc(12px + env(safe-area-inset-bottom));flex-wrap:wrap}
+  .dtt-dlgfoot{padding:12px 18px calc(12px + var(--sa-b));flex-wrap:wrap}
   .dtt-dlgfoot>.dtt-hint{flex:1 1 100%}
   .dtt-dlgfoot .dtt-dlgbtns{flex:1}
   .dtt-dlgfoot .dtt-dlgbtns .dtt-btn{flex:1}
   .dtt-drhead{padding:14px 16px}
   .dtt-drbody{padding:16px 18px}
-  .dtt-drfoot{padding:12px 18px calc(12px + env(safe-area-inset-bottom))}
+  .dtt-drfoot{padding:12px 18px calc(12px + var(--sa-b))}
   .dtt-stop{display:flex;flex-wrap:wrap;align-items:center;padding:8px 10px;gap:8px}
   .dtt-stopl{flex:1;min-width:0}
   .dtt-stopm{order:3;flex:1 1 100%;justify-content:center}
@@ -749,7 +749,7 @@ body:has(.dtt-session) .dtt-toasts{top:16px;bottom:auto}
   .dtt-count{min-width:0;font-size:16px}
   .dtt-token{width:24px;height:24px;font-size:12px}
   .dtt-tokrw{width:30px;height:24px}
-  .dtt-teacher{margin:0;border-radius:18px 18px 0 0;padding:10px 12px calc(10px + env(safe-area-inset-bottom));gap:8px}
+  .dtt-teacher{margin:0;border-radius:18px 18px 0 0;padding:10px 12px calc(10px + var(--sa-b));gap:8px}
   .dtt-teacher .dtt-tinfo{flex:1 1 auto;flex-direction:row;align-items:center;gap:8px}
   .dtt-saylab{display:none}
   .dtt-teacher .dtt-say,.dtt-teacher .dtt-tlabel{font-size:18px}

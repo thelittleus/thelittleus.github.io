@@ -1,6 +1,6 @@
 /* Little Us · app layout for phones and tablets (see lu-app.js). Only applies when <html> has .lu-app. */
 html.lu-app{--ua-bar:84px;--ua-rail:96px;background:#FBF8F3}
-html.lu-app body{padding-bottom:calc(var(--ua-bar) + env(safe-area-inset-bottom));background:#FBF8F3}
+html.lu-app body{padding-bottom:calc(var(--ua-bar) + var(--sa-b));background:#FBF8F3}
 html.lu-app.lu-land body{padding-bottom:0;padding-left:var(--ua-rail)}
 html.lu-app.ua-notabs body{padding-bottom:0;padding-left:0}
 html.lu-app.ua-notabs #uaNav{display:none}
@@ -10,7 +10,7 @@ html.lu-land .ua-pagetitle{margin:26px 32px 6px}
 
 /* ---------- tab bar (phone, tablet portrait) and rail (tablet landscape) ---------- */
 #uaNav{position:fixed;z-index:60;background:#fff;font-family:Figtree,system-ui,sans-serif;color:#2B2A35}
-#uaNav.bar{left:0;right:0;bottom:0;border-top:1px solid #ECE6DC;padding:6px 0 calc(10px + env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(5,1fr);box-shadow:0 -6px 20px rgba(43,42,53,.04)}
+#uaNav.bar{left:0;right:0;bottom:0;border-top:1px solid #ECE6DC;padding:6px 0 calc(10px + var(--sa-b));display:grid;grid-template-columns:repeat(5,1fr);box-shadow:0 -6px 20px rgba(43,42,53,.04)}
 html.lu-port #uaNav.bar{padding-left:max(0px,calc(50% - 340px));padding-right:max(0px,calc(50% - 340px))}
 #uaNav.rail{left:0;top:0;bottom:0;width:var(--ua-rail);border-right:1px solid #ECE6DC;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:18px 0 20px;gap:6px}
 #uaNav.rail>a,#uaNav.rail>button{flex:none}
@@ -31,7 +31,7 @@ html.lu-port .ua-tlab{font-size:13px}
 /* ---------- opening screen ---------- */
 .ua-splash{position:fixed;inset:0;z-index:999;background:#FFC94A;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .35s ease}
 .ua-splash.out{opacity:0;pointer-events:none}
-.ua-splmid{display:flex;flex-direction:column;align-items:center;gap:18px;margin-top:-6vh}
+.ua-splmid{display:flex;flex-direction:column;align-items:center;gap:18px}
 .ua-splmid svg{animation:uaHeartIn .7s cubic-bezier(.2,.9,.3,1.3) both}
 .ua-spllogo{width:168px;mix-blend-mode:multiply}
 .ua-splbot{position:absolute;left:0;right:0;bottom:max(10vh,64px);display:flex;flex-direction:column;align-items:center;gap:14px}
@@ -78,7 +78,7 @@ html.lu-port .ua-page{max-width:720px;padding:0 28px 32px}
 .ua-home{padding:0 0 24px;gap:0}
 html.lu-port .ua-home{max-width:none;padding:0 0 24px}html.lu-port .ua-home .ua-pad{max-width:760px;margin:0 auto;width:100%}
 html.lu-port .ua-tiles{grid-template-columns:repeat(4,1fr)}
-.ua-hero{background:#FFF1C7;padding:calc(env(safe-area-inset-top) + 20px) 20px 66px;display:flex;flex-direction:column;gap:14px;border-radius:0 0 32px 32px;position:relative;overflow:hidden}
+.ua-hero{background:#FFF1C7;padding:calc(var(--sa-t) + 20px) 20px 66px;display:flex;flex-direction:column;gap:14px;border-radius:0 0 32px 32px;position:relative;overflow:hidden}
 .ua-hero:before{content:"";position:absolute;inset:0;background:radial-gradient(rgba(255,255,255,.7) 1px,transparent 1.5px) 0 0/11px 11px;pointer-events:none}
 .ua-htop{display:flex;align-items:center;justify-content:space-between;gap:12px;position:relative}
 .ua-login{flex:none;display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0 20px;border-radius:999px;background:#fff;box-shadow:0 1px 3px rgba(43,42,53,.1);font:700 15px Figtree,sans-serif;color:#2B2A35;text-decoration:none}
@@ -173,7 +173,7 @@ html.lu-port .ua-where .ua-wtx b{font-size:26px}html.lu-port .ua-where .ua-wtx s
 .ua-art.two{width:100px;height:84px;position:relative}.ua-art.two i{position:absolute;width:58px;height:58px;display:block}.ua-art.two i:first-child{left:0;top:2px}.ua-art.two i+i{right:0;bottom:0}
 
 /* ---------- Tools home ---------- */
-.ua-head{display:flex;align-items:center;gap:12px;padding:calc(env(safe-area-inset-top) + 18px) 0 4px;min-height:72px}
+.ua-head{display:flex;align-items:center;gap:12px;padding:calc(var(--sa-t) + 18px) 0 4px;min-height:72px}
 .ua-head h1{flex:1;font:600 30px Fredoka,sans-serif;margin:0}
 .ua-head.plain{gap:10px}
 .ua-avabtn{border:0;background:none;padding:0;cursor:pointer;border-radius:50%}
@@ -197,7 +197,7 @@ html.lu-land .ua-tiles{grid-template-columns:repeat(4,1fr)}
 .ua-tools .ua-head .ua-cont{flex:0 1 330px;margin:0}
 
 /* ---------- Settings and Child ---------- */
-.ua-title{font:600 32px Fredoka,sans-serif;margin:0;padding:calc(env(safe-area-inset-top) + 20px) 0 6px}
+.ua-title{font:600 32px Fredoka,sans-serif;margin:0;padding:calc(var(--sa-t) + 20px) 0 6px}
 .ua-lab{font:700 15.5px Figtree,sans-serif;margin:10px 0 0}
 .ua-srow{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:20px;background:#fff;border:1px solid #ECE6DC;text-decoration:none;color:#2B2A35}
 .ua-srow b{font-size:16px}.ua-srow .ua-right{margin-left:auto;font-size:14px;color:#6B6875}
@@ -216,7 +216,7 @@ html.lu-land .ua-tiles{grid-template-columns:repeat(4,1fr)}
 .ua-tog.on{background:#2B2A35}.ua-tog.on i{left:23px}
 .ua-settings .la-setcard{margin:0}
 .ua-settings.land{display:grid;grid-template-columns:minmax(300px,.8fr) 1.2fr;gap:28px;align-items:start}
-.ua-setL,.ua-setR{display:flex;flex-direction:column;gap:12px}.ua-setR{padding-top:calc(env(safe-area-inset-top) + 78px)}
+.ua-setL,.ua-setR{display:flex;flex-direction:column;gap:12px}.ua-setR{padding-top:calc(var(--sa-t) + 78px)}
 .ua-grow{flex:1}
 .ua-between{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .ua-kidcard{display:flex;align-items:center;gap:14px;padding:16px;border-radius:24px;background:#FFF1C7}
@@ -240,7 +240,7 @@ html.lu-land .ua-tiles{grid-template-columns:repeat(4,1fr)}
 /* ---------- sheets ---------- */
 .ua-sheetwrap{position:fixed;inset:0;z-index:500;display:flex;align-items:flex-end;justify-content:center}
 .ua-scrim{position:absolute;inset:0;background:rgba(43,42,53,.4);opacity:0;transition:opacity .2s}
-.ua-sheet{position:relative;width:100%;max-width:560px;max-height:88vh;overflow:auto;background:#FBF8F3;border-radius:30px 30px 0 0;padding:10px 22px calc(26px + env(safe-area-inset-bottom));transform:translateY(100%);transition:transform .22s ease;font-family:Figtree,system-ui,sans-serif;color:#2B2A35}
+.ua-sheet{position:relative;width:100%;max-width:560px;max-height:88vh;overflow:auto;background:#FBF8F3;border-radius:30px 30px 0 0;padding:10px 22px calc(26px + var(--sa-b));transform:translateY(100%);transition:transform .22s ease;font-family:Figtree,system-ui,sans-serif;color:#2B2A35}
 html:not(.lu-phone) .ua-sheetwrap{align-items:center}
 html:not(.lu-phone) .ua-sheet{border-radius:30px;padding-bottom:26px}
 .ua-sheetwrap.open .ua-scrim{opacity:1}.ua-sheetwrap.open .ua-sheet{transform:none}
@@ -283,7 +283,7 @@ html:not(.lu-phone) .ua-langsheet .ua-lang-h{margin-top:10px}
 .ua-charpick button.on{border:2.5px solid #2B2A35;box-shadow:0 4px 0 #FFC94A}
 
 /* ---------- add to home screen ---------- */
-.ua-a2hs{position:fixed;z-index:70;left:12px;right:12px;bottom:calc(var(--ua-bar) + 10px + env(safe-area-inset-bottom));max-width:420px;margin:0 auto;background:#fff;border-radius:24px;padding:14px;box-shadow:0 18px 40px rgba(43,42,53,.22);font-family:Figtree,sans-serif;color:#2B2A35;transform:translateY(20px);opacity:0;transition:.25s}
+.ua-a2hs{position:fixed;z-index:70;left:12px;right:12px;bottom:calc(var(--ua-bar) + 10px + var(--sa-b));max-width:420px;margin:0 auto;background:#fff;border-radius:24px;padding:14px;box-shadow:0 18px 40px rgba(43,42,53,.22);font-family:Figtree,sans-serif;color:#2B2A35;transform:translateY(20px);opacity:0;transition:.25s}
 .ua-a2hs.open{transform:none;opacity:1}
 html.lu-land .ua-a2hs{bottom:20px;left:calc(var(--ua-rail) + 20px)}
 .ua-a2top{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
@@ -295,7 +295,7 @@ html.lu-land .ua-a2hs{bottom:20px;left:calc(var(--ua-rail) + 20px)}
 
 /* ===================== shared pages inside the app ===================== */
 /* tool pages: centred title with "for Raka", back button, big preview, sticky "Show to Child" */
-html.lu-app .tl-main{padding-top:env(safe-area-inset-top)}
+html.lu-app .tl-main{padding-top:var(--sa-t)}
 html.lu-app .tl-page{padding:10px 16px 24px;gap:12px}
 html.lu-app .tl-top{display:grid;grid-template-columns:46px 1fr auto;align-items:center;gap:8px;min-height:64px}
 html.lu-app .tl-top .tl-iconbtn{width:46px;height:46px;border-radius:50%;background:#fff;border:1px solid #ECE6DC}
@@ -305,7 +305,7 @@ html.lu-app .tl-top .tl-toptx small{font-size:13px;color:#6B6875}
 html.lu-app .tl-top .tl-profbtn{display:none}
 html.lu-app .tl-previewbox{border-radius:26px;min-height:260px}
 html.lu-app .tl-lab2{font:700 16px Figtree,sans-serif}
-html.lu-app .tl-foot{position:sticky;bottom:calc(var(--ua-bar) + env(safe-area-inset-bottom));z-index:5;padding:12px 0 6px;background:linear-gradient(rgba(251,248,243,0),#FBF8F3 30%)}
+html.lu-app .tl-foot{position:sticky;bottom:calc(var(--ua-bar) + var(--sa-b));z-index:5;padding:12px 0 6px;background:linear-gradient(rgba(251,248,243,0),#FBF8F3 30%)}
 html.lu-land .tl-foot,html.lu-app.ua-notabs .tl-foot{bottom:0}
 html.lu-app .tl-foot .tl-btn.primary.lg{min-height:62px;border-radius:20px;font-size:18px}
 html.lu-app .tl-foot [data-act$="start"]:before,html.lu-app .tl-foot [data-lc$="start"]:before{content:"";width:22px;height:22px;flex:none;margin-right:8px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232B2A35' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 13V6.5a1.5 1.5 0 0 1 3 0V12M11 11V5a1.5 1.5 0 0 1 3 0v6M14 11V6.5a1.5 1.5 0 0 1 3 0V14c0 4-2.5 7-6 7-2.5 0-4-1.5-5.5-4L4 14.5a1.5 1.5 0 0 1 2.5-1.6L8 15'/%3E%3C/svg%3E") center/contain no-repeat}
@@ -318,7 +318,7 @@ html.lu-app .tl-chip.big{min-height:52px;border-radius:16px;font-size:15.5px}
   html.lu-land .tl-page.narrow:not(.setup)>.tl-previewbox{grid-column:1;grid-row:2 / span 30;position:sticky;top:20px;min-height:calc(100vh - 140px)}
 }
 /* welcome flow (P01 to P05) */
-html.lu-app .tl-page.setup{max-width:560px;min-height:100vh;padding:calc(env(safe-area-inset-top) + 18px) 24px 0;gap:14px}
+html.lu-app .tl-page.setup{max-width:560px;min-height:100vh;padding:calc(var(--sa-t) + 18px) 24px 0;gap:14px}
 .tl-sethead{display:flex;align-items:center;gap:14px}
 .tl-bars{flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
 .tl-bars i{height:6px;border-radius:3px;background:#ECE6DC}.tl-bars i.on{background:#FFC94A}
@@ -340,7 +340,7 @@ html.lu-app .tl-page.setup{max-width:560px;min-height:100vh;padding:calc(env(saf
 .tl-radio i{width:24px;height:24px;border-radius:50%;border:2px solid #C9BFAE;flex:none}
 .tl-radio b{flex:1;font-size:16.5px}.tl-radio small{font-size:14px;color:#6B6875}
 .tl-radio.on{border:2px solid #2B2A35}.tl-radio.on i{border:7px solid #2B2A35}
-.tl-foot.setfoot{display:flex;gap:10px;margin-top:auto;position:sticky;bottom:0;padding:12px 0 calc(18px + env(safe-area-inset-bottom));background:linear-gradient(rgba(251,248,243,0),#FBF8F3 25%)}
+.tl-foot.setfoot{display:flex;gap:10px;margin-top:auto;position:sticky;bottom:0;padding:12px 0 calc(18px + var(--sa-b));background:linear-gradient(rgba(251,248,243,0),#FBF8F3 25%)}
 .tl-foot.setfoot .tl-btn.quiet{flex:0 0 auto;min-width:110px}
 .tl-page.setup.done{background:#FFF1C7;max-width:none;justify-content:space-between}
 .tl-allset{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;position:relative}
@@ -357,7 +357,7 @@ html.lu-app .tl-page.setup{max-width:560px;min-height:100vh;padding:calc(env(saf
 .tl-sheetwrap.setupmodal .tl-page.setup.done{background:none}
 
 /* shop, product and articles inside the app */
-html.lu-app #lu-main{padding-top:env(safe-area-inset-top)}
+html.lu-app #lu-main{padding-top:var(--sa-t)}
 html.lu-app .cat-layout,html.lu-app .ar-page{padding-top:0}
 html.lu-app .chips{padding-left:16px;padding-right:16px}
 html.lu-app .chips .chip{min-height:44px;border-radius:999px}
@@ -366,7 +366,7 @@ html.lu-app .chips .chip.on{background:#2B2A35;color:#fff;border-color:#2B2A35}
 .tl-sheetwrap.setupmodal .tl-tip.quiet{margin-top:0}
 /* Conversation Starters fills the app frame */
 html.lu-app .cs-page{padding:0!important;max-width:none!important}
-html.lu-app .cs-app{height:calc(100dvh - var(--ua-bar) - env(safe-area-inset-bottom));min-height:0;max-height:none;border-radius:0;box-shadow:none}
+html.lu-app .cs-app{height:calc(100dvh - var(--ua-bar) - var(--sa-b));min-height:0;max-height:none;border-radius:0;box-shadow:none}
 html.lu-land .cs-app{height:100dvh}
 
 @media (min-width:900px){html.lu-land .tl-page.narrow:not(.setup)>.tl-previewbox .tl-pv{transform:scale(1.9);transform-origin:center}html.lu-land .tl-page.narrow:not(.setup)>.tl-previewbox{gap:90px}}
@@ -650,7 +650,8 @@ html.ud-home .closing{grid-template-columns:minmax(0,1fr)!important}
   html.lu-desk .cat-layout .grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:16px!important}
   /* product page: pictures on top, details underneath */
   html.lu-desk .pdp{grid-template-columns:minmax(0,1fr)!important;row-gap:28px}
-  html.lu-desk .pdp .gallery{max-width:500px}
+  html.lu-desk .pdp-cards{columns:1!important}
+  html.lu-desk .pdp .gallery{max-width:500px;position:static!important}
   html.lu-desk .pdp-info{position:static!important}
   /* Little Us Plus: the comparison table, then the plan picker underneath */
   html.lu-desk .la-plans{grid-template-columns:minmax(0,1fr)!important;row-gap:24px}
@@ -727,3 +728,19 @@ html.ud-in .ud-railbtn.prev{left:0}
 html.ud-in .ud-railbtn.next{right:0}
 html.ud-in .ud-railbtn:focus-visible{outline:3px solid var(--sunny);outline-offset:2px}
 html.ud-in .ud-railbtn:disabled{opacity:.4;box-shadow:none;cursor:default}
+
+/* desktop home (signed in or not): no Articles section; articles stay one tap away in the header */
+html.ud-home #secBlog{display:none!important}
+
+/* Shop: the search box lives inside the Shop page (not in the top menu) */
+.cat-search{flex:1 1 260px;max-width:420px;height:46px;border-radius:999px;align-self:flex-end}
+.cat-search input{font-size:16px}
+.cat-search input::-webkit-search-cancel-button{cursor:pointer}
+@media (max-width:959px){.cat-search{flex-basis:100%;max-width:none;order:3}}
+html.lu-app .cat-search{flex-basis:100%;max-width:none;height:50px;border-radius:16px;order:3}
+
+/* app home: the Upgrade row next to Articles */
+.ua-upart{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.ua-upart svg{width:44%!important;height:auto!important}
+.ua-upart .ua-plus{font-size:10px}
+.ua-where.big .ua-upart .ua-plus,html.lu-port .ua-where .ua-upart .ua-plus{font-size:13px}
